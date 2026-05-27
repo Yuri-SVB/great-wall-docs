@@ -237,11 +237,13 @@ I'm sorry, but that premise undermines propagation of adoption. Plus, everybody 
 
 \noindent The community endorses obscurity \textit{in the same threads} where it documents obscurity's failure. Obscurity \textit{is} the security strategy --- and it imposes a measurable cost. This paper estimates that cost.
 
+\IfFileExists{./assets/obscure_bitcoiner_horizontal_short.png}{%
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.78\linewidth]{./assets/obscure_bitcoiner_horizontal_short.png}
 \caption{The \emph{Maximalism vs.\ Obscurity} dilemma, circulated widely among Bitcoin holders. The contradiction the dilemma dramatises is not incidental: it is the community's current physical-security posture.}
-\end{figure}
+\end{figure}%
+}{}
 
 % ══════════════════════════════════════════════════════════════════════════
 \section{An Insurance Framework}
@@ -752,6 +754,57 @@ Scale matters for the argument. At the current annualised cost of \fpeval{round(
 \end{equation*}
 
 \noindent Over a 10-year horizon with the forward-looking multiplier, the present value of the security tax across the whale population is \fpeval{round(\pvTenTen * 100, 1)}\% of \$\fpeval{round(\WhaleAUMbn, 0)}B $\approx$ \$\fpeval{round(\TenYrTAMbn, 1)}B. That figure is value being destroyed across the entire Bitcoin ecosystem, not a revenue projection. The engineering path through which Great Wall eliminates it --- fractal encoder, time-lock-puzzle library, spaced-repetition training vault, Lightning marketplace for outsourced solving, dead-man's-switch inheritance protocol, and the unified desktop wallet that integrates them --- is the subject of the sections that follow.
+
+\subsection{The four-property test: why every existing custody method fails}
+\label{sec:fourprops}
+
+Before the engineering details, it is worth stating what an adequate self-custody protocol must do. The requirement is the simultaneous satisfaction of four security properties that, until now, have been mutually exclusive across deployed custody methods:
+
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{Knowledge-Based (Deviceless).} Access is tied only to the user's mind --- to \emph{tacit knowledge} --- not to a physical device, seed phrase, or object that can be stolen, lost, or seized. A device that exists in the world is a device that can be taken from it.
+  \item \textbf{Individual Custody.} The protocol upholds the core cryptographic promise: \emph{not your keys, not your coins}. The holder is their own bank; no third-party custodian, exchange, or co-signer stands between the holder and their funds.
+  \item \textbf{Anti-Obscure (Anti-Fragile).} Obscurity is fragile (Section~\ref{sec:trend}): once attackers learn the trick, the protection collapses and often inverts. An anti-obscure protocol is \emph{anti-fragile}: its security \emph{increases} as adversaries learn the mechanism, because public knowledge that the protocol cannot be coerced is itself the deterrent against attempting coercion.
+  \item \textbf{Coercion-Resistant.} The architecture --- requiring both \emph{time} and \emph{tacit knowledge} --- makes it effectively impossible for an attacker to obtain access through force within any window the attacker can sustain. The \$5 wrench is neutralised at the protocol layer, not at the operational-security layer.
+\end{itemize}
+
+\noindent Every other custody method on the market satisfies a strict subset of these four properties --- and the property it fails on is, in each case, the one that gets the holder killed, robbed, or expropriated. The table below summarises the comparison.
+
+\newcommand{\emojicell}[1]{\includegraphics[height=0.7cm]{#1}}
+\newcommand{\emojicheck}{\emojicell{./assets/emojis/green-check-emoji.png}}
+\newcommand{\emojicross}{\emojicell{./assets/emojis/red-x-no-emoji.png}}
+\newcommand{\emojiredskull}{\emojicell{./assets/emojis/red-skull-danger-emoji.png}}
+
+\begingroup
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.25}
+\renewcommand{\tabularxcolumn}[1]{m{#1}}
+\footnotesize
+\newcolumntype{Y}{>{\centering\arraybackslash}m{1.2cm}}
+\noindent\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}m{2.6cm}|Y|Y|Y|Y|>{\arraybackslash}X|>{\arraybackslash}X|}
+\hline
+\rowcolor{accentlight}
+\textbf{Method} & \textbf{Dev.} & \textbf{Indiv.} & \textbf{Anti-Obsc.} & \textbf{Coerc.} & \textbf{Examples} & \textbf{Primary down-side} \\ \hline
+\textbf{TKBA} & \emojicheck & \emojicheck & \emojicheck & \emojicheck
+  & Great Wall.
+  & relies on the user not forgetting their tacit knowledge (\textbf{which we solve} via an integrated memory coach). \\ \hline
+Physical & \emojicross & \emojicheck & \emojicheck & \emojicheck
+  & physical vault(s), multiple addresses, Shamir's secret sharing / multisig
+  & \textbf{astronomically high cost} and operational complexity, and geographic binding: ``glorified gold'' (see Section~\ref{sec:trend}). \\ \hline
+Shared / Delegated & \emojicheck & \emojicross & \emojicheck & \emojicheck
+  & exchanges or co-custody companies: Coinbase, Binance, Casa.
+  & \textbf{negates the core premise} of self-custody: ``not your keys\dots{}'' \\ \hline
+Obscurity-Based & \emojicheck & \emojicheck & \emojicross & \emojiredskull
+  & decoy wallets; plausible denial; redirectable time-locked transactions
+  & \textbf{inevitably backfires}: once educated about the obscure method, the attacker has a material incentive towards \textbf{more violence} (torture / assassination). \\ \hline
+Vanilla Custody & \emojicheck & \emojicheck & \emojicheck & \emojicross
+  & hardware (Ledger, Trezor, Krux BIP39) or software (Electrum, Exodus, MetaMask) wallets
+  & \textbf{completely vulnerable} to a wrench attack. \\ \hline
+\end{tabularx}
+\endgroup
+
+\noindent Read column-by-column, the table is a statement about the structure of the custody-design space: the four properties are not a wish-list but a \emph{covering set}. Drop any one of them and the failure mode is concrete and named. Physical schemes drop \textbf{Deviceless} and inherit the cost/geography burden that Bitcoin was created to escape. Shared/delegated schemes drop \textbf{Individual Custody} and inherit the very counterparty risk the Bitcoin thesis exists to retire. Obscurity-based schemes drop \textbf{Anti-Obscure} and convert robbery into homicide as the attacker's knowledge of the trick grows --- the red skull in the coercion column denotes \emph{negative} resistance, not merely absence. The mechanism is no longer hypothetical. Once the community's own consensus advice is ``deny that you own Bitcoin'' and ``hand over a decoy if pressed,'' \emph{every signal a victim can emit under coercion has been pre-discredited by the defence itself}: a denial is presumed to be the denial-script; a disclosed wallet is presumed to be the decoy. An educated attacker therefore has no Bayesian update available short of continued violence, and the rational continuation of an interrogation that began with a denial is more violence, not less. A documented case fits the prediction with grim precision: a Swedish League of Legends streamer was bound and tortured for hours by armed intruders demanding cryptocurrency he did not own; the attackers --- evidently unable to credit the denial --- persisted long past any actuarial value the robbery could have justified, ultimately leaving with the victim's Pokémon-card collection.\footnote{Lopp, J., post on X reporting the incident: ``Swedish League of Legends streamer RATIRL reveals that armed intruders broke into his home, tortured him for hours, and demanded cryptocurrency he didn't have. The robbers eventually left with only his Pok\'emon cards. 2 suspects have been arrested thus far.'' \url{https://x.com/lopp/status/2058917155530293600}.} The victim's profile (a publicly visible high-income gamer) supplied the prior; the obscurity norm supplied the discount on his denial; the attackers supplied the rest. Vanilla wallets drop \textbf{Coercion Resistance} and reduce the user's last line of defence to silence about their holdings --- exactly the maximalism-vs-obscurity contradiction with which this document opened.
+
+\noindent TKBA --- memory-held entropy navigated against a user-specific perturbation of the Burning Ship fractal, gated by a calibrated Argon2 derivation, with a verifiable delay outsourced to an anonymous Lightning marketplace --- is the first construction that holds all four columns simultaneously. The remaining sections describe how each component is built from standard primitives.
 
 \subsection{The protocol is application-agnostic}
 
