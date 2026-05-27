@@ -423,9 +423,17 @@ Responsibilities:
 - Bisection area visualization (gated by debug mode, since this is 
   explicit knowledge whose memorization undermines TKBA) 
 - Point markers and crosshairs
-- Input handling (mouse, keyboard)
-- Platform abstraction for portability — **desktop first** (pygame
-  today), **mobile next**; web further ahead
+- Input handling (pointer, keyboard, touch, gamepad)
+- Platform abstraction for portability — **desktop first, mobile
+  next, web further ahead** — implemented as a single Dart + Flutter
+  codebase. The pygame viewer in `great-wall-core` is treated as a
+  reference implementation only and is not carried into the
+  library's first tagged release. See
+  `great-wall-ux/TECH_STACK.md` for the full rationale and locked
+  sub-decisions (web renderer, threading model, platform floors,
+  FFI strategy, back-pressure, palette pipeline, accessibility,
+  internationalisation, and the coercion-resistance invariants the
+  library is built against).
 
 Imports from great-wall-core at the API level (calls the Rust engine
 for escape counts, encode/decode). Does NOT submodule great-wall-core —
