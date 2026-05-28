@@ -22,6 +22,21 @@ determinism-critical engine itself stays in `great-wall-core`.
 
 ---
 
+## Guiding UX principle: sober, but game-like
+
+A core goal of this library is to **mitigate the mental toil of
+memorisation through a pleasant experience**. The interface should be
+*sober* — it never competes with the fractal for attention, and it
+carries no gimmickry, gamified nagging, or vanity metrics — yet it
+should *feel like a game*: tactile, responsive, and quietly rewarding to
+operate, so that practice feels closer to play than to drill. Controls
+favour direct, physical affordances (e.g. a rotary hue **wheel** the
+user clicks to turn, rather than a dropdown). This principle informs the
+concrete interaction choices below; where a feature could be either a
+chore or a small pleasure, choose the pleasure.
+
+---
+
 ## In scope
 
 The library owns the following responsibilities. They are grouped by
@@ -31,7 +46,14 @@ internal module layout.
 ### Rendering
 
 - Fractal rendering: viewport, zoom, pan, resampling.
-- Escape-count to colour transforms (palettes, lighting effects).
+- Escape-count coloring: a **fixed log transform** mapping escape
+  counts onto the palette index, and a **single base palette** ("Classic",
+  inherited from `great-wall-core`) available in **six hue rotations** at
+  60° spacing. No other transforms and no other palette families are
+  offered — see [`TECH_STACK.md`](./TECH_STACK.md) §"Locked sub-decisions"
+  for the rationale (function before aesthetics; ossifying the scheme
+  set so users cannot accidentally chain incompatible mappings against
+  their trained visual memory).
 - Stage-aware rendering: canonical fractal (stage 1) vs. user-perturbed
   fractal (stage 2, parameterised by `(o, p, q)`).
 - Overlays: point markers, crosshairs, leaf rectangles.
@@ -47,6 +69,16 @@ internal module layout.
 - Select-mode (click-to-decode) workflow on each stage's viewport.
 - Pan/zoom gestures with deterministic mapping back to fractal
   coordinates.
+- **Live brightness control as a tacit surface.** Brightness falloff is
+  always on; the brightness offset is adjusted *during navigation* by
+  `L` + mouse scroll in fine 0.1 steps, reset to a fixed default each
+  session and never persisted or displayed. The fine granularity is
+  deliberate — it turns the adjustment into a recognition skill the
+  user acquires tacitly (see [`TECH_STACK.md`](./TECH_STACK.md)
+  §"Locked sub-decisions / Brightness modulation").
+- Hue selection via a clickable **rotary wheel** on a control panel that
+  snaps through the six hue offsets — the intended affordance for the
+  locked Classic × 6 palette set.
 - Practice-session UX primitives reusable by `celestial-peace-nf-core`'s
   training flow (point-by-point confirm, hesitation timing surface, grade
   picker chrome).
@@ -62,11 +94,13 @@ internal module layout.
 
 ### Assets and theming
 
-- Palette definitions and the colour-pipeline contract. Palettes ship
-  as JSON assets (see [`TECH_STACK.md`](./TECH_STACK.md)); the official
-  palette set is treated as a frozen visual vocabulary — once a
-  palette ships in a tagged release its escape-count → RGBA mapping
-  is never silently changed.
+- The Classic base palette (inherited from `great-wall-core`) and its
+  six hue rotations are the entire palette surface (see
+  [`TECH_STACK.md`](./TECH_STACK.md) §"Locked sub-decisions"). The
+  set is a frozen visual vocabulary — once it ships in a tagged
+  release its escape-count → RGBA mapping is never silently changed.
+  There is no user-extensible palette loader and no toggle for the
+  escape-count transform.
 - Iconography and typography tokens for the chrome that surrounds the
   fractal canvas.
 

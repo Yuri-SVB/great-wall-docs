@@ -40,10 +40,13 @@ This was the deciding factor.
 ### 2. Deterministic, GPU-accelerated 2D rendering of the canvas
 
 The fractal canvas is the central widget. Flutter's Skia-backed
-`CustomPainter` / `Canvas` API gives us:
+`CustomPainter` / `Canvas` API plus its `FragmentProgram` shader support
+give us:
 
-- Direct pixel-level control for the fractal raster (the texture is
-  produced by the Rust core; Flutter blits it).
+- Direct control of the fractal raster. The Rust core produces a raw
+  **escape-count** buffer (single channel); great-wall-ux uploads it as a
+  texture and a fragment shader turns counts into pixels (see *Locked
+  sub-decisions / Color pipeline*). The core never emits colored pixels.
 - Cheap layered overlays — point markers, crosshairs, debug-mode leaf
   rectangles — composited over the raster without leaving the GPU path.
 - A consistent rendering model across every target platform, so visual
@@ -161,14 +164,107 @@ re-litigated.
   result when ready. This preserves smooth motion under load at the
   cost of brief blurriness — the established pattern from
   map-style viewers.
-- **Palette pipeline: JSON assets.** Palettes ship as JSON files in
-  `assets/`, parsed at startup. Users (and downstream apps) can drop
-  in additional palettes without recompiling. Both user-facing docs
-  and contributor docs MUST carry a prominent warning that non-official
-  palettes change the escape-count → colour mapping and can degrade
-  recognisability of paths the user has memorised. The official
-  palette set is a deliberate visual vocabulary; defectors cannot
-  replicate it trivially without retraining users' visual memory.
+- **Escape-count transform: fixed log, no toggle.** The escape-count
+  index passed to the palette is `log2(1 + n)` (normalised against
+  `log2(1 + max_iter)`), and nothing else. The pygame prototype's
+  per-keystroke cycle through Identity / Square / Cube / Exp / Sqrt /
+  Cbrt / Log is not carried forward. Rationale: function before
+  aesthetics — dog-fooding established log as the most legible
+  transform across the full escape-count range, and any toggle is a
+  way for the user to land on a different mapping than the one they
+  trained on without realising it. The library does not even expose
+  the transform as a parameter.
+- **Palette set: Classic × 6 hue offsets.** The entire palette surface
+  is the Classic base palette inherited from `great-wall-core`, made
+  available in **six hue rotations evenly spaced around the wheel**
+  (0°, 60°, 120°, 180°, 240°, 300°). Variants are named after the
+  dominant hue of each rotation so the user always knows which one
+  they are on; switching is an explicit, labelled action, not a
+  cycle-on-keypress. Rationale, in order of weight:
+    1. **Anti-confusion / anti-chaining.** A small number of
+       visually-distinct, named options means the user cannot drift
+       between schemes by accident, and cannot unknowingly chain
+       different mappings across sessions in a way that would
+       degrade recognition of paths they have memorised.
+    2. **Circadian / sleep-hygiene latitude.** Many users (including
+       the protocol author) prefer cooler hues by day and warmer /
+       red-shifted hues at night. Six offsets cover that span without
+       inflating the option set.
+    3. **Color-vision accessibility.** A handful of well-separated
+       hue rotations gives users with color-blindness or other
+       color-perception differences a meaningfully better chance of
+       finding a variant whose contrast structure works for them
+       than a single fixed palette would.
+  Once a tagged release ships, neither the Classic base nor the six
+  rotations' escape-count → RGBA mappings are silently changed —
+  the user's visual memory is treated as an API surface, per the
+  palette stability invariant below.
+- **Color pipeline: GPU fragment shader, in great-wall-ux.** The
+  escape-count → pixel mapping (log transform → palette lookup →
+  brightness modulation) runs entirely in a Flutter `FragmentProgram`
+  inside this library; `great-wall-core` returns only the raw
+  single-channel escape-count buffer and never emits colored pixels.
+  This is the division of labour fixed by
+  `great-wallet/ARCHITECTURE.md` ("color schemes, lighting effects …
+  do not touch the engine"); it is restated here because an earlier
+  deliberation had tentatively placed coloring in the core and it is
+  now settled the other way. Rationale:
+    1. **Live adjustment is free.** Brightness offset and hue rotation
+       are changed *during navigation* (see *Brightness modulation*
+       below); as shader uniforms / a swapped palette LUT they cost
+       nothing per frame and never re-rasterise. The expensive Rust
+       `escape_count` re-runs only when the viewport actually moves.
+       Coloring in the core would force a round-trip — and would drag
+       viewport zoom and the live brightness offset (interaction
+       state) into the engine, which the architecture separates ux to
+       prevent.
+    2. **Determinism is unaffected.** Only escape counts and the
+       pixel-to-coordinate mapping feed the bijection, and both stay
+       bit-deterministic in Rust regardless of where coloring runs.
+       Color is display-only; sub-perceptual GPU floating-point
+       differences across devices cannot move a recognition boundary.
+       Cross-platform *appearance* identity is guaranteed by
+       specifying the formulae here, not by executing them in Rust.
+    3. **No shipped second renderer.** The pygame viewer is
+       reference-only and not shipped; the sole production renderer is
+       Flutter, so there is no running engine-side coloriser to stay
+       byte-consistent with.
+- **Brightness modulation: always-on, tacit live control.** Each
+  pixel's color is scaled by the sigmoid-like "cave-exploration"
+  dimming curve inherited from `great-wall-core`
+  (`viewer.py` / `constants.py`):
+
+      factor = B / (B + 2^(n − beo) / z²)      then  rgb *= factor
+
+  with falloff base `B = 16`, raw escape count `n`, zoom `z` (derived
+  from the viewport), and brightness-exponent offset `beo`. High
+  escape counts dim, zooming in brightens, and `beo` slides which
+  escape-count band is lit. Locked properties:
+    - **Always on, no toggle.** The prototype's `L`-key on/off toggle
+      is dropped, for the same "function before aesthetics" reason the
+      transform toggle is dropped.
+    - **`beo` is reset to a fixed default at the start of every
+      session** and is **never persisted** — consistent with the
+      no-stored-secrets posture (a persisted offset would be one more
+      thing coercion could extract).
+    - **Live adjustment via `L` + mouse scroll**, in fine steps of
+      **0.1** (down from the prototype's coarse 1.5). The small step is
+      deliberate: it makes the during-navigation brightness adjustment
+      a *recognition* skill rather than a few coarse presets. The user
+      acquires tacit knowledge of "what each scene looks like at the
+      brightness where just enough detail is visible to locate the
+      next reference point" — too much information to recollect and
+      reproduce, but not too much to recognise. (Compare learning to
+      walk an unfamiliar route in a city whose language you cannot
+      read: you procedurally learn to recognise alien scenery you
+      could never verbally describe; asked to recite the landmarks "in
+      a vacuum" you cannot — much as one reliably recognises a coin
+      without being able to describe it.) The 0.1 step is a starting
+      point, expected to be optimised empirically during dog-fooding.
+    - **No on-screen readout of `beo`.** The prototype's
+      "Brightness offset +N.N" status message is removed; surfacing
+      the value would convert a tacit skill into an explicit,
+      verbalizable fact and weaken TKBA.
 - **Accessibility: chrome-only.** Buttons, menus, dialogs, settings,
   grade pickers, progress indicators, and all surrounding chrome are
   fully accessible (semantic labels, focus order, screen-reader
@@ -204,6 +300,12 @@ revision.
   logging facility, where present, exists for chrome-level events
   (button presses, navigation, errors that do not include
   coordinate data) only.
+- **Tacit-only navigation controls.** Controls whose *setting* is part
+  of the user's tacit recall — currently the brightness offset — are
+  never displayed as a value, labelled, logged, or persisted. Their
+  state lives only as ephemeral session state. Surfacing such a value
+  would convert tacit recognition into explicit, verbalizable
+  knowledge and weaken TKBA.
 - **Pixel-to-coordinate determinism.** Given identical viewport
   state — centre `(re, im)`, zoom, device-pixel-ratio, palette,
   escape-count transform — the pixel-to-coordinate mapping is
@@ -211,11 +313,17 @@ revision.
   is enforced by golden tests and is a load-bearing property of
   the bisection's pixel-to-coordinate contract; without it,
   decoded points would drift between platforms.
-- **Palette stability.** Once an official palette ships in a
-  tagged release, its escape-count → RGBA mapping is frozen
-  forever. Tweaks ship as new named palettes, never as silent
-  updates to existing ones. Users' visual memory of a palette is
-  a UX dependency treated as an API surface.
+- **Palette stability.** Once a tagged release ships, the Classic
+  base palette and each of its six hue rotations have a frozen
+  escape-count → RGBA mapping. Tweaks ship as new named variants,
+  never as silent updates to existing ones. Users' visual memory of
+  a variant is a UX dependency treated as an API surface.
+- **No alternative escape-count transforms, no extra palettes.** The
+  log transform and the Classic × 6-hue set are the entire surface;
+  re-introducing a transform toggle or a user-extensible palette
+  loader is a breaking change to the ecosystem's TKBA posture
+  (users can no longer be confident which mapping they trained on)
+  and not a normal library revision.
 
 ---
 
