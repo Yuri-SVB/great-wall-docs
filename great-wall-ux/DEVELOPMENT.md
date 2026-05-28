@@ -23,7 +23,7 @@ Per-platform build toolchains (install only what you target):
 flutter pub get
 cd example
 flutter pub get
-flutter run -d chrome --web-renderer canvaskit   # or: -d linux | macos | windows
+flutter run -d chrome   # or: -d linux | macos | windows
 ```
 
 The example wires `DemoEscapeCountSource` — synthetic test data, **not** a
