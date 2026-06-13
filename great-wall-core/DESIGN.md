@@ -18,6 +18,59 @@ stored state beyond the shared parameters.
 
 ---
 
+## Chained Protocol — One Point Per Stage
+
+**Official rule.** The protocol encodes **exactly one 32-bit point per stage**,
+and **each stage is its own fractal** derived by hashing all preceding points:
+
+```
+one stage  =  one fractal  =  one haystack
+one point  =  one needle
+```
+
+`n_stages = entropy_bits / 32`. The **first** stage (index 0) is the public,
+canonical Burning Ship (o = p = q = 0). Every **later** stage's fractal
+parameters are produced by running the memory-hard chain over the concatenated
+bits of *every preceding point*:
+
+```
+θ_k  =  SHA-256( Argon2^N( bits of points 0 .. k−1 ) )  →  (o, p, q)
+```
+
+with `N` the user-chosen Argon2 iteration count. Because stage `k+1`'s fractal
+cannot be derived until stage `k`'s point is fixed (the next θ depends on all
+prior points), the derivations form a strict chain — and each link is a full
+`N`-iteration Argon2 run. An `n_stages`-stage secret therefore contains **one
+canonical fractal and `n_stages − 1` secret, chain-derived fractals**, and the
+honest derivation cost is ≈ `(n_stages − 1) · N` Argon2 passes.
+
+**Why one point per stage.** The design goal is *haystack ≫ needle*: specifying
+*which* fractal (the haystack) must cost far more than specifying *where* in it
+the point sits (the needle, ≈ 32 bits). Chaining one point per stage multiplies
+the cost of descriptively bypassing the memory-hard derivation by the number of
+stages: a perceptual-oracle attacker who tries to *describe* a fractal instead
+of deriving it must reconstruct *every* fractal in the chain, and cannot start
+on stage `k+1` until stage `k`'s point is fixed. So the labyrinth-description
+cost `D_θ` scales with the number of stages while a single point stays ≈ 32 bits
+— the inequality `D_θ ≫ D_pt` is enforced per stage and compounded across the
+chain. (See `great-wall-docs/next-steps/research-notes-substrate-hardness.md`
+for the full security analysis and the deferred parameter-family discussion.)
+
+**Breaking change.** This supersedes the earlier two-stage /
+multiple-points-per-stage prototype (which used 2 stages with 1/2/4 points each
+and a single stage-1 → stage-2 derivation). It is a **hard,
+backward-incompatible** protocol update: encodings do not round-trip across the
+change, and old session/vector documents are not compatible.
+
+**Pipeline.** The chained pipeline is the single source of truth in
+`great-wall-core/burning_ship/protocol.py`
+(`encode_entropy` / `decode_entropy` / `stage_params`); the CLI and GUI both
+drive their encode/decode through it. The per-stage memory-hard derivation lives
+in `argon2_pipeline.derive_stage_params` (built on the reusable
+`argon2_iterate`).
+
+---
+
 ## Architecture Overview
 
 ```
@@ -506,17 +559,77 @@ In practice, the encoder reliably handles **32 bits per point.** Beyond that,
 the rectangle becomes too small for island discovery to find meaningful
 structure at the minimum pixel resolution.
 
-Three size presets are supported (always 2 stages, 32 bits per point):
+The protocol encodes **exactly one 32-bit point per stage** (see *Chained
+Protocol — One Point Per Stage* below), so the number of stages equals the
+entropy size divided by 32 — equivalently, words divided by 3. Every BIP39 size
+that is a multiple of 32 bits is therefore supported uniformly, from 32 bits up
+to a hard cap of 256:
 
-| Preset  | Points/Stage | Total Entropy | BIP39 Words |
-|---------|-------------|--------------|-------------|
-| mini    | 1           | 64 bits      | 6           |
-| default | 2           | 128 bits     | 12          |
-| large   | 4           | 256 bits     | 24          |
+| Words | Entropy  | Stages | Secret fractals | Tier |
+|------:|---------:|-------:|----------------:|------|
+| 3     | 32 bits  | 1      | 0               | sub-standard |
+| 6     | 64 bits  | 2      | 1               | sub-standard |
+| 9     | 96 bits  | 3      | 2               | sub-standard |
+| 12    | 128 bits | 4      | 3               | standard (default) |
+| 15    | 160 bits | 5      | 4               | standard |
+| 18    | 192 bits | 6      | 5               | standard |
+| 21    | 224 bits | 7      | 6               | standard |
+| 24    | 256 bits | 8      | 7               | standard |
 
-Stage 1 encodes the first half of entropy bits using the canonical Burning
-Ship formula (o=0, p=0, q=0); Stage 2 encodes the remaining half using a
-perturbed formula with Argon2-derived parameters (o, p, q).
+The first stage encodes its 32-bit point on the canonical Burning Ship formula
+(o=0, p=0, q=0). Every later stage encodes its point on a *perturbed* fractal
+whose parameters (o, p, q) are derived from the memory-hard hash of **all
+preceding points** (Argon2 → SHA-256 → θ). The first stage is therefore public
+("the haystack is given"); the remaining `stages − 1` are secret, chain-derived
+haystacks.
+
+### Size range, the 256-bit cap, and the iteration policy
+
+- **Hard cap at 256 bits / 24 words / 8 stages** (`constants.MAX_ENTROPY_BITS`).
+  Larger mnemonics are valid BIP39 in principle but deliberately *not* offered:
+  one more stage is the same marginal mental effort for diminishing returns, so
+  the better lever past 24 words is **more between-stage Argon2 iterations**, not
+  more stages. Interfaces should advise this. A user with a specific reason to
+  exceed 256 bits could chain multiple setups via a future "advanced pepper"
+  field (pepper = a prior setup's result) — tracked in next-steps; revisit.
+- **Sub-standard sizes (32/64/96 bits)** sit below BIP39's 128-bit floor and are
+  offered for completeness. The **32-bit / single-stage** mode has only the
+  canonical first stage and no memory-hard chain, so its coercion-resistance is
+  *minimal but nonzero*: a wrench attacker without a Great Wall–compatible app
+  still fails, and setup beats the brute-force resistance of a 9-decimal-digit
+  PIN. 128 bits (12 words) is the recommended default.
+- **One Argon2 iteration count per setup, calibrated on-device (official).** To
+  prevent parameter explosion, a single iteration count `N` is fixed at setup
+  and applied to *every* stage (`protocol.encode_entropy` / `decode_entropy`
+  take one `iterations`). **`N` is the durable parameter; wall-clock "hours" is
+  only a perishable label on it** — recovery reproduces the digest from `N`, not
+  from a duration, so hardware progress (notably AI-driven memory-bandwidth
+  gains) changes only the *time a given `N` takes*, never correctness or the
+  entropy/OOM-gate security. Accordingly:
+  - The interface offers a few **target wall-clock durations** and **calibrates
+    `N` per setup on the user's own device** (micro-benchmark a few passes at the
+    chosen memory profile → solve for `N`). This removes dev-time and
+    cross-hardware staleness; only the genuine setup→recovery temporal drift
+    remains, and it is harmless to correctness.
+  - **`N` (and the memory profile `m`) is the user's responsibility to
+    memorize** (needed if the device/setup is lost — "hard recovery"). Two
+    mitigations: (a) the protocol gracefully stores the **sequence of
+    intermediate derivation results**, from which the user can *recognize* the
+    correct one (checkpoint trial-and-error; see *Checkpointing*), so an
+    approximate memory of `N` suffices — in this design `N` and `m` are the
+    *only* inter-stage unknowns (the per-stage `o,p,q` are derived from them and
+    the prior points), and once the parameter space expands this *same*
+    recognition recovers any forgotten inter-stage parameter (next-steps §5);
+    (b) the **Celestial-Peace-Never-Forget** trainer (`celestial-peace-nf-core`)
+    drills explicit recall of `N` and `m` — safe because they are *parameters,
+    not the tacit secret*. Note `m` must be recalled exactly (a wrong profile
+    breaks every derived fractal); `N` only approximately.
+  - UX should induce users to set the derivation time **conservatively (e.g.
+    2×)**, then use a **TLP / `jade-clock`** layer to freely adjust the *effective
+    per-session* delay (the RSW time-lock puzzle re-imposes a tunable, possibly
+    outsourced, delay on top of the fixed `N`). See `great-wallet`.
+  - This per-setup-calibration policy is **official**; per-stage iteration
+    variation remains deferred (see next-steps) and may be revisited.
 
 ---
 
@@ -640,22 +753,29 @@ reconstruct independently.
 ## GUI Viewer: BIP39 Encode and Decode Workflows
 
 The viewer (`viewer.py`) provides two complementary workflows: **encoding** a
-BIP39 mnemonic into fractal points (1–4 per stage depending on preset), and
-**decoding** user-selected fractal points back into entropy bits.
+BIP39 mnemonic into fractal points (one point per stage), and **decoding**
+user-selected fractal points back into entropy bits.
 
-### Two-stage encoding architecture
+### Chained encoding architecture
 
-The entropy is split into two equal halves, each encoded on a different
-fractal surface:
+The entropy is split into `n_stages = entropy_bits / 32` chunks of 32 bits, one
+per stage; each chunk is encoded as a single point on its own fractal surface:
 
-| Stage | Formula                           | Parameters | Derived from        |
-|-------|-----------------------------------|------------|---------------------|
-| 1     | Canonical Burning Ship (d = 2)    | o=0, p=0, q=0 | —              |
-| 2     | Perturbed BS with (o, p, q)       | Argon2-derived | SHA-256(Argon2(stage1 bits)) |
+| Stage | Formula                        | Parameters     | Derived from                         |
+|-------|--------------------------------|----------------|--------------------------------------|
+| 0     | Canonical Burning Ship (d = 2) | o=0, p=0, q=0  | — (public, canonical)                |
+| k ≥ 1 | Perturbed BS with (o, p, q)    | Argon2-derived | SHA-256(Argon2^N(points 0 .. k−1))   |
 
-Stage 2's parameters (o, p, q) are derived from an Argon2d hash of the
-Stage 1 entropy bits, making the second fractal surface dependent on the first.
-The number of points per stage depends on the size preset (1, 2, or 4).
+Each secret stage's parameters (o, p, q) are derived from the memory-hard hash
+of **all preceding points**, so every fractal surface depends on the entire
+prefix before it — a strict chain. The user fixes one point per stage and runs
+the (memory-hard) Argon2 step to unlock the next stage's fractal, repeating
+until the last stage; only then is the full mnemonic recovered. Note: with
+`N ≥ 1` the honest cost is `n_stages − 1` chained Argon2 runs, one per secret
+stage. The sections below — written when the prototype used two stages with
+P1/P2/… points — illustrate the per-stage mechanics; under the current protocol
+each "stage" contributes exactly one point and the Argon2 transition repeats
+between every consecutive pair of stages.
 
 ### Stage 1: Encoding (mnemonic → P1, P2)
 
@@ -879,9 +999,10 @@ For each click:
 3. The path prefix is advanced after each valid point (re-encode the decoded
    bits to derive the path).
 
-After 2 stage-1 points: 64 bits stored for Argon2.
-After 2 stage-2 points: stage-1 + stage-2 bits combined → `bits_to_mnemonic()`
-→ full 12-word BIP39 phrase.
+After a stage's single point is fixed, its 32 bits join the cumulative prefix
+that feeds the Argon2 derivation of the next stage's fractal. After the last
+stage's point, the concatenated per-stage bits are combined →
+`bits_to_mnemonic()` → full BIP39 phrase.
 
 ### Manual bit input mode
 
@@ -891,12 +1012,13 @@ Press **M** to enter manual mode.  The user types bits directly:
 - **I** key = bit 1 (right for vertical splits, down for horizontal)
 - **Backspace** = undo last bit (crosses point boundary if needed)
 
-Manual mode enforces **2 × 32 bits** per stage.  After 32 bits, point 1 is
-auto-committed (path prefix advances), and input continues for point 2.
-After 64 total bits, the stage completes.  Area visualization auto-enables and
-focuses on the latest bisection step.
+Manual mode enforces **32 bits per stage** (one point).  After 32 bits, the
+stage's point is auto-committed (path prefix advances) and the stage completes;
+the user then runs the Argon2 step to unlock the next stage's fractal and
+continues. Area visualization auto-enables and focuses on the latest bisection
+step.
 
-The status bar shows `P1 bit N/32` or `P2 bit N/32` with the live path string.
+The status bar shows `P{stage} bit N/32` with the live path string.
 
 ### BIP39 phrase display and clipboard
 
@@ -977,14 +1099,20 @@ than expected.
 
 ---
 
-## Stage-2 Parameter Derivation (Hash Byte Attribution)
+## Per-Stage Parameter Derivation (Hash Byte Attribution)
 
-The Argon2 digest (32 bytes) is hashed with SHA-256, and the first 24 bytes
-of the resulting hash are split into three 8-byte big-endian uint64 values
+Every secret stage (index `k ≥ 1`) derives its fractal parameters from the
+memory-hard chain run over the concatenated bits of **all preceding points**:
+
+```
+digest_k = Argon2^N( bits of points 0 .. k−1 )       // the memory-hard chain
+h        = SHA-256(digest_k)
+```
+
+The first 24 bytes of `h` are split into three 8-byte big-endian uint64 values
 in **alphabetical order**:
 
 ```
-h = SHA-256(argon2_digest)
 o = h[0:8]       // orbit seed (z₀)
 p = h[8:16]      // additive perturbation
 q = h[16:24]     // linear perturbation (εz term)
@@ -997,6 +1125,14 @@ Each parameter encodes a complex number with magnitude bits and sign bits:
 | o     | 31 per component | bit 31 (Re), bit 63 (Im) | none | 2^(-3) |
 | p     | 31 per component | bit 31 (Re), bit 63 (Im) | 2^(-3) = 1/8 | 2^(-4) |
 | q     | 31 per component | bit 31 (Re), bit 63 (Im) | none | 2^(-5) |
+
+The byte-attribution and per-parameter encoding are unchanged from the earlier
+prototype; what changed is the **input** to the chain (the cumulative prior
+points) and that the derivation now runs **once per secret stage** rather than a
+single time. The candidate *new* parameter families under study (history-
+dependent folds, polynomial perturbations, bit-gated masks, …) are deliberately
+**out of scope** for this protocol update and tracked separately in
+`great-wall-docs/next-steps/research-notes-substrate-hardness.md`.
 
 ---
 

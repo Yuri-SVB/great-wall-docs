@@ -454,6 +454,18 @@ Responsibilities:
   scheduler state)
 - Vault encryption/decryption (via tlp-core)
 - Background TLP solver management with checkpointing
+- **Explicit-recall training of the derivation parameters `N` (Argon2
+  iteration count) and `m` (memory profile)**, so a *hard recovery* (device /
+  setup lost) goes smoothly. Unlike the fractal locations — which must stay
+  *tacit* (recognition only) to remain coercion-resistant — `N` and `m` are
+  derivation **parameters, not the secret**: an adversary who learns them still
+  has no points, so drilling them as explicit facts does **not** weaken
+  coercion-resistance of the seed. Note the asymmetry: `m` must be recalled
+  *exactly* (a wrong profile changes the Argon2 digest and breaks every derived
+  fractal), whereas `N` needs only *approximate* recall — checkpoint
+  trial-and-error and stored, recognizable intermediate results close the gap
+  (see `great-wall-core` DESIGN / next-steps). This complements the existing
+  mitigations for a forgotten `N`.
 
 #### Core Concept
 
