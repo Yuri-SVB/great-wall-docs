@@ -1,5 +1,17 @@
 # Burning Ship Encoder — Design Document
 
+> **Chained protocol version: `0.2.0`** (one 32-bit point per stage; pre-1.0,
+> unstable). This document is the **single source of truth** for
+> `great-wall-core` at this protocol version; the code declares the same
+> `PROTOCOL_VERSION` (`great-wall-core/burning_ship/protocol.py`) and stamps it
+> into encode/decode output (`protocol_version`). Bump both together when the
+> protocol's behaviour changes. Lineage: `0.1.0` two-stage prototype → `0.2.0`
+> chained (current) → `0.3.0+` new parameters → `1.0.0` first stable (at which
+> point comprehensive frozen test vectors are rebuilt; interim vectors are
+> provisional and a harness version guard flags mismatches as STALE).
+> (Independent of the Rust `ENGINE_VERSION` — the single-fractal encode/decode
+> algorithm — unchanged at `0.1.0`.)
+
 ## Purpose
 
 The Burning Ship encoder implements a **bijective mapping** between arbitrary
