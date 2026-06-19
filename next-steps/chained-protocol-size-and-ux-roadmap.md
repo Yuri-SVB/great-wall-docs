@@ -12,10 +12,12 @@ The implementation hard-caps at 256 bits / 24 words / 8 stages
 mental effort for diminishing returns — the better lever past 24 words is more
 between-stage Argon2 iterations, not more stages, and interfaces should advise
 this. A user with a specific reason to exceed 256 bits could instead **manually
-combine keys from multiple setups**. Concretely, expose an optional **pepper**
-field in an advanced mode where the *pepper = the result of a previous setup*,
-so setups compose. **Revisit:** whether/when to lift the cap, and the exact
-pepper semantics. (The salt+SHA512 carry-over in §4 is the natural primitive.)
+combine keys from multiple setups**. As of protocol `0.3.0` the **stage-0 text
+field is exactly this pepper primitive**: set *pepper = the result of a previous
+setup* (its master-secret export) and feed it in as stage-0 text, so setups
+compose. **Revisit:** whether/when to lift the cap, and the exact pepper
+semantics. (The Argon2id master-secret carry-over in §4 is the natural
+primitive.)
 
 ## 2. Per-stage Argon2 iteration count — currently fixed (official)
 **Official policy (now):** a *single* Argon2 iteration count is fixed at setup
@@ -87,11 +89,20 @@ fact (the iteration count stays fixed, §2):
 
 To support this elegantly, at *any* stage boundary the UI should be able to:
 - **copy the words so far without displaying them** (clipboard only), and
-- **copy `SHA512(words_so_far ++ user_salt)`** for a user-provided salt.
+- **copy the master-secret export** — `Argon2id` over the setup transcript so
+  far (stage-0 text ‖ N ‖ per-stage params ‖ per-stage leaf-centre coordinates,
+  up to the exporting stage) with **the exporting stage's own text label appended
+  to the message** and a **fixed salt `b"greatwall"`** (same style as the
+  inter-stage chain) — for a blind carry-over into another wallet or as the
+  pepper of a downstream setup. Available at every non-0 stage and **not**
+  contingent on completing later stages (see DESIGN.md → *Master-Secret Export*).
 
-The current version already does this at the second stage (the salt + SHA512
-button that appears after decoding); generalize it to **every** stage boundary.
-This is also the primitive behind the §1 pepper idea.
+As of `0.3.0` this **replaces** the earlier `SHA512(words_so_far ++ user_salt)`
+button: the salted SHA-512 digest is superseded by the Argon2id export, which
+tolerates large peppers/outputs without entropy collapse. Generalize the export
+to **every** stage boundary (today's default takes only the first 32 characters
+of the 1024-byte output; full output behind advanced options is a TODO). This is
+also the primitive behind the §1 pepper idea.
 
 ## 5. Forgotten inter-stage parameter — recover by recognizing the fractal
 A large parameter space makes it unlikely that uniformly-distributed

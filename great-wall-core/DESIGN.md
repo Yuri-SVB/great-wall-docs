@@ -1,16 +1,33 @@
 # Burning Ship Encoder — Design Document
 
-> **Chained protocol version: `0.2.0`** (one 32-bit point per stage; pre-1.0,
-> unstable). This document is the **single source of truth** for
-> `great-wall-core` at this protocol version; the code declares the same
-> `PROTOCOL_VERSION` (`great-wall-core/burning_ship/protocol.py`) and stamps it
-> into encode/decode output (`protocol_version`). Bump both together when the
-> protocol's behaviour changes. Lineage: `0.1.0` two-stage prototype → `0.2.0`
-> chained (current) → `0.3.0+` new parameters → `1.0.0` first stable (at which
-> point comprehensive frozen test vectors are rebuilt; interim vectors are
-> provisional and a harness version guard flags mismatches as STALE).
-> (Independent of the Rust `ENGINE_VERSION` — the single-fractal encode/decode
-> algorithm — unchanged at `0.1.0`.)
+> **Chained protocol version: `0.3.0`** (one 32-bit point per *point* stage,
+> plus a mandatory text-only **stage 0**; pre-1.0, unstable). This document is
+> the **single source of truth** for `great-wall-core` at this protocol version;
+> the code declares the same `PROTOCOL_VERSION`
+> (`great-wall-core/burning_ship/protocol.py`) and stamps it into encode/decode
+> output (`protocol_version`). Bump both together when the protocol's behaviour
+> changes. Version `0.3.0` makes three behaviour-changing moves:
+>
+> 1. A **mandatory, point-less stage 0** carries only a short text input and is
+>    chained into stage 1 exactly like any other stage. Because stage 1's
+>    fractal now derives from stage-0 text, **there is no longer a public
+>    "canonical" first fractal** — every point-bearing fractal is private and
+>    chain-derived (see *Chained Protocol*).
+> 2. Stage-0 text is **strongly restricted** for user safety (upper-case
+>    ASCII alphanumerics and `-` only) and doubles as a **salt** (a label such
+>    as `MAIN-STASH` / `RETIREMENT`) or a **pepper** (build one setup over
+>    another — a password manager, Shamir share, or a prior Great Wall setup).
+> 3. The master-secret carry-over is no longer `SHA512(seedphrase ‖ text)`; it
+>    is a single **Argon2id** pass over the full, reproducible setup transcript
+>    (*Master-Secret Export*).
+>
+> Lineage: `0.1.0` two-stage prototype → `0.2.0` chained (one point per stage)
+> → `0.3.0` stage-0 text + Argon2id carry-over (current) → `1.0.0` first stable
+> (at which point comprehensive frozen test vectors are rebuilt; interim vectors
+> are provisional and a harness version guard flags mismatches as STALE). This
+> is a **hard, backward-incompatible** change: `0.2.0` encodings do not
+> round-trip across it. (Independent of the Rust `ENGINE_VERSION` — the
+> single-fractal encode/decode algorithm — unchanged at `0.1.0`.)
 
 ## Purpose
 
@@ -30,49 +47,103 @@ stored state beyond the shared parameters.
 
 ---
 
-## Chained Protocol — One Point Per Stage
+## Chained Protocol — Stage 0 Text, One Point Per Later Stage
 
-**Official rule.** The protocol encodes **exactly one 32-bit point per stage**,
-and **each stage is its own fractal** derived by hashing all preceding points:
+**Official rule.** The protocol begins with a mandatory **stage 0 that carries
+no point — only a short text input** — and then encodes **exactly one 32-bit
+point per later stage**. Every stage (stage 0 included) is a link in one
+memory-hard chain, and every point-bearing stage is its own fractal:
 
 ```
-one stage  =  one fractal  =  one haystack
+stage 0    =  text only (no point)  =  the salt/pepper that seeds the chain
+one stage  =  one fractal           =  one haystack   (stages 1 .. N)
 one point  =  one needle
 ```
 
-`n_stages = entropy_bits / 32`. The **first** stage (index 0) is the public,
-canonical Burning Ship (o = p = q = 0). Every **later** stage's fractal
-parameters are produced by running the memory-hard chain over the concatenated
-bits of *every preceding point*:
+`N = entropy_bits / 32` is the number of **point** stages (1 .. N); the total
+stage count is `N + 1` because stage 0 is always present. Stage 0 is chained
+into stage 1 **exactly like any other stage** — its text is the first input the
+memory-hard chain consumes, so even stage 1's fractal depends on it:
 
 ```
-θ_k  =  SHA-256( Argon2^N( bits of points 0 .. k−1 ) )  →  (o, p, q)
+θ_k  =  SHA-256( Argon2^N( stage-0 text  ‖  bits of points 1 .. k−1 ) )  →  (o, p, q)
 ```
 
-with `N` the user-chosen Argon2 iteration count. Because stage `k+1`'s fractal
-cannot be derived until stage `k`'s point is fixed (the next θ depends on all
-prior points), the derivations form a strict chain — and each link is a full
-`N`-iteration Argon2 run. An `n_stages`-stage secret therefore contains **one
-canonical fractal and `n_stages − 1` secret, chain-derived fractals**, and the
-honest derivation cost is ≈ `(n_stages − 1) · N` Argon2 passes.
+with `N_iter` the user-chosen Argon2 iteration count. Because stage `k+1`'s
+fractal cannot be derived until stage `k`'s point is fixed (the next θ depends
+on all prior points *and* on stage-0 text), the derivations form a strict chain
+— and each link is a full `N_iter`-iteration Argon2 run.
 
-**Why one point per stage.** The design goal is *haystack ≫ needle*: specifying
-*which* fractal (the haystack) must cost far more than specifying *where* in it
-the point sits (the needle, ≈ 32 bits). Chaining one point per stage multiplies
-the cost of descriptively bypassing the memory-hard derivation by the number of
-stages: a perceptual-oracle attacker who tries to *describe* a fractal instead
-of deriving it must reconstruct *every* fractal in the chain, and cannot start
-on stage `k+1` until stage `k`'s point is fixed. So the labyrinth-description
-cost `D_θ` scales with the number of stages while a single point stays ≈ 32 bits
-— the inequality `D_θ ≫ D_pt` is enforced per stage and compounded across the
-chain. (See `great-wall-docs/next-steps/research-notes-substrate-hardness.md`
-for the full security analysis and the deferred parameter-family discussion.)
+**No more "canonical fractal."** In `0.2.0` the first stage was the public,
+canonical Burning Ship (`o = p = q = 0`) — a fractal an attacker already knew.
+Seeding the chain from stage-0 text removes that privileged surface: **every**
+point-bearing fractal (stage 1 included) is now private and chain-derived from a
+user-controlled input. With a non-empty stage-0 label there is no fractal in the
+setup that an attacker can know in advance. (An *empty* stage-0 text still
+produces a deterministic base fractal, but it is no longer a special, named
+"canonical" surface; interfaces should encourage a non-empty label.)
 
-**Breaking change.** This supersedes the earlier two-stage /
-multiple-points-per-stage prototype (which used 2 stages with 1/2/4 points each
-and a single stage-1 → stage-2 derivation). It is a **hard,
-backward-incompatible** protocol update: encodings do not round-trip across the
-change, and old session/vector documents are not compatible.
+**Stage 0 as salt or pepper.** The same derivation that consumes stage-0 text
+gives it two complementary uses:
+
+- **Salt — a human label.** `MAIN-STASH`, `RETIREMENT`, `COLD-2026`: distinct
+  labels deterministically fork the *entire* chain, so one memorised seed yields
+  independent wallets per label with no extra entropy to store. The fork is
+  total, and that is the point: the tacit **brain memory** of the setup yielded
+  by one label is, **by design, not applicable** to the setups under other
+  labels. Each label is its own independent labyrinth — recognition memory does
+  not transfer between them, so training (or coercing) the recall of one reveals
+  nothing about another.
+- **Pepper — build one setup over another.** Feed in the output of a prior
+  secret system — a password manager entry, a Shamir share, or a previous Great
+  Wall setup — so setups *compose*: the Great Wall sits on top of an existing
+  secret rather than beside it.
+
+**Strong text restrictions (user safety).** *Every* stage text input — stage-0
+text **and** the per-stage export label that every non-0 stage carries (see
+*Master-Secret Export*) — is restricted to **upper-case ASCII alphanumerics and
+`-` only** (`[A-Z0-9-]`, ASCII-encoded). The restriction exists so the same text
+round-trips identically across devices, keyboards, locales, and clipboards — a
+stray lower-case letter, accent, or Unicode look-alike would silently fork the
+chain (or the export) into a different (unrecoverable) result. The GUI input
+field enforces this live: it **up-cases** typed letters and **rejects**
+characters outside the set, and in both cases **signals the user that a
+restriction is being applied** (so the divergence is never silent). See
+*GUI Viewer → Stage 0 text input*.
+
+**Illustrative stage-0 labels (generic).** The labels below are *illustrative
+archetypes*, not prescriptions — they describe the kind of custody a setup
+serves. They span the threat model the tool is built for: anyone whose key
+custodian is a target for coercion.
+
+| Category                             | Example labels |
+|--------------------------------------|----------------|
+| Personal / family                    | `PERSONAL-COLD-STORAGE`, `FAMILY-INHERITANCE-2040`, `KIDS-COLLEGE`, `RETIREMENT` |
+| Institutional / corporate treasury   | `CORP-TREASURY-COLD-001`, `BOARD-MULTISIG-3-OF-5`, `FOUNDATION-ENDOWMENT-RESERVE` |
+| Sovereign / national reserve         | `SOVEREIGN-COLD-RESERVE`, `CENTRAL-BANK-RESERVE`, `STRATEGIC-NATIONAL-RESERVE` |
+| Trade secret / IP                    | `TRADE-SECRET-FORMULA`, `PROPRIETARY-RECIPE-VAULT`, `PATENT-BLUEPRINT` |
+| Whistleblower / investigative        | `WHISTLEBLOWER-EVIDENCE-VAULT`, `WITNESS-TESTIMONY-ESCROW` |
+| Press freedom / source protection    | `HUMAN-RIGHTS-DOSSIER`, `PRESS-FREEDOM-LEDGER` |
+| Military protocols / classified docs | `MANHATTAN-PROJECT`, `HQ-NUMBER-STATION-CODES`, `OPERATION-XYZ-FILES` |
+
+**Why one point per (later) stage.** The design goal is *haystack ≫ needle*:
+specifying *which* fractal (the haystack) must cost far more than specifying
+*where* in it the point sits (the needle, ≈ 32 bits). Chaining one point per
+stage multiplies the cost of descriptively bypassing the memory-hard derivation
+by the number of stages: a perceptual-oracle attacker who tries to *describe* a
+fractal instead of deriving it must reconstruct *every* fractal in the chain,
+and cannot start on stage `k+1` until stage `k`'s point is fixed. So the
+labyrinth-description cost `D_θ` scales with the number of stages while a single
+point stays ≈ 32 bits — the inequality `D_θ ≫ D_pt` is enforced per stage and
+compounded across the chain. (See
+`great-wall-docs/next-steps/research-notes-substrate-hardness.md` for the full
+security analysis and the deferred parameter-family discussion.)
+
+**Breaking change.** This supersedes the `0.2.0` chain (one point per stage,
+canonical first fractal, `SHA512` carry-over) and the earlier two-stage /
+multiple-points-per-stage prototype. It is a **hard, backward-incompatible**
+protocol update: encodings do not round-trip across the change, and old
+session/vector documents are not compatible.
 
 **Pipeline.** The chained pipeline is the single source of truth in
 `great-wall-core/burning_ship/protocol.py`
@@ -571,29 +642,38 @@ In practice, the encoder reliably handles **32 bits per point.** Beyond that,
 the rectangle becomes too small for island discovery to find meaningful
 structure at the minimum pixel resolution.
 
-The protocol encodes **exactly one 32-bit point per stage** (see *Chained
-Protocol — One Point Per Stage* below), so the number of stages equals the
-entropy size divided by 32 — equivalently, words divided by 3. Every BIP39 size
-that is a multiple of 32 bits is therefore supported uniformly, from 32 bits up
-to a hard cap of 256:
+The protocol encodes **exactly one 32-bit point per point stage** (see *Chained
+Protocol — Stage 0 Text, One Point Per Later Stage* below), so the number of
+**point** stages `N` equals the entropy size divided by 32 — equivalently, words
+divided by 3 — atop a mandatory, point-less **stage 0** (total stages `N + 1`).
+Every BIP39 size that is a multiple of 32 bits is supported uniformly, from 32
+bits up to a hard cap of 256:
 
-| Words | Entropy  | Stages | Secret fractals | Tier |
-|------:|---------:|-------:|----------------:|------|
-| 3     | 32 bits  | 1      | 0               | sub-standard |
-| 6     | 64 bits  | 2      | 1               | sub-standard |
-| 9     | 96 bits  | 3      | 2               | sub-standard |
-| 12    | 128 bits | 4      | 3               | standard (default) |
-| 15    | 160 bits | 5      | 4               | standard |
-| 18    | 192 bits | 6      | 5               | standard |
-| 21    | 224 bits | 7      | 6               | standard |
-| 24    | 256 bits | 8      | 7               | standard |
+| Words | Entropy  | Point stages (N) | Total stages (incl. stage 0) | Tier |
+|------:|---------:|-----------------:|-----------------------------:|------|
+| 3     | 32 bits  | 1                | 2                            | sub-standard |
+| 6     | 64 bits  | 2                | 3                            | sub-standard |
+| 9     | 96 bits  | 3                | 4                            | sub-standard |
+| 12    | 128 bits | 4                | 5                            | standard (default) |
+| 15    | 160 bits | 5                | 6                            | standard |
+| 18    | 192 bits | 6                | 7                            | standard |
+| 21    | 224 bits | 7                | 8                            | standard |
+| 24    | 256 bits | 8                | 9                            | standard |
 
-The first stage encodes its 32-bit point on the canonical Burning Ship formula
-(o=0, p=0, q=0). Every later stage encodes its point on a *perturbed* fractal
-whose parameters (o, p, q) are derived from the memory-hard hash of **all
-preceding points** (Argon2 → SHA-256 → θ). The first stage is therefore public
-("the haystack is given"); the remaining `stages − 1` are secret, chain-derived
-haystacks.
+Every point stage (1 .. N) encodes its 32-bit point on a *perturbed* fractal
+whose parameters (o, p, q) are derived from the memory-hard hash of **stage-0
+text plus all preceding points** (Argon2 → SHA-256 → θ). Unlike `0.2.0`, **none
+of these fractals is public** — there is no canonical first surface; with a
+non-empty stage-0 label all `N` haystacks are secret and chain-derived.
+
+**Exact, bidirectional BIP39 ⇄ Great Wall conversion is preserved at every size,
+including the sub-standard ones.** A `3·N`-word mnemonic encodes losslessly to
+`N` points and decodes back to the identical mnemonic. This is retained
+deliberately for two reasons: (1) **interoperability** — a Great Wall setup can
+be imported into, or exported from, any BIP39 wallet at any supported size; and
+(2) **reassurance** — a skeptical user who doubts that the fractal mapping is
+truly lossless can verify the round-trip themselves, in either direction, and
+watch their exact words come back.
 
 ### Size range, the 256-bit cap, and the iteration policy
 
@@ -605,11 +685,12 @@ haystacks.
   exceed 256 bits could chain multiple setups via a future "advanced pepper"
   field (pepper = a prior setup's result) — tracked in next-steps; revisit.
 - **Sub-standard sizes (32/64/96 bits)** sit below BIP39's 128-bit floor and are
-  offered for completeness. The **32-bit / single-stage** mode has only the
-  canonical first stage and no memory-hard chain, so its coercion-resistance is
-  *minimal but nonzero*: a wrench attacker without a Great Wall–compatible app
-  still fails, and setup beats the brute-force resistance of a 9-decimal-digit
-  PIN. 128 bits (12 words) is the recommended default.
+  offered for completeness. The **32-bit / single-point** mode (stage 0 + one
+  point stage) still runs the memory-hard chain — stage 1's fractal is derived
+  from stage-0 text — so even here there is no public canonical surface; its
+  coercion-resistance is *minimal but nonzero*: a wrench attacker without a Great
+  Wall–compatible app still fails, and setup beats the brute-force resistance of
+  a 9-decimal-digit PIN. 128 bits (12 words) is the recommended default.
 - **One Argon2 iteration count per setup, calibrated on-device (official).** To
   prevent parameter explosion, a single iteration count `N` is fixed at setup
   and applied to *every* stage (`protocol.encode_entropy` / `decode_entropy`
@@ -647,7 +728,9 @@ haystacks.
 
 ## Default Initial Area
 
-The default rectangle covers the **canonical Burning Ship fractal region**:
+The default rectangle covers the **base Burning Ship fractal region** (the
+viewport for every stage's perturbed surface; no longer a privileged "canonical"
+fractal — see *Chained Protocol*):
 
 ```
 Re ∈ [−2.5, +1.5)      Im ∈ [−2.0, +1.5)
@@ -770,24 +853,64 @@ user-selected fractal points back into entropy bits.
 
 ### Chained encoding architecture
 
-The entropy is split into `n_stages = entropy_bits / 32` chunks of 32 bits, one
-per stage; each chunk is encoded as a single point on its own fractal surface:
+The setup opens with a text-only **stage 0**; the entropy is then split into
+`N = entropy_bits / 32` chunks of 32 bits, one per **point** stage, each encoded
+as a single point on its own fractal surface:
 
-| Stage | Formula                        | Parameters     | Derived from                         |
-|-------|--------------------------------|----------------|--------------------------------------|
-| 0     | Canonical Burning Ship (d = 2) | o=0, p=0, q=0  | — (public, canonical)                |
-| k ≥ 1 | Perturbed BS with (o, p, q)    | Argon2-derived | SHA-256(Argon2^N(points 0 .. k−1))   |
+| Stage   | Carries     | Parameters     | Derived from                                         |
+|---------|-------------|----------------|------------------------------------------------------|
+| 0       | text only   | — (no fractal) | user input (`[A-Z0-9-]`, ASCII) — salt / pepper      |
+| k (1..N)| one point   | Argon2-derived | SHA-256(Argon2^N(stage-0 text ‖ points 1 .. k−1))    |
 
-Each secret stage's parameters (o, p, q) are derived from the memory-hard hash
-of **all preceding points**, so every fractal surface depends on the entire
-prefix before it — a strict chain. The user fixes one point per stage and runs
-the (memory-hard) Argon2 step to unlock the next stage's fractal, repeating
-until the last stage; only then is the full mnemonic recovered. Note: with
-`N ≥ 1` the honest cost is `n_stages − 1` chained Argon2 runs, one per secret
-stage. The sections below — written when the prototype used two stages with
-P1/P2/… points — illustrate the per-stage mechanics; under the current protocol
-each "stage" contributes exactly one point and the Argon2 transition repeats
-between every consecutive pair of stages.
+Each point stage's parameters (o, p, q) are derived from the memory-hard hash of
+**stage-0 text plus all preceding points**, so every fractal surface depends on
+the entire prefix before it — a strict chain that begins at stage-0 text. There
+is no public, canonical fractal: stage 1 already depends on the user's stage-0
+label. The user enters stage-0 text, then fixes one point per stage and runs the
+(memory-hard) Argon2 step to unlock the next stage's fractal, repeating until the
+last stage; only then is the full mnemonic recovered. With `N_iter ≥ 1` the
+honest cost is `N` chained Argon2 runs (stage 0 → 1, then one per point stage).
+The sections below — written when the prototype used two stages with P1/P2/…
+points — illustrate the per-stage mechanics; under the current protocol each
+point stage contributes exactly one point and the Argon2 transition repeats
+between every consecutive pair of stages, starting from stage 0.
+
+### Stage 0 text input
+
+Stage 0 is a mandatory text field — no point is clicked or rendered — whose
+content seeds the whole chain. Two design rules govern it:
+
+**Character restrictions (enforced live, never silent).** Accepted input is
+**upper-case ASCII alphanumerics and the hyphen only** (`[A-Z0-9-]`). The field:
+
+- **up-cases** letters as they are typed (so `main-stash` becomes `MAIN-STASH`),
+  and
+- **rejects** any character outside the set (accents, spaces, punctuation,
+  Unicode look-alikes, control bytes).
+
+In *both* cases the GUI **signals that a restriction was applied** — a brief
+status-bar note and/or a field flash — so the user always knows their keystroke
+was transformed or dropped. The restriction is a safety measure, not cosmetic:
+the same label must hash to the same chain on every device, keyboard layout,
+locale, and clipboard, and a single un-normalised character would silently fork
+the setup into a different, unrecoverable wallet.
+
+**Visibility toggle.** The field offers a show/hide toggle (like a password
+box). It defaults to hidden because stage-0 text is frequently a **pepper** —
+the output of another secret system (a password-manager entry, a Shamir share,
+or a prior Great Wall setup) — which the user wants masked. When stage-0 text is
+merely a **salt** (a non-secret label such as `RETIREMENT`) the user can reveal
+it to confirm spelling. The *same* derivation scheme serves both roles: the
+engine does not distinguish a salt-label from a pepper-secret — only the user's
+intent (and whether the input is itself secret) differs.
+
+**Per-stage export-label fields (non-0 stages).** The same restricted text widget
+(identical `[A-Z0-9-]` up-case/reject/signal behaviour and visibility toggle)
+reappears at **every non-0 stage**, supplying that stage's **master-secret export
+label** — appended to the Argon2id message (the export uses a fixed salt; see
+*Master-Secret Export*). It is independent of stage-0 text and is available at
+each stage boundary **without** waiting for later stages, so a user can export /
+carry over at any truncation point.
 
 ### Stage 1: Encoding (mnemonic → P1, P2)
 
@@ -804,7 +927,7 @@ mnemonic_to_bits()          12 words → 132 bits (128 entropy + 4 SHA-256 check
 entropy[:64]                 First 64 entropy bits → 2 chunks of 32 bits each.
     │                        (4-bit checksum is discarded; recomputed on decode.)
     ▼  (for each chunk)
-encode(chunk, area, params)  Rust FFI: bisection tree over the canonical fractal.
+encode(chunk, area, params)  Rust FFI: bisection tree over the stage's fractal.
     │                         Returns EncodeResult with:
     │                           • point_re, point_im     (f64, for display only)
     │                           • point_re_raw, point_im_raw  (i64, for lossless decode)
@@ -1113,13 +1236,18 @@ than expected.
 
 ## Per-Stage Parameter Derivation (Hash Byte Attribution)
 
-Every secret stage (index `k ≥ 1`) derives its fractal parameters from the
-memory-hard chain run over the concatenated bits of **all preceding points**:
+Every point stage (index `k`, `1 ≤ k ≤ N`) derives its fractal parameters from
+the memory-hard chain run over **stage-0 text followed by the concatenated bits
+of all preceding points**:
 
 ```
-digest_k = Argon2^N( bits of points 0 .. k−1 )       // the memory-hard chain
+digest_k = Argon2^N( stage-0 text  ‖  bits of points 1 .. k−1 )   // the memory-hard chain
 h        = SHA-256(digest_k)
 ```
+
+Stage-0 text is the ASCII bytes of the normalised `[A-Z0-9-]` label/pepper, so
+stage 1 (`k = 1`, empty point prefix) already depends on it — which is exactly
+why no fractal in the chain is the old public "canonical" surface.
 
 The first 24 bytes of `h` are split into three 8-byte big-endian uint64 values
 in **alphabetical order**:
@@ -1145,6 +1273,94 @@ single time. The candidate *new* parameter families under study (history-
 dependent folds, polynomial perturbations, bit-gated masks, …) are deliberately
 **out of scope** for this protocol update and tracked separately in
 `great-wall-docs/next-steps/research-notes-substrate-hardness.md`.
+
+---
+
+## Master-Secret Export (final Argon2id over the setup transcript)
+
+A setup can export a **master secret** for blind hand-off (paste into another
+wallet, derive a non-BIP39 seed, or act as the *pepper* of a downstream setup).
+In `0.2.0` this carry-over was `SHA512(seedphrase ‖ text)`. As of `0.3.0` it is a
+single **Argon2id** pass — built in the **same style as the inter-stage chain
+(fixed salt `b"greatwall"`, with all per-setup uniqueness carried by the
+message)** — over the **reproducible setup transcript**: the stage-0 input, the
+iteration count, and, for every point stage *up to and including the exporting
+stage* `k`, its derived parameters and the centre of its encoded point's leaf
+rectangle, with the **exporting stage's own text input appended to the message**:
+
+```
+master = Argon2id(
+    message = stage-0 text
+              ‖ N_iter
+              ‖ stage-1 params ‖ stage-1 leaf-centre (re, im)
+              ‖ stage-2 params ‖ stage-2 leaf-centre (re, im)
+              ‖ …
+              ‖ stage-k params ‖ stage-k leaf-centre (re, im)
+              ‖ stage-k text,    // EXPORTING stage's text (k ≥ 1), appended to
+                                 //   the input; same [A-Z0-9-] restrictions
+    salt    = b"greatwall",      // FIXED, same as the inter-stage chain
+    type    = Argon2id,
+    m       = 2^16 KiB  (65 536 KiB ≈ 64 MiB),
+    p       = 2 threads,
+    t       = 8 passes,
+    l       = 1024 bytes of output
+)
+```
+
+Each stage contributes its **params** (the `(o, p, q)` that defined its fractal)
+and its **leaf-centre coordinates** (the raw I4F60 centre of the decoded point's
+leaf rectangle), so the transcript is an exact, order-preserving function of the
+setup so far and reproduces bit-for-bit on recovery.
+
+**Stage-k text rides in the message; the salt is fixed.** This mirrors the
+inter-stage chain, which also uses the fixed salt `b"greatwall"` and draws all of
+its uniqueness from a high-entropy input (there, the memory-hard digest; here,
+the per-setup transcript). The exporting stage's own text input (a non-0 stage,
+not stage 0, subject to the same `[A-Z0-9-]` restrictions) is simply **appended
+to the Argon2id message** rather than supplied as the salt. Two payoffs: the
+construction is uniform with the rest of the protocol, and — because the label no
+longer functions as a salt — **the Argon2 ≥ 8-byte salt minimum no longer
+applies**, so a stage label may be any length (a bare `1` is fine; no padding or
+pre-hashing is needed). Stage 0 stays free to play its chain-seeding salt/pepper
+role.
+
+**Available at every non-0 stage, not contingent on later stages.** The export
+is offered at **all** non-0 stages (`k ≥ 1`), and producing it at stage `k`
+does **not** require completing stages `k+1 .. N`. This is the convenience
+primitive behind *amendable setups* (truncate-early / extend-later, see
+`next-steps/chained-protocol-size-and-ux-roadmap.md` §4): a user may stop at any
+stage boundary and carry over exactly the prefix fixed so far.
+
+**Illustrative export labels (versioning).** Because each non-0 stage carries
+its own label, the natural use is to **deterministically version keys per
+usage**. Generic conventions (`[A-Z0-9-]`, same restrictions):
+
+| Convention            | Example labels |
+|-----------------------|----------------|
+| Sequence (rotation #) | `1`, `2`, … (or zero-padded `00000001` for tidy sorting) |
+| Date (`YYYY-MM-DD`)   | `2026-06-19` (issuance / rotation date) |
+| Purpose-tagged        | `SIGNING-1`, `WITHDRAWAL-2026-06`, `AUDIT-2026-Q2`, `COSIGNER-03-OF-05` |
+| Time-locked tranche   | `TRANCHE-UNLOCK-2030-01-01` |
+
+Since the label rides in the Argon2id **message** (not the salt), there is **no
+length minimum** — a bare `1` works; zero-padding (`00000001`) is now only a
+cosmetic sorting convention, not a requirement.
+
+**Why these parameters.** The export must tolerate **large outputs and large
+peppers without entropy collapse** — feeding the 1024-byte result back in as a
+downstream pepper must not narrow the space. Hence Argon2id (data-independent
+first half resists side channels on a possibly-shared pepper, data-dependent
+remainder keeps the memory gate), `m = 2^16 KiB` / `p = 2` / `t = 8` for a
+modest but real cost on commodity hardware, and `l = 1024` so the output is
+generous. **Excess output is simply ignored** — a consumer takes only as many
+bytes as it needs.
+
+**Output-size ergonomics (TODO).** 1024 bytes is unwieldy as a default. The
+intended UX gates the **full 1024-byte output behind advanced options** and
+shows a conventional **32 characters** (the **first 32**) by default. Building
+that gating is **deferred** (this change set is already large): **for the time
+being the export uses only the first 32 characters of the Argon2id output.**
+Tracked in `next-steps/chained-protocol-size-and-ux-roadmap.md`.
 
 ---
 
