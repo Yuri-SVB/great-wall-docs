@@ -12,10 +12,28 @@ island** found inside that stage's **leaf rectangle** — a deliberately *simple
 deterministic* criterion so encode, decode, and the UI all single out the same
 one.
 
-- **Criterion:** the island with the greatest `flood_area = pixel_count ×
-  pixel_delta²` in the leaf rect. For the "distinct" qualifier, optionally
-  require it to win by a margin over the runner-up (tunable; default: just the
-  max).
+**Total-order criterion** (apply in order; the first that discriminates wins):
+
+1. **Largest area** — greatest `flood_area = pixel_count × pixel_delta²`
+   (reduces to pixel count at a single resolution). The "big" pick.
+2. **Smallest barycenter** — lexicographic `(center_re, center_im)` as raw
+   `i64`. A total order on distinct islands (two disjoint islands sharing an
+   exact integer barycenter is effectively impossible). Chosen over
+   "first-in-PRNG-discovery-order" because it depends only on **final island
+   geometry**, not on the discovery loop's internal ordering — robust to refactors
+   and automatically identical for encode/decode (the bijection already produces
+   identical island sets).
+3. *(Theoretical final tie — cannot realistically occur)* lowest `escape_count`,
+   then discovery index.
+
+**Zoom-invariance.** The criterion is evaluated over a **fixed reference — the
+leaf rectangle sampled at a canonical resolution**, in fractal coordinates — *not*
+over whatever raster is currently displayed. Otherwise the "largest connected
+region" would change with pan/zoom and the user would highlight a different island
+each time. The result is a property of the *stage*; it is then rendered into
+whatever viewport is current. (Still ux-computable, no new FFI: sample the leaf
+rect once at a fixed resolution and run the criterion there.)
+
 - **Not the encoder's island `score`.** `great-wall-core/DESIGN.md` already
   defines `scoreⱼ = log₂(good_total_area / flood_areaⱼ)` — that is an
   *inverse-area* weight used for the weighted-median split, so it favours the
