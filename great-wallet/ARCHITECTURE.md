@@ -758,6 +758,46 @@ curious.
 >   safer used *scientifically* (spatial-memory / maze-learning research)
 >   or within the doctoral-thesis framing than as a public pitch.
 
+#### Corollary: physicality as a feature (the macro-trend angle)
+
+The same thesis, argued from technology trends rather than cognition.
+The dominant decade-long vector has been **offloading** memory and
+cognition to devices, cloud, and custodians — which makes
+"brain-memory-as-critical-infrastructure" *read* as regressive. But not
+every newest thing is the next thing: some trends overshoot what human
+physicality accommodates and correct. The Metaverse is the clean example
+— pitched as imminent at the peak of lockdown, it hit the ceiling of
+embodiment and reverted.
+
+The useful framing is an **inversion**: the Metaverse tried to *dissolve*
+physicality (drag embodied life into screens) and broke against it; Great
+Wall *enlists* physicality (anchors a digital secret in embodied memory
+and an irreducible physical time-cost). *Same ceiling, opposite side.*
+The offloading trend it runs against is precisely what created the gap it
+fills: anything offloaded to a digital or custodial store is, by
+construction, seizable, copyable, and remotely reachable — and the brain
+is the one substrate that is none of those (see *The Four Properties* and
+*TKBA* above).
+
+Two guard-rails so this stays an argument, not a slogan:
+
+- **Scope it narrowly.** Many offloaded faculties did *not* revert (mental
+  arithmetic, map navigation) and that is fine. The claim is *not* that
+  memory broadly returns; it is that for the high-stakes, coercion-exposed
+  niche of self-custody, the physical brain is the **only** substrate that
+  delivers. The Metaverse is the *illustration* ("physicality wins in some
+  domains"), not the proof.
+- **It dissolves an objection; it does not prove adoption.** "Trends hit
+  ceilings and revert" removes the "this is just backwards" dismissal but
+  says nothing about whether users will choose the effort — that rests on
+  the re-activation framing and the *measured* training system, a separate
+  leg. (Note too: the Metaverse failed on *desire*; this proposition's
+  adoption risk is *effort* — same lesson, different mechanism.)
+
+> *Positioning one-liner (tentative):* "Not every newest thing is the next
+> thing. The Metaverse fought the body and broke; we put your keys
+> somewhere only a body can go."
+
 ---
 
 ## Security Model Summary
