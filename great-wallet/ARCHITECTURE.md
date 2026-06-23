@@ -491,6 +491,13 @@ Key properties:
   confirmed by the feature, app tells user it's now safe to use system
   to secure stash (risk of loss by forgetting became negligible).
   Regular maintenance reviews are still done following SM-2 doctrine.
+  Until graduation there is a bootstrapping chicken-and-egg paradox —
+  securing an untrained setup needs memorized entropy, while memorizing
+  it needs training — so a **transient provisional key** must be held
+  externally across the consolidation window and destroyed at
+  graduation, after which the setup self-secures (its own entropy gates
+  its own TLP). See
+  [`next-steps/provisional-key-bootstrapping.md`](../next-steps/provisional-key-bootstrapping.md).
 - **Inheritance.** Deadlock by death, memory loss, or mental
   incapacitation is still guarded by companion inheritance protocol.
 
