@@ -682,6 +682,84 @@ puzzles for instant setup of arbitrary, user-defined delay.
 
 ---
 
+## Guiding UX Principles
+
+Two principles govern the *feel* of every Great Wall surface, app-wide.
+They are design north-stars, not security claims — but they are
+load-bearing: the product asks the user to trust their own memory with
+their savings, and whether that proposition feels *plausible* is largely
+a UX problem.
+
+### 1. Sober, but game-like
+
+The interface should never compete with the fractal for attention or
+lapse into gimmickry, vanity metrics, or gamified nagging — yet it should
+feel tactile, responsive, and quietly rewarding to operate, so that
+practice reads closer to play than to drill. Controls favour direct,
+physical affordances (a rotary hue **wheel** the user clicks to turn, not
+a dropdown). Where a feature could be either a chore or a small pleasure,
+choose the pleasure. (Detailed in
+[`great-wall-ux/SCOPE.md`](../great-wall-ux/SCOPE.md#guiding-ux-principle-sober-but-game-like).)
+
+### 2. An instrument, not an app — re-activating a dormant faculty
+
+Great Wall asks the user to memorise 4–8 fractal "landscapes" and stake
+their retirement on that recall. To a public conditioned by a decade of
+smartphones this sounds implausible — but the faculty it draws on is
+**dormant, not absent**. Within living memory, holding dozens of phone
+numbers and navigating a city from a mental map was unremarkable; that
+capacity atrophied only recently (post-2007), and it can be re-activated.
+The product's task is to address the user's *subconscious memory of having
+been competent*, not to teach an alien new skill. Two design consequences
+follow:
+
+- **Posture: a competence-instrument, not a thinking-service.**
+  Pre-smartphone gadgets signalled that the *operator* was the clever one
+  and the device merely amplified them; the smartphone inverted this (the
+  device thinks; the user is a passenger). Great Wall deliberately takes
+  the first posture — the interface should feel like an instrument the
+  user *operates and masters*. That posture is itself what makes "you will
+  be the one who remembers" believable.
+- **Stability is physicality.** Physical control panels never reflow: a
+  button stays where the hand learned it, so the interface is offloaded to
+  spatial / muscle memory instead of forcing visual re-search each time.
+  Prefer fixed element positions over reflowing ones; labels *beside*
+  controls rather than above (so a changing value never moves anything);
+  persistent-but-greyed affordances over ones that appear and disappear.
+  This is the same spatial-memory machinery the core asks of the user —
+  the chrome should rehearse it, not fight it.
+
+**Grounding, not just romance.** The strongest precedent is the *method of
+loci* (memory palaces): spatial memory is the most robust, trainable form
+of human memory, and the fractal-as-territory is literally that. The bold
+ask sits well inside the demonstrated human ceiling.
+
+**Honesty as a feature.** The proposition's hard edge — "and when I am old,
+or injured?" — must not be waved away; it is answered by design and should
+be *featured*, not hidden: the spaced-repetition graduation gate (the stash
+is not secured until consolidation is measured and confirmed — see
+[celestial-peace-nf-core](#4-celestial-peace-nf-core)), the provisional-key
+bootstrapping window (see
+[`next-steps/provisional-key-bootstrapping.md`](../next-steps/provisional-key-bootstrapping.md)),
+and the inheritance protocol (phoenix-scroll). The romance earns the right
+to be made only because the rigour stands behind it.
+
+**Tone.** Frame this as re-activation and confidence ("you still have this;
+we will prove it to you"), never as decline or guilt ("you have grown
+lazy"). Guilt makes prospects defensive; recovered competence makes them
+curious.
+
+> *Candidate taglines (tentative, for the positioning voice):*
+> - "If ancient sailors could project a centaur onto a couple of dots in
+>   the sky and use it to cross oceans on makeshift boats, you can use a
+>   few weird fractal objects to secure your retirement."
+> - "If a lab rat can learn to navigate a maze, so can you." — deploy with
+>   care: a rat comparison can read as belittling in consumer copy; it is
+>   safer used *scientifically* (spatial-memory / maze-learning research)
+>   or within the doctoral-thesis framing than as a public pitch.
+
+---
+
 ## Security Model Summary
 
 | Threat                        | Mitigation                                                    |
