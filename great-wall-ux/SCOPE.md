@@ -104,6 +104,47 @@ internal module layout.
 - Iconography and typography tokens for the chrome that surrounds the
   fractal canvas.
 
+#### Console palette ("Gunmetal") — rationale
+
+The app's console (the message/help surface that floats over the foot of
+the viewer) is styled as a translucent, cool, **near-neutral blue-grey**
+("Gunmetal"): background `0xE6131519` (~90% opaque), cool off-white text
+`0xFFE9EDF2`, and a brighter same-cast accent `0xFFB8C2CC` for headers,
+the divider and the top edge. The reasoning, recorded so the decision can
+be revisited:
+
+- **Near-neutral, because the fractal owns the colour.** The six fractal
+  schemes are single-hue and *fully saturated*. Any saturation in the
+  chrome would harmonise with one scheme and clash with its complement, so
+  the panel must read as scheme-agnostic. A low-chroma grey is the only
+  colour that sits neutrally against all six.
+- **…but not a perfect grey, because materials aren't.** A dead-neutral
+  `R=G=B` reads as *abstract* — the colour equivalent of a flawless
+  machined plane; perfect symmetry tends toward the brutalist /
+  uninteresting. Real materials carry a faint cast (dye lot, resin, oxide),
+  and the eye reads that small asymmetry as evidence of *substance*. So the
+  channels are offset only a few levels (a whisper of blue) — enough to say
+  "made of something," far too little to count as a hue. This serves the
+  "instrument, not an app" principle (see
+  [`great-wallet/ARCHITECTURE.md`](../great-wallet/ARCHITECTURE.md#guiding-ux-principles)).
+- **Translucent, so the fractal bleeds through.** The console overlays the
+  canvas rather than taking a layout row (stable layout — the viewer never
+  resizes). ~90% opacity keeps text crisp while letting the fractal's
+  motion register faintly behind the glass.
+- **Temperature-matched text.** Cool background ⇒ cool-white text; a
+  warm-on-cool pairing reads as "printed on" rather than "one material lit
+  by one source."
+- **Accent by brightness, not hue.** Emphasis (headers, active state) uses
+  a *brighter tint of the same cast*, never a saturated colour — keeping
+  the chrome scheme-agnostic on every fractal palette.
+
+Alternatives considered along the temperature axis (all equally valid,
+same low-chroma discipline): Slate-teal (cooler), Graphite (almost
+neutral), Bakelite (warm red-brown), Olive-drab (green), Tube-amber (warm
+yellow). Gunmetal was chosen for the "precision instrument / late-90s
+gadget" feel; Bakelite is the documented fallback for a warmer,
+better-worn-personal-device read.
+
 ### Accessibility
 
 - Full accessibility — semantic labels, focus order, screen-reader
