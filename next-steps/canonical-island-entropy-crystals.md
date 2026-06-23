@@ -47,24 +47,33 @@ selecting it, it lights up, as if the user is *collecting crystals to build thei
 cryptographic key*. This turns an abstract bit-encoding into a tangible,
 rewarding act and gives each stage a memorable visual anchor.
 
-## 3. Interface — needs a small core/FFI addition
+## 3. Interface — core/FFI addition (implemented)
 
 Selection is core-side, so the core↔ux boundary must carry the canonical island's
-identity. Minimal addition: when core resolves a stage's leaf (during
-encode/decode it already discovers the islands), pick the canonical one and
-expose
+identity. **Implemented** in `great-wall-core` as the FFI entry point
+`bs_canonical_island` (`rust_engine/src/ffi.rs`, Python wrapper
+`burning_ship_engine.canonical_island`):
 
-- its **escape count**,
-- a **guaranteed-interior seed pixel** (fractal coords — any stored island
-  pixel), and
-- its **bounding box** + the **leaf rect** (for framing / the canonical zoom).
+- **Input:** the leaf rect + bisection `path` (both already returned by
+  `bs_decode_full`), plus the same discovery params / `o,p,q` / `rng_seed` used
+  for the decode.
+- **Behaviour:** runs `discover_islands` fresh over the leaf rectangle (no
+  inherited seeds — the leaf is never itself split, so its island set is defined
+  solely by this discovery) and applies `discovery::select_canonical_index`
+  (largest `pixel_count`, ties → earliest discovery order).
+- **Output:** the canonical island's **escape count**, a **guaranteed-interior
+  seed point** (fractal coords — the flood-filled pixel nearest the barycenter,
+  stored on `Island::seed_re/seed_im` so it stays inside non-convex islands),
+  its **bounding box**, and **pixel count**. Returns `0` when the leaf holds no
+  island.
 
 ux then renders the island's *shape* at display resolution by flood-filling the
 displayed `EscapeCountRaster` from that seed at that escape count (the per-pixel
-raster suffices for the **render**, just not for the **selection**). The
-`findCanonicalIsland` helper added to great-wall-ux is therefore a ux-side
-*fallback approximation* (largest connected component) — the authoritative pick
-is core's; `islandFromSeed` is the render primitive.
+raster suffices for the **render**, just not for the **selection**).
+`islandFromSeed` (great-wall-ux) is that render primitive; `seedPixelNear` snaps
+the core seed onto the matching pixel if display-resolution drift lands it a
+pixel or two off. There is deliberately **no ux-side selector** — the
+authoritative pick is core's.
 
 ## 4. Highlight rendering (the "white" ask) — open
 
@@ -99,12 +108,11 @@ much that recognition suffers.
 ## 7. Open questions
 
 - **Decided:** style = **flat white** (per discussion); render location =
-  **great-wall-ux** (`FractalCanvas` overlay).
+  **great-wall-ux** (`FractalCanvas` overlay, via `CanonicalIslandHighlight`).
 - **Decided:** selection = pixel count, then PRNG discovery order (core-side).
-- Core/FFI: expose the canonical island (escape count + interior seed + bbox +
-  leaf rect) from the encode/decode path.
-- Decorative-shell count/opacity — dogfooding.
-- Render location (great-wall-ux overlay vs great-wallet app-side overlay).
-- Whether the highlight is computed ux-side from the raster (first version) or
-  core-assisted (exact mask) — start ux-side.
-- Decorative-shell count/opacity — dogfooding.
+- **Done (core):** `bs_canonical_island` exposes escape count + interior seed +
+  bbox + pixel count; ux flood-fills the seed and paints flat white.
+- **Remaining (app):** `great-wallet` must bind `bs_canonical_island`, frame the
+  leaf at its canonical zoom, and pass `CanvasOverlays.canonicalIsland` to
+  `FractalCanvas`; then reuse the mask for the stage-tab crystal (§5).
+- Decorative-shell count/opacity — dogfooding (§6).
