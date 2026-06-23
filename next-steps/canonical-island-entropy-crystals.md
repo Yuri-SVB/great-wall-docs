@@ -7,38 +7,36 @@
 
 ## 1. Definition (proposed)
 
-The **canonical island** of a stage is the single **largest-area, most distinct
-island** found inside that stage's **leaf rectangle** — a deliberately *simple,
-deterministic* criterion so encode, decode, and the UI all single out the same
-one.
+The **canonical island** of a stage is the single distinguished island inside
+that stage's **leaf area** — the leaf rectangle as the bisection algorithm
+deterministically produces it (which also fixes its *canonical zoom*; at base
+zoom the leaf is typically sub-pixel). It is singled out by a deliberately
+simple, deterministic criterion so encode, decode, and the UI all agree.
 
-**Total-order criterion** (apply in order; the first that discriminates wins):
+**Criterion.** Over the algorithm-given leaf area, take **all islands the
+discovery algorithm finds** there and sort them by:
 
-1. **Largest area** — greatest `flood_area = pixel_count × pixel_delta²`
-   (reduces to pixel count at a single resolution). The "big" pick.
-2. **Smallest barycenter** — lexicographic `(center_re, center_im)` as raw
-   `i64`. A total order on distinct islands (two disjoint islands sharing an
-   exact integer barycenter is effectively impossible). Chosen over
-   "first-in-PRNG-discovery-order" because it depends only on **final island
-   geometry**, not on the discovery loop's internal ordering — robust to refactors
-   and automatically identical for encode/decode (the bijection already produces
-   identical island sets).
-3. *(Theoretical final tie — cannot realistically occur)* lowest `escape_count`,
-   then discovery index.
+1. **Pixel count, descending** — the biggest island. (Equivalently `flood_area`
+   when comparing across resolutions; within one leaf at one resolution it is
+   just pixel count.)
+2. **PRNG discovery order, ascending** — the order in which the algorithm's
+   seeded SplitMix64 discovery found them.
 
-**Zoom-invariance.** The criterion is evaluated over a **fixed reference — the
-leaf rectangle sampled at a canonical resolution**, in fractal coordinates — *not*
-over whatever raster is currently displayed. Otherwise the "largest connected
-region" would change with pan/zoom and the user would highlight a different island
-each time. The result is a property of the *stage*; it is then rendered into
-whatever viewport is current. (Still ux-computable, no new FFI: sample the leaf
-rect once at a fixed resolution and run the criterion there.)
+The **first** island in that sort is canonical.
+
+**This is selected in core, not ux.** The island set *and* its discovery order
+are produced by `great-wall-core`'s deterministic discovery (seeded from the
+bisection path). ux cannot reproduce the PRNG order without re-porting the whole
+discovery algorithm, so **core must select the canonical island and expose it**
+(see §3). The earlier "smallest-barycenter, no-FFI, ux-side" idea was wrong:
+barycenter is unnecessary once discovery order is the tie-break, and ux has no
+access to that order.
 
 - **Not the encoder's island `score`.** `great-wall-core/DESIGN.md` already
-  defines `scoreⱼ = log₂(good_total_area / flood_areaⱼ)` — that is an
-  *inverse-area* weight used for the weighted-median split, so it favours the
-  **smallest** islands. The canonical island is the opposite end (biggest), and
-  is used **only for visualisation**, never for the encoded bits.
+  defines `scoreⱼ = log₂(good_total_area / flood_areaⱼ)` — an *inverse-area*
+  weight used for the weighted-median split, so it favours the **smallest**
+  islands. The canonical island is the opposite end (biggest), used **only for
+  visualisation**, never for the encoded bits.
 
 ## 2. Why — "collecting entropy crystals"
 
@@ -49,13 +47,24 @@ selecting it, it lights up, as if the user is *collecting crystals to build thei
 cryptographic key*. This turns an abstract bit-encoding into a tangible,
 rewarding act and gives each stage a memorable visual anchor.
 
-## 3. Interface — no new FFI required (first version)
+## 3. Interface — needs a small core/FFI addition
 
-ux receives the per-pixel `EscapeCountRaster` and the leaf rect. An island is a
-connected equal-escape region, so ux can flood-fill the raster, measure areas,
-and pick the largest inside the leaf rect on its own side — **no island object
-needs to cross the core↔ux boundary.** (Optional later: core exposes the winning
-island's escape-count + an interior seed pixel for a resolution-exact mask.)
+Selection is core-side, so the core↔ux boundary must carry the canonical island's
+identity. Minimal addition: when core resolves a stage's leaf (during
+encode/decode it already discovers the islands), pick the canonical one and
+expose
+
+- its **escape count**,
+- a **guaranteed-interior seed pixel** (fractal coords — any stored island
+  pixel), and
+- its **bounding box** + the **leaf rect** (for framing / the canonical zoom).
+
+ux then renders the island's *shape* at display resolution by flood-filling the
+displayed `EscapeCountRaster` from that seed at that escape count (the per-pixel
+raster suffices for the **render**, just not for the **selection**). The
+`findCanonicalIsland` helper added to great-wall-ux is therefore a ux-side
+*fallback approximation* (largest connected component) — the authoritative pick
+is core's; `islandFromSeed` is the render primitive.
 
 ## 4. Highlight rendering (the "white" ask) — open
 
@@ -67,10 +76,9 @@ Render the canonical island **highlighted on selection**. Styling options (the
 - **Dim everything except the island** — inverts the emphasis; very "crystal in
   the dark", but a larger visual change.
 
-**Where to render is an open architectural decision** (the canvas lives in
-`great-wall-ux`; the app consumes it as a submodule): either a new island-mask
-overlay in `great-wall-ux`'s `FractalCanvas`, or an app-side `CustomPaint`
-overlay over the canvas in `great-wallet`. Decide before implementing.
+**Decided:** rendered in **great-wall-ux** (a `FractalCanvas` overlay), styled as
+**flat white**. (The app consumes great-wall-ux as a submodule, so the change is
+synced there.)
 
 ## 5. Stage-tab "crystal" (bonus)
 
@@ -90,7 +98,12 @@ much that recognition suffers.
 
 ## 7. Open questions
 
-- Tie-breaking when two islands are near-equal in area (the "distinct" margin).
+- **Decided:** style = **flat white** (per discussion); render location =
+  **great-wall-ux** (`FractalCanvas` overlay).
+- **Decided:** selection = pixel count, then PRNG discovery order (core-side).
+- Core/FFI: expose the canonical island (escape count + interior seed + bbox +
+  leaf rect) from the encode/decode path.
+- Decorative-shell count/opacity — dogfooding.
 - Render location (great-wall-ux overlay vs great-wallet app-side overlay).
 - Whether the highlight is computed ux-side from the raster (first version) or
   core-assisted (exact mask) — start ux-side.
