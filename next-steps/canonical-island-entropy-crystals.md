@@ -32,6 +32,28 @@ discovery algorithm, so **core must select the canonical island and expose it**
 barycenter is unnecessary once discovery order is the tie-break, and ux has no
 access to that order.
 
+**Shape = union of all the island's points, not one seed.** Core hands ux the
+canonical island's **whole point set** (every flood-filled discovery point), and
+ux re-floods from *all* of them at display resolution and **unions** the result.
+A single representative seed was rejected: (a) any "pick one point" rule (e.g.
+nearest-barycenter) needs an arbitrary tiebreak; (b) more importantly, display
+resolution ≠ discovery resolution, so one seed's flood can miss parts of the
+shape — a finer pixel size splits a thin neck, a coarser one merges a neighbour.
+Flooding from the full set is robust to this and only *cheaply* redundant (most
+points re-flood into the same component; a shared `visited` set visits each pixel
+once).
+
+**Bounded by the leaf.** Every flood — in core (to recover the point set) and in
+ux (to render) — is **clipped to the leaf rectangle**, so a stray escape-count
+plateau can never balloon the "island" across the whole view.
+
+**"Unstable crystals" (tolerated Easter egg).** Because connectivity is
+resolution-dependent, a highly irregular island can flood to a visibly different
+shape at different zooms. That minor glitch is **kept as a feature** — *some
+entropy crystals are unstable*. Whenever a *stable, canonical image* is needed
+(e.g. the stage-tab thumbnail, §5), render at the leaf's **canonical zoom**,
+which is fixed by the bisection algorithm.
+
 - **Not the encoder's island `score`.** `great-wall-core/DESIGN.md` already
   defines `scoreⱼ = log₂(good_total_area / flood_areaⱼ)` — an *inverse-area*
   weight used for the weighted-median split, so it favours the **smallest**
@@ -50,30 +72,37 @@ rewarding act and gives each stage a memorable visual anchor.
 ## 3. Interface — core/FFI addition (implemented)
 
 Selection is core-side, so the core↔ux boundary must carry the canonical island's
-identity. **Implemented** in `great-wall-core` as the FFI entry point
-`bs_canonical_island` (`rust_engine/src/ffi.rs`, Python wrapper
-`burning_ship_engine.canonical_island`):
+identity. **Implemented** in `great-wall-core` as a small handle-based FFI family
+(`rust_engine/src/ffi.rs`, Python wrapper `burning_ship_engine.canonical_island`):
+
+- `bs_canonical_island_compute(leaf rect, params, o,p,q, path) → *handle`
+- `bs_canonical_island_found(handle) → 0|1`
+- `bs_canonical_island_meta(handle, *escape, *pixel_count, *bbox[4])`
+- `bs_canonical_island_num_points(handle) → n`
+- `bs_canonical_island_points(handle, *buf, len)` — `n × (re i64 LE, im i64 LE)`
+- `bs_canonical_island_free(handle)`
+
+A handle is used because the **point set is variable-length**: compute once, then
+read metadata and copy the points without re-running discovery.
 
 - **Input:** the leaf rect + bisection `path` (both already returned by
   `bs_decode_full`), plus the same discovery params / `o,p,q` / `rng_seed` used
   for the decode.
-- **Behaviour:** runs `discover_islands` fresh over the leaf rectangle (no
-  inherited seeds — the leaf is never itself split, so its island set is defined
-  solely by this discovery) and applies `discovery::select_canonical_index`
-  (largest `pixel_count`, ties → earliest discovery order).
-- **Output:** the canonical island's **escape count**, a **guaranteed-interior
-  seed point** (fractal coords — the flood-filled pixel nearest the barycenter,
-  stored on `Island::seed_re/seed_im` so it stays inside non-convex islands),
-  its **bounding box**, and **pixel count**. Returns `0` when the leaf holds no
-  island.
+- **Behaviour** (`discovery::canonical_island`): runs `discover_islands` fresh
+  over the leaf rectangle (no inherited seeds — the leaf is never itself split,
+  so its island set is defined solely by this discovery), applies
+  `discovery::select_canonical_index` (largest `pixel_count`, ties → earliest
+  discovery order), then **re-floods from that island's deterministic interior
+  seed** (`Island::seed_re/seed_im`, the flood start — pure, so it reproduces the
+  island exactly) to recover **all** its points, bounded by the leaf.
+- **Output:** the canonical island's **escape count**, **all its discovery
+  points** (the seed set), its **bounding box**, and **pixel count**.
 
-ux then renders the island's *shape* at display resolution by flood-filling the
-displayed `EscapeCountRaster` from that seed at that escape count (the per-pixel
-raster suffices for the **render**, just not for the **selection**).
-`islandFromSeed` (great-wall-ux) is that render primitive; `seedPixelNear` snaps
-the core seed onto the matching pixel if display-resolution drift lands it a
-pixel or two off. There is deliberately **no ux-side selector** — the
-authoritative pick is core's.
+ux then renders the island's *shape* at display resolution via `islandFromSeeds`
+(great-wall-ux): it maps every core seed to a raster pixel (`seedPixelNear` snaps
+any that display-drift left a step off the escape count), floods the **union** of
+all seeds **clipped to the leaf box**, and paints it flat white. There is
+deliberately **no ux-side selector** — the authoritative pick is core's.
 
 ## 4. Highlight rendering (the "white" ask) — open
 
@@ -110,9 +139,15 @@ much that recognition suffers.
 - **Decided:** style = **flat white** (per discussion); render location =
   **great-wall-ux** (`FractalCanvas` overlay, via `CanonicalIslandHighlight`).
 - **Decided:** selection = pixel count, then PRNG discovery order (core-side).
-- **Done (core):** `bs_canonical_island` exposes escape count + interior seed +
-  bbox + pixel count; ux flood-fills the seed and paints flat white.
-- **Remaining (app):** `great-wallet` must bind `bs_canonical_island`, frame the
-  leaf at its canonical zoom, and pass `CanvasOverlays.canonicalIsland` to
+- **Decided:** shape = **union of all the island's discovery points**, flooded
+  at display resolution and **clipped to the leaf** (not one representative
+  seed); resolution-dependent "unstable crystals" tolerated, canonical-zoom for
+  the stable image.
+- **Done (core):** the `bs_canonical_island_*` handle family exposes escape count
+  + **all discovery points** + bbox + pixel count; ux (`islandFromSeeds`) floods
+  the union, leaf-clipped, and paints flat white.
+- **Remaining (app):** `great-wallet` must bind the `bs_canonical_island_*`
+  family, frame the leaf at its canonical zoom, and pass
+  `CanvasOverlays.canonicalIsland` (seed set + leaf bounds + escape count) to
   `FractalCanvas`; then reuse the mask for the stage-tab crystal (§5).
 - Decorative-shell count/opacity — dogfooding (§6).
