@@ -32,27 +32,31 @@ discovery algorithm, so **core must select the canonical island and expose it**
 barycenter is unnecessary once discovery order is the tie-break, and ux has no
 access to that order.
 
-**Shape = union of all the island's points, not one seed.** Core hands ux the
-canonical island's **whole point set** (every flood-filled discovery point), and
-ux re-floods from *all* of them at display resolution and **unions** the result.
-A single representative seed was rejected: (a) any "pick one point" rule (e.g.
-nearest-barycenter) needs an arbitrary tiebreak; (b) more importantly, display
-resolution ≠ discovery resolution, so one seed's flood can miss parts of the
-shape — a finer pixel size splits a thin neck, a coarser one merges a neighbour.
-Flooding from the full set is robust to this and only *cheaply* redundant (most
-points re-flood into the same component; a shared `visited` set visits each pixel
-once).
+**Shape = the island's whole point set, rendered as tiled cells.** Core hands ux
+the canonical island's **every discovery point** plus the discovery grid spacing
+`pixel_delta`. Each point is the centre of a `pixel_delta × pixel_delta` cell;
+ux draws the union of those cells. This is exact and resolution-correct: at the
+leaf's canonical zoom the cells tile into a solid island, when zoomed out they
+collapse to a speck, and when zoomed *in* past discovery resolution they go
+blocky but never gappy.
 
-**Bounded by the leaf.** Every flood — in core (to recover the point set) and in
-ux (to render) — is **clipped to the leaf rectangle**, so a stray escape-count
-plateau can never balloon the "island" across the whole view.
+**Why not flood the display raster.** An earlier design flooded the on-screen
+escape-count raster from the points. That fails in practice: the display raster
+is rendered at a **low iteration cap** (`renderMaxIter`, 64) and packs escape
+counts into a **byte** (`(count % 255) + 1`), so an island whose true escape
+count is ≥ the cap (or ≥ 255) is indistinguishable in it — its pixels read as
+"inside the set". The points core already provides *are* the authoritative shape,
+so tiling their cells sidesteps the raster (and all escape-count matching)
+entirely.
 
-**"Unstable crystals" (tolerated Easter egg).** Because connectivity is
-resolution-dependent, a highly irregular island can flood to a visibly different
-shape at different zooms. That minor glitch is **kept as a feature** — *some
-entropy crystals are unstable*. Whenever a *stable, canonical image* is needed
-(e.g. the stage-tab thumbnail, §5), render at the leaf's **canonical zoom**,
-which is fixed by the bisection algorithm.
+**Bounded by the leaf.** Core's flood (recovering the point set) is clipped to
+the leaf rectangle, and ux clips the drawn cells to the leaf box too — a stray
+cell can never balloon the island across the view.
+
+**Canonical zoom for stable images.** The cell tiling is exact, so there is no
+"unstable crystal" wobble in the render. Where a single *stable thumbnail* is
+wanted (the stage-tab crystal, §5), render at the leaf's **canonical zoom**,
+fixed by the bisection algorithm.
 
 - **Not the encoder's island `score`.** `great-wall-core/DESIGN.md` already
   defines `scoreⱼ = log₂(good_total_area / flood_areaⱼ)` — an *inverse-area*
@@ -77,7 +81,7 @@ identity. **Implemented** in `great-wall-core` as a small handle-based FFI famil
 
 - `bs_canonical_island_compute(leaf rect, params, o,p,q, path) → *handle`
 - `bs_canonical_island_found(handle) → 0|1`
-- `bs_canonical_island_meta(handle, *escape, *pixel_count, *bbox[4])`
+- `bs_canonical_island_meta(handle, *escape, *pixel_count, *pixel_delta, *bbox[4])`
 - `bs_canonical_island_num_points(handle) → n`
 - `bs_canonical_island_points(handle, *buf, len)` — `n × (re i64 LE, im i64 LE)`
 - `bs_canonical_island_free(handle)`
@@ -96,13 +100,17 @@ read metadata and copy the points without re-running discovery.
   seed** (`Island::seed_re/seed_im`, the flood start — pure, so it reproduces the
   island exactly) to recover **all** its points, bounded by the leaf.
 - **Output:** the canonical island's **escape count**, **all its discovery
-  points** (the seed set), its **bounding box**, and **pixel count**.
+  points**, the **`pixel_delta`** grid spacing, its **bounding box**, and
+  **pixel count**.
 
-ux then renders the island's *shape* at display resolution via `islandFromSeeds`
-(great-wall-ux): it maps every core seed to a raster pixel (`seedPixelNear` snaps
-any that display-drift left a step off the escape count), floods the **union** of
-all seeds **clipped to the leaf box**, and paints it flat white. There is
-deliberately **no ux-side selector** — the authoritative pick is core's.
+ux then renders the island's *shape* by **tiling cells** (great-wall-ux
+`CanonicalIslandHighlight` → `FractalCanvas._rebuildIslandMask`): each point is
+the centre of a `pixel_delta`-sized cell, mapped to the current viewport's pixel
+rect and filled flat white, clipped to the leaf box. No display-raster flood and
+no escape-count matching — correct at every zoom. There is deliberately **no
+ux-side selector** — the authoritative pick is core's. (`islandFromSeeds` /
+`seedPixelNear` remain as exported raster-flood primitives but are no longer on
+the highlight path.)
 
 ## 4. Highlight rendering (the "white" ask) — open
 
@@ -139,15 +147,14 @@ much that recognition suffers.
 - **Decided:** style = **flat white** (per discussion); render location =
   **great-wall-ux** (`FractalCanvas` overlay, via `CanonicalIslandHighlight`).
 - **Decided:** selection = pixel count, then PRNG discovery order (core-side).
-- **Decided:** shape = **union of all the island's discovery points**, flooded
-  at display resolution and **clipped to the leaf** (not one representative
-  seed); resolution-dependent "unstable crystals" tolerated, canonical-zoom for
-  the stable image.
+- **Decided:** shape = **all the island's discovery points tiled as
+  `pixel_delta` cells**, clipped to the leaf — *not* a display-raster flood
+  (which fails at `renderMaxIter` 64 / `% 255` byte packing). Correct at every
+  zoom; no escape-count matching.
 - **Done (core):** the `bs_canonical_island_*` handle family exposes escape count
-  + **all discovery points** + bbox + pixel count; ux (`islandFromSeeds`) floods
-  the union, leaf-clipped, and paints flat white.
-- **Remaining (app):** `great-wallet` must bind the `bs_canonical_island_*`
-  family, frame the leaf at its canonical zoom, and pass
-  `CanvasOverlays.canonicalIsland` (seed set + leaf bounds + escape count) to
-  `FractalCanvas`; then reuse the mask for the stage-tab crystal (§5).
-- Decorative-shell count/opacity — dogfooding (§6).
+  + **all discovery points** + `pixel_delta` + bbox + pixel count.
+- **Done (app + ux):** `great-wallet` binds the family and caches one
+  `CanonicalIslandHighlight` per stage (memorise flow only); great-wall-ux tiles
+  the cells flat white in `FractalCanvas._rebuildIslandMask`.
+- **Remaining:** reuse the cell mask for the stage-tab crystal at canonical zoom
+  (§5); decorative-shell count/opacity — dogfooding (§6).
