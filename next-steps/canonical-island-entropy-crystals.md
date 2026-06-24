@@ -126,6 +126,32 @@ Render the canonical island **highlighted on selection**. Styling options (the
 **flat white**. (The app consumes great-wall-ux as a submodule, so the change is
 synced there.)
 
+### Scale & resolution (load-bearing — this is what made it actually visible)
+
+Two facts about the geometry, learned by exercising the engine end-to-end:
+
+- **Resolution.** At the *encode* discovery resolution (`encodeParams.minGridCells`
+  = 4096, a ~64×64 grid over the leaf) the biggest island is only a **3–30-pixel
+  speck** — invisible. The app therefore resolves the canonical island at a much
+  finer grid (`EncodingConstants.canonicalIslandMinGridCells` = 2²⁰ ≈ 1.05M),
+  which yields **15–15000 cells** (a real shape) while staying under the engine's
+  flood cap (`maxFloodPoints` = 50000). This is a pure visualisation override; it
+  never touches encoded bits. Cost ≈ 220 ms per stage (one-off; a candidate to
+  move off the UI isolate later).
+- **Framing.** The biggest island is only **~0.5–40 % of the leaf's** extent (it
+  varies a lot by seed) and sits on a *different*, smaller island than the
+  encoded point. So framing the **leaf** leaves the crystal a few pixels at most.
+  Focus instead frames the **union of the point and the island's cells**
+  (`SetupController.focusTargetAt`): the crystal fills a good fraction of the view
+  *and* the white point marker stays on screen. Measured over many seeds at the
+  0.5 focus ratio this gives a clearly visible crystal (hundreds–tens-of-thousands
+  of lit pixels) for essentially all of them; a genuinely tiny island (e.g. 15
+  cells far from the point) stays small — *some crystals are just small*.
+
+At base/shallow zoom the leaf itself is sub-pixel, so the crystal only appears
+once the stage is **focused** (or the user zooms in to the point); at all other
+zooms only the point marker shows.
+
 ## 5. Stage-tab "crystal" (bonus)
 
 When a stage is complete / its point is available, the stage tab shows the
@@ -156,5 +182,9 @@ much that recognition suffers.
 - **Done (app + ux):** `great-wallet` binds the family and caches one
   `CanonicalIslandHighlight` per stage (memorise flow only); great-wall-ux tiles
   the cells flat white in `FractalCanvas._rebuildIslandMask`.
+- **Done (scale):** discovery resolved at ~1M grid (`canonicalIslandMinGridCells`)
+  so the island is a real shape; **focus frames the point+island union** so the
+  crystal is actually visible (the leaf is ~100× too big). See §4 "Scale".
 - **Remaining:** reuse the cell mask for the stage-tab crystal at canonical zoom
-  (§5); decorative-shell count/opacity — dogfooding (§6).
+  (§5); decorative-shell count/opacity — dogfooding (§6); consider moving the
+  ~220 ms discovery off the UI isolate.
