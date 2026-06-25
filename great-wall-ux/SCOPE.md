@@ -47,13 +47,15 @@ internal module layout.
 
 - Fractal rendering: viewport, zoom, pan, resampling.
 - Escape-count coloring: a **fixed log transform** mapping escape
-  counts onto the palette index, and a **single base palette** ("Classic",
-  inherited from `great-wall-core`) available in **six hue rotations** at
-  60° spacing. No other transforms and no other palette families are
-  offered — see [`TECH_STACK.md`](./TECH_STACK.md) §"Locked sub-decisions"
-  for the rationale (function before aesthetics; ossifying the scheme
-  set so users cannot accidentally chain incompatible mappings against
-  their trained visual memory).
+  counts onto the palette index, and a **single-hue, full-saturation,
+  brightness-ramped** palette — within a scheme the hue is fixed and only
+  brightness varies with the transformed escape count — offered in **six
+  hues** at 60° spacing, **green by default**. No other transforms and no
+  other palette families are offered — see
+  [`TECH_STACK.md`](./TECH_STACK.md) §"Locked sub-decisions" for the
+  rationale (one perceptual dimension: brightness; function before
+  aesthetics; ossifying the scheme set so users cannot accidentally chain
+  incompatible mappings against their trained visual memory).
 - Stage-aware rendering: canonical fractal (stage 1) vs. user-perturbed
   fractal (stage 2, parameterised by `(o, p, q)`).
 - Overlays: point markers, crosshairs, leaf rectangles.
@@ -77,8 +79,13 @@ internal module layout.
   user acquires tacitly (see [`TECH_STACK.md`](./TECH_STACK.md)
   §"Locked sub-decisions / Brightness modulation").
 - Hue selection via a clickable **rotary wheel** on a control panel that
-  snaps through the six hue offsets — the intended affordance for the
-  locked Classic × 6 palette set.
+  snaps through the six hues — the intended affordance for the locked
+  single-hue × 6 palette set.
+- **UI sound cues.** Short, synthesised audio blips (click on tap, plus
+  select / confirm / deny outcomes) for tactile, "game-like" feedback,
+  exposed as a muteable `SoundBoard` primitive the app wires to interaction
+  outcomes. Cues are display-only feedback: they carry no coordinate data
+  and are never logged or persisted.
 - Practice-session UX primitives reusable by `celestial-peace-nf-core`'s
   training flow (point-by-point confirm, hesitation timing surface, grade
   picker chrome).
@@ -94,15 +101,17 @@ internal module layout.
 
 ### Assets and theming
 
-- The Classic base palette (inherited from `great-wall-core`) and its
-  six hue rotations are the entire palette surface (see
+- The single-hue, brightness-ramped palette in its six hues (green by
+  default) is the entire palette surface (see
   [`TECH_STACK.md`](./TECH_STACK.md) §"Locked sub-decisions"). The
   set is a frozen visual vocabulary — once it ships in a tagged
   release its escape-count → RGBA mapping is never silently changed.
   There is no user-extensible palette loader and no toggle for the
   escape-count transform.
 - Iconography and typography tokens for the chrome that surrounds the
-  fractal canvas.
+  fractal canvas. The chrome's monospace face is **Ubuntu Mono**
+  (Ubuntu Font Licence 1.0), carrying the terminal aesthetic of the
+  "sober, but game-like" principle.
 
 ### Accessibility
 
@@ -153,7 +162,10 @@ These belong to sibling repos and must not be re-implemented here.
 
 - **Imports from:** `great-wall-core` only — for escape counts and the
   encode/decode entry points. Calls cross the Rust FFI exposed by the
-  core repo.
+  core repo. (This concerns *ecosystem* dependencies; ordinary pub
+  packages for platform plumbing — e.g. `intl` for i18n and an audio
+  plugin for the UI sound cues — are not ecosystem couplings and are
+  not constrained by this rule.)
 - **Imported by:** `great-wallet/app` (and, transitively, any sibling
   that composes UX primitives — currently the training flow in
   `celestial-peace-nf-core` reuses pieces of this library through the
