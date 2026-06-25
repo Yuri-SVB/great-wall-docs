@@ -491,6 +491,13 @@ Key properties:
   confirmed by the feature, app tells user it's now safe to use system
   to secure stash (risk of loss by forgetting became negligible).
   Regular maintenance reviews are still done following SM-2 doctrine.
+  Until graduation there is a bootstrapping chicken-and-egg paradox —
+  securing an untrained setup needs memorized entropy, while memorizing
+  it needs training — so a **transient provisional key** must be held
+  externally across the consolidation window and destroyed at
+  graduation, after which the setup self-secures (its own entropy gates
+  its own TLP). See
+  [`next-steps/provisional-key-bootstrapping.md`](../next-steps/provisional-key-bootstrapping.md).
 - **Inheritance.** Deadlock by death, memory loss, or mental
   incapacitation is still guarded by companion inheritance protocol.
 
@@ -672,6 +679,124 @@ computation — otherwise an attacker could repeatedly prompt "try
 again" under duress until the secret leaks. In Great Wall this
 gating is Argon2 (primary derivation) and, optionally, RSW time-lock
 puzzles for instant setup of arbitrary, user-defined delay.
+
+---
+
+## Guiding UX Principles
+
+Two principles govern the *feel* of every Great Wall surface, app-wide.
+They are design north-stars, not security claims — but they are
+load-bearing: the product asks the user to trust their own memory with
+their savings, and whether that proposition feels *plausible* is largely
+a UX problem.
+
+### 1. Sober, but game-like
+
+The interface should never compete with the fractal for attention or
+lapse into gimmickry, vanity metrics, or gamified nagging — yet it should
+feel tactile, responsive, and quietly rewarding to operate, so that
+practice reads closer to play than to drill. Controls favour direct,
+physical affordances (a rotary hue **wheel** the user clicks to turn, not
+a dropdown). Where a feature could be either a chore or a small pleasure,
+choose the pleasure. (Detailed in
+[`great-wall-ux/SCOPE.md`](../great-wall-ux/SCOPE.md#guiding-ux-principle-sober-but-game-like).)
+
+### 2. An instrument, not an app — re-activating a dormant faculty
+
+Great Wall asks the user to memorise 4–8 fractal "landscapes" and stake
+their retirement on that recall. To a public conditioned by a decade of
+smartphones this sounds implausible — but the faculty it draws on is
+**dormant, not absent**. Within living memory, holding dozens of phone
+numbers and navigating a city from a mental map was unremarkable; that
+capacity atrophied only recently (post-2007), and it can be re-activated.
+The product's task is to address the user's *subconscious memory of having
+been competent*, not to teach an alien new skill. Two design consequences
+follow:
+
+- **Posture: a competence-instrument, not a thinking-service.**
+  Pre-smartphone gadgets signalled that the *operator* was the clever one
+  and the device merely amplified them; the smartphone inverted this (the
+  device thinks; the user is a passenger). Great Wall deliberately takes
+  the first posture — the interface should feel like an instrument the
+  user *operates and masters*. That posture is itself what makes "you will
+  be the one who remembers" believable.
+- **Stability is physicality.** Physical control panels never reflow: a
+  button stays where the hand learned it, so the interface is offloaded to
+  spatial / muscle memory instead of forcing visual re-search each time.
+  Prefer fixed element positions over reflowing ones; labels *beside*
+  controls rather than above (so a changing value never moves anything);
+  persistent-but-greyed affordances over ones that appear and disappear.
+  This is the same spatial-memory machinery the core asks of the user —
+  the chrome should rehearse it, not fight it.
+
+**Grounding, not just romance.** The strongest precedent is the *method of
+loci* (memory palaces): spatial memory is the most robust, trainable form
+of human memory, and the fractal-as-territory is literally that. The bold
+ask sits well inside the demonstrated human ceiling.
+
+**Honesty as a feature.** The proposition's hard edge — "and when I am old,
+or injured?" — must not be waved away; it is answered by design and should
+be *featured*, not hidden: the spaced-repetition graduation gate (the stash
+is not secured until consolidation is measured and confirmed — see
+[celestial-peace-nf-core](#4-celestial-peace-nf-core)), the provisional-key
+bootstrapping window (see
+[`next-steps/provisional-key-bootstrapping.md`](../next-steps/provisional-key-bootstrapping.md)),
+and the inheritance protocol (phoenix-scroll). The romance earns the right
+to be made only because the rigour stands behind it.
+
+**Tone.** Frame this as re-activation and confidence ("you still have this;
+we will prove it to you"), never as decline or guilt ("you have grown
+lazy"). Guilt makes prospects defensive; recovered competence makes them
+curious.
+
+> *Candidate taglines (tentative, for the positioning voice):*
+> - "If ancient sailors could project a centaur onto a couple of dots in
+>   the sky and use it to cross oceans on makeshift boats, you can use a
+>   few weird fractal objects to secure your retirement."
+> - "If a lab rat can learn to navigate a maze, so can you." — deploy with
+>   care: a rat comparison can read as belittling in consumer copy; it is
+>   safer used *scientifically* (spatial-memory / maze-learning research)
+>   or within the doctoral-thesis framing than as a public pitch.
+
+#### Corollary: physicality as a feature (the macro-trend angle)
+
+The same thesis, argued from technology trends rather than cognition.
+The dominant decade-long vector has been **offloading** memory and
+cognition to devices, cloud, and custodians — which makes
+"brain-memory-as-critical-infrastructure" *read* as regressive. But not
+every newest thing is the next thing: some trends overshoot what human
+physicality accommodates and correct. The Metaverse is the clean example
+— pitched as imminent at the peak of lockdown, it hit the ceiling of
+embodiment and reverted.
+
+The useful framing is an **inversion**: the Metaverse tried to *dissolve*
+physicality (drag embodied life into screens) and broke against it; Great
+Wall *enlists* physicality (anchors a digital secret in embodied memory
+and an irreducible physical time-cost). *Same ceiling, opposite side.*
+The offloading trend it runs against is precisely what created the gap it
+fills: anything offloaded to a digital or custodial store is, by
+construction, seizable, copyable, and remotely reachable — and the brain
+is the one substrate that is none of those (see *The Four Properties* and
+*TKBA* above).
+
+Two guard-rails so this stays an argument, not a slogan:
+
+- **Scope it narrowly.** Many offloaded faculties did *not* revert (mental
+  arithmetic, map navigation) and that is fine. The claim is *not* that
+  memory broadly returns; it is that for the high-stakes, coercion-exposed
+  niche of self-custody, the physical brain is the **only** substrate that
+  delivers. The Metaverse is the *illustration* ("physicality wins in some
+  domains"), not the proof.
+- **It dissolves an objection; it does not prove adoption.** "Trends hit
+  ceilings and revert" removes the "this is just backwards" dismissal but
+  says nothing about whether users will choose the effort — that rests on
+  the re-activation framing and the *measured* training system, a separate
+  leg. (Note too: the Metaverse failed on *desire*; this proposition's
+  adoption risk is *effort* — same lesson, different mechanism.)
+
+> *Positioning one-liner (tentative):* "Not every newest thing is the next
+> thing. The Metaverse fought the body and broke; we put your keys
+> somewhere only a body can go."
 
 ---
 
