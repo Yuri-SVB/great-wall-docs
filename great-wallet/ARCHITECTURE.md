@@ -496,7 +496,11 @@ Key properties:
   it needs training — so a **transient provisional key** must be held
   externally across the consolidation window and destroyed at
   graduation, after which the setup self-secures (its own entropy gates
-  its own TLP). See
+  its own TLP). A first version is **implemented** in the app's Setup
+  mode: the setup is encrypted to a file (AES-256-GCM keyed by Argon2id)
+  and the compact 128- or 256-bit key is carried as a hand-coloured
+  byte-mode QR, a blind-copied hex string for a password manager, or the
+  user's own entropy — never persisted as a durable digital artifact. See
   [`next-steps/provisional-key-bootstrapping.md`](../next-steps/provisional-key-bootstrapping.md).
 - **Inheritance.** Deadlock by death, memory loss, or mental
   incapacitation is still guarded by companion inheritance protocol.

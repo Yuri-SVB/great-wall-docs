@@ -279,6 +279,30 @@ re-litigated.
       "Brightness offset +N.N" status message is removed; surfacing
       the value would convert a tacit skill into an explicit,
       verbalizable fact and weaken TKBA.
+- **Audio cues: discrete volume, `V` + arrow live control.** Short
+  synthesised "console blip" cues (click / select / confirm / deny)
+  give tactile feedback for the "sober, but game-like" surface. Volume
+  is a discrete integer level from `0` to `kMaxVolumeLevel` (**10
+  steps, 11 settings**) — the familiar media-player granularity, coarse
+  enough to reach either end in about a second of holding the hotkey.
+  Properties:
+    - **Live adjustment via `V` + Up/Down arrows**, mirroring the
+      `L` + scroll brightness gesture (a held modifier plus a
+      directional nudge). The hotkey is bound by the *consuming app*
+      (which owns keyboard focus), not by the canvas widget; the app
+      drives `SoundBoard.volumeUp` / `volumeDown` and replays a cue at
+      the new level so the user *hears* where the volume now sits.
+    - **Level `0` is silence and is exactly what "mute" means.** There
+      is no separate mute flag: `muted` is defined as `level == 0`, and
+      the mute toggle simply drops to `0` and restores the previous
+      level. This keeps "volume 0 == muted" true by construction.
+    - **Not a tacit control — a readout is allowed.** Unlike the
+      brightness offset, the cue volume carries no coercion-relevant
+      tacit knowledge, so a host *may* surface it (a numeric readout, a
+      volume icon).
+    - **Best-effort and never logged.** Any audio backend error is
+      swallowed to silence; cues carry no coordinate data, consistent
+      with the no-leak posture.
 - **Accessibility: chrome-only.** Buttons, menus, dialogs, settings,
   grade pickers, progress indicators, and all surrounding chrome are
   fully accessible (semantic labels, focus order, screen-reader
