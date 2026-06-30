@@ -33,6 +33,16 @@ interface offers a few targets, micro-benchmarks a few Argon2 passes at the
 selected memory profile, and solves for the `N` that hits the target. CLI keeps
 a raw `--iterations` for the low-level reference path.
 
+**Implemented and documented as reference.** The GUI ships this as an `Alt+D`
+calibration dialog (worker-isolate benchmark = 1 warm-up + median of N timed
+passes, cancellable, determinate progress bar + ETA; target presets; per-stage
+vs all-stages scope; default ×2 safety margin behind an Advanced *"leave
+unchanged if unsure"* expander; Apply writes the solved `N`; CLI keeps
+`--iterations`). The full implemented detail now lives as reference docs in
+[`great-wallet/ARCHITECTURE.md` → *Calibrating Argon2 duration → Implementation —
+on-device calibration of `N`*](../great-wallet/ARCHITECTURE.md#calibrating-argon2-duration).
+The rest of this section is the design rationale behind that feature.
+
 **Framing — time is a perishable label on a durable parameter.** `N` (and `m`)
 are exact and reproducible; "hours" is only a human label. Recovery reproduces
 the digest from `N`, so hardware progress (esp. AI-driven memory-bandwidth
