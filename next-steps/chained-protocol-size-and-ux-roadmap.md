@@ -88,6 +88,23 @@ a marketplace that lets users re-impose and tune real per-session delay via
 TLPs becomes more valuable over time, not less. Track this under
 `justification-and-economics` / `great-wallet`.
 
+### 3a. Adjusting `N` on an open setup — the real safety net for imperfect `N` recall
+**Proposed.** A first-class feature to **re-derive an already-open setup with a
+different `N`** — re-running the chain at a new iteration count without a fresh
+setup. This is the *practical* recovery path for a user whose memory of `N` is
+imperfect: they **nudge `N` until the setup reproduces** (recognizing the
+correct stages), rather than the interface pretending `N` is only ever recalled
+"approximately." Treat recalled `N` as **exact** everywhere (the CPNF deck card
+for `N` is a plain exact-recall fact); this feature — plus the stored
+recognizable intermediates (mitigation 1 above) — is what closes the gap when it
+isn't.
+
+**Calibration nudges round numbers.** The Alt+D calibration dialog (§3) should
+steer the solved `N` toward a **memorable rounded value**, so what the user must
+remember is easy to hold *and* easy to hit with the adjust-`N` feature above. A
+round `N` costs negligible security (Argon2 cost is smooth in `N`) and buys a lot
+of recall robustness.
+
 ## 4. Amendable setups — truncate early / extend later, with carry-over
 The modular chain should let a setup's **number of stages** be amended after the
 fact (the iteration count stays fixed, §2):

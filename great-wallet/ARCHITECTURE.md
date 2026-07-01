@@ -582,6 +582,15 @@ Begin background TLP computation
 Imports from great-wall-core (encode/decode for validation) and
 tlp-core (TLP encrypt/decrypt/solve).
 
+Design detail for the deck contents and the pre-/post-graduation
+lifecycle ("setup standing on its own legs" — the `CPNF-NNNN` own-legs
+key schedule, RSW-TLP deck encryption, panic button, and outsourced
+squaring) is in
+[`next-steps/cpnf-lifecycle-and-deck.md`](../next-steps/cpnf-lifecycle-and-deck.md);
+the buildable first slice (pure SM-2 scheduler + injected clock + card
+model + review session) is specified in
+[`next-steps/cpnf-step1-scheduler.md`](../next-steps/cpnf-step1-scheduler.md).
+
 ### 5. jade-clock
 
 **Status:** In development.
