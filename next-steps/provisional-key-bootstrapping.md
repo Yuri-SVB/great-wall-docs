@@ -56,6 +56,10 @@ desired properties differently:
 **Revisit:** how the app should prompt for provisional-key creation at
 generation and, crucially, for its destruction at graduation (the lifecycle
 prompts are not yet wired to the `celestial-peace-nf-core` graduation signal).
+The graduation signal itself is now defined — the **graduation gate** (honest
+grade → lockout estimate → user-set `ε` at a target delay) in
+[`cpnf-lifecycle-and-deck.md`](cpnf-lifecycle-and-deck.md) §3; destruction of the
+provisional key is step 4 of its graduation→first-arming sequence.
 
 ## Implemented
 

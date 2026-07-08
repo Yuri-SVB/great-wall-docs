@@ -34,7 +34,7 @@
    download provenance, and miscellaneous reminders are parameters/labels, **not
    the tacit seed** — storing/quizzing them (encrypted at rest) does not weaken
    coercion-resistance. Asymmetry: `m` exact (mismatch ⇒ every fractal breaks);
-   `N` also exact here (approximate-memory recovery is *adjust-`N`-on-open-setup*,
+   `D` also exact here (approximate-memory recovery is *adjust-`D`-on-open-setup*,
    roadmap §3a — not a scheduler concession).
 4. **No wall-clock reads outside the injected `Clock`.** Never call
    `DateTime.now()` in scheduler or session code — only `Clock.now()`. Both a
@@ -87,8 +87,8 @@ class MemCard {
 class ReviewQueue { final List<MemCard> due; } // due <= clock.now(), oldest first
 ```
 
-**Card set for a setup with `S` stages:** `S` point cards + one fact card each
-for `m`, `N`, `salt/pepper`, download-provenance, every user-defined export salt,
+**Card set for a setup with `N` stages:** `N` point cards + one fact card each
+for `m`, `D`, `salt/pepper`, download-provenance, every user-defined export salt,
 and any optional miscellaneous reminders.
 
 ## 3. Scheduler — conservative SM-2 (`MemSchedule`)
@@ -145,7 +145,7 @@ for each due card, oldest first:
 - [ ] Real `SystemClock` + advanceable `FakeClock` both implement `Clock`.
 - [ ] Interval ladder: Good → 1d → 6d → `round(6*EF)`; Again resets to 1d, bumps
       `lapses`; EF floors at 1.3, rises on Easy.
-- [ ] `S` stages ⇒ `S` point cards + the fact cards of §2.
+- [ ] `N` stages ⇒ `N` point cards + the fact cards of §2.
 - [ ] Point cards render with **highlight off** and never display/serialize the
       point in cleartext; the point is read only to validate.
 - [ ] Deck at rest is encrypted (provisional key); no cleartext coordinates/bits/

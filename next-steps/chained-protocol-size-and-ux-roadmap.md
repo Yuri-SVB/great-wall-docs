@@ -26,59 +26,63 @@ should encourage choosing it deliberately in advance. **Revisit:** allowing the
 iteration count to vary per stage (e.g. heavier derivations deeper in the
 chain). Kept fixed for now for simplicity and predictability.
 
-## 3. Iteration UX — per-setup on-device calibration of N (OFFICIAL)
-**Decision (official).** Calibrate the single iteration count `N` **per setup,
-on the user's own device**, against a chosen **target wall-clock duration**: the
-interface offers a few targets, micro-benchmarks a few Argon2 passes at the
-selected memory profile, and solves for the `N` that hits the target. CLI keeps
-a raw `--iterations` for the low-level reference path.
+## 3. Iteration UX — per-setup on-device calibration of D (OFFICIAL)
+> **Notation:** `D` = Argon2d **D**erivation steps between stages (the iteration
+> count); `N` = number of stages. The `Alt+D` calibration hotkey reflects `D`.
+
+**Decision (official).** Calibrate the single derivation-step count `D` **per
+setup, on the user's own device**, against a chosen **target wall-clock
+duration**: the interface offers a few targets, micro-benchmarks a few Argon2
+passes at the selected memory profile, and solves for the `D` that hits the
+target. CLI keeps a raw `--iterations` for the low-level reference path.
 
 **Implemented and documented as reference.** The GUI ships this as an `Alt+D`
-calibration dialog (worker-isolate benchmark = 1 warm-up + median of N timed
+calibration dialog (worker-isolate benchmark = 1 warm-up + median of several timed
 passes, cancellable, determinate progress bar + ETA; target presets; per-stage
 vs all-stages scope; default ×2 safety margin behind an Advanced *"leave
-unchanged if unsure"* expander; Apply writes the solved `N`; CLI keeps
+unchanged if unsure"* expander; Apply writes the solved `D`; CLI keeps
 `--iterations`). The full implemented detail now lives as reference docs in
 [`great-wallet/ARCHITECTURE.md` → *Calibrating Argon2 duration → Implementation —
-on-device calibration of `N`*](../great-wallet/ARCHITECTURE.md#calibrating-argon2-duration).
+on-device calibration of `D`*](../great-wallet/ARCHITECTURE.md#calibrating-argon2-duration).
 The rest of this section is the design rationale behind that feature.
 
-**Framing — time is a perishable label on a durable parameter.** `N` (and `m`)
+**Framing — time is a perishable label on a durable parameter.** `D` (and `m`)
 are exact and reproducible; "hours" is only a human label. Recovery reproduces
-the digest from `N`, so hardware progress (esp. AI-driven memory-bandwidth
-gains) changes only *how long a given `N` takes*, never correctness, entropy
+the digest from `D`, so hardware progress (esp. AI-driven memory-bandwidth
+gains) changes only *how long a given `D` takes*, never correctness, entropy
 security, or the OOM gate. The only thing that degrades is the absolute
 coercion *delay*, and it does so gracefully and symmetrically (attacker and
 defender speed up together for sequential, p=1 memory-hard work). On-device
 setup calibration removes dev-time and cross-hardware staleness; only the true
 setup→recovery temporal drift remains, and it is harmless to correctness.
 
-**Memorizing N (and m) + graceful recovery.** `N` is the **user's
+**Memorizing D (and m) + graceful recovery.** `D` is the **user's
 responsibility to memorize** (needed for hard recovery if the device/setup is
 lost); so is the memory profile `m`. Two complementary mitigations:
 1. **Stored, recognizable intermediates.** The protocol gracefully supports
    storing the sequence of intermediate derivation results, so an approximate
-   memory of `N` suffices — the user *recognizes* the correct one (checkpoint
-   trial-and-error). In this design `N` and `m` are the *only* inter-stage
+   memory of `D` suffices — the user *recognizes* the correct one (checkpoint
+   trial-and-error). In this design `D` (Argon2d derivation steps between stages)
+   and `m` are the *only* inter-stage
    unknowns (the per-stage `o,p,q` are derived from them and the prior points),
    so this is the whole story today; §5 is the **same** recognition mechanism
    generalized to a larger parameter space, recovering any forgotten inter-stage
    parameter once the parameter set expands (not a separate mitigation).
 2. **Celestial-Peace-Never-Forget (CPNF) training.** `celestial-peace-nf-core`
-   should **also train explicit recall of `N` and `m`** (alongside the tacit
+   should **also train explicit recall of `D` and `m`** (alongside the tacit
    point-recognition it already drills), so hard recovery is smooth. This is
    *safe*: unlike the point locations (which must stay tacit / recognition-only
-   to remain coercion-resistant), `N` and `m` are derivation **parameters, not
+   to remain coercion-resistant), `D` and `m` are derivation **parameters, not
    the secret** — an adversary who learns them still has no points. Asymmetry to
    respect: `m` must be recalled **exactly** (wrong profile → wrong Argon2 digest
-   → every derived fractal breaks); `N` only **approximately** (mitigation 1
+   → every derived fractal breaks); `D` only **approximately** (mitigation 1
    closes the gap). See `great-wallet/ARCHITECTURE.md` §celestial-peace-nf-core.
 
 **Conservative setting + TLP/jade-clock for per-session flexibility.** Manuals
 and UX should induce users to pick the derivation time **conservatively (e.g.
 2×)**, then rely on a **TLP / `jade-clock`** layer to freely adjust the
 *effective per-session* delay — the RSW time-lock puzzle re-imposes a tunable
-(and outsourceable) delay on top of the fixed `N`. See
+(and outsourceable) delay on top of the fixed `D`. See
 `great-wallet/ARCHITECTURE.md` (tlp-core, jade-clock).
 
 **Business angle — a technical problem begs a business solution.** The
@@ -88,21 +92,21 @@ a marketplace that lets users re-impose and tune real per-session delay via
 TLPs becomes more valuable over time, not less. Track this under
 `justification-and-economics` / `great-wallet`.
 
-### 3a. Adjusting `N` on an open setup — the real safety net for imperfect `N` recall
+### 3a. Adjusting `D` on an open setup — the real safety net for imperfect `D` recall
 **Proposed.** A first-class feature to **re-derive an already-open setup with a
-different `N`** — re-running the chain at a new iteration count without a fresh
-setup. This is the *practical* recovery path for a user whose memory of `N` is
-imperfect: they **nudge `N` until the setup reproduces** (recognizing the
-correct stages), rather than the interface pretending `N` is only ever recalled
-"approximately." Treat recalled `N` as **exact** everywhere (the CPNF deck card
-for `N` is a plain exact-recall fact); this feature — plus the stored
+different `D`** — re-running the chain at a new derivation-step count without a
+fresh setup. This is the *practical* recovery path for a user whose memory of `D`
+is imperfect: they **nudge `D` until the setup reproduces** (recognizing the
+correct stages), rather than the interface pretending `D` is only ever recalled
+"approximately." Treat recalled `D` as **exact** everywhere (the CPNF deck card
+for `D` is a plain exact-recall fact); this feature — plus the stored
 recognizable intermediates (mitigation 1 above) — is what closes the gap when it
 isn't.
 
 **Calibration nudges round numbers.** The Alt+D calibration dialog (§3) should
-steer the solved `N` toward a **memorable rounded value**, so what the user must
-remember is easy to hold *and* easy to hit with the adjust-`N` feature above. A
-round `N` costs negligible security (Argon2 cost is smooth in `N`) and buys a lot
+steer the solved `D` toward a **memorable rounded value**, so what the user must
+remember is easy to hold *and* easy to hit with the adjust-`D` feature above. A
+round `D` costs negligible security (Argon2 cost is smooth in `D`) and buys a lot
 of recall robustness.
 
 ## 4. Amendable setups — truncate early / extend later, with carry-over
@@ -117,7 +121,7 @@ fact (the iteration count stays fixed, §2):
 To support this elegantly, at *any* stage boundary the UI should be able to:
 - **copy the words so far without displaying them** (clipboard only), and
 - **copy the master-secret export** — `Argon2id` over the setup transcript so
-  far (stage-0 text ‖ N ‖ per-stage params ‖ per-stage leaf-centre coordinates,
+  far (stage-0 text ‖ D ‖ per-stage params ‖ per-stage leaf-centre coordinates,
   up to the exporting stage) with **the exporting stage's own text label appended
   to the message** and a **fixed salt `b"greatwall"`** (same style as the
   inter-stage chain) — for a blind carry-over into another wallet or as the
