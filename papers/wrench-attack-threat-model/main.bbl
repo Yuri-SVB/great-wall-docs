@@ -1,0 +1,73 @@
+\begin{thebibliography}{10}
+
+\bibitem{aft-wrench}
+Anonymous.
+\newblock Investigating wrench attacks: Physical attacks targeting
+  cryptocurrency users.
+\newblock In {\em Advances in Financial Technologies (AFT)}, LIPIcs. Schloss
+  Dagstuhl, 2024.
+
+\bibitem{argon2}
+Alex Biryukov, Daniel Dinu, and Dmitry Khovratovich.
+\newblock Argon2: New generation of memory-hard functions for password hashing
+  and other applications.
+\newblock In {\em IEEE European Symposium on Security and Privacy (EuroS\&P)},
+  pages 292--302, 2016.
+
+\bibitem{gw-timechain-salt}
+Yuri da~Silva Villas~Boas.
+\newblock A memorization-free, precomputation-resistant salt from the bitcoin
+  timechain.
+\newblock Great Wall companion paper (Namtso), 2026.
+
+\bibitem{dolev-yao}
+Danny Dolev and Andrew~C. Yao.
+\newblock On the security of public key protocols.
+\newblock {\em IEEE Transactions on Information Theory}, 29(2):198--208, 1983.
+
+\bibitem{gw-orbit}
+{Great Wall}.
+\newblock The coercion-resistant orbit protocol (canonical spec).
+\newblock Great Wall documentation,
+  \texttt{next-steps/coercion-resistant-orbit-protocol.md}, 2026.
+
+\bibitem{gw-threatmodel}
+{Great Wall}.
+\newblock Great wall ecosystem --- threat model.
+\newblock Great Wall documentation, \texttt{great-wallet/THREAT\_MODEL.md},
+  2026.
+
+\bibitem{grover1996}
+Lov~K. Grover.
+\newblock A fast quantum mechanical algorithm for database search.
+\newblock In {\em 28th Annual ACM Symposium on Theory of Computing (STOC)},
+  pages 212--219, 1996.
+
+\bibitem{kerckhoffs1883}
+Auguste Kerckhoffs.
+\newblock La cryptographie militaire.
+\newblock {\em Journal des sciences militaires}, IX:5--38, 1883.
+
+\bibitem{lopp-attacks}
+Jameson Lopp.
+\newblock Known physical bitcoin attacks.
+\newblock \url{https://github.com/jlopp/physical-bitcoin-attacks}, 2025.
+\newblock Community registry of documented ``\$5 wrench'' incidents.
+
+\bibitem{rewind-bitcoin}
+{Rewind Bitcoin}.
+\newblock Rewind bitcoin --- timelock vaults with rescue.
+\newblock \url{https://rewindbitcoin.com/}, 2025.
+
+\bibitem{rsw1996}
+Ronald~L. Rivest, Adi Shamir, and David~A. Wagner.
+\newblock Time-lock puzzles and timed-release crypto.
+\newblock Technical Report MIT/LCS/TR-684, MIT Laboratory for Computer Science,
+  1996.
+
+\bibitem{shamir1979}
+Adi Shamir.
+\newblock How to share a secret.
+\newblock {\em Communications of the ACM}, 22(11):612--613, 1979.
+
+\end{thebibliography}

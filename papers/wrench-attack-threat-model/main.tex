@@ -1,0 +1,577 @@
+\documentclass[a4paper,11pt]{article}
+
+% ============================================================================
+%  The Deadly Race — a formal wrench-attack threat model
+%  First LaTeX manuscript. Source: papers/deadly-race-coercion-resistance.md,
+%  great-wallet/THREAT_MODEL.md, next-steps/coercion-resistant-orbit-protocol.md
+% ============================================================================
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=24mm]{geometry}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+
+% ── Brand palette (shared with the Great Wall paper set) ───────────────────
+\definecolor{accent}{HTML}{2F6F4E}
+\definecolor{accentdark}{HTML}{234F38}
+\definecolor{accentlight}{HTML}{EBF3EE}
+\definecolor{darktext}{HTML}{1E1E1E}
+\definecolor{graytext}{HTML}{646464}
+\definecolor{attackcol}{HTML}{C0392B}
+
+\hypersetup{colorlinks=true, linkcolor=accentdark, urlcolor=accentdark,
+            citecolor=accentdark,
+            pdftitle={The Deadly Race: a formal wrench-attack threat model},
+            pdfauthor={Yuri da Silva Villas Boas}}
+
+% ── Headers / footers ──────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[R]{\small\textit{\color{graytext}The Deadly Race}}
+\fancyfoot[C]{\small\color{graytext}\thepage}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\small\color{graytext}\thepage}}
+
+% ── Section styling ────────────────────────────────────────────────────────
+\titleformat{\section}{\large\bfseries\color{accent}}{\thesection}{0.7em}{}
+  [\vspace{-0.5em}{\color{accent}\rule{\textwidth}{0.4pt}}]
+\titleformat{\subsection}{\normalsize\bfseries\color{darktext}}{\thesubsection}{0.6em}{}
+
+% ── Theorem environments ───────────────────────────────────────────────────
+\newtheoremstyle{gw}{0.6em}{0.6em}{\itshape}{}{\bfseries\color{accentdark}}{.}{.5em}{}
+\theoremstyle{gw}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+\newtheorem{principle}{Principle}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\newtheorem{definition}{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+% ── Notation shorthands ────────────────────────────────────────────────────
+\newcommand{\Hcheap}{\mathsf{H}}
+\newcommand{\Hhard}{\mathsf{H}^{\!*}}
+\newcommand{\Sh}{\mathit{Sh}}
+\newcommand{\TLP}{\mathsf{TLP}}
+\newcommand{\sftstar}{64^{*}}
+\newcommand{\Victim}{\mathcal{V}}
+\newcommand{\Attacker}{\mathcal{A}}
+
+\begin{document}
+
+% ════════════════════════════════════════════════════════════════════════════
+% TITLE
+% ════════════════════════════════════════════════════════════════════════════
+\thispagestyle{plain}
+\begin{center}
+{\fontsize{22}{26}\selectfont\bfseries\color{accent}The Deadly Race}\\[8pt]
+{\large A Formal Threat Model for Physical-Coercion (``Wrench'') Attacks,\\
+ and a Construction that Clears It}\\[12pt]
+{\color{accent}\rule{78mm}{0.5pt}}\\[9pt]
+{\itshape\color{graytext}Great Wall coercion-resistance paper series}\\[4pt]
+{\small\color{graytext}Yuri da Silva Villas Boas \textperiodcentered{} First manuscript, July 2026}
+\end{center}
+
+\vspace{6pt}
+
+\begin{abstract}
+\noindent Physical-coercion (``wrench'') attacks defeat custody schemes that
+key management and cryptography treat as out of scope. We give a \emph{formal
+model} of coercion against a secret-holder and prove that a large class of
+``graceful'' recovery designs --- those that leave a device seizure holding a
+\emph{feasible-but-slower} path to the secret --- are strictly worse than
+useless: they manufacture a material incentive to \emph{assassinate} the
+victim. We name this the \textbf{Deadly Race}, derive it from a single
+impossibility (one cannot prove one has forgotten), and distil a design bar ---
+the \textbf{No-Gray-Area Principle} --- that any coercion-resistant scheme must
+clear. We then present a construction, \textbf{Great Wall}, that clears the bar
+for the Bitcoin self-custody setting while keeping custody \emph{individual},
+and we locate a shipping alternative --- timelock-rescue vaults --- precisely:
+it clears the same bar by the \emph{other} available route, at the cost of a
+trusted third party. The framework fixes a bar; it does not claim Great Wall is
+the unique construction that clears it.
+\end{abstract}
+
+\vspace{4pt}
+
+% ════════════════════════════════════════════════════════════════════════════
+\section{Introduction}
+% ════════════════════════════════════════════════════════════════════════════
+
+Coercion is the unmodeled attack. Standard threat models --- Dolev--Yao on the
+wire~\cite{dolev-yao}, \textsc{ind-cca} for encryption, forward secrecy for
+sessions --- all assume the adversary cannot compel the \emph{holder} of a
+secret. For bearer assets that assumption is empirically false: the physical
+attack registry maintained by Lopp~\cite{lopp-attacks}, and the systematic
+study of the phenomenon in the financial-technologies literature~\cite{aft-wrench},
+document a growing series of incidents in which a Bitcoin holder is physically
+threatened with a ``\$5 wrench'' until they surrender their keys.
+
+Cryptographic hardness does not help here. A wrench attacker does not break the
+cipher; they compel the person who can operate it. Worse, the standard defence
+offered to holders --- \emph{obscurity} (``never tell anyone you own
+Bitcoin'') --- is not a security mechanism at all in the sense of
+Kerckhoffs~\cite{kerckhoffs1883}: it is a bet that the attacker lacks knowledge
+the defender has, and it degrades precisely as adoption spreads that knowledge.
+
+This paper models coercion directly. Our contributions are:
+
+\begin{enumerate}[nosep,leftmargin=1.6em]
+  \item a \textbf{formal coercion model} (\S\ref{sec:model}) with an explicit
+        adversary, a Kerckhoffs premise, and an engineering ``feasibility
+        line'' that turns asymptotic security into concrete parameter bounds;
+  \item the \textbf{Deadly-Race impossibility chain} (\S\ref{sec:chain}): a
+        classical impossibility (you cannot prove you forgot) that escalates,
+        step by step, into an incentive to murder the victim;
+  \item the \textbf{No-Gray-Area Principle} (\S\ref{sec:chain}), the design bar
+        that a coercion-resistant scheme must clear, together with a
+        \emph{reachability} dichotomy that classifies every clearance route;
+  \item a \textbf{construction} (\S\ref{sec:gw}), the Great Wall orbit, that
+        meets the bar with individual custody, including a proof that the master
+        secret is at least $\sftstar$ from every seizable state; and
+  \item a \textbf{taxonomy} (\S\ref{sec:classify}) that classifies existing
+        designs by \emph{which} clearance route they take --- illustrated on
+        shipping timelock-rescue vaults.
+\end{enumerate}
+
+For citation, we name the central results after their first statement in the
+Great Wall design record~\cite{gw-threatmodel}: the \textbf{Deadly-Race Lemma}
+(\emph{Villas Boas' Lemma}) and the \textbf{No-Gray-Area Principle}
+(\emph{Villas Boas' Principle}).
+
+% ════════════════════════════════════════════════════════════════════════════
+\section{Model}
+\label{sec:model}
+% ════════════════════════════════════════════════════════════════════════════
+
+\subsection{Principals and capabilities}
+
+\begin{definition}[Principals]
+The \textbf{holder} $\Victim$ possesses (in memory and on devices) whatever is
+needed to reach a master secret $K$ that gates an asset. The \textbf{coercer}
+$\Attacker$ seeks $K$. Optional \textbf{heirs} or \textbf{delegates} may hold
+partial capability on $\Victim$'s behalf.
+\end{definition}
+
+\begin{assumption}[Kerckhoffs, premise~0]\label{ass:kerckhoffs}
+$\Attacker$ knows the protocol in full: all algorithms, all source, $\Victim$'s
+setup topology, and every in-scope parameter. Only the protocol \emph{secrets}
+are hidden. Every result below is proved \emph{against} such an $\Attacker$;
+security by obscurity is assumed to contribute nothing.
+\end{assumption}
+
+\begin{assumption}[Adversary power]\label{ass:power}
+$\Attacker$ is Dolev--Yao on the wire~\cite{dolev-yao}: it observes all
+transmitted plaintext and ciphertext but cannot decrypt beyond its
+computational budget. $\Attacker$ may \emph{seize any device} and read all
+state on it (vault blobs, time-lock blobs, commitment scripts, review
+schedules). $\Attacker$ has \emph{unbounded compute within a wall-clock custody
+window}, and may \emph{physically coerce} $\Victim$ for a bounded duration ---
+bounds calibrated against the incident durations in the registry~\cite{lopp-attacks}.
+\end{assumption}
+
+\subsection{The feasibility line}
+
+Asymptotic ``hard'' and ``easy'' are useless against a fixed, resourced
+attacker; we replace them with two engineering stipulations that fix what
+\emph{feasible} means and turn the lemmas into concrete bounds.
+
+\begin{assumption}[Feasibility stipulations]\label{ass:feas}
+Let a \emph{cheap} evaluation be one call to a non-memory-hard hash $\Hcheap$,
+and a \emph{memory-hard} evaluation one call to an hours-scale Argon2d-class
+function $\Hhard$~\cite{argon2}.
+\begin{itemize}[nosep,leftmargin=1.4em]
+  \item \textbf{S1 (feasible).} $2^{32}$ cheap evaluations are within
+        $\Attacker$'s budget.
+  \item \textbf{S2 (infeasible).} $2^{64}$ memory-hard evaluations --- written
+        $\mathbf{64^{*}}$ --- are beyond it.
+\end{itemize}
+\end{assumption}
+
+Two currencies span the gap between them. \emph{Entropy} buys $32 \to 64$: a
+second independent 32-bit stage. But plain $2^{64}$ \emph{cheap} work still sits
+at the border of a resourced attacker's reach (hours), so the $64 \to \sftstar$
+step must be bought by \emph{memory-hardness} --- which is why the gating
+function has to be Argon2-class. We refer to plain cheap $2^{64}$ throughout as
+the \emph{softest number}: it must be named explicitly wherever it is invoked,
+never silently treated as infeasible.
+
+\subsection{The tacit-knowledge premise}
+
+The construction of \S\ref{sec:gw} rests the secret on \emph{tacit} knowledge.
+We state the premise abstractly here; \S\ref{sec:gw} instantiates it.
+
+\begin{assumption}[Tacit knowledge, TKBA]\label{ass:tkba}
+The secret is a set of fractal locations that are \emph{recognisable but not
+transmissible}.
+\begin{itemize}[nosep,leftmargin=1.4em]
+  \item \textbf{TKBA$_1$.} A point is intransmissible without the fractal
+        parameters that render it; $\Victim$ cannot dictate it in the abstract.
+  \item \textbf{TKBA$_2$.} The \emph{deep} fractal parameters are not a
+        hand-overable artifact; producing them requires walking a memory-hard
+        chain that later locations do not exist before.
+\end{itemize}
+\end{assumption}
+
+% ════════════════════════════════════════════════════════════════════════════
+\section{The Deadly-Race impossibility chain}
+\label{sec:chain}
+% ════════════════════════════════════════════════════════════════════════════
+
+The core results form an escalating chain: each follows from the one before,
+starting from a classical impossibility and ending in a design bar.
+
+\begin{lemma}[Non-Negative-Proof Lemma, NNPL]\label{lem:nnpl}
+No agent can furnish satisfactorily verifiable proof of \emph{lack of access} to
+a given piece of information --- whether that access would be through their own
+memory, or directly or indirectly through physical media. One can prove one
+\emph{knows} something; one cannot prove one has \emph{forgotten} it, nor that
+no backup of it exists anywhere.
+\end{lemma}
+
+\begin{proof}[Argument]
+Knowledge admits a positive certificate: exhibit the datum, or answer a
+challenge that only a knower could answer. Non-knowledge admits no such
+certificate. Any protocol in which $\Victim$ demonstrates ignorance is one in
+which a knowing $\Victim$ could simulate the same transcript by withholding what
+they know; and no observation of $\Victim$ or of any finite set of media
+excludes the existence of a further, unobserved copy. The asymmetry is
+information-theoretic, not a matter of effort.
+\end{proof}
+
+\begin{lemma}[Deadly-Race Lemma / Villas Boas' Lemma]\label{lem:drl}
+Because a released $\Victim$ cannot prove (Lemma~\ref{lem:nnpl}) that they retain
+no resumable copy of their protocol state, any seizure that leaves $\Attacker$
+with enough information to \emph{eventually} reach $K$ --- however much slower
+than legitimate use --- defines a \textbf{race} between $\Attacker$ (working
+from the seized information) and the released $\Victim$ (presumed to hold
+complete information). Whoever reaches $K$ first seizes whatever it gates. The
+existence of that race creates a \textbf{material incentive for $\Attacker$ to
+assassinate $\Victim$} --- and possibly the heirs --- upon seizing sufficient
+information, so as to eliminate the competing racer.
+\end{lemma}
+
+\begin{proof}
+Suppose the seizure leaves $\Attacker$ on a feasible path to $K$ of wall-clock
+length $T_A$, and $\Victim$, once released, on a path of length $T_V \le T_A$.
+By Lemma~\ref{lem:nnpl}, $\Attacker$ cannot verify any promise by $\Victim$ to
+abstain or to have destroyed their copy, so $\Attacker$ must assume $\Victim$
+races. Eliminating $\Victim$ deletes the competing racer and converts an
+uncertain win into a certain one; it is therefore a strictly dominant action
+for a payoff-maximising $\Attacker$ whenever the marginal cost of the killing is
+below the contested value. The incentive is a structural consequence of the
+race, independent of $\Attacker$'s temperament.
+\end{proof}
+
+\begin{principle}[No-Gray-Area Principle / Villas Boas' Principle]\label{prin:nga}
+A coercion-resistant protocol must, for a fixed threat model, admit \textbf{only}
+outcomes in which a wrench attack \emph{clearly succeeds} or \emph{clearly
+fails} --- never a race. A protocol in which some wrench-attack outcome is a
+race is, by construction, not acceptable: the gray area is precisely where the
+assassination incentive of Lemma~\ref{lem:drl} lives.
+\end{principle}
+
+\begin{proof}[Operational restatement]
+Seizing a device must yield either \emph{nothing feasible} (clear failure) or
+\emph{the secret itself while $\Attacker$ is present and $\Victim$ is captive}
+(clear success, no free racer) --- never a feasible-but-slower offline path that
+$\Attacker$ could pursue after releasing or killing $\Victim$. ``Feasible'' is
+judged against the attacker of Assumptions~\ref{ass:power}--\ref{ass:feas}, not
+against a casual one.
+\end{proof}
+
+\begin{remark}[Reachability --- the remote-racer escape]\label{rem:reach}
+The assassination incentive of Lemma~\ref{lem:drl} is realizable \emph{only
+against a racer $\Attacker$ can reach}. A racer beyond physical reach --- e.g.\
+a \emph{remote} rescuer or delegate --- cannot be eliminated, so their racing
+advantage stands and the attack fails cleanly. Remoteness of the racer is
+therefore itself a remediation. Hence there are exactly \textbf{two honest ways
+to clear Principle~\ref{prin:nga}}:
+\begin{enumerate}[nosep,leftmargin=1.6em]
+  \item \textbf{remove the race} --- admit no feasible seizure path at all
+        (custody stays individual); or
+  \item \textbf{remove $\Attacker$'s reach over the racer} --- interpose a
+        remote delegate (custody becomes shared).
+\end{enumerate}
+This dichotomy is the classification axis of \S\ref{sec:classify}. The escape
+buys safety by moving the winning racer \emph{off the individual} --- it
+requires a trusted third party.
+\end{remark}
+
+% ════════════════════════════════════════════════════════════════════════════
+\section{Construction --- Great Wall (clears by removing the race)}
+\label{sec:gw}
+% ════════════════════════════════════════════════════════════════════════════
+
+We now exhibit a construction that clears Principle~\ref{prin:nga} by the first
+route of Remark~\ref{rem:reach}: it admits \emph{no feasible seizure path}, so
+custody remains individual. Full normative detail is in the canonical
+spec~\cite{gw-orbit}; we give the parts the theorem needs.
+
+\subsection{The orbit}
+
+Let $\Hcheap$ be a cheap, entropy-preserving one-way hash and $\Hhard$ an
+memory-hard (Argon2-class) hash of tunable cost. Let $\sigma$ be a public,
+precomputation-resistant \emph{timechain salt} whose cross-user amortization is
+negligible (the companion Namtso primitive~\cite{gw-timechain-salt}). Define an
+\textbf{orbit} of $N$ deep stages:
+\begin{align}
+  o_0 &= \Hcheap(\sigma), \\
+  o_i &= \Hhard\!\big(\, \Hcheap(o_{i-1} \,\|\, \Sh_{i-1}) \,\big),
+         \qquad 1 \le i \le N,
+  \label{eq:orbit}
+\end{align}
+where the raw inputs $\{o_{i-1}, \Sh_{i-1}\}$ are \textbf{wiped} in the instant
+between the cheap inner hash and the long memory-hard step. Computing
+$c := \Hcheap(o_{i-1}\|\Sh_{i-1})$ first (instant), wiping, then running the
+long $o_i := \Hhard(c)$, means the raw prior orbit point and Shamir secret exist
+only momentarily --- not across the whole memory-hard window. This directly
+shrinks the window in which $K$ is seizable, and is the reason not to write
+$\Hhard(o_{i-1}\|\Sh_{i-1})$ directly.
+
+\subsection{No single-point oracle}
+
+Each stage $i$ carries not an individual point but a \emph{whole Shamir
+polynomial}~\cite{shamir1979}. Stage $i$ has $s_i$ points $p_{i,j}$, each a
+32-bit leaf-area of a fractal $\theta_{i,j} = \Hcheap(o_i \| j)$; any $t_i$ of
+them reconstruct the degree-$(t_i{-}1)$ polynomial $\Sh_i$ of $t_i \cdot 32 \ge
+64$ bits ($t_i \ge 2$). The orbit absorbs the \emph{full} polynomial $\Sh_i$,
+not its constant term $f(0)$.
+
+\begin{remark}[Block-orbit $k \ge 2$ condition]
+Because the smallest object any orbit link commits is a full stage ($\ge 64$
+bits), no individual point $p_{i,j}$ is ever checkable in isolation --- there is
+no sub-threshold oracle against which a single guessed point could be verified.
+This is the block-orbit $k \ge 2$ condition, realised as Shamir $t_i \ge 2$ per
+stage.
+\end{remark}
+
+\subsection{Tacit multi-fractal stages}
+
+The points $p_{i,j}$ instantiate Assumption~\ref{ass:tkba}: they are
+recognisable on their fractal boards but not transmissible without
+$\theta_{i,j}$ (TKBA$_1$), and the deep $\theta_{i,j}$ are regenerated from
+$o_i$ --- which itself requires walking the memory-hard chain (TKBA$_2$). Using
+several shallow-zoom fractals per stage lets a stage carry $t_i \cdot 32$ bits
+at low zoom depth per board, keeping each point recognisable while tuning stage
+entropy in 32-bit steps.
+
+\subsection{Cheap terminal secret}
+
+The master secret is
+\begin{equation}
+  K = \Hcheap(o_N \,\|\, \Sh_N),
+  \label{eq:master}
+\end{equation}
+deliberately using the \emph{cheap} $\Hcheap$. A memory-hard last step would only
+\emph{prolong} the window in which $o_N$ and the final points are live (paying an
+$\Hhard$ \emph{after} the last point is recognised), worsening the very window
+we shrink in~\eqref{eq:orbit}. The resistance therefore lives in \emph{entropy}:
+standard deep stages carry 96 bits ($t_i = 3$), so a cheap ledger brute of
+$\Sh_N$ from a bare $o_N$ costs $2^{96}$ --- infeasible --- while the terminal
+window stays instant.
+
+\subsection{The $\sftstar$ floor}
+
+\begin{theorem}[$\sftstar$ floor on the master secret]\label{thm:floor}
+Under Assumptions~\ref{ass:power}--\ref{ass:tkba} and the standard build of
+\eqref{eq:orbit}--\eqref{eq:master}, from every seizable state the master secret
+$K$ is at least $\sftstar$ away: no single seizure leaves $K$ fewer than two
+memory-hard 32-bit stages from reach. Consequently a device seizure yields
+nothing feasible --- a \emph{clear failure} in the sense of
+Principle~\ref{prin:nga}, with no racer for $\Attacker$ to reach.
+\end{theorem}
+
+\begin{proof}[Proof by case analysis over seizable states]
+From a seized $o_i$ ($i \le N$), reaching $K$ requires guessing
+$\Sh_i, \dots, \Sh_N$; each $\Sh_j$ guess is $2^{t_j \cdot 32}$ and is
+$\Hhard$-gated, since it is checked only by recomputing the memory-hard link
+\eqref{eq:orbit}. Preimage resistance of $\Hcheap, \Hhard$ makes the orbit
+forward-only: a seized $o_i$ cannot yield $o_{i-1}$. We enumerate:
+\begin{itemize}[nosep,leftmargin=1.4em]
+  \item \emph{Pure device seizure} (no coercion; only time-lock-gated~\cite{rsw1996}
+        blobs at rest). All tacit points are required; $K$ is unreachable.
+  \item \emph{Wrench of stage~0} ($p_{0,\cdot}$, always present since $\sigma$ is
+        public). $\Attacker$ computes $o_1$ with one $\Hhard$; from $o_1$, $K$
+        costs $2^{\sum_{j\ge 1} t_j\cdot 32}$, which is $2^{96}$ or more in the
+        standard ($N\ge 2$) build --- infeasible.
+  \item \emph{Mid-orbit seizure} at $o_i$ ($i \le N$). $K$ costs $\ge 2^{96}$,
+        each guess $\Hhard$-gated --- infeasible.
+  \item \emph{Residual} $o_N$ present. Treated separately in
+        \S\ref{sec:residual}.
+\end{itemize}
+Every case except the residual leaves $K \ge \sftstar$ --- two memory-hard
+stages, beyond S2 of Assumption~\ref{ass:feas}.
+\end{proof}
+
+\begin{remark}[Why a last-stage KDF fails]
+The floor is not automatic. In a naive sequential setup whose master secret is
+$\mathrm{KDF}(p_N)$ --- determined by the \emph{last} stage alone --- a surprise
+seizure at stage $N{-}1$ holds the preimage of stage $N$; deriving it and
+brute-forcing the final 32-bit point costs $2^{32}$ (S1, feasible). That is a
+feasible-but-slower path: a gray area, rejected by
+Principle~\ref{prin:nga}. The requirement is that $K$ be $\ge \sftstar$ from
+\emph{every} seizable state, which is exactly the no-single-point-oracle /
+block-orbit ($k \ge 2$) condition met above.
+\end{remark}
+
+\subsection{The tolerated residual window}
+\label{sec:residual}
+
+One gray sliver survives: a wrench attack that lands with $o_N$
+imminently or currently live can, after the \emph{second-to-last} point of stage
+$N$ is surrendered, leave $\Attacker$ one cheap $2^{32}\cdot\Hcheap$ brute
+(\eqref{eq:master} is cheap) --- roughly a one-minute window --- from $K$. We
+report this honestly as a bounded residual rather than claim zero. It is
+tolerated on five grounds:
+\begin{enumerate}[nosep,leftmargin=1.6em]
+  \item a well-trained fractal is recognised in $\sim$1 minute;
+  \item $\Attacker$'s plan already budgets time-lock or re-derivation, subdue,
+        and interface time --- a residual minute rarely changes the escape;
+  \item assassinating \emph{trusts} that the earlier surrendered points were
+        genuine; one wrong point and the coercion retry is burned;
+  \item it sharply \emph{worsens judicial liability} --- murder qualified by
+        futile motive \emph{and} by the victim's defenselessness, atop armed
+        robbery; and
+  \item the terminal $K$ is deliberately cheap (\S\ref{eq:master}), so keeping
+        memory-hardness in the orbit rather than the terminal step removes any
+        advantage $\Attacker$ would gain by pre-staging.
+\end{enumerate}
+Whether the window opens after the $(t_N{-}1)$-th or $(t_N{-}2)$-th point rests
+on the softest number of Assumption~\ref{ass:feas} --- inside the tolerated
+reasoning either way. Net: a tiny window in which $\Attacker$ is, more likely
+than not, incentivised \emph{not} to act.
+
+% ════════════════════════════════════════════════════════════════════════════
+\section{Classification of existing designs}
+\label{sec:classify}
+% ════════════════════════════════════════════════════════════════════════════
+
+Remark~\ref{rem:reach} gives a classification axis: a design that clears
+Principle~\ref{prin:nga} does so either by \emph{removing the race} or by
+\emph{removing $\Attacker$'s reach over the racer}. The framework should
+classify a shipping design, and it does --- via the reachability remark, not by
+calling it broken.
+
+\subsection{Timelock-rescue vaults}
+
+Take \textbf{Rewind Bitcoin}~\cite{rewind-bitcoin} as the exemplar. Funds sit in
+a Bitcoin-native timelock vault; unlocking starts a multi-day countdown; if an
+unauthorized unlock is triggered, the owner \emph{or a trusted delegate} has that
+window to press ``Rescue'' and sweep to a cold panic address.
+
+Against \emph{remote} theft it is sound: a thief who steals keys trips the
+countdown, the owner notices, and rescues. But the spend capability sits behind
+\emph{only a delay}, with keys on the seized device and no recall floor --- so a
+wrench attacker who seizes the device \emph{does} hold a feasible path (unlock,
+wait out the countdown). That is a race, in the sense of Lemma~\ref{lem:drl}.
+Rewind's answer is exactly the second route of Remark~\ref{rem:reach}: it puts
+the winning racer out of $\Attacker$'s reach --- a \emph{remote delegate} the
+attacker cannot find or eliminate presses Rescue --- so the attack fails
+cleanly. This is a legitimate clearance, but the remote-racer kind: its cost is
+that \textbf{custody is no longer individual}.
+
+\begin{remark}[When the escape closes]
+The remedy holds only while the delegate is genuinely remote. If the delegate is
+a friend who happens to be visiting during the attack, \emph{both} problems
+apply at once --- custody was already non-individual, and the racer is now
+co-located and reachable --- so the design becomes deadly-race-susceptible
+again. The user is thus forced into an awkward corner: trust someone they can
+rarely be near, and accept a perverse incentive to avoid physical proximity to a
+trusted friend.
+\end{remark}
+
+\subsection{Great Wall, and the honest comparison}
+
+Great Wall clears by the \emph{other} route: the secret is tacit and never on
+the device (Assumption~\ref{ass:tkba}, Theorem~\ref{thm:floor}), so a seizure
+yields nothing feasible --- there is no racer to reach, and the time-lock is
+only a delay \emph{on top of} an already-clean failure. Custody stays
+individual. The two designs therefore clear the same bar by the two different
+routes of Remark~\ref{rem:reach}:
+\begin{center}\small
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{@{}l l X@{}}
+\toprule
+\textbf{Design} & \textbf{Clearance route} & \textbf{Cost / consequence} \\
+\midrule
+Timelock-rescue (Rewind) & Remove reach over racer & Remote delegate $\Rightarrow$ \emph{shared} custody; escape closes if delegate co-located \\
+Great Wall (orbit)       & Remove the race         & Tacit secret, $\ge \sftstar$ floor $\Rightarrow$ custody stays \emph{individual} \\
+\bottomrule
+\end{tabularx}
+\end{center}
+\noindent ``Put the racer out of reach'' versus ``leave no race to run'' is the
+honest comparison. Other designs slot onto the same axis: plausible-deniability
+and duress-PIN schemes fail Assumption~\ref{ass:kerckhoffs} (an educated
+$\Attacker$ persists past the decoy); Shamir-only social recovery moves reach
+onto guardians; multisig-by-geography attempts a weak form of the second route.
+
+% ════════════════════════════════════════════════════════════════════════════
+\section{Quantum note}
+\label{sec:quantum}
+% ════════════════════════════════════════════════════════════════════════════
+
+A few-minutes memory-hard $\Hhard$ per element also defeats
+Grover~\cite{grover1996}: a quantum search over an $n$-bit space needs
+$\sim 2^{n/2}$ \emph{coherent} evaluations of the memory-hard oracle, which is
+impractical for an hours-scale Argon2d barrier. Hence sub-256-bit standards
+(96 or 128 bits per stage) are quantum-defensible \emph{without} a 256-bit seed
+--- the memory-hardness that buys the $\sftstar$ floor classically also caps the
+quantum speed-up.
+
+% ════════════════════════════════════════════════════════════════════════════
+\section{Limitations and scope}
+\label{sec:limits}
+% ════════════════════════════════════════════════════════════════════════════
+
+Out of scope for this model: adversarial-agent scenarios (testator/heir mutual
+distrust, malicious interference with rotation); device side-channels (timing,
+EM, acoustic) during active tacit recall; long-horizon cryptographic erosion
+(century-plus hardness of the underlying primitives and of Argon2 parameters
+against future hardware); and mass on-chain correlation beyond the privacy of
+standard taproot outputs and private channels.
+
+Two scoping notes bear repeating. First, the framework fixes a \emph{bar}
+(Principle~\ref{prin:nga}); it does not claim Great Wall is the unique
+construction that clears it. Second, the residual window of
+\S\ref{sec:residual} is a genuine, bounded gray sliver, argued to be
+incentive-safe rather than eliminated --- we do not over-claim it away.
+
+% ════════════════════════════════════════════════════════════════════════════
+\section{Conclusion}
+% ════════════════════════════════════════════════════════════════════════════
+
+The Deadly Race turns ``graceful degradation'' from a virtue into a liability
+whenever the degraded state is a feasible-but-slower path to the secret: by
+Lemma~\ref{lem:drl}, that state is a race, and the race pays an assassination
+incentive. The No-Gray-Area Principle is the resulting design bar, and the
+reachability remark shows there are exactly two honest ways to clear it. The
+Great Wall orbit clears it by removing the race entirely --- an $\sftstar$ floor
+from every seizable state (Theorem~\ref{thm:floor}) --- and so keeps custody
+individual, where timelock-rescue vaults clear the same bar by removing the
+attacker's reach at the cost of a trusted third party.
+
+\paragraph{Open items for the full draft.}
+Fully game-based definitions of NNPL, the Lemma, and the Principle with an
+explicit adversary game and a reduction for the $\sftstar$ floor; a quantitative
+$\Hhard$ per-evaluation calibration tying S1/S2 to hardware; a precise
+game-based definition of ``coercion-resistance'' that the Principle implies; and
+an empirical grounding of the residual-window argument against the wrench-attack
+registry~\cite{lopp-attacks}.
+
+% ════════════════════════════════════════════════════════════════════════════
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
