@@ -54,7 +54,9 @@ Ran Canetti, Cynthia Dwork, Moni Naor, and Rafail Ostrovsky.
 \bibitem{gw-design}
 Yuri da~Silva Villas~Boas.
 \newblock Great wall core --- burning ship encoder design document.
-\newblock Great Wall documentation, \texttt{great-wall-core/DESIGN.md}, 2026.
+\newblock Great Wall documentation,
+  \url{https://github.com/Yuri-SVB/great-wall-docs/blob/main/great-wall-core/DESIGN.md},
+  2026.
 \newblock Public-facing protocol and instantiation-parameter reference.
 
 \bibitem{gw-timechain-salt}
@@ -80,33 +82,40 @@ Danny Dolev and Andrew~C. Yao.
 {Great Wall}.
 \newblock Celestial peace, never forget (cpnf): A spaced-repetition companion
   for setup recall.
-\newblock Great Wall documentation, \texttt{great-wallet/ARCHITECTURE.md}
+\newblock Great Wall documentation,
+  \url{https://github.com/Yuri-SVB/great-wall-docs/blob/main/great-wallet/ARCHITECTURE.md}
   (Celestial Peace --- Never Forget module), 2026.
 
 \bibitem{gw-fourprops}
 {Great Wall}.
 \newblock The four properties and tacit knowledge-based authentication (tkba).
-\newblock Great Wall documentation, \texttt{great-wallet/ARCHITECTURE.md} and
-  \texttt{justification-and-economics/JUSTIFICATION}, 2026.
+\newblock Great Wall documentation,
+  \url{https://github.com/Yuri-SVB/great-wall-docs/blob/main/great-wallet/ARCHITECTURE.md}
+  and
+  \url{https://github.com/Yuri-SVB/great-wall-docs/blob/main/justification-and-economics/JUSTIFICATION.pdf},
+  2026.
 
 \bibitem{gw-threatmodel}
 {Great Wall}.
 \newblock Great wall ecosystem --- threat model.
-\newblock Great Wall documentation, \texttt{great-wallet/THREAT\_MODEL.md},
+\newblock Great Wall documentation,
+  \url{https://github.com/Yuri-SVB/great-wall-docs/blob/main/great-wallet/THREAT_MODEL.md},
   2026.
 
 \bibitem{gw-jadeclock}
 {Great Wall}.
 \newblock Jade clock --- outsourced anonymous timelock.
-\newblock Great Wall documentation, \texttt{great-wallet/ARCHITECTURE.md} (Jade
-  Clock module), 2026.
+\newblock Great Wall documentation,
+  \url{https://github.com/Yuri-SVB/great-wall-docs/blob/main/great-wallet/ARCHITECTURE.md}
+  (Jade Clock module), 2026.
 
 \bibitem{gw-justification}
 {Great Wall}.
 \newblock Justification and economics: The security cost of bitcoin
   self-custody.
 \newblock Great Wall documentation,
-  \texttt{justification-and-economics/JUSTIFICATION}, 2026.
+  \url{https://github.com/Yuri-SVB/great-wall-docs/blob/main/justification-and-economics/JUSTIFICATION.pdf},
+  2026.
 
 \bibitem{grover1996}
 Lov~K. Grover.
