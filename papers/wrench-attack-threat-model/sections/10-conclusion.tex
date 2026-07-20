@@ -1,0 +1,56 @@
+% ════════════════════════════════════════════════════════════════════════════
+\section{Conclusion}
+% ════════════════════════════════════════════════════════════════════════════
+
+The Deadly Race turns ``graceful degradation'' from a virtue into a liability
+whenever the degraded state is a feasible-but-slower path to the secret: by
+Lemma~\ref{lem:drl}, that state is a race, and the race pays an assassination
+incentive. The No-Gray-Area Criterion is the resulting design bar, and the
+reachability corollary shows there are exactly two honest ways to clear it. The
+TGPO orbit clears it by removing the race entirely --- an $\sftstar$ floor
+from every seizable state (Theorem~\ref{thm:floor}) --- and so keeps custody
+individual, where timelock-rescue vaults clear the same bar by removing the
+attacker's reach at the cost of a trusted third party.
+
+\paragraph{What devicelessness buys: a threat model that stays simple.}
+Beyond clearing the bar, keeping the whole setup in the head keeps a series of
+otherwise-open cans of worms firmly shut --- and it is this that lets the model
+above stay \emph{a fortiori} and single-shot rather than a tangle of sub-games. The
+tacit, deviceless TGPO holder enjoys:
+\begin{enumerate}[nosep,leftmargin=1.9em]
+  \item a \textbf{minimal window} in which the stash $K$ is seizable at all --- the
+        bounded residual (\S\ref{sec:residual}), not a standing device \emph{(the
+        funds survive)};
+  \item a \emph{separate} \textbf{minimal window} of deadly-race exposure \emph{(the
+        owner survives)} --- distinct from~(1), and only mostly overlapping it: once
+        the second-to-last point of stage $N$ is surrendered the stash is effectively
+        lost while the deadly-race window is at its \emph{peak} (an impatient
+        $\Attacker$, or one perceiving a threat to its escape, may still kill);
+  \item \textbf{no hostage device} --- and so none of the game-theoretic bluffing
+        maze of ransoming a seized token (\S\ref{sub:hostage});
+  \item an NNPP that is a \textbf{dead end}: $\Attacker$ may assume an undisclosed
+        shortcut device exists (Assumption~\ref{lem:nnpl}), but killing $\Victim$
+        cannot extract it, and $\Attacker$ knows $\Victim$ has no \emph{need} of one
+        --- so denial is inherently plausible (Remark~\ref{rem:plausible-denial});
+  \item \textbf{no trusted third party} (route \ref{r:removerace}, not
+        \ref{r:remotewinner});
+  \item \textbf{maximum portability} --- no geographic binding to sites of custody
+        (Definition~\ref{def:geographic});
+  \item the \textbf{lowest operational cost} of the three routes.
+\end{enumerate}
+Each is a simplification that device-, geography-, or delegate-dependent designs
+forfeit; taken together they are why the deviceless secret admits so plain a threat
+model.
+
+\paragraph{Open items for the full draft.}
+The impossibility chain is drafted here (\S\ref{sec:chain}); the remaining work
+is to promote it to an \emph{explicit adversary game} --- $\Attacker$ a PPT
+adversary augmented by a bounded physical-coercion oracle --- so that
+Criterion~\ref{prin:nga} becomes a theorem rather than a stipulated bar; a
+utility model richer than the single-shot $(1 - p_A)\,W > c$ (repeated
+encounters, partial extraction, heir cascades, $\Attacker$'s risk-aversion); the
+$\sftstar$-floor \emph{reduction} discharging \S\ref{sec:gw}'s $p_A = 0$
+obligation; a quantitative $\Hhard$ per-evaluation calibration tying \ref{s:feasible}/\ref{s:infeasible} to
+hardware; and an empirical grounding of the residual-window argument against the
+wrench-attack registry~\cite{lopp-attacks}.
+

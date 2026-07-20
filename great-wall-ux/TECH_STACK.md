@@ -174,31 +174,45 @@ re-litigated.
   way for the user to land on a different mapping than the one they
   trained on without realising it. The library does not even expose
   the transform as a parameter.
-- **Palette set: Classic × 6 hue offsets.** The entire palette surface
-  is the Classic base palette inherited from `great-wall-core`, made
-  available in **six hue rotations evenly spaced around the wheel**
-  (0°, 60°, 120°, 180°, 240°, 300°). Variants are named after the
-  dominant hue of each rotation so the user always knows which one
-  they are on; switching is an explicit, labelled action, not a
-  cycle-on-keypress. Rationale, in order of weight:
-    1. **Anti-confusion / anti-chaining.** A small number of
-       visually-distinct, named options means the user cannot drift
+- **Palette set: single hue × 6, brightness-ramped.** The entire palette
+  surface is a **constant-hue ramp**: within any one scheme the hue is
+  **fixed** and the saturation is **full**, and only **brightness** varies —
+  brightness ramps with the (fixed-log) transformed escape count. The same
+  scheme is offered in **six hues evenly spaced around the wheel**
+  (0°, 60°, 120°, 180°, 240°, 300°), named by hue, with **green the
+  default** (a green-on-black terminal allusion). Switching hue is an
+  explicit, labelled wheel action, not a cycle-on-keypress. Rationale,
+  in order of weight:
+    1. **One perceptual dimension.** Hue variance *within* a scheme reads
+       as arbitrary and competes for attention; fixing the hue makes
+       **brightness** the single dimension the user's visual cognition
+       tracks to judge how much detail is visible and to locate the next
+       reference point. This is the same "function before aesthetics"
+       logic that fixes the escape-count transform, and it composes with
+       the always-on brightness modulation below.
+    2. **Anti-confusion / anti-chaining.** A small number of
+       visually-distinct, named hues means the user cannot drift
        between schemes by accident, and cannot unknowingly chain
        different mappings across sessions in a way that would
        degrade recognition of paths they have memorised.
-    2. **Circadian / sleep-hygiene latitude.** Many users (including
+    3. **Circadian / sleep-hygiene latitude.** Many users (including
        the protocol author) prefer cooler hues by day and warmer /
-       red-shifted hues at night. Six offsets cover that span without
+       red-shifted hues at night. Six hues cover that span without
        inflating the option set.
-    3. **Color-vision accessibility.** A handful of well-separated
-       hue rotations gives users with color-blindness or other
-       color-perception differences a meaningfully better chance of
-       finding a variant whose contrast structure works for them
-       than a single fixed palette would.
-  Once a tagged release ships, neither the Classic base nor the six
-  rotations' escape-count → RGBA mappings are silently changed —
-  the user's visual memory is treated as an API surface, per the
-  palette stability invariant below.
+    4. **Color-vision accessibility.** A handful of well-separated
+       hues gives users with color-blindness or other color-perception
+       differences a meaningfully better chance of finding a hue whose
+       brightness ramp works for them than a single fixed hue would.
+  Once a tagged release ships, the six hues' escape-count → RGBA mappings
+  are not silently changed — the user's visual memory is treated as an
+  API surface, per the palette stability invariant below.
+
+  *History:* an earlier revision locked this surface to the **Classic**
+  multi-hue base (inherited from `great-wall-core`) rotated into six
+  variants. That was superseded — before any tagged release — by the
+  single-hue, brightness-ramped scheme above, on the "one perceptual
+  dimension" rationale; the six-hue wheel and its anti-chaining /
+  circadian / accessibility rationale are retained.
 - **Color pipeline: GPU fragment shader, in great-wall-ux.** The
   escape-count → pixel mapping (log transform → palette lookup →
   brightness modulation) runs entirely in a Flutter `FragmentProgram`
@@ -265,6 +279,30 @@ re-litigated.
       "Brightness offset +N.N" status message is removed; surfacing
       the value would convert a tacit skill into an explicit,
       verbalizable fact and weaken TKBA.
+- **Audio cues: discrete volume, `V` + arrow live control.** Short
+  synthesised "console blip" cues (click / select / confirm / deny)
+  give tactile feedback for the "sober, but game-like" surface. Volume
+  is a discrete integer level from `0` to `kMaxVolumeLevel` (**10
+  steps, 11 settings**) — the familiar media-player granularity, coarse
+  enough to reach either end in about a second of holding the hotkey.
+  Properties:
+    - **Live adjustment via `V` + Up/Down arrows**, mirroring the
+      `L` + scroll brightness gesture (a held modifier plus a
+      directional nudge). The hotkey is bound by the *consuming app*
+      (which owns keyboard focus), not by the canvas widget; the app
+      drives `SoundBoard.volumeUp` / `volumeDown` and replays a cue at
+      the new level so the user *hears* where the volume now sits.
+    - **Level `0` is silence and is exactly what "mute" means.** There
+      is no separate mute flag: `muted` is defined as `level == 0`, and
+      the mute toggle simply drops to `0` and restores the previous
+      level. This keeps "volume 0 == muted" true by construction.
+    - **Not a tacit control — a readout is allowed.** Unlike the
+      brightness offset, the cue volume carries no coercion-relevant
+      tacit knowledge, so a host *may* surface it (a numeric readout, a
+      volume icon).
+    - **Best-effort and never logged.** Any audio backend error is
+      swallowed to silence; cues carry no coordinate data, consistent
+      with the no-leak posture.
 - **Accessibility: chrome-only.** Buttons, menus, dialogs, settings,
   grade pickers, progress indicators, and all surrounding chrome are
   fully accessible (semantic labels, focus order, screen-reader
@@ -313,13 +351,13 @@ revision.
   is enforced by golden tests and is a load-bearing property of
   the bisection's pixel-to-coordinate contract; without it,
   decoded points would drift between platforms.
-- **Palette stability.** Once a tagged release ships, the Classic
-  base palette and each of its six hue rotations have a frozen
-  escape-count → RGBA mapping. Tweaks ship as new named variants,
-  never as silent updates to existing ones. Users' visual memory of
-  a variant is a UX dependency treated as an API surface.
+- **Palette stability.** Once a tagged release ships, each of the six
+  single-hue, brightness-ramped schemes has a frozen escape-count →
+  RGBA mapping. Tweaks ship as new named variants, never as silent
+  updates to existing ones. Users' visual memory of a scheme is a UX
+  dependency treated as an API surface.
 - **No alternative escape-count transforms, no extra palettes.** The
-  log transform and the Classic × 6-hue set are the entire surface;
+  log transform and the single-hue × 6 set are the entire surface;
   re-introducing a transform toggle or a user-extensible palette
   loader is a breaking change to the ecosystem's TKBA posture
   (users can no longer be confident which mapping they trained on)
