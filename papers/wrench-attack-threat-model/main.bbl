@@ -1,0 +1,160 @@
+\begin{thebibliography}{10}
+
+\bibitem{depth-robust}
+Jo{\"e}l Alwen, Jeremiah Blocki, and Krzysztof Pietrzak.
+\newblock Depth-robust graphs and their cumulative memory complexity.
+\newblock In {\em Advances in Cryptology --- EUROCRYPT 2017}, volume 10212 of
+  {\em Lecture Notes in Computer Science}, pages 3--32. Springer, 2017.
+
+\bibitem{aft-wrench}
+Anonymous.
+\newblock Investigating wrench attacks: Physical attacks targeting
+  cryptocurrency users.
+\newblock In {\em Advances in Financial Technologies (AFT)}, LIPIcs. Schloss
+  Dagstuhl, 2024.
+
+\bibitem{argon2}
+Alex Biryukov, Daniel Dinu, and Dmitry Khovratovich.
+\newblock Argon2: New generation of memory-hard functions for password hashing
+  and other applications.
+\newblock In {\em IEEE European Symposium on Security and Privacy (EuroS\&P)},
+  pages 292--302, 2016.
+
+\bibitem{bitvault}
+{BitVault}.
+\newblock Bitvault --- time-delayed bitcoin self-custody.
+\newblock \url{https://www.bitvault.sv/}, 2026.
+
+\bibitem{bojinov-rubberhose}
+Hristo Bojinov, Daniel Sanchez, Paul Reber, Dan Boneh, and Patrick Lincoln.
+\newblock Neuroscience meets cryptography: Designing crypto primitives secure
+  against rubber hose attacks.
+\newblock In {\em 21st USENIX Security Symposium (USENIX Security)}, pages
+  129--141, 2012.
+
+\bibitem{boneh-vdf}
+Dan Boneh, Joseph Bonneau, Benedikt B{\"u}nz, and Ben Fisch.
+\newblock Verifiable delay functions.
+\newblock In {\em Advances in Cryptology --- CRYPTO 2018}, volume 10991 of {\em
+  Lecture Notes in Computer Science}, pages 757--788. Springer, 2018.
+
+\bibitem{canetti-deniable}
+Ran Canetti, Cynthia Dwork, Moni Naor, and Rafail Ostrovsky.
+\newblock Deniable encryption.
+\newblock In {\em Advances in Cryptology --- CRYPTO 1997}, volume 1294 of {\em
+  Lecture Notes in Computer Science}, pages 90--104. Springer, 1997.
+
+\bibitem{casa}
+{Casa}.
+\newblock Casa --- collaborative multisig bitcoin custody.
+\newblock \url{https://casa.io/}, 2026.
+\newblock 2-of-3 / 3-of-5 multisig; client keys on separate devices plus a Casa
+  co-signing key.
+
+\bibitem{gw-design}
+Yuri da~Silva Villas~Boas.
+\newblock Great wall core --- burning ship encoder design document.
+\newblock Great Wall documentation, \texttt{great-wall-core/DESIGN.md}, 2026.
+\newblock Public-facing protocol and instantiation-parameter reference.
+
+\bibitem{gw-timechain-salt}
+Yuri da~Silva Villas~Boas.
+\newblock A memorization-free, precomputation-resistant salt from the bitcoin
+  timechain.
+\newblock Great Wall companion paper (Namtso),
+  \url{https://github.com/Yuri-SVB/namtso-the-sacred-salt}, 2026.
+
+\bibitem{balland}
+{DL News}.
+\newblock Ledger co-founder david balland and wife kidnapped in france.
+\newblock DL News,
+  \url{https://www.dlnews.com/articles/regulation/ledger-cofounder-david-balland-and-wife-kidnapped-in-france/},
+  2025.
+
+\bibitem{dolev-yao}
+Danny Dolev and Andrew~C. Yao.
+\newblock On the security of public key protocols.
+\newblock {\em IEEE Transactions on Information Theory}, 29(2):198--208, 1983.
+
+\bibitem{gw-cpnf}
+{Great Wall}.
+\newblock Celestial peace, never forget (cpnf): A spaced-repetition companion
+  for setup recall.
+\newblock Great Wall documentation, \texttt{great-wallet/ARCHITECTURE.md}
+  (Celestial Peace --- Never Forget module), 2026.
+
+\bibitem{gw-fourprops}
+{Great Wall}.
+\newblock The four properties and tacit knowledge-based authentication (tkba).
+\newblock Great Wall documentation, \texttt{great-wallet/ARCHITECTURE.md} and
+  \texttt{justification-and-economics/JUSTIFICATION}, 2026.
+
+\bibitem{gw-threatmodel}
+{Great Wall}.
+\newblock Great wall ecosystem --- threat model.
+\newblock Great Wall documentation, \texttt{great-wallet/THREAT\_MODEL.md},
+  2026.
+
+\bibitem{gw-jadeclock}
+{Great Wall}.
+\newblock Jade clock --- outsourced anonymous timelock.
+\newblock Great Wall documentation, \texttt{great-wallet/ARCHITECTURE.md} (Jade
+  Clock module), 2026.
+
+\bibitem{gw-justification}
+{Great Wall}.
+\newblock Justification and economics: The security cost of bitcoin
+  self-custody.
+\newblock Great Wall documentation,
+  \texttt{justification-and-economics/JUSTIFICATION}, 2026.
+
+\bibitem{grover1996}
+Lov~K. Grover.
+\newblock A fast quantum mechanical algorithm for database search.
+\newblock In {\em 28th Annual ACM Symposium on Theory of Computing (STOC)},
+  pages 212--219, 1996.
+
+\bibitem{juels-coercion}
+Ari Juels, Dario Catalano, and Markus Jakobsson.
+\newblock Coercion-resistant electronic elections.
+\newblock In {\em Proceedings of the 2005 ACM Workshop on Privacy in the
+  Electronic Society (WPES)}, pages 61--70. ACM, 2005.
+
+\bibitem{kahn-codebreakers}
+David Kahn.
+\newblock {\em The Codebreakers: The Story of Secret Writing}.
+\newblock Scribner, revised edition, 1996.
+
+\bibitem{kerckhoffs1883}
+Auguste Kerckhoffs.
+\newblock La cryptographie militaire.
+\newblock {\em Journal des sciences militaires}, IX:5--38, 1883.
+
+\bibitem{lopp-attacks}
+Jameson Lopp.
+\newblock Known physical bitcoin attacks.
+\newblock \url{https://github.com/jlopp/physical-bitcoin-attacks}, 2025.
+\newblock Community registry of documented ``\$5 wrench'' incidents.
+
+\bibitem{monrose-keystroke}
+Fabian Monrose and Aviel~D. Rubin.
+\newblock Keystroke dynamics as a biometric for authentication.
+\newblock {\em Future Generation Computer Systems}, 16(4):351--359, 2000.
+
+\bibitem{rewind-bitcoin}
+{Rewind Bitcoin}.
+\newblock Rewind bitcoin --- timelock vaults with rescue.
+\newblock \url{https://rewindbitcoin.com/}, 2025.
+
+\bibitem{rsw1996}
+Ronald~L. Rivest, Adi Shamir, and David~A. Wagner.
+\newblock Time-lock puzzles and timed-release crypto.
+\newblock Technical Report MIT/LCS/TR-684, MIT Laboratory for Computer Science,
+  1996.
+
+\bibitem{shamir1979}
+Adi Shamir.
+\newblock How to share a secret.
+\newblock {\em Communications of the ACM}, 22(11):612--613, 1979.
+
+\end{thebibliography}

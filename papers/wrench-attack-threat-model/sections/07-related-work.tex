@@ -1,0 +1,44 @@
+% ════════════════════════════════════════════════════════════════════════════
+\section{Related work}
+\label{sec:related}
+% ════════════════════════════════════════════════════════════════════════════
+
+\textbf{Coercion resistance.} The term is due to Juels, Catalano, and
+Jakobsson~\cite{juels-coercion}, in electronic voting: a scheme is
+coercion-resistant if a voter \emph{cannot prove} to a coercer how they voted, so
+the coercer cannot verify compliance and the reason to coerce collapses. Our sense
+is different and complementary. There the protected act is a \emph{choice} the
+coercer wants to dictate and safety comes from \emph{unprovability}; here the
+protected object is a \emph{bearer secret} the coercer wants to extract, and the
+danger is not that compliance is unverifiable but that a released holder remains a
+racer worth killing (Lemma~\ref{lem:drl}). We inherit the word, not the model.
+
+\textbf{Secrets recognised but not articulated.} The tacit premise
+(Assumption~\ref{ass:tkba}) --- a secret its holder can \emph{recognise} but cannot
+\emph{transmit} --- has direct antecedents. Bojinov, Sanchez, Reber, Boneh, and
+Lincoln~\cite{bojinov-rubberhose} train an authentication secret by \emph{implicit
+learning} so that even a cooperating, coerced user cannot articulate it
+(``rubber-hose'' resistance); this is the closest prior instantiation of our TKBA,
+and TGPO can be read as carrying the same idea from an authentication token to a
+self-custody key behind a memory-hard time-gate. The broader phenomenon --- identity
+carried in a behaviour that resists articulation --- is old: keystroke dynamics treat
+idiosyncratic typing rhythm as a biometric~\cite{monrose-keystroke}, and WWII traffic
+analysis identified individual wireless operators by the ``fist'' of their Morse
+keying long before either was formalised~\cite{kahn-codebreakers}.
+
+\textbf{Deniability versus unprovability.} Deniable
+encryption~\cite{canetti-deniable}, and the duress-PIN / panic-password schemes it
+inspired, let a coerced user \emph{plausibly lie} --- surrender a fake key, or open a
+decoy. NNPP (Assumption~\ref{lem:nnpl}) is the sharp negative counterpart: rather
+than proving a false positive (``this is the key''), the holder would need to prove a
+true negative (``no other key exists''), which cannot be done. Deniability offers a
+lie the coercer cannot disprove; we show the holder cannot furnish the assurance the
+coercer would need, which is exactly why the coercer's only remaining lever is the
+victim (\S\ref{sec:chain}). Note too (\S\ref{sub:fourprops}) that decoy and duress
+schemes rest on the adversary's ignorance and so fail Kerckhoffs.
+
+\textbf{Time-gates.} The construction's wall-clock gate is a time-lock puzzle in the
+sense of Rivest, Shamir, and Wagner~\cite{rsw1996}; verifiable delay
+functions~\cite{boneh-vdf} are the modern, publicly checkable form of the same
+primitive, and either may instantiate the outsourced timelock the orbit optionally
+uses (\S\ref{sec:gw}).
