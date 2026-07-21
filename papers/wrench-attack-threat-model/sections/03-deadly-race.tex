@@ -11,7 +11,7 @@ skull.''\\
 
 \noindent This section states the paper's core negative result as an \emph{escalating
 chain}: the \emph{Non-Negative-Proof Principle}, an \emph{a fortiori} assumption on
-the attacker's knowledge --- justified by an information-theoretic impossibility --- (\S\ref{sub:nnpl}), its decision-theoretic
+the attacker's knowledge (justified by an information-theoretic impossibility, \S\ref{sub:nnpl}), its decision-theoretic
 consequence for a rational coercer (\S\ref{sub:drl}), and the design bar the two
 together force (\S\ref{sub:nga}--\S\ref{sub:reach}). We are
 deliberately explicit about which links are \emph{impossibilities} and which are
@@ -118,7 +118,7 @@ nothing, whereas pricing a single brute attempt would be finer than any
 distinction the construction can express. Conservatively $b = \sftstar$ --- work
 below $\sftstar$ feasible (the softest number handed to $\Attacker$), $\sftstar$
 itself infeasible. A fourth optional parameter $t$ budgets the \textbf{coercion
-time} (\ref{d:subjugation}'s window): $\mathrm{WDY}[W,c,b,t]$ fixes the maximum wall-clock the
+time} (\ref{d:subjugation}'s window): $\mathrm{WDY}[W,c,b,t]$ fixes the maximum wall-clock time for which the
 adversary can sustain coercion. Like $b$, $t$ is a capability bound pinned at its
 real, registry-calibrated value $t_{\mathrm{reg}}$, not sent to $\infty$ ---
 unbounded coercion would let $\Attacker$ walk any time-gate to completion, the same
@@ -161,9 +161,9 @@ two do not conflict --- one is the public mechanism, the other $\Victim$'s priva
 state --- so NNPP \emph{qualifies} Kerckhoffs, and we resolve the gap
 conservatively: \textbf{$\Attacker$ always assumes an undisclosed backup exists}.
 Notice that something as small as an SD card, as inconspicuous as steganographic 
-notes on a book, or as interior as memorized login and password of an email suffice
-to store a short-cutting state. Again, for purposes of a fortiori argument, we do not 
-consider attacker reading truthfulness off $\Victim$'s terrorised demeanour or tone.
+notes in a book, or as interior as the memorised login and password of an email account suffices
+to store a short-cutting state. Again, for the purposes of the \emph{a fortiori} argument, we do not 
+consider the attacker reading truthfulness off $\Victim$'s terrorised demeanour or tone.
 
 Both halves point the \emph{same} way --- toward killing. Knowing the protocol
 (Kerckhoffs) and always presuming $\Victim$ a live racer (NNPP) each \emph{raise}
@@ -199,7 +199,7 @@ overlord there is no custody to resist. Defending against it is a \emph{doomsday
 bet}: the branch in which the adversary exists is the branch in which the stakes
 that define the game are gone, so a rational actor assigns it \emph{zero
 decision-weight} --- not because its probability is negligible, but because its
-utility is undefined there. NNPP is therefore safe as a \emph{modeling boundary}:
+utility is undefined there. NNPP is therefore safe as a \emph{modelling boundary}:
 the only world that falsifies it is one in which the question does not arise.
 \end{remark}
 
@@ -707,7 +707,7 @@ body-implanted chip, a biometric token, or a USB stick carried everywhere.
 Property~\ref{p:coerc} (coercion resistance against a WDY) prunes them: every \emph{carried
 device} is co-located at the attack site, hence seized (\ref{d:seizure}), and a biometric is
 coerced --- only the \emph{brain}, the one store that is not a device, survives.
-The brain still holds both coercible (explicit, memorizable) and non-coercible
+The brain still holds both coercible (explicit, memorisable) and non-coercible
 content, so the same Property~\ref{p:coerc}, now against the coercion oracle (\ref{d:explicit}), forces the
 secret to be the latter: \emph{non-transmissible}, i.e.\ tacit. Non-geography
 narrows the store to portable ones; \emph{non-seizability} (Property~\ref{p:coerc}) picks the
@@ -777,7 +777,7 @@ of this work.
 \begin{remark}[Deviceless TKBA avoids the can of worms]\label{rem:hostage-tkba}
 Deviceless, classic TKBA has no external token to take hostage, and so escapes the
 whole tangle: with the secret in the head alone, there is nothing to seize, ransom,
-or read a backup off of.
+or read a backup off.
 \end{remark}
 
 \begin{remark}[Denial is inherently plausible]\label{rem:plausible-denial}

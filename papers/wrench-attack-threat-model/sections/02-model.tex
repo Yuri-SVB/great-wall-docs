@@ -6,7 +6,7 @@
 \subsection*{Notation}
 
 \noindent The symbols below recur throughout; each is defined in full where it is
-introduced, and gathered here for reference.
+introduced, and all are gathered here for reference.
 
 \vspace{4pt}
 
@@ -115,7 +115,7 @@ coercion oracle over the holder: the \emph{wrench} the name records. WDY is fixe
         over, because they are recognisable but non-transmissible. This and
         \ref{d:noperceptual} are the operational restatement, in the adversary
         model, of the tacit-knowledge premise (Assumption~\ref{ass:tkba}).
-  \item\label{d:noperceptual} \textbf{No perceptual-parameter seizure.} Likewise
+  \item\label{d:noperceptual} \textbf{No perceptual-parameter seizure.} As with
         the tacit entropy-carrying secrets (\ref{d:notacit}), $\Victim$'s
         perceptual-oracle parameters --- the deep fractals --- are seized \emph{iff}
         they are available at the moment of attack; when the tacitness is effective 
@@ -136,7 +136,7 @@ coercion oracle over the holder: the \emph{wrench} the name records. WDY is fixe
 The \emph{only} channel to the tacit material withheld by \ref{d:notacit}--\ref{d:noperceptual} is a
 \textbf{bounded coercion oracle}: $\Attacker$ extracts it through the cooperating
 $\Victim$ (\ref{d:subjugation}) over a bounded duration $t$ --- the adversary's
-\textbf{coercion-time budget}, the maximum wall-clock it can sustain coercion,
+\textbf{coercion-time budget}, the maximum wall-clock time for which it can sustain coercion,
 calibrated against the incident durations in the registry~\cite{lopp-attacks}.
 Cooperation is genuine throughout by \ref{d:subjugation}; the one exception, \emph{feigned}
 cooperation, is confined to the residual window (\S\ref{sec:residual}).
@@ -223,11 +223,11 @@ We state the premise abstractly here; \S\ref{sec:gw} instantiates it.
 The secret is a set of fractal locations that are \emph{recognisable but not
 transmissible}.
 \begin{itemize}[nosep,leftmargin=1.4em]
-  \item \textbf{TKBA$_1$.} A point is intransmissible without the fractal
+  \item \textbf{TKBA$_1$.} A point is non-transmissible without the fractal
         parameters that render it; $\Victim$ cannot dictate it in the abstract.
   \item \textbf{TKBA$_2$.} The \emph{deep} fractal parameters are not a
-        hand-overable artifact; producing them requires walking a memory-hard
-        chain that later locations do not exist before.
+        hand-overable artefact; producing them requires walking a memory-hard
+        chain, before which later locations do not exist.
 \end{itemize}
 \end{assumption}
 

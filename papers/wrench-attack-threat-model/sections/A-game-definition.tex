@@ -24,7 +24,7 @@ Let $\Pi$ be a custody protocol and $\Attacker$ a WDY adversary
 (Assumption~\ref{ass:power}). The experiment $\CRExp_{\Pi}(\Attacker)$ is:
 \begin{enumerate}[nosep,leftmargin=1.7em]
   \item \textbf{Setup.} The challenger runs $\Pi$'s honest setup for the holder
-  $\Victim$, producing the master secret $K$, the co-located device state $D$
+  $\Victim$, producing the master secret $K$, the co-located device and explicit-secret state $D$
   (vault and time-lock blobs, commitment scripts, review schedules), and the tacit
   state $T$ (the holder's recognition capability). Public parameters $\mathrm{pp}$,
   including the salt $\sigma$, are given to $\Attacker$ (clause~\ref{d:kerckhoffs}).

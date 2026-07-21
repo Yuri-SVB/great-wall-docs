@@ -7,9 +7,9 @@ whenever the degraded state is a feasible-but-slower path to the secret: by
 Lemma~\ref{lem:drl}, that state is a race, and the race pays an assassination
 incentive. The No-Gray-Area Criterion is the resulting design bar, and the
 reachability corollary shows there are exactly two honest ways to clear it. The
-TGPO orbit clears it by removing the race entirely --- an $\sftstar$ floor
+TGPO orbit clears it by removing the race entirely --- a $\sftstar$ floor
 from every seizable state (Theorem~\ref{thm:floor}) --- and so keeps custody
-individual, where timelock-rescue vaults clear the same bar by removing the
+individual, whereas timelock-rescue vaults clear the same bar by removing the
 attacker's reach at the cost of a trusted third party.
 
 \paragraph{What devicelessness buys: a threat model that stays simple.}
@@ -23,7 +23,7 @@ tacit, deviceless TGPO holder enjoys:
         funds survive)};
   \item a \emph{separate} \textbf{minimal window} of deadly-race exposure \emph{(the
         owner survives)} --- distinct from~(1), and only mostly overlapping it: once
-        the second-to-last point of stage $N$ is surrendered the stash is effectively
+        the second-to-last point of stage $N$ is surrendered, the stash is effectively
         lost while the deadly-race window is at its \emph{peak} (an impatient
         $\Attacker$, or one perceiving a threat to its escape, may still kill);
   \item \textbf{no hostage device} --- and so none of the game-theoretic bluffing
