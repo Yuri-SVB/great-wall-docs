@@ -68,7 +68,7 @@ created precisely at pivotal (gray) states (Lemma~\ref{lem:drl}). Hence an
 adversary that provably cannot learn $K$ --- e.g.\ one facing a graceful-recovery
 vault it cannot open within the custody window --- may nonetheless win, which is
 the paper's central negative result restated as a game. Symmetrically, the
-full-compromise endpoint $p_A = 1$ is \emph{clear}, not a win: the game penalises
+full-compromise endpoint $p_A = 1$ is \emph{clear}, not a win: the game penalizes
 the kill incentive, not disclosure, so an attacker who simply extracts $K$ with no
 gray race is scored $0$ --- the clean loss argued deadly-race-safe in
 Remark~\ref{rem:r2-cost}. This is a statement of \emph{scope}, not of
@@ -76,7 +76,7 @@ indifference: extracting $K$ is of course a real loss for $\Victim$ and a real w
 for $\Attacker$; it is merely \emph{irrelevant to the deadly-race-safety
 question}, which asks only whether the design manufactures an incentive to kill.
 Fund-safety is a \emph{separate} axis, and the construction handles it separately
---- \emph{on top of} removing the gray race, it minimises the window in which the
+--- \emph{on top of} removing the gray race, it minimizes the window in which the
 stash is seizable at all, via the wipe-before-memory-hard step
 of~\eqref{eq:orbit} and the $\sftstar$ floor (Theorem~\ref{thm:floor}).
 \end{remark}
@@ -90,7 +90,7 @@ $\Pr[\CRExp_{\Pi}(\Attacker) = 1] \le \varepsilon$ for all $\Attacker$. The clai
 below are the $\varepsilon = 0$ statements; the residual makes them
 $\varepsilon$-small --- not zero --- in the sliver argued incentive-safe there.
 In plain terms, this sliver is the moment the attack coincides with a \emph{live}
-final orbit point $o_N$ --- currently or imminently materialised --- and
+final orbit point $o_N$ --- currently or imminently materialized --- and
 $\Attacker$ prevents the wipe (or reset) that would otherwise close it; only then
 is transmissible material briefly within reach, which is why the window is a
 bounded $\varepsilon$ rather than a standing exposure.

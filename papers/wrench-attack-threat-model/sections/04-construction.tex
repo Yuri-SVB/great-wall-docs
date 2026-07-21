@@ -20,7 +20,7 @@ specified in the Great Wall Core design document~\cite{gw-design}.
 
 Let $\Hcheap$ be a cheap, entropy-preserving one-way hash and $\Hhard$ a
 memory-hard (Argon2-class) hash of tunable cost. Let $\sigma$ be a public,
-precomputation-resistant \emph{timechain salt} whose cross-user amortisation is
+precomputation-resistant \emph{timechain salt} whose cross-user amortization is
 negligible (the companion Namtso primitive~\cite{gw-timechain-salt}). Define an
 \textbf{orbit} of $N$ deep stages (Figure~\ref{fig:orbit}):
 \begin{align}
@@ -93,18 +93,18 @@ not its constant term $f(0)$.
 Because the smallest object any orbit link commits is a full stage ($\ge 64$
 bits), no individual point $p_{i,j}$ is ever checkable in isolation --- there is
 no sub-threshold oracle against which a single guessed point could be verified.
-This is the block-orbit $k \ge 2$ condition, realised as Shamir $k_i \ge 2$ per
+This is the block-orbit $k \ge 2$ condition, realized as Shamir $k_i \ge 2$ per
 stage.
 \end{remark}
 
 \subsection{Tacit multi-fractal stages}
 
 The points $p_{i,j}$ instantiate Assumption~\ref{ass:tkba}: they are
-recognisable on their fractal boards but not transmissible without
+recognizable on their fractal boards but not transmissible without
 $\theta_{i,j}$ (TKBA$_1$), and the deep $\theta_{i,j}$ are regenerated from
 $o_i$ --- which itself requires walking the memory-hard chain (TKBA$_2$). Using
 several shallow-zoom fractals per stage lets a stage carry $k_i \cdot 32$ bits
-at low zoom depth per board, keeping each point recognisable while tuning stage
+at low zoom depth per board, keeping each point recognizable while tuning stage
 entropy in 32-bit steps.
 
 \subsection{Cheap terminal secret}
@@ -116,7 +116,7 @@ The master secret is
 \end{equation}
 deliberately using the \emph{cheap} $\Hcheap$. A memory-hard last step would only
 \emph{prolong} the window in which $o_N$ and the final points are live (paying an
-$\Hhard$ \emph{after} the last point is recognised), worsening the very window
+$\Hhard$ \emph{after} the last point is recognized), worsening the very window
 we shrink in~\eqref{eq:orbit}. The resistance therefore lives in \emph{entropy}:
 standard deep stages carry 96 bits ($k_i = 3$), so a cheap ledger brute of
 $\Sh_N$ from a bare $o_N$ costs $2^{96}$ --- infeasible --- while the terminal
@@ -197,7 +197,7 @@ term of $(1 - p_A)\,W > c$ they act on --- show the inequality fails.
 \noindent\emph{Conditional on $\mathsf{Corr}$, the gain $(1 - p_A)\,W$ is minimal
 ($p_A$ is already ${\approx}\,1$):}
 \begin{enumerate}[nosep,leftmargin=1.6em]
-  \item a well-trained fractal is recognised in ${\approx}1$ minute, so
+  \item a well-trained fractal is recognized in ${\approx}1$ minute, so
         brute-forcing the last point saves $\Attacker$ at most that
         ${\approx}1$--$2$ minutes over coercing it --- bounding the entire
         interval on which $\mathsf{Esc}$, and hence any gain from killing, can
@@ -226,7 +226,7 @@ rise:}
 \noindent\emph{And the cost $c$ is large:}
 \begin{enumerate}[nosep,leftmargin=1.6em,start=5]
   \item the killing sharply \emph{worsens judicial liability} --- murder
-        aggravated by frivolous motive \emph{and} by the victim's defencelessness,
+        aggravated by frivolous motive \emph{and} by the victim's defenselessness,
         atop armed robbery --- so $c$ sits well above the minute-scale
         $(1 - p_A)\,W$ the first four grounds leave on the table.
 \end{enumerate}
@@ -249,7 +249,7 @@ induces, it is rational only if $\Delta p_A\,W > c$, and
 \]
 where $q \in [0,1]$ is the win probability a still-cooperating victim would
 restore --- via a corrected point --- and that killing forfeits. The gain term is
-small ($\mathsf{Esc}$ is unlikely, is realised only within $\mathsf{Corr}$, and
+small ($\mathsf{Esc}$ is unlikely, is realized only within $\mathsf{Corr}$, and
 even then is bounded to a minute the brute can be pre-staged around); the loss
 term is a strict subtraction growing with $\Pr[\neg\mathsf{Corr}]$; and $c$ is
 large (ground 5). Hence the criterion the strategy must satisfy,
@@ -274,7 +274,7 @@ intersection of a wrench attacker who:
   \item \textbf{could rule out every already-coerced point being incorrect}
         ($\mathsf{Corr}$); and
   \item \textbf{accepted the liability of a doubly-aggravated murder} --- frivolous
-        motive \emph{and} victim defencelessness. \emph{(Once again extrinsic to
+        motive \emph{and} victim defenselessness. \emph{(Once again extrinsic to
         TGPO: it burdens the deadly-racer attacker of any coercion-resistance
         protocol.)}
 \end{enumerate}
@@ -282,7 +282,7 @@ intersection of a wrench attacker who:
 \begin{remark}[Cloaking the window --- the Jade Clock]
 The gain term carries a further hidden factor: the residual is reached only when
 the attack \emph{coincides} with the brief interval in which $o_N$ is live. That
-coincidence is itself suppressible. Anonymising \emph{when} the vault-opening
+coincidence is itself suppressible. Anonymizing \emph{when} the vault-opening
 window occurs --- the role of the outsourced anonymous time-lock (``Jade
 Clock'')~\cite{gw-jadeclock} --- drives
 $\Pr[\text{attack lands in the } o_N\text{-live window}]$ down, and this factor
@@ -385,8 +385,8 @@ A professional champion of self-custody was seized from his home and mutilated -
 finger severed to force payment --- and neither wealth nor prominence prevented it. He
 was freed by an elite \emph{state} police unit, and the ransom --- paid not by Balland
 but by an associate --- was clawed back largely because part of it moved in a
-\emph{centralised} stablecoin whose issuer could freeze it. A self-custody pioneer
-made whole by the state and by centralisation: two mechanisms external to, and in
+\emph{centralized} stablecoin whose issuer could freeze it. A self-custody pioneer
+made whole by the state and by centralization: two mechanisms external to, and in
 tension with, the creed. Only the issuer freeze is independently verifiable; the
 remainder rests on the parties' accounts, according to which roughly $5\%$ was never recovered.
 The case also indicts the delegated route (\ref{r:remotewinner}): an associate
@@ -398,7 +398,7 @@ but merely \emph{not carrying} the device --- leaving the wallet in a home vault
 does the same, while for the long attack the delegate is not out of reach but is the
 ransom channel itself. The lesson is not that Balland erred: it is that, against a
 determined long-hold attacker, the fielded options collapse to state rescue and
-centralised freezing, whereas the tacit route removes the leverage --- no standing
+centralized freezing, whereas the tacit route removes the leverage --- no standing
 device, no hostage token, no delegate to pay --- rather than relying on ex-post
 recovery.
 

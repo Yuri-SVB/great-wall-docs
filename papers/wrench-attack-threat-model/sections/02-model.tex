@@ -65,7 +65,7 @@ security by obscurity is assumed to contribute nothing.
 The \textbf{Wrench--Dolev--Yao (WDY)} adversary inherits the
 Dolev--Yao~\cite{dolev-yao} intruder \emph{on the wire} --- it sees all transmitted
 plaintext and ciphertext --- but departs from it in two ways that matter here. It is
-\emph{computational}, not symbolic: Dolev--Yao's perfect-cryptography idealisation is
+\emph{computational}, not symbolic: Dolev--Yao's perfect-cryptography idealization is
 replaced by the feasibility line (Stipulation~\ref{ass:feas}), so ``cannot break the
 cipher'' becomes ``cannot exceed its work budget''. And it is extended \emph{past the
 wire} with the physical capabilities Dolev--Yao omits --- device seizure and a bounded
@@ -82,14 +82,14 @@ coercion oracle over the holder: the \emph{wrench} the name records. WDY is fixe
         $\Attacker$ crudely, the feasibility line \emph{sharply}.
   \item\label{d:frequency} \textbf{Frequency ceiling.} There is a ceiling on how much faster
         $\Attacker$'s hardware evaluates a computation than $\Victim$'s. So an
-        entropy-preserving hash with enough \emph{non-parallelisable} steps ($\Hhard$)
+        entropy-preserving hash with enough \emph{non-parallelizable} steps ($\Hhard$)
         lets $\Victim$'s setup impose an \emph{arbitrarily long} latency on
         $\Attacker$ per evaluation --- at the price of a proportionally longer
         latency on $\Victim$. This is what makes the time-gate meaningful:
-        $\Attacker$ can neither parallelise nor out-clock its way past a sequential
+        $\Attacker$ can neither parallelize nor out-clock its way past a sequential
         memory-hard chain.
   \item\label{d:subjugation} \textbf{Complete subjugation.} This is an information-security model, not
-        a study of physical violence versus physical defence; we do not model
+        a study of physical violence versus physical defense; we do not model
         $\Attacker$'s coercive power against $\Victim$'s resistance. For
         simplicity, and to make the argument \emph{a fortiori}, we assume that
         from the onset of the attack until $\Attacker$ releases $\Victim$,
@@ -102,17 +102,17 @@ coercion oracle over the holder: the \emph{wrench} the name records. WDY is fixe
         commitment scripts, review schedules. A single WDY encounter has one
         \emph{site}; devices and principals at \emph{other} sites lie beyond its
         reach within the bounded window --- the opening a \emph{geographic}
-        defence exploits (\S\ref{sub:fourprops}).
+        defense exploits (\S\ref{sub:fourprops}).
   \item\label{d:explicit} \textbf{Explicit-secret seizure.} All of $\Victim$'s \emph{explicit}
         (non-tacit) authenticating secrets are immediately seized.
   \item\label{d:notacit} \textbf{No tacit seizure.} $\Victim$'s \emph{tacit} entropy-carrying 
         secrets --- the points --- are captured by seizure \emph{if and only if} they are
-        \emph{available} in transmissible form at the moment of attack (materialised,
+        \emph{available} in transmissible form at the moment of attack (materialized,
         and not wiped before $\Victim$ is subdued) --- that is, exactly when the
         tacitness fails to be effective. When it \emph{is} effective they are not:
         by \ref{d:subjugation} this is a genuine \emph{incapacity to transmit}, not
         any unwillingness --- even a fully cooperating $\Victim$ cannot hand them
-        over, because they are recognisable but non-transmissible. This and
+        over, because they are recognizable but non-transmissible. This and
         \ref{d:noperceptual} are the operational restatement, in the adversary
         model, of the tacit-knowledge premise (Assumption~\ref{ass:tkba}).
   \item\label{d:noperceptual} \textbf{No perceptual-parameter seizure.} As with
@@ -127,7 +127,7 @@ coercion oracle over the holder: the \emph{wrench} the name records. WDY is fixe
         delegate --- a party holding rescue capability on $\Victim$'s behalf beyond
         the attack site (\ref{d:seizure}) --- is past $\Attacker$'s \emph{remote}
         coercive reach: from the encounter with $\Victim$, $\Attacker$ cannot compel
-        it to surrender or act on its state. Without this a delegated defence is
+        it to surrender or act on its state. Without this a delegated defense is
         vacuous. Real delegates span a spectrum of coercion-compliance; collapsing it
         to a clean ``cannot be reached'' is a deliberate simplification --- the kind
         that makes the \emph{a fortiori} argument possible, at the cost of reality's
@@ -173,19 +173,19 @@ attacker; we replace them with two engineering stipulations that fix what
 \begin{stipulation}[Feasibility line]\label{ass:feas}
 Let a \emph{cheap} evaluation be one call to a non-memory-hard hash $\Hcheap$,
 and a \emph{hard} evaluation one call to an hours-scale Argon2-class function
-$\Hhard$ whose cost is a large number of \emph{non-parallelisable} steps ---
+$\Hhard$ whose cost is a large number of \emph{non-parallelizable} steps ---
 \emph{memory- and depth}-hard,\footnote{\emph{Depth-hard} is meant more sharply
-than \emph{sequential} or \emph{non-parallelisable} alone: the cost is a
-non-parallelisable computation with a \emph{deliberately large number of steps} ---
+than \emph{sequential} or \emph{non-parallelizable} alone: the cost is a
+non-parallelizable computation with a \emph{deliberately large number of steps} ---
 a long sequential \emph{depth} --- the parallelism-resistance axis of
 \emph{depth-robust} memory-hard functions~\cite{depth-robust} --- that $\Attacker$
-can neither parallelise away nor out-clock past (\ref{d:frequency}). We also weighed \emph{memory- and
+can neither parallelize away nor out-clock past (\ref{d:frequency}). We also weighed \emph{memory- and
 sequentiality-hard} (accurate but clumsy) and \emph{memory- and
 iteration-count-hard} (which names the step \emph{count} rather than its
-non-parallelisable structure); \emph{depth} is the single noun that carries both
+non-parallelizable structure); \emph{depth} is the single noun that carries both
 the seriality and the magnitude, and it parallels \emph{memory}.} so
 $\Attacker$'s bounded speed advantage (\ref{d:frequency})
-cannot amortise it~\cite{argon2}.
+cannot amortize it~\cite{argon2}.
 \begin{enumerate}[nosep,leftmargin=2.2em,label=\textbf{S\arabic*},ref=S\arabic*]
   \item\label{s:feasible} \textbf{(feasible).} $2^{32}$ cheap evaluations are within
         $\Attacker$'s budget.
@@ -220,13 +220,13 @@ The construction of \S\ref{sec:gw} rests the secret on \emph{tacit} knowledge.
 We state the premise abstractly here; \S\ref{sec:gw} instantiates it.
 
 \begin{assumption}[Tacit knowledge, TKBA]\label{ass:tkba}
-The secret is a set of fractal locations that are \emph{recognisable but not
+The secret is a set of fractal locations that are \emph{recognizable but not
 transmissible}.
 \begin{itemize}[nosep,leftmargin=1.4em]
   \item \textbf{TKBA$_1$.} A point is non-transmissible without the fractal
         parameters that render it; $\Victim$ cannot dictate it in the abstract.
   \item \textbf{TKBA$_2$.} The \emph{deep} fractal parameters are not a
-        hand-overable artefact; producing them requires walking a memory-hard
+        hand-overable artifact; producing them requires walking a memory-hard
         chain, before which later locations do not exist.
 \end{itemize}
 \end{assumption}
@@ -237,7 +237,7 @@ clauses~\ref{d:notacit}--\ref{d:noperceptual} lifted out of the adversary model 
 stated as a premise on the secret. The clauses say $\Attacker$ cannot seize the
 tacit points or the perceptual parameters even under full cooperation
 (\ref{d:subjugation}); TKBA says the same thing about the secret itself ---
-recognisable but not transmissible --- with no adversary mentioned. They are two
+recognizable but not transmissible --- with no adversary mentioned. They are two
 faces of one assumption (exactly as \ref{d:kerckhoffs} and
 Assumption~\ref{ass:kerckhoffs} are two faces of Kerckhoffs), and by
 Remark~\ref{rem:tacit-coincide} the two clauses are themselves one. We keep both
