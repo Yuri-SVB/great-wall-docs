@@ -78,6 +78,13 @@ Danny Dolev and Andrew~C. Yao.
 \newblock On the security of public key protocols.
 \newblock {\em IEEE Transactions on Information Theory}, 29(2):198--208, 1983.
 
+\bibitem{grassl-grover-aes}
+Markus Grassl, Brandon Langenberg, Martin Roetteler, and Rainer Steinwandt.
+\newblock Applying {Grover's} algorithm to {AES}: Quantum resource estimates.
+\newblock In {\em Post-Quantum Cryptography --- 7th International Workshop
+  (PQCrypto 2016)}, volume 9606 of {\em Lecture Notes in Computer Science},
+  pages 29--43. Springer, 2016.
+
 \bibitem{gw-cpnf}
 {Great Wall}.
 \newblock Celestial peace, never forget (cpnf): A spaced-repetition companion

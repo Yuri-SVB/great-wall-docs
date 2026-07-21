@@ -3,12 +3,16 @@
 \label{sec:quantum}
 % ════════════════════════════════════════════════════════════════════════════
 
-A few-minutes memory- and depth-hard $\Hhard$ per element also defeats
-Grover~\cite{grover1996}: a quantum search over an $n$-bit space needs
-$\sim 2^{n/2}$ \emph{coherent} evaluations of the oracle, and each such evaluation
-is an hours-scale, deeply sequential Argon2d computation --- coherence would have to
-survive the full \emph{depth} of every one, which is impractical. Hence sub-256-bit
-standards (96 or 128 bits per stage) are quantum-defensible \emph{without} a 256-bit
-seed --- the memory- and depth-hardness that buys the $\sftstar$ floor classically
-also caps the quantum speed-up.
+Memory- and depth-hardness is a tunable lever, and even its modest settings
+suffice here. A quantum search over an $n$-bit space needs $\sim 2^{n/2}$
+\emph{coherent} evaluations of the oracle~\cite{grover1996}, and each such
+evaluation is a deeply sequential Argon2d computation whose full \emph{depth} the
+coherence must survive --- a cost the quantum resource-estimation literature
+already finds decisive even against oracles far cheaper than
+ours~\cite{grassl-grover-aes}. Even a \emph{few-minutes} $\Hhard$ per element
+therefore places Grover out of reach; an \emph{hours-scale} $\Hhard$ does so
+\emph{a fortiori}. Hence sub-256-bit standards (96 or 128 bits per stage) are
+quantum-defensible \emph{without} a 256-bit seed --- the memory- and
+depth-hardness that buys the $\sftstar$ floor classically also caps the quantum
+speed-up.
 
