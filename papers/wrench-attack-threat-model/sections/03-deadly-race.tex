@@ -253,7 +253,7 @@ holds.
         recovery path, not its hardness.
   \item \textbf{The danger peaks where the marketing promises safety.} A
         ``graceful'' fallback --- a slow-but-feasible recovery left on a seized
-        device, a timelocked rescue, a delayed vault --- holds $p_A$ well below
+        device, a time-locked rescue, a delayed vault --- holds $p_A$ well below
         $1$ while leaving $W$ fully at stake, i.e.\ it \emph{maximises}
         $(1 - p_A)\,W$. Designs that degrade gracefully thus tend to sit squarely
         in the region of \textbf{largest} assassination incentive. Graceful
@@ -409,7 +409,7 @@ meets.
 \begin{definition}[Time-gating custody protocol]\label{def:timegate}
 A custody protocol is \textbf{time-gating} if reaching its master secret $K$
 requires completing a \emph{time-gate} --- a computation or delay of wall-clock
-cost $G$ (a memory-hard derivation, or a timelock) --- so that $K$ is unavailable
+cost $G$ (a memory-hard derivation, or a time-lock) --- so that $K$ is unavailable
 before $G$ elapses; $G$ is the design parameter, set against the adversary's
 coercion-time budget $t$ (\ref{d:subjugation}). Time-gating is a \emph{mechanism}, not a strength:
 a given time-gated protocol instantiates one of the three levels above according
@@ -439,7 +439,7 @@ exactly two ways:
 
 \noindent \ref{r:removerace} and \ref{r:remotewinner} are the classification axis of \S\ref{sec:classify} ---
 \emph{leave no race to run} vs.\ \emph{put the racer out of reach}. TGPO
-(\S\ref{sec:gw}) takes \ref{r:removerace}; timelock-rescue vaults take \ref{r:remotewinner}.
+(\S\ref{sec:gw}) takes \ref{r:removerace}; time-lock-rescue vaults take \ref{r:remotewinner}.
 
 \begin{remark}[The honest cost of the remote-delegate escape]\label{rem:r2-cost}
 It is tempting to say NNPP (Assumption~\ref{lem:nnpl}) also weakens
@@ -611,7 +611,7 @@ A protocol that admits \emph{two or more} feasible paths to $K$ --- one running
 through the collection of physically distributed tokens and another that does not
 (say an undisclosed, locally hidden shortcut, or a state seized \emph{during} the
 wrench attack) --- yields a \emph{cyber-physical} race: one racer works to complete
-a KDF (or timelock) computation while the other roams the custody sites. The
+a KDF (or time-lock) computation while the other roams the custody sites. The
 temporal and spatial clearance routes are then run in parallel by different
 parties, and $p_A$ is fixed by whichever path is faster --- a mixed regime that the
 pure-temporal (tacit) and pure-spatial (geographic) analyses each capture only half
