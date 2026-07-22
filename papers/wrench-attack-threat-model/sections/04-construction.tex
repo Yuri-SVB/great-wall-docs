@@ -156,10 +156,11 @@ terminal window stays instant.
 
 \begin{theorem}[The floor on the master secret]\label{thm:floor}
 Under Assumptions~\ref{ass:power}--\ref{ass:tkba} and the standard build of
-\eqref{eq:orbit}--\eqref{eq:master}, from every seizable state the master secret
-$K_N$ is \emph{prohibitive} to reach --- its cost meets the floor
-(Stipulation~\ref{ass:feas}). Consequently a device seizure yields
-nothing feasible --- a \emph{clear failure} in the sense of
+\eqref{eq:orbit}--\eqref{eq:master}, from every seizable state \emph{save a single
+residual window} (\S\ref{sec:residual}) the master secret $K_N$ is
+\emph{prohibitive} to reach --- its cost meets the floor
+(Stipulation~\ref{ass:feas}). Consequently a device seizure outside that window
+yields nothing feasible --- a \emph{clear failure} in the sense of
 Criterion~\ref{prin:nga}, with no racer for $\Attacker$ to reach.
 \end{theorem}
 
@@ -200,15 +201,28 @@ block-orbit ($r \ge 2$) condition met above.
 \subsection{The tolerated residual window}
 \label{sec:residual}
 
-One gray sliver survives. A wrench attack that lands with target $o_N$ imminently or
-currently live can, after the \emph{second-to-last} point of stage $N$ is
-surrendered, leave $\Attacker$ one cheap $2^{32}\cdot\Hcheap$ brute
-(\eqref{eq:master} is cheap) --- an ${\approx}1$-minute window --- from $K$. We
-report this honestly as a bounded residual rather than claim zero, and test it ---
-now against the priced adversary $\mathrm{WDY}[W,c]$ (Definition~\ref{def:priced}),
-the model appropriate to a quantitative window --- against the only thing that
-matters: the kill condition of Lemma~\ref{lem:drl}, $(1 - p_A)\,W > c$. We argue
-it is, more likely than not, unmet.
+One sliver escapes the floor, and it is first a \emph{seizability} gap --- not yet a
+deadly race. It is the lone exception of Theorem~\ref{thm:floor}: a wrench that lands
+with the final board $o_N$ imminently or currently live, and subdues $\Victim$ before
+the wipe (\eqref{eq:orbit}), catches the derivation essentially complete and $\Victim$
+under control. In that coincidence $\Attacker$ \emph{does} reach $K$ and the stash is
+lost --- we concede it plainly. The floor is a claim about \emph{seizability}, and
+precisely here it fails; what keeps the failure a mere \emph{residual} is how narrow
+the coincidence is --- a precise landing on the brief live-$o_N$ interval, and a
+subdual before any wipe or reset.
+
+Funds-loss, though, is a \emph{separate} axis from the \emph{deadly race}, and it is
+the latter this section turns on: does the same window also manufacture an incentive
+to \emph{kill} $\Victim$? That does \emph{not} follow from the seizure. Killing buys
+$\Attacker$ only a \emph{shaving} of the final step --- after the
+\emph{second-to-last} point of stage $N$ is surrendered, a cheap
+$2^{32}\cdot\Hcheap$ brute (\eqref{eq:master} is cheap) reaches $K$ in
+${\approx}1$~minute, versus waiting for a cooperating coerced $\Victim$ to recollect
+it. Whether that shaved minute pays an assassination takes \emph{further} conditions,
+which we test against the priced adversary $\mathrm{WDY}[W,c]$
+(Definition~\ref{def:priced}), the model appropriate to a quantitative window ---
+against the only thing that matters: the kill condition of Lemma~\ref{lem:drl},
+$(1 - p_A)\,W > c$. We argue it is, more likely than not, unmet.
 
 Two events govern the marginal value of killing $\Victim$ in this window:
 \begin{itemize}[nosep,leftmargin=1.4em]
