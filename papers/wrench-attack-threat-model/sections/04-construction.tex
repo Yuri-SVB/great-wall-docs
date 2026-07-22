@@ -25,8 +25,12 @@ negligible (the companion Namtso primitive~\cite{gw-timechain-salt}). Define an
 \textbf{orbit} of $N$ deep stages (Figure~\ref{fig:orbit}):
 \begin{align}
   o_0 &= \Hcheap(\sigma), \\
-  o_i &= \Hhard\!\big(\, \Hcheap(o_{i-1} \,\|\, \Sh_{i-1}) \,\big),
-         \qquad 1 \le i \le N,
+  u_i &= \Hcheap(o_{i} \,\|\, \Sh_{i}),
+         \qquad 1 \le i \le N, \\
+  o_i &= \Hhard\!\big(\, u_{i-1} \,\big),
+         \qquad \qquad 1 \le i \le N, \\
+  K_i &= \Hcheap(o_i \,\|\, \Sh_i),
+         \qquad 0 \le i \le N, 
   \label{eq:orbit}
 \end{align}
 where the raw inputs $\{o_{i-1}, \Sh_{i-1}\}$ are \textbf{wiped} in the instant
@@ -34,8 +38,8 @@ between the cheap inner hash and the long memory-hard step. Computing
 $u_i := \Hcheap(o_{i-1}\|\Sh_{i-1})$ first (instant), wiping, then running the
 long $o_i := \Hhard(u_i)$, means the raw prior orbit point and Shamir secret exist
 only momentarily --- not across the whole memory-hard window. This directly
-shrinks the window in which $K$ is seizable, and is the reason not to write
-$\Hhard(o_{i-1}\|\Sh_{i-1})$ directly.
+shrinks the window in which $\{o_{i-1},\Sh_{i-1}\ }$ is seizable (\ref{d:seizure}), 
+and is the reason not to use $\Hhard(o_{i-1}\|\Sh_{i-1})$ directly.
 
 \begin{figure}[t]
 \centering
@@ -44,26 +48,43 @@ $\Hhard(o_{i-1}\|\Sh_{i-1})$ directly.
   \node[gwevent] (sig) {$\sigma$};
   \node[gwstate, right=of sig] (o0) {$o_0$};
   \node[gwtask, right=of o0] (st0)
-     {$u_1 := \Hcheap(o_0 \,\|\, \Sh_0)$\\[2pt]
-      \textcolor{graytext}{\footnotesize wipe}, then $o_1 := \Hhard(u_1)$};
+     {$K_{0} := \Hcheap(o_{0} \,\|\, \Sh_{0})$;\\[2pt]
+      $u_0 := \Hcheap(o_0 \,\|\, \Sh_0)$;\\[2pt]
+      \textcolor{graytext}{\footnotesize wipe} $\{o_0, \Sh_0\}$;\\[2pt]
+      $o_1 := \Hhard(u_0)$;}
   \node[gwstate, right=of st0] (o1) {$o_1$};
   \node[right=8mm of o1] (dots) {$\cdots$};
-  \node[gwstate, right=8mm of dots] (oN) {$o_{N}$};
+  \node[gwstate, right=8mm of dots] (oNm) {$o_{N-1}$};
+  \node[gwtask, right=of oNm] (stNm)
+     {$K_{N-1} := \Hcheap(o_{N-1} \,\|\, \Sh_{N-1})$;\\[2pt]
+      $u_{n-1} := \Hcheap(o_{n-1} \,\|\, \Sh_{n-1})$;\\[2pt]
+      \textcolor{graytext}{\footnotesize wipe} $\{o_{n-1}, \Sh_{n-1}\}$;\\[2pt]
+      $o_N := \Hhard(u_{n-1})$;}
+  \node[gwstate, right=8mm of stNm] (oN) {$o_{N}$};
   \node[gwtask, right=of oN] (stN)
-     {$K := \Hcheap(o_{N} \,\|\, \Sh_{N})$};
-  \node[gwstate, right=of stN] (K) {$K$};
+     {$K_N := \Hcheap(o_{N} \,\|\, \Sh_{N})$};
+  \node[gwstate, below=of st0] (K0) {$K_0$};
+  \node[gwstate, below=of stNm] (KNm) {$K_{N-1}$};
+  \node[gwstate, below=of stN] (KN) {$K_N$};
   \draw[gwflow] (sig) -- node[gwlabel, above]{$\Hcheap$} (o0);
   \draw[gwflow] (o0)  -- (st0);
-  \draw[gwflow] (st0) -- (o1);
+  \draw[gwflow] (st0) -- node[gwlabel, above]{$\Hhard$} (o1);
   \draw[gwflow] (o1)  -- (dots);
-  \draw[gwflow] (dots)-- (oN);
+  \draw[gwflow] (dots)-- node[gwlabel, above]{$\Hhard$} (oNm);
+  \draw[gwflow] (oNm) -- (stNm);
+  \draw[gwflow] (stNm)-- node[gwlabel, above]{$\Hhard$} (oN);
   \draw[gwflow] (oN) -- (stN);
-  \draw[gwflow] (stN) -- node[gwlabel, above]{$\Hcheap$} (K);
+  \draw[gwflow] (st0) -- node[gwlabel, right]{$\Hcheap$} (K0);
+  \draw[gwflow] (stNm) -- node[gwlabel, right]{$\Hcheap$} (KNm);
+  \draw[gwflow] (stN) -- node[gwlabel, right]{$\Hcheap$} (KN);
   \node[gwtask, above=9mm of st0] (sh0)
      {$\Sh_0$\\[1pt]\textcolor{graytext}{\footnotesize any $k_0$ of $p_{0,j}$}};
+  \node[gwtask, above=9mm of stNm] (shNm)
+     {$\Sh_{N-1}$\\[1pt]\textcolor{graytext}{\footnotesize any $k_{N-1}$ of $p_{N-1,j}$}};
   \node[gwtask, above=9mm of stN] (shN)
      {$\Sh_{N}$\\[1pt]\textcolor{graytext}{\footnotesize any $k_{N}$ of $p_{N,j}$}};
   \draw[gwflow] (sh0) -- (st0);
+  \draw[gwflow] (shNm) -- (stNm);
   \draw[gwflow] (shN) -- (stN);
 \end{tikzpicture}}
 \caption{\textbf{The TGPO orbit} (\S\ref{sec:gw}). A public,
@@ -71,12 +92,12 @@ precomputation-resistant timechain salt $\sigma$ (the Namtso primitive) seeds a
 chain of $N$ memory-hard stages. At each stage the raw inputs
 $o_{i-1}\,\|\,\Sh_{i-1}$ are folded by the \emph{cheap} inner hash $\Hcheap$ and
 \emph{wiped} before the long memory-hard step $\Hhard$, so seizable material
-exists only for an instant --- shrinking the window in which $K$ is reachable.
-Each board $o_i$ contributes a whole Shamir polynomial $\Sh_i$ (any $k_i$ of its
-points $p_{i,j}$ reconstruct it), absorbed into the \emph{next} orbit link, so no
-single point is checkable in isolation. The
-terminal secret $K = \Hcheap(o_N \,\|\, \Sh_N)$ deliberately uses the cheap hash,
-keeping the final window instant.}
+exists only for an instant --- shrinking the window in which $o_{i-1}, Sh_{i-1}$ are 
+reachable. Each board $o_i$ contributes a whole Shamir polynomial $\Sh_i$ (any $k_i$ 
+of its points $p_{i,j}$ reconstruct it), absorbed into the \emph{next} orbit link, 
+so no single point is checkable in isolation. The terminal secrets $K_i = 
+\Hcheap(o_i \,\|\, \Sh_i)$ deliberately uses the cheap hash, keeping the final window 
+instant. By construction, coercion resistance happens for $i \geq 1$.}
 \label{fig:orbit}
 \end{figure}
 
@@ -109,33 +130,33 @@ entropy in 32-bit steps.
 
 \subsection{Cheap terminal secret}
 
-The master secret is
+The coercion-resistant master secrets are all
 \begin{equation}
-  K = \Hcheap(o_N \,\|\, \Sh_N),
+  K_i &= \Hcheap(o_i \,\|\, \Sh_i),
+         \qquad 1 \le i \le N,
   \label{eq:master}
 \end{equation}
-deliberately using the \emph{cheap} $\Hcheap$. A memory-hard last step would only
-\emph{prolong} the window in which $o_N$ and the final points are live (paying an
-$\Hhard$ \emph{after} the last point is recognized), worsening the very window
-we shrink in~\eqref{eq:orbit}. The resistance therefore lives in \emph{entropy}:
-standard deep stages carry 96 bits ($k_i = 3$), so a cheap ledger brute of
-$\Sh_N$ from a bare $o_N$ costs $2^{96}$ --- infeasible --- while the terminal
-window stays instant.
+deliberately using the \emph{cheap} $\Hcheap$. A memory-hard last 
+step would only \emph{prolong} the window in which $o_N$ and the final points are 
+live (paying an $\Hhard$ \emph{after} the last point is recognized), worsening the 
+very window we shrink in~\eqref{eq:orbit}. The resistance therefore lives in 
+\emph{entropy}: standard deep stages carry 96 bits ($k_i = 3$), so a cheap ledger 
+brute of $\Sh_N$ from a bare $o_N$ costs $2^{96}$ --- infeasible --- while the 
+terminal window stays instant.
 
 \subsection{The $\sftstar$ floor}
 
 \begin{theorem}[$\sftstar$ floor on the master secret]\label{thm:floor}
 Under Assumptions~\ref{ass:power}--\ref{ass:tkba} and the standard build of
 \eqref{eq:orbit}--\eqref{eq:master}, from every seizable state the master secret
-$K$ is at least $\sftstar$ away: no single seizure leaves $K$ fewer than two
-memory-hard 32-bit stages from reach. Consequently a device seizure yields
+$K_N$ is at least $2^{96}$ away. Consequently a device seizure yields
 nothing feasible --- a \emph{clear failure} in the sense of
 Criterion~\ref{prin:nga}, with no racer for $\Attacker$ to reach.
 \end{theorem}
 
 \begin{proof}[Proof by case analysis over seizable states]
-From a seized $o_i$ ($i \le N$), reaching $K$ requires guessing
-$\Sh_i, \dots, \Sh_N$; each $\Sh_j$ guess is $2^{k_j \cdot 32}$ and is
+From a seized $o_i$ ($i < N$), reaching $K_N$ requires guessing
+$\Sh_i, \dots, \Sh_N$; each $\Sh_l$ guess is $2^{k_l \cdot 32}$ and is
 $\Hhard$-gated, since it is checked only by recomputing the memory-hard link
 \eqref{eq:orbit}. Preimage resistance of $\Hcheap, \Hhard$ makes the orbit
 forward-only: a seized $o_i$ cannot yield $o_{i-1}$. We enumerate:
@@ -143,16 +164,16 @@ forward-only: a seized $o_i$ cannot yield $o_{i-1}$. We enumerate:
   \item \emph{Pure device seizure} (no coercion; only time-lock-gated~\cite{rsw1996}
         blobs at rest). All tacit points are required; $K$ is unreachable.
   \item \emph{Wrench of stage~0} ($p_{0,\cdot}$, always present since $\sigma$ is
-        public). $\Attacker$ computes $o_1$ with one $\Hhard$; from $o_1$, $K$
+        public). $\Attacker$ computes $o_1$ with one $\Hhard$; from $o_1$, $K_N$
         costs $2^{\sum_{j\ge 1} k_j\cdot 32}$, which is $2^{96}$ or more in the
-        standard ($N\ge 2$) build --- infeasible.
-  \item \emph{Mid-orbit seizure} at $o_i$ ($i \le N$). $K$ costs $\ge 2^{96}$,
+        recommended standard builds~\cite{gw-design} --- infeasible.
+  \item \emph{Mid-orbit seizure} at $o_i$ ($0 < i < N$). $K_N$ costs $\ge 2^{96}$,
         each guess $\Hhard$-gated --- infeasible.
   \item \emph{Residual} $o_N$ present. Treated separately in
         \S\ref{sec:residual}.
 \end{itemize}
-Every case except the residual leaves $K \ge \sftstar$ --- two memory-hard
-stages, beyond \ref{s:infeasible} of Stipulation~\ref{ass:feas}.
+Every case except the residual leaves cost of $K_N \ge 2^{96}$, beyond \ref{s:infeasiblec} 
+of Stipulation~\ref{ass:feas}.
 \end{proof}
 
 \begin{remark}[Why a last-stage KDF fails]
@@ -169,7 +190,7 @@ block-orbit ($k \ge 2$) condition met above.
 \subsection{The tolerated residual window}
 \label{sec:residual}
 
-One gray sliver survives. A wrench attack that lands with $o_N$ imminently or
+One gray sliver survives. A wrench attack that lands with target $o_N$ imminently or
 currently live can, after the \emph{second-to-last} point of stage $N$ is
 surrendered, leave $\Attacker$ one cheap $2^{32}\cdot\Hcheap$ brute
 (\eqref{eq:master} is cheap) --- an ${\approx}1$-minute window --- from $K$. We
@@ -285,7 +306,7 @@ the attack \emph{coincides} with the brief interval in which $o_N$ is live. That
 coincidence is itself suppressible. Anonymizing \emph{when} the vault-opening
 window occurs --- the role of the outsourced anonymous time-lock (``Jade
 Clock'')~\cite{gw-jadeclock} --- drives
-$\Pr[\text{attack lands in the } o_N\text{-live window}]$ down, and this factor
+$\Pr[\text{attack lands in the target } o_N\text{-live window}]$ down, and this factor
 multiplies the already-minimal $\Pr[\mathsf{Corr}\cap\mathsf{Esc}]$. Here anonymity
 of the \emph{timing} suppresses a residual that confidentiality of the \emph{secret}
 alone does not reach.
