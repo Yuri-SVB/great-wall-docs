@@ -244,29 +244,30 @@ holds.
 
 \noindent Three remarks fix the result's meaning and scope:
 
-\begin{itemize}[leftmargin=1.6em]
-  \item \textbf{It is decision-theoretic, not cryptographic.}
-        Lemma~\ref{lem:drl} says nothing about breaking a cipher; it holds
-        \emph{whatever} the underlying cryptography, because it lives in the
-        incentive layer threat models omit. This is why ``the crypto is strong''
-        is no defense --- the danger is created by the \emph{shape} of the
-        recovery path, not its hardness.
-  \item \textbf{The danger peaks where the marketing promises safety.} A
-        ``graceful'' fallback --- a slow-but-feasible recovery left on a seized
-        device, a time-locked rescue, a delayed vault --- holds $p_A$ well below
-        $1$ while leaving $W$ fully at stake, i.e.\ it \emph{maximizes}
-        $(1 - p_A)\,W$. Designs that degrade gracefully thus tend to sit squarely
-        in the region of \textbf{largest} assassination incentive. Graceful
-        degradation, a virtue everywhere else, is here a liability --- hence the
-        title.
-  \item \textbf{Release is the trigger.} The incentive is a property of the
-        released gray state: it is $\Victim$-as-free-racer whom $\Attacker$ is
-        paid to remove. A scheme that simply hands $\Attacker$ the funds outright
-        kills no one; the gray fallback is \emph{worse than} that clean loss. And
-        by Corollary~\ref{cor:disclosure} no amount of surrender removes the
-        incentive --- $\Attacker$ can never confirm $\Victim$ kept no resumable
-        copy --- so only the victim's elimination closes it.
-\end{itemize}
+\begin{remark}[It is decision-theoretic, not cryptographic]\label{rem:decision-theoretic}
+Lemma~\ref{lem:drl} says nothing about breaking a cipher; it holds
+\emph{whatever} the underlying cryptography, because it lives in the incentive
+layer threat models omit. This is why ``the crypto is strong'' is no defense ---
+the danger is created by the \emph{shape} of the recovery path, not its hardness.
+\end{remark}
+
+\begin{remark}[Release is the trigger]\label{rem:release-trigger}
+The incentive is a property of the released gray state: it is
+$\Victim$-as-free-racer whom $\Attacker$ is paid to remove. A scheme that simply
+hands $\Attacker$ the funds outright kills no one; the gray fallback is
+\emph{worse than} that clean loss. And by Corollary~\ref{cor:disclosure} no
+amount of surrender removes the incentive --- $\Attacker$ can never confirm
+$\Victim$ kept no resumable copy --- so only the victim's elimination closes it.
+\end{remark}
+
+\begin{remark}[The danger peaks where the marketing promises safety]\label{rem:danger-peaks}
+A ``graceful'' fallback --- a slow-but-feasible recovery left on a seized device,
+a time-locked rescue, a delayed vault --- holds $p_A$ well below $1$ while leaving
+$W$ fully at stake, i.e.\ it \emph{maximizes} $(1 - p_A)\,W$. Designs that degrade
+gracefully thus tend to sit squarely in the region of \textbf{largest}
+assassination incentive. Graceful degradation, a virtue everywhere else, is here a
+liability --- hence the title.
+\end{remark}
 
 \subsection{The No-Gray-Area Criterion}
 \label{sub:nga}
