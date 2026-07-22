@@ -35,8 +35,9 @@ $\mathsf{Esc}$ & residual-window event: the ${\approx}1$--$2$ min shaved by brut
 \midrule
 $\sigma$ & public, precomputation-resistant timechain salt (Namtso) \\
 $\Hcheap,\ \Hhard$ & cheap hash; memory- and depth-hard (Argon2-class) hash \\
-$o_i$ & orbit state at stage $i$, $o_i = \Hhard(u_i)$; $N$ stages total \\
-$u_i$ & wiped inner value $\Hcheap(o_{i-1}\|\Sh_{i-1})$ \\
+$o_i$ & orbit state at stage $i \in \{0,\dots,N\}$; $o_i = \Hhard(u_i)$ (with $o_0 = \Hcheap(\sigma)$); $N{+}1$ stages total \\
+$N$ & number of \emph{deep} stages --- those requiring at least one memory- and depth-hard hash ($\Hhard$) to derive \\
+$u_i$ & $\Hcheap(o_{i-1}\|\Sh_{i-1})$: commitment of the wiped inner values $o_{i-1}$ and $\Sh_{i-1}$ \\
 $\Sh_i$ & Shamir polynomial at stage $i$; $k_i$ of its points reconstruct it \\
 $p_{i,j},\ \theta_{i,j}$ & point $j$ of stage $i$; parameters for fractal $j$ of stage $i$ \\
 $k_i$ & Shamir threshold at stage $i$ ($k_i \ge 2$) \\
