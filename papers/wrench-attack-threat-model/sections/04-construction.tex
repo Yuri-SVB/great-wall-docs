@@ -41,6 +41,14 @@ only momentarily --- not across the whole memory-hard window. This directly
 shrinks the window in which $\{o_{i-1},\Sh_{i-1}\}$ is seizable (\ref{d:seizure}),
 and is the reason not to use $\Hhard(o_{i-1}\|\Sh_{i-1})$ directly.
 
+\emph{On notation.} $\Hcheap$ and $\Hhard$ are \emph{generic} designations --- any
+suitable cheap, and memory- and depth-hard (Argon2-class), instantiation serves.
+Note that $u_i$ and $K_i$ share the formula $\Hcheap(o_i\|\Sh_i)$; they are
+nonetheless \emph{distinct} objects, separated by \emph{role} --- $u_i$ is wiped and
+consumed only by the next memory-hard step, whereas $K_i$ is exposed as a usable
+master secret. A deployment keeps the two apart by domain separation, a
+specification detail beyond our scope.
+
 \begin{figure}[t]
 \centering
 \resizebox{\linewidth}{!}{%
