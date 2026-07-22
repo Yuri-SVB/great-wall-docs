@@ -42,6 +42,7 @@ $\Sh_i$ & Shamir polynomial at stage $i$; $r_i$ of its points reconstruct it \\
 $p_{i,j},\ \theta_{i,j}$ & point $j$ of stage $i$; parameters for fractal $j$ of stage $i$ \\
 $r_i$ & Shamir threshold at stage $i$ ($r_i \ge 2$) \\
 $\sftstar$ & $2^{64}$ memory- and depth-hard evaluations (infeasible) \\
+floor & \emph{prohibitive} cost: $\ge \sftstar$ hard \emph{or} $\ge 2^{96}$ cheap (Stipulation~\ref{ass:feas}) \\
 \bottomrule
 \end{tabularx}
 \endgroup
@@ -201,6 +202,17 @@ The star denotes this memory- and depth-hardness and attaches to \emph{any}
 bit-count --- $32^{*}, 64^{*}, 96^{*}, \dots$ --- each meaning that many $\Hhard$
 evaluations, not just $64^{*}$.
 \end{stipulation}
+
+\noindent\textbf{The floor.} We call a work cost \emph{prohibitive} --- equivalently,
+say it \emph{meets the floor} --- when it satisfies \ref{s:infeasible} \emph{or}
+\ref{s:infeasiblec}: at least $\sftstar$ memory-hard evaluations, \emph{or} at least
+$2^{96}$ cheap ones. The two bounds are independent, and we deliberately fix \emph{no}
+ordering between them. For realistic memory- and depth-hardness the per-evaluation
+$*$ premium is well under $2^{32}$, so $\sftstar < 2^{96}$ and the cheap bound is the
+binding one; but $*$ is a user-tunable lever, and an aggressive enough setting pushes
+that premium past $2^{32} \approx 4.29\times 10^{9}$ --- above $32$ extra bits ---
+making $\sftstar > 2^{96}$. Every ``floor'' claim below names \emph{this} threshold,
+not a fixed number, and holds whichever bound binds.
 
 \noindent We keep the star rather than fold it into an equivalent bit-count because
 memory- and depth-hardness has \emph{three} distinct consequences, only the first of

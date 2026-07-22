@@ -78,7 +78,7 @@ question}, which asks only whether the design manufactures an incentive to kill.
 Fund-safety is a \emph{separate} axis, and the construction handles it separately
 --- \emph{on top of} removing the gray race, it minimizes the window in which the
 stash is seizable at all, via the wipe-before-memory-hard step
-of~\eqref{eq:orbit} and the $\sftstar$ floor (Theorem~\ref{thm:floor}).
+of~\eqref{eq:orbit} and the floor (Theorem~\ref{thm:floor}).
 \end{remark}
 
 \begin{remark}[The residual window: from $0$ to $\varepsilon$]
@@ -121,7 +121,7 @@ The Time-Gated Perceptual Oracle (\S\ref{sec:gw}) is coercion-resistant.
 The experiment outputs $1$ only on a \emph{gray} state ($\pi > 0$); both clear
 endpoints $p_A \in \{0,1\}$ give $\pi = 0$ and hence output $0$. By
 Theorem~\ref{thm:floor} every state reachable by $\mathsf{Seize}$,
-$\mathsf{Coerce}$, and $\mathsf{Compute}$ leaves $K$ infeasibly far ($\sftstar$ or $2^{96}$), so
+$\mathsf{Coerce}$, and $\mathsf{Compute}$ leaves $K$ at the floor, so
 the reachable endpoint is the \emph{clear failure} $p_A = 0$ --- the opposite
 endpoint $p_A = 1$ would require feasibly reaching $K$, which the same theorem
 bars. Either way $\pi = 0$, so the experiment never outputs $1$ and
