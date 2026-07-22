@@ -24,13 +24,10 @@ precomputation-resistant \emph{timechain salt} whose cross-user amortization is
 negligible (the companion Namtso primitive~\cite{gw-timechain-salt}). Define an
 \textbf{orbit} of $N$ deep stages (Figure~\ref{fig:orbit}):
 \begin{align}
-  o_0 &= \Hcheap(\sigma), \\
-  u_i &= \Hcheap(o_{i} \,\|\, \Sh_{i}),
-         \qquad 0 \le i \le N-1, \\
-  o_i &= \Hhard\!\big(\, u_{i-1} \,\big),
-         \qquad \qquad 1 \le i \le N, \\
-  K_i &= \Hcheap(o_i \,\|\, \Sh_i),
-         \qquad 0 \le i \le N, 
+  o_0 &= \Hcheap(\sigma),                && \\
+  u_i &= \Hcheap(o_{i} \,\|\, \Sh_{i}),  && 0 \le i \le N-1, \\
+  o_i &= \Hhard\!\big(\, u_{i-1} \,\big), && 1 \le i \le N, \\
+  K_i &= \Hcheap(o_i \,\|\, \Sh_i),      && 0 \le i \le N,
   \label{eq:orbit}
 \end{align}
 where the raw inputs $\{o_{i-1}, \Sh_{i-1}\}$ are \textbf{wiped} in the instant
