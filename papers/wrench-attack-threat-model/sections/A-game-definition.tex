@@ -3,7 +3,7 @@
 \label{app:game}
 % ════════════════════════════════════════════════════════════════════════════
 
-\newcommand{\CRExp}{\mathsf{CR}\text{-}\mathsf{Exp}}
+\newcommand{\DRExp}{\mathsf{DR}\text{-}\mathsf{Exp}}
 \newcommand{\SzExp}{\mathsf{Sz}\text{-}\mathsf{Exp}}
 
 The body states coercion-safety in a \emph{decision-theoretic} register: the
@@ -102,7 +102,7 @@ $o_N$-live coincidence where $\Attacker$ does reach $K$; the loss there is of
 \subsection{The deadly-race game --- deadly-race-safety}
 
 \begin{definition}[Deadly-race experiment]\label{def:crexp}
-The \textbf{deadly-race experiment} $\CRExp_{\Pi}(\Attacker')$ runs the interaction
+The \textbf{deadly-race experiment} $\DRExp_{\Pi}(\Attacker')$ runs the interaction
 (Definition~\ref{def:wdy-int}) with adversary $\mathcal{X} = \Attacker'$ and holder
 $\mathcal{Y} = \Victim'$, and outputs $1$ (``$\Attacker'$ \emph{wins}'') iff
 $\pi > 0$; for the individual-custody case $R = \{\Victim'\}$ this is exactly a
@@ -111,7 +111,7 @@ $\pi > 0$; for the individual-custody case $R = \{\Victim'\}$ this is exactly a
 
 \begin{definition}[Coercion resistance]\label{def:crsecure}
 $\Pi$ is \textbf{coercion-resistant} if
-$\Pr\!\big[\CRExp_{\Pi}(\Attacker') = 1\big] = 0$ for every WDY adversary
+$\Pr\!\big[\DRExp_{\Pi}(\Attacker') = 1\big] = 0$ for every WDY adversary
 $\Attacker'$.
 \end{definition}
 
@@ -142,7 +142,7 @@ Definition~\ref{def:crsecure} is the information-theoretic, no-gray-area form. T
 residual window (\S\ref{sec:residual-dr}) replaces the exact $0$ by a bounded
 $\varepsilon = \Pr[\mathsf{Corr}\cap\mathsf{Esc}]$: call $\Pi$
 \textbf{$\varepsilon$-coercion-resistant} if
-$\Pr[\CRExp_{\Pi}(\Attacker') = 1] \le \varepsilon$ for all $\Attacker'$. The claims
+$\Pr[\DRExp_{\Pi}(\Attacker') = 1] \le \varepsilon$ for all $\Attacker'$. The claims
 below are the $\varepsilon = 0$ statements; the residual makes them
 $\varepsilon$-small --- not zero --- in the sliver argued incentive-safe there.
 In plain terms, this sliver is the moment the attack coincides with a \emph{live}
@@ -161,7 +161,7 @@ No-Gray-Area Criterion (Criterion~\ref{prin:nga}), iff $\Pi$ is coercion-safe in
 the decision-theoretic game (Definition~\ref{def:game}).
 \end{theorem}
 \begin{proof}
-$\CRExp$ outputs $1$ exactly on a reachable state with $\pi > 0$, so
+$\DRExp$ outputs $1$ exactly on a reachable state with $\pi > 0$, so
 $\Pr[\text{win}] = 0$ iff no reachable state is pivotal. By
 Theorem~\ref{thm:safety}, $\pi = 0$ everywhere is equivalent to coercion-safety
 and to Criterion~\ref{prin:nga}. The two clearance routes of
