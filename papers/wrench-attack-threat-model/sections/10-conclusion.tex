@@ -7,8 +7,9 @@ whenever the degraded state is a feasible-but-slower path to the secret: by
 Lemma~\ref{lem:drl}, that state is a race, and the race pays an assassination
 incentive. The No-Gray-Area Criterion is the resulting design bar, and the
 reachability corollary shows there are exactly two honest ways to clear it. The
-TGPO orbit clears it by removing the race entirely --- a $\sftstar$ floor
-from every seizable state (Theorem~\ref{thm:floor}) --- and so keeps custody
+TGPO orbit clears it by removing the race entirely --- a floor that leaves $K$
+infeasibly far ($\sftstar$ or $2^{96}$) from every seizable state
+(Theorem~\ref{thm:floor}) --- and so keeps custody
 individual, whereas time-lock-rescue vaults clear the same bar by removing the
 attacker's reach at the cost of a trusted third party.
 

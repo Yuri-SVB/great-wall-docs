@@ -157,7 +157,9 @@ terminal window stays instant.
 \begin{theorem}[$\sftstar$ floor on the master secret]\label{thm:floor}
 Under Assumptions~\ref{ass:power}--\ref{ass:tkba} and the standard build of
 \eqref{eq:orbit}--\eqref{eq:master}, from every seizable state the master secret
-$K_N$ is at least $2^{96}$ away. Consequently a device seizure yields
+$K_N$ is infeasibly far: reaching it costs at least $\sftstar$ (memory-hard,
+\ref{s:infeasible}) or $2^{96}$ (cheap, \ref{s:infeasiblec}), with no ordering
+assumed between the two bounds. Consequently a device seizure yields
 nothing feasible --- a \emph{clear failure} in the sense of
 Criterion~\ref{prin:nga}, with no racer for $\Attacker$ to reach.
 \end{theorem}
@@ -174,15 +176,17 @@ forward-only: a seized $o_i$ cannot yield $o_{i-1}$. We enumerate:
   \item \emph{Wrench of stage~0} ($p_{0,\cdot}$, always present since $\sigma$ is
         public). $\Attacker$ computes $o_1$ with one $\Hhard$; from $o_1$, $K_N$
         costs $2^{\sum_{j\ge 1} r_j\cdot 32}$, which is $2^{96}$ or more in the
-        recommended standard builds~\cite{gw-design} --- infeasible (\ref{s:infeasiblec}).
+        recommended standard builds~\cite{gw-design}, each guess $\Hhard$-gated ---
+        infeasible by either bound (\ref{s:infeasible},\ref{s:infeasiblec}).
   \item \emph{Mid-orbit seizure} at $o_i$ ($0 < i < N$). $K_N$ costs $\ge 2^{96}$
         cheap (\ref{s:infeasiblec}), each guess additionally $\Hhard$-gated
         (\ref{s:infeasible}) --- infeasible by either bound.
   \item \emph{Residual} $o_N$ present. Treated separately in
         \S\ref{sec:residual}.
 \end{itemize}
-Every case except the residual leaves cost of $K_N \ge 2^{96}$, beyond \ref{s:infeasiblec} 
-of Stipulation~\ref{ass:feas}.
+Every case except the residual leaves $K_N$ infeasibly far --- $\ge 2^{96}$ cheap
+and, below the terminal, additionally $\sftstar$-gated --- beyond
+\ref{s:infeasible},\ref{s:infeasiblec} of Stipulation~\ref{ass:feas}.
 \end{proof}
 
 \begin{remark}[Why a last-stage KDF fails]
@@ -191,7 +195,8 @@ $\mathrm{KDF}(p_N)$ --- determined by the \emph{last} stage alone --- a surprise
 seizure at stage $N{-}1$ holds the preimage of stage $N$; deriving it and
 brute-forcing the final 32-bit point costs $2^{32}$ (\ref{s:feasible}, feasible). That is a
 feasible-but-slower path: a gray area, rejected by
-Criterion~\ref{prin:nga}. The requirement is that $K$ be $\ge \sftstar$ from
+Criterion~\ref{prin:nga}. The requirement is that $K$ be infeasibly far ---
+$\sftstar$ or $2^{96}$ (\ref{s:infeasible},\ref{s:infeasiblec}) --- from
 \emph{every} seizable state, which is exactly the no-single-point-oracle /
 block-orbit ($r \ge 2$) condition met above.
 \end{remark}
