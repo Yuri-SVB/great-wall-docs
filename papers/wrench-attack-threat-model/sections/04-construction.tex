@@ -141,7 +141,7 @@ step would only \emph{prolong} the window in which $o_N$ and the final points ar
 live (paying an $\Hhard$ \emph{after} the last point is recognized), worsening the 
 very window we shrink in~\eqref{eq:orbit}. The resistance therefore lives in 
 \emph{entropy}: standard deep stages carry 96 bits ($k_i = 3$), so a cheap ledger 
-brute of $\Sh_N$ from a bare $o_N$ costs $2^{96}$ --- infeasible --- while the 
+brute of $\Sh_N$ from a bare $o_N$ costs $2^{96}$ --- infeasible by~\ref{s:infeasiblec} --- while the
 terminal window stays instant.
 
 \subsection{The $\sftstar$ floor}
@@ -166,9 +166,10 @@ forward-only: a seized $o_i$ cannot yield $o_{i-1}$. We enumerate:
   \item \emph{Wrench of stage~0} ($p_{0,\cdot}$, always present since $\sigma$ is
         public). $\Attacker$ computes $o_1$ with one $\Hhard$; from $o_1$, $K_N$
         costs $2^{\sum_{j\ge 1} k_j\cdot 32}$, which is $2^{96}$ or more in the
-        recommended standard builds~\cite{gw-design} --- infeasible.
-  \item \emph{Mid-orbit seizure} at $o_i$ ($0 < i < N$). $K_N$ costs $\ge 2^{96}$,
-        each guess $\Hhard$-gated --- infeasible.
+        recommended standard builds~\cite{gw-design} --- infeasible (\ref{s:infeasiblec}).
+  \item \emph{Mid-orbit seizure} at $o_i$ ($0 < i < N$). $K_N$ costs $\ge 2^{96}$
+        cheap (\ref{s:infeasiblec}), each guess additionally $\Hhard$-gated
+        (\ref{s:infeasible}) --- infeasible by either bound.
   \item \emph{Residual} $o_N$ present. Treated separately in
         \S\ref{sec:residual}.
 \end{itemize}
