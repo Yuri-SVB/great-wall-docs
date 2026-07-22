@@ -137,12 +137,11 @@ entropy in 32-bit steps.
 
 The coercion-resistant master secrets are all
 \begin{equation}
-  K_i = \Hcheap(o_i \,\|\, \Sh_i),
-         \qquad 1 \le i \le N,
+  K_i, \qquad 1 \le i,
   \label{eq:master}
 \end{equation}
-deliberately using the \emph{cheap} $\Hcheap$. A memory-hard last 
-step would only \emph{prolong} the window in which $o_N$ and the final points are 
+deliberately using the \emph{cheap} $K_i = \Hcheap(o_i \,\|\, \Sh_i)$. A memory-hard last 
+step would only \emph{prolong} the window (\S\ref{sec:residual}) in which $o_N$ and the final points are 
 live (paying an $\Hhard$ \emph{after} the last point is recognized), worsening the 
 very window we shrink in~\eqref{eq:orbit}. The resistance therefore lives in 
 \emph{entropy}: standard deep stages carry 96 bits ($r_i = 3$), so a cheap ledger 
@@ -157,7 +156,7 @@ Under Assumptions~\ref{ass:power}--\ref{ass:tkba} and the standard build of
 residual window} (\S\ref{sec:residual}) the master secret $K_N$ is
 \emph{prohibitive} to reach --- its cost meets the floor
 (Stipulation~\ref{ass:feas}). Consequently a device seizure outside that window
-yields nothing feasible --- a \emph{clear failure} in the sense of
+yields nothing feasible --- a \emph{clear attacker failure} in the sense of
 Criterion~\ref{prin:nga}, with no racer for $\Attacker$ to reach.
 \end{theorem}
 
