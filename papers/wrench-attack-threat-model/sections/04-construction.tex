@@ -26,7 +26,7 @@ negligible (the companion Namtso primitive~\cite{gw-timechain-salt}). Define an
 \begin{align}
   o_0 &= \Hcheap(\sigma), \\
   u_i &= \Hcheap(o_{i} \,\|\, \Sh_{i}),
-         \qquad 1 \le i \le N, \\
+         \qquad 0 \le i \le N-1, \\
   o_i &= \Hhard\!\big(\, u_{i-1} \,\big),
          \qquad \qquad 1 \le i \le N, \\
   K_i &= \Hcheap(o_i \,\|\, \Sh_i),
@@ -35,8 +35,8 @@ negligible (the companion Namtso primitive~\cite{gw-timechain-salt}). Define an
 \end{align}
 where the raw inputs $\{o_{i-1}, \Sh_{i-1}\}$ are \textbf{wiped} in the instant
 between the cheap inner hash and the long memory-hard step. Computing
-$u_i := \Hcheap(o_{i-1}\|\Sh_{i-1})$ first (instant), wiping, then running the
-long $o_i := \Hhard(u_i)$, means the raw prior orbit point and Shamir secret exist
+$u_{i-1} := \Hcheap(o_{i-1}\|\Sh_{i-1})$ first (instant), wiping, then running the
+long $o_i := \Hhard(u_{i-1})$, means the raw prior orbit point and Shamir secret exist
 only momentarily --- not across the whole memory-hard window. This directly
 shrinks the window in which $\{o_{i-1},\Sh_{i-1}\}$ is seizable (\ref{d:seizure}),
 and is the reason not to use $\Hhard(o_{i-1}\|\Sh_{i-1})$ directly.
@@ -92,11 +92,11 @@ precomputation-resistant timechain salt $\sigma$ (the Namtso primitive) seeds a
 chain of $N$ memory-hard stages. At each stage the raw inputs
 $o_{i-1}\,\|\,\Sh_{i-1}$ are folded by the \emph{cheap} inner hash $\Hcheap$ and
 \emph{wiped} before the long memory-hard step $\Hhard$, so seizable material
-exists only for an instant --- shrinking the window in which $o_{i-1}, Sh_{i-1}$ are 
+exists only for an instant --- shrinking the window in which $o_{i-1}, \Sh_{i-1}$ are
 reachable. Each board $o_i$ contributes a whole Shamir polynomial $\Sh_i$ (any $k_i$ 
 of its points $p_{i,j}$ reconstruct it), absorbed into the \emph{next} orbit link, 
-so no single point is checkable in isolation. The terminal secrets $K_i = 
-\Hcheap(o_i \,\|\, \Sh_i)$ deliberately uses the cheap hash, keeping the final window 
+so no single point is checkable in isolation. The terminal secrets $K_i =
+\Hcheap(o_i \,\|\, \Sh_i)$ deliberately use the cheap hash, keeping the final window
 instant. By construction, coercion resistance happens for $i \geq 1$.}
 \label{fig:orbit}
 \end{figure}
