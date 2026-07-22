@@ -38,7 +38,7 @@ between the cheap inner hash and the long memory-hard step. Computing
 $u_i := \Hcheap(o_{i-1}\|\Sh_{i-1})$ first (instant), wiping, then running the
 long $o_i := \Hhard(u_i)$, means the raw prior orbit point and Shamir secret exist
 only momentarily --- not across the whole memory-hard window. This directly
-shrinks the window in which $\{o_{i-1},\Sh_{i-1}\ }$ is seizable (\ref{d:seizure}), 
+shrinks the window in which $\{o_{i-1},\Sh_{i-1}\}$ is seizable (\ref{d:seizure}),
 and is the reason not to use $\Hhard(o_{i-1}\|\Sh_{i-1})$ directly.
 
 \begin{figure}[t]
@@ -57,9 +57,9 @@ and is the reason not to use $\Hhard(o_{i-1}\|\Sh_{i-1})$ directly.
   \node[gwstate, right=8mm of dots] (oNm) {$o_{N-1}$};
   \node[gwtask, right=of oNm] (stNm)
      {$K_{N-1} := \Hcheap(o_{N-1} \,\|\, \Sh_{N-1})$;\\[2pt]
-      $u_{n-1} := \Hcheap(o_{n-1} \,\|\, \Sh_{n-1})$;\\[2pt]
-      \textcolor{graytext}{\footnotesize wipe} $\{o_{n-1}, \Sh_{n-1}\}$;\\[2pt]
-      $o_N := \Hhard(u_{n-1})$;}
+      $u_{N-1} := \Hcheap(o_{N-1} \,\|\, \Sh_{N-1})$;\\[2pt]
+      \textcolor{graytext}{\footnotesize wipe} $\{o_{N-1}, \Sh_{N-1}\}$;\\[2pt]
+      $o_N := \Hhard(u_{N-1})$;}
   \node[gwstate, right=8mm of stNm] (oN) {$o_{N}$};
   \node[gwtask, right=of oN] (stN)
      {$K_N := \Hcheap(o_{N} \,\|\, \Sh_{N})$};
@@ -132,7 +132,7 @@ entropy in 32-bit steps.
 
 The coercion-resistant master secrets are all
 \begin{equation}
-  K_i &= \Hcheap(o_i \,\|\, \Sh_i),
+  K_i = \Hcheap(o_i \,\|\, \Sh_i),
          \qquad 1 \le i \le N,
   \label{eq:master}
 \end{equation}
