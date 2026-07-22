@@ -86,11 +86,11 @@ specification detail beyond our scope.
   \draw[gwflow] (stNm) -- node[gwlabel, right]{$\Hcheap$} (KNm);
   \draw[gwflow] (stN) -- node[gwlabel, right]{$\Hcheap$} (KN);
   \node[gwtask, above=9mm of st0] (sh0)
-     {$\Sh_0$\\[1pt]\textcolor{graytext}{\footnotesize any $k_0$ of $p_{0,j}$}};
+     {$\Sh_0$\\[1pt]\textcolor{graytext}{\footnotesize any $r_0$ of $p_{0,j}$}};
   \node[gwtask, above=9mm of stNm] (shNm)
-     {$\Sh_{N-1}$\\[1pt]\textcolor{graytext}{\footnotesize any $k_{N-1}$ of $p_{N-1,j}$}};
+     {$\Sh_{N-1}$\\[1pt]\textcolor{graytext}{\footnotesize any $r_{N-1}$ of $p_{N-1,j}$}};
   \node[gwtask, above=9mm of stN] (shN)
-     {$\Sh_{N}$\\[1pt]\textcolor{graytext}{\footnotesize any $k_{N}$ of $p_{N,j}$}};
+     {$\Sh_{N}$\\[1pt]\textcolor{graytext}{\footnotesize any $r_{N}$ of $p_{N,j}$}};
   \draw[gwflow] (sh0) -- (st0);
   \draw[gwflow] (shNm) -- (stNm);
   \draw[gwflow] (shN) -- (stN);
@@ -101,7 +101,7 @@ chain of $N$ memory-hard stages. At each stage the raw inputs
 $o_{i-1}\,\|\,\Sh_{i-1}$ are folded by the \emph{cheap} inner hash $\Hcheap$ and
 \emph{wiped} before the long memory-hard step $\Hhard$, so seizable material
 exists only for an instant --- shrinking the window in which $o_{i-1}, \Sh_{i-1}$ are
-reachable. Each board $o_i$ contributes a whole Shamir polynomial $\Sh_i$ (any $k_i$ 
+reachable. Each board $o_i$ contributes a whole Shamir polynomial $\Sh_i$ (any $r_i$ 
 of its points $p_{i,j}$ reconstruct it), absorbed into the \emph{next} orbit link, 
 so no single point is checkable in isolation. The terminal secrets $K_i =
 \Hcheap(o_i \,\|\, \Sh_i)$ deliberately use the cheap hash, keeping the final window
@@ -113,16 +113,16 @@ instant. By construction, coercion resistance happens for $i \geq 1$.}
 
 Each stage $i$ carries not an individual point but a \emph{whole Shamir
 polynomial}~\cite{shamir1979}. Stage $i$ has $s_i$ points $p_{i,j}$, each a
-32-bit leaf-area of a fractal $\theta_{i,j} = \Hcheap(o_i \| j)$; any $k_i$ of
-them reconstruct the degree-$(k_i{-}1)$ polynomial $\Sh_i$ of $k_i \cdot 32 \ge
-64$ bits ($k_i \ge 2$). The orbit absorbs the \emph{full} polynomial $\Sh_i$,
+32-bit leaf-area of a fractal $\theta_{i,j} = \Hcheap(o_i \| j)$; any $r_i$ of
+them reconstruct the degree-$(r_i{-}1)$ polynomial $\Sh_i$ of $r_i \cdot 32 \ge
+64$ bits ($r_i \ge 2$). The orbit absorbs the \emph{full} polynomial $\Sh_i$,
 not its constant term $f(0)$.
 
-\begin{remark}[Block-orbit $k \ge 2$ condition]
+\begin{remark}[Block-orbit $r \ge 2$ condition]
 Because the smallest object any orbit link commits is a full stage ($\ge 64$
 bits), no individual point $p_{i,j}$ is ever checkable in isolation --- there is
 no sub-threshold oracle against which a single guessed point could be verified.
-This is the block-orbit $k \ge 2$ condition, realized as Shamir $k_i \ge 2$ per
+This is the block-orbit $r \ge 2$ condition, realized as Shamir $r_i \ge 2$ per
 stage.
 \end{remark}
 
@@ -132,7 +132,7 @@ The points $p_{i,j}$ instantiate Assumption~\ref{ass:tkba}: they are
 recognizable on their fractal boards but not transmissible without
 $\theta_{i,j}$ (TKBA$_1$), and the deep $\theta_{i,j}$ are regenerated from
 $o_i$ --- which itself requires walking the memory-hard chain (TKBA$_2$). Using
-several shallow-zoom fractals per stage lets a stage carry $k_i \cdot 32$ bits
+several shallow-zoom fractals per stage lets a stage carry $r_i \cdot 32$ bits
 at low zoom depth per board, keeping each point recognizable while tuning stage
 entropy in 32-bit steps.
 
@@ -148,7 +148,7 @@ deliberately using the \emph{cheap} $\Hcheap$. A memory-hard last
 step would only \emph{prolong} the window in which $o_N$ and the final points are 
 live (paying an $\Hhard$ \emph{after} the last point is recognized), worsening the 
 very window we shrink in~\eqref{eq:orbit}. The resistance therefore lives in 
-\emph{entropy}: standard deep stages carry 96 bits ($k_i = 3$), so a cheap ledger 
+\emph{entropy}: standard deep stages carry 96 bits ($r_i = 3$), so a cheap ledger 
 brute of $\Sh_N$ from a bare $o_N$ costs $2^{96}$ --- infeasible by~\ref{s:infeasiblec} --- while the
 terminal window stays instant.
 
@@ -164,7 +164,7 @@ Criterion~\ref{prin:nga}, with no racer for $\Attacker$ to reach.
 
 \begin{proof}[Proof by case analysis over seizable states]
 From a seized $o_i$ ($i < N$), reaching $K_N$ requires guessing
-$\Sh_i, \dots, \Sh_N$; each $\Sh_l$ guess is $2^{k_l \cdot 32}$ and is
+$\Sh_i, \dots, \Sh_N$; each $\Sh_l$ guess is $2^{r_l \cdot 32}$ and is
 $\Hhard$-gated, since it is checked only by recomputing the memory-hard link
 \eqref{eq:orbit}. Preimage resistance of $\Hcheap, \Hhard$ makes the orbit
 forward-only: a seized $o_i$ cannot yield $o_{i-1}$. We enumerate:
@@ -173,7 +173,7 @@ forward-only: a seized $o_i$ cannot yield $o_{i-1}$. We enumerate:
         blobs at rest). All tacit points are required; $K$ is unreachable.
   \item \emph{Wrench of stage~0} ($p_{0,\cdot}$, always present since $\sigma$ is
         public). $\Attacker$ computes $o_1$ with one $\Hhard$; from $o_1$, $K_N$
-        costs $2^{\sum_{j\ge 1} k_j\cdot 32}$, which is $2^{96}$ or more in the
+        costs $2^{\sum_{j\ge 1} r_j\cdot 32}$, which is $2^{96}$ or more in the
         recommended standard builds~\cite{gw-design} --- infeasible (\ref{s:infeasiblec}).
   \item \emph{Mid-orbit seizure} at $o_i$ ($0 < i < N$). $K_N$ costs $\ge 2^{96}$
         cheap (\ref{s:infeasiblec}), each guess additionally $\Hhard$-gated
@@ -193,7 +193,7 @@ brute-forcing the final 32-bit point costs $2^{32}$ (\ref{s:feasible}, feasible)
 feasible-but-slower path: a gray area, rejected by
 Criterion~\ref{prin:nga}. The requirement is that $K$ be $\ge \sftstar$ from
 \emph{every} seizable state, which is exactly the no-single-point-oracle /
-block-orbit ($k \ge 2$) condition met above.
+block-orbit ($r \ge 2$) condition met above.
 \end{remark}
 
 \subsection{The tolerated residual window}
@@ -261,7 +261,7 @@ rise:}
         $(1 - p_A)\,W$ the first four grounds leave on the table.
 \end{enumerate}
 
-Whether the window opens after the $(k_N{-}1)$-th or $(k_N{-}2)$-th point rests
+Whether the window opens after the $(r_N{-}1)$-th or $(r_N{-}2)$-th point rests
 on the softest number of Stipulation~\ref{ass:feas} --- inside the tolerated
 reasoning either way.
 
