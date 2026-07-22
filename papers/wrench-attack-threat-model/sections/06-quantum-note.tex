@@ -16,3 +16,25 @@ quantum-defensible \emph{without} a 256-bit seed --- the memory- and
 depth-hardness behind the floor's \emph{hard} bound ($\sftstar$) classically also caps the quantum
 speed-up.
 
+\begin{remark}[The one bound Grover does dent: the live-$o_N$ residual]
+The duality's \emph{cheap} bound is a different matter. The floor also clears
+$\sftstar$ via a cheap $2^{96}$ ledger brute of $\Sh_N$ (Stipulation~\ref{ass:feas},
+\ref{s:infeasiblec}), and that cheap side inherits \emph{no} depth-hardness to guard
+it: Grover halves it outright to $\sim 2^{48}$. Concretely, a Quantum WDY attacker
+landing on an imminently- or currently-live final board $o_N$ --- the same coincidence
+that opens the tolerated residual window (\S\ref{sec:residual}) --- faces only the cheap
+$2^{96}$ brute of the terminal secret, and Grover reduces that to a
+$\sim 2^{48}$ (``$48$-qubit'') floor.\footnote{Each Grover attempt is one cheap
+evaluation of the terminal step --- a single $\Hcheap(o_N \,\|\, \Sh_N)$
+key-derivation followed by the ledger decryption/spend check --- and \emph{nothing}
+more: the search is over the $96$-bit $\Sh_N$ \emph{directly}, so Shamir
+reconstruction (the holder's step of interpolating $\Sh_N$ from $r_N$ recognized
+points) never enters the oracle loop. One quantum attempt is thus KDF $+$
+decryption, not Shamir $+$ KDF $+$ decryption.} This touches nothing but the
+residual: it does \emph{not} reach the memory-hard $\sftstar$ bound (guarded above),
+and it applies only inside the already-$\varepsilon$-bounded live-$o_N$ sliver, whose
+incentive-safety argument (\S\ref{sec:residual}) turns on the kill economics, not on
+the brute's width --- a $2^{48}$ Grover search buys $\Attacker$ nothing a classical
+$2^{32}$ brute in that same window does not already grant.
+\end{remark}
+
