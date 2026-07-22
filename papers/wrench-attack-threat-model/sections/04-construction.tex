@@ -184,17 +184,6 @@ Every case except the residual leaves $K_N$ at the floor
 (Stipulation~\ref{ass:feas}).
 \end{proof}
 
-\begin{remark}[Why a last-stage KDF fails]
-The floor is not automatic. In a naive sequential setup whose master secret is
-$\mathrm{KDF}(p_N)$ --- determined by the \emph{last} stage alone --- a surprise
-seizure at stage $N{-}1$ holds the preimage of stage $N$; deriving it and
-brute-forcing the final 32-bit point costs $2^{32}$ (\ref{s:feasible}, feasible). That is a
-feasible-but-slower path: a gray area, rejected by
-Criterion~\ref{prin:nga}. The requirement is that $K$ meet the floor from
-\emph{every} seizable state, which is exactly the no-single-point-oracle /
-block-orbit ($r \ge 2$) condition met above.
-\end{remark}
-
 \subsection{The tolerated residual window}
 \label{sec:residual}
 
