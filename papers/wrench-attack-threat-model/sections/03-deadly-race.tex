@@ -394,7 +394,8 @@ adversary (\textbf{\ref{d:kerckhoffs}--\ref{d:nodelegatecoerce}}) does not, \emp
 secret $K$, but \emph{may} leave a \emph{deadly-race} state: a reachable state of
 positive pivotality $\pi > 0$ (Theorem~\ref{thm:safety}) in which $\Attacker$
 holds a feasible-but-slower path and $\Victim$ remains a reachable racer. The
-secret is withheld; the holder is not safe.
+secret is withheld \emph{during coercion}; the holder is not safe: \emph{after coercion 
+finishes} $\Attacker$ may enact deadly race and ultimately seize $K$ nevertheless.
 \end{definition}
 
 \begin{definition}[Strongly coercion-resistant / strongly {$\mathrm{WDY}[W,c,b,t]$}-resistant]\label{def:strong-cr}
