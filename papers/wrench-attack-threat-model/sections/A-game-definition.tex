@@ -83,7 +83,7 @@ of~\eqref{eq:orbit} and the floor (Theorem~\ref{thm:floor}).
 
 \begin{remark}[The residual window: from $0$ to $\varepsilon$]
 Definition~\ref{def:crsecure} is the information-theoretic, no-gray-area form. The
-residual window (\S\ref{sec:residual}) replaces the exact $0$ by a bounded
+residual window (\S\ref{sec:residual-dr}) replaces the exact $0$ by a bounded
 $\varepsilon = \Pr[\mathsf{Corr}\cap\mathsf{Esc}]$: call $\Pi$
 \textbf{$\varepsilon$-coercion-resistant} if
 $\Pr[\CRExp_{\Pi}(\Attacker) = 1] \le \varepsilon$ for all $\Attacker$. The claims
@@ -126,7 +126,7 @@ the reachable endpoint is the \emph{clear failure} $p_A = 0$ --- the opposite
 endpoint $p_A = 1$ would require feasibly reaching $K$, which the same theorem
 bars. Either way $\pi = 0$, so the experiment never outputs $1$ and
 $\Pr[\text{win}] = 0$. The only place $p_A$ rises above $0$ (to $1$ in the worst
-instant) is the residual window (\S\ref{sec:residual}), where the tacit premise
+instant) is the residual window (\S\ref{sec:residual-seizure}), where the tacit premise
 momentarily fails; accounting for it yields $\varepsilon$-coercion resistance.
 \end{proof}
 

@@ -98,13 +98,13 @@ parameters $(W,c)$ and modeled as a \emph{cold expected-utility maximiser}: it
 chooses among release, continued coercion, and assassination so as to maximize
 its assessed expected payoff over the deadly-race probabilities (the win
 probability $p_A$, and the correctness/escape events introduced in
-\S\ref{sec:residual}). Plain $\mathrm{WDY}$
+\S\ref{sec:residual-dr}). Plain $\mathrm{WDY}$
 carries \emph{no} such payoff: it is the adversary of the general results (NNPP,
 the No-Gray-Area Criterion, the floor), which must hold whatever
 $(W,c)$ turn out to be. $\mathrm{WDY}[W,c]$ is invoked only where a
 \emph{quantitative} incentive is actually computed --- the Deadly-Race Lemma's
 condition (\S\ref{sub:drl}) and the residual-window analysis
-(\S\ref{sec:residual}).
+(\S\ref{sec:residual-dr}).
 
 A third, optional parameter sharpens the feasibility line to a single threshold.
 $\mathrm{WDY}[W,c,b]$ replaces the two stipulations of Stipulation~\ref{ass:feas}
@@ -145,7 +145,7 @@ would let it walk any time-gate to completion and collapse the tacit route
 window: there $p_A \to 1$ while the worst case wants $W \to \infty$, making
 $(1-p_A)\,W$ an $\infty\cdot 0$ indeterminate form --- which is precisely why that
 window is settled with \emph{finite} $(W,c)$ and the $\Delta p_A$ increment
-(\S\ref{sec:residual}), not with the blunt limit.
+(\S\ref{sec:residual-dr}), not with the blunt limit.
 \end{remark}
 
 \subsection{The Non-Negative-Proof Principle}
@@ -494,7 +494,7 @@ analysis under the feasibility line (\ref{s:feasible}/\ref{s:infeasible}, Stipul
 standard \emph{key-size} stipulation, not a reduction to a named hard problem, and
 none is needed for a key-sizing argument (\S\ref{sec:limits}). The residual window
 is \emph{not} $p_A = 0$: it is a bounded $p_A > 0$ exception argued
-\emph{incentive}-safe against $\mathrm{WDY}[W,c]$ (\S\ref{sec:residual}), a ``more
+\emph{incentive}-safe against $\mathrm{WDY}[W,c]$ (\S\ref{sec:residual-dr}), a ``more
 likely than not'' statement rather than a theorem. \textbf{(ii)} Turning that
 residual argument into a \emph{quantitative bound} is the remaining construction-side
 item; the softest premise of all --- that a transmissible-resistant perceptual

@@ -28,8 +28,8 @@ WDY & the Wrench--Dolev--Yao adversary, fixed by clauses \ref{d:kerckhoffs}--\re
 $p_A$ & probability $\Attacker$ reaches $K$ after the encounter; \emph{gray} iff $0<p_A<1$ \\
 $t$ & coercion-time budget (how long $\Attacker$ can sustain coercion) \\
 $G$ & protocol time-gate (enforced latency to complete the derivation) \\
-$\mathsf{Corr}$ & residual-window event: the points $\Victim$ has surrendered so far are correct (\S\ref{sec:residual}) \\
-$\mathsf{Esc}$ & residual-window event: the ${\approx}1$--$2$ min shaved by brute-forcing the last points decides escape from the scene (\S\ref{sec:residual}) \\
+$\mathsf{Corr}$ & residual-window event: the points $\Victim$ has surrendered so far are correct (\S\ref{sec:residual-dr}) \\
+$\mathsf{Esc}$ & residual-window event: the ${\approx}1$--$2$ min shaved by brute-forcing the last points decides escape from the scene (\S\ref{sec:residual-dr}) \\
 \addlinespace
 \multicolumn{2}{@{}l}{\textbf{Construction (TGPO orbit \S\ref{sec:gw})}}\\
 \midrule
@@ -100,7 +100,7 @@ coercion oracle over the holder: the \emph{wrench} the name records. WDY is fixe
         $\Attacker$ meets \emph{no resistance whatsoever} and enjoys $\Victim$'s
         \emph{full cooperation}. The sole qualification --- \emph{feigned}
         cooperation in the residual window --- is, as we argue there
-        (\S\ref{sec:residual}), of residual importance.
+        (\S\ref{sec:residual-dr}), of residual importance.
   \item\label{d:seizure} \textbf{Co-located device seizure.} All of $\Victim$'s devices \emph{at
         the attack site} are immediately seized --- vault blobs, time-lock blobs,
         commitment scripts, review schedules. A single WDY encounter has one
@@ -143,7 +143,7 @@ $\Victim$ (\ref{d:subjugation}) over a bounded duration $t$ --- the adversary's
 \textbf{coercion-time budget}, the maximum wall-clock time for which it can sustain coercion,
 calibrated against the incident durations in the registry~\cite{lopp-attacks}.
 Cooperation is genuine throughout by \ref{d:subjugation}; the one exception, \emph{feigned}
-cooperation, is confined to the residual window (\S\ref{sec:residual}).
+cooperation, is confined to the residual window (\S\ref{sec:residual-dr}).
 \end{assumption}
 
 \begin{remark}[The two non-seizure clauses coincide for design]\label{rem:tacit-coincide}
