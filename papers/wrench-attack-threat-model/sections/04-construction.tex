@@ -140,7 +140,17 @@ The coercion-resistant master secrets are all
   K_i, \qquad 1 \le i,
   \label{eq:master}
 \end{equation}
-deliberately using the \emph{cheap} $K_i = \Hcheap(o_i \,\|\, \Sh_i)$. A memory-hard last 
+deliberately using the \emph{cheap} $K_i = \Hcheap(o_i \,\|\, \Sh_i)$.
+
+Each $K_i$ ($i \ge 1$) is a full instantiation of the abstract master secret $K$
+that \S\ref{sec:chain} reasons about: the orbit yields not one secret but a nested
+\emph{family} of master secrets, and every $K$-result --- the floor
+(Theorem~\ref{thm:floor}), the deadly-race analysis --- holds of each. $K_0$ is set
+aside: stage~$0$'s board $o_0$ derives from the public salt alone
+(\eqref{eq:orbit}), so it sits below the memory-hard chain that gives the deeper
+stages their floor.
+
+A memory-hard last
 step would only \emph{prolong} the window (\S\ref{sec:residual-seizure}) in which $o_N$ and the final points are 
 live (paying an $\Hhard$ \emph{after} the last point is recognized), worsening the 
 very window we shrink in~\eqref{eq:orbit}. The resistance therefore lives in 
@@ -153,7 +163,7 @@ terminal window stays instant.
 \begin{theorem}[The floor on the master secret]\label{thm:floor}
 Under Assumptions~\ref{ass:power}--\ref{ass:tkba} and the standard build of
 \eqref{eq:orbit}--\eqref{eq:master}, from every seizable state \emph{save a single
-residual window} (\S\ref{sec:residual-seizure}) the master secret $K_N$ is
+residual window} (\S\ref{sec:residual-seizure}) a target master secret $K_N$ is
 \emph{prohibitive} to reach --- its cost meets the floor
 (Stipulation~\ref{ass:feas}). Consequently a device seizure outside that window
 yields nothing feasible --- a \emph{clear attacker failure} in the sense of
@@ -355,6 +365,25 @@ interval minute-scale and pre-stageable) against a large $c$ (ground~5). So the
 residual is bounded on the \emph{gain} side by itself: feigning ($\neg\mathsf{Corr}$)
 subtracts further and is a welcome bonus, but the window is already small without
 it --- even against a perfectly honest, fully cooperating victim.
+\end{remark}
+
+\begin{remark}[Splitting a stash across several $K_i$]
+Nothing forces a holder to route an entire stash through a single master secret; it
+may be split across several $K_i$ --- distinct stages, or independent orbit setups
+--- with two risk-management benefits, each diluting one of the residual failure
+modes:
+\begin{enumerate}[nosep,leftmargin=1.6em]
+  \item \emph{Diluted seizure risk} --- the proverbial ``not all eggs in one
+        basket.'' Should the residual \emph{seizure} window
+        (\S\ref{sec:residual-seizure}), or any other failure mode of the
+        construction, expose one $K_i$, only the fraction of the stash it guards is
+        lost.
+  \item \emph{Diluted deadly-race payoff.} In the residual \emph{deadly-race}
+        window (\S\ref{sec:residual-dr}) the kill condition is $(1-p_A)\,W > c$;
+        with the stash split, the $W$ at stake in any single window is only a
+        fraction of the whole, lowering $\Attacker$'s assassination payoff and
+        making the inequality harder to meet.
+\end{enumerate}
 \end{remark}
 
 \subsection{Empirical grounding in the registry}
