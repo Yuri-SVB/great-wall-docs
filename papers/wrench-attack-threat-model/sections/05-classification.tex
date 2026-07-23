@@ -1,0 +1,129 @@
+% ════════════════════════════════════════════════════════════════════════════
+\section{Classification of existing designs}
+\label{sec:classify}
+% ════════════════════════════════════════════════════════════════════════════
+
+Corollary~\ref{cor:reach} gives a classification axis: a design that clears
+Criterion~\ref{prin:nga} does so either by \emph{removing the race} or by
+\emph{removing $\Attacker$'s reach over the racer}. The framework should
+classify shipping designs, and it does --- via the reachability corollary, not
+by calling them broken.
+
+\subsection{Timelock-rescue vaults}
+
+Take \textbf{Rewind Bitcoin}~\cite{rewind-bitcoin} as the exemplar. Funds sit in
+a Bitcoin-native timelock vault; unlocking starts a multi-day countdown; if an
+unauthorized unlock is triggered, the owner \emph{or a trusted delegate} has that
+window to press ``Rescue'' and sweep to a cold panic address.
+
+Against \emph{remote} theft it is sound: a thief who steals keys trips the
+countdown, the owner notices, and rescues. But the spend capability sits behind
+\emph{only a delay}, with keys on the seized device and no recall floor --- so a
+wrench attacker who seizes the device \emph{does} hold a feasible path (unlock,
+wait out the countdown). That is a race, in the sense of Lemma~\ref{lem:drl}.
+Rewind's answer is exactly the second route of Corollary~\ref{cor:reach}: it puts
+the winning racer out of $\Attacker$'s reach --- a \emph{remote delegate} the
+attacker cannot find or eliminate presses Rescue --- so the attack fails
+cleanly. This is a legitimate clearance, but the remote-racer kind: its cost is
+that \textbf{custody is no longer individual}.
+
+\begin{remark}[When the escape closes]\label{rem:escape-closes}
+The remedy holds only while the delegate is genuinely remote. If the delegate is
+a friend who happens to be visiting during the attack, \emph{both} problems
+apply at once --- custody was already non-individual, and the racer is now
+co-located and reachable --- so the design becomes deadly-race-susceptible
+again. The user is thus forced into an awkward corner: trust someone they can
+rarely be near, and accept a perverse incentive to avoid physical proximity to a
+trusted friend. The same closure afflicts the remote-delegate route to a
+perceptual oracle (Remark~\ref{rem:delegate-perceptual}).
+\end{remark}
+
+\subsection{A second timelock design --- BitVault}
+
+\textbf{BitVault}~\cite{bitvault} is the same species with a different rescue
+verb. Funds sit in a multisig with \emph{time-delayed transactions} (a
+configurable $2\,\mathrm{h}$--$15\,\mathrm{day}$ window); a spend enters the
+delay, an alert reaches the owner's chosen ``owl wallet,'' and the owner may
+\emph{cancel} before settlement. It is marketed as coercion-resistant
+self-custody --- it ``protects your Bitcoin even if you're physically forced to
+hand over your keys.''
+
+The structure is Rewind's, with cancel-during-delay standing in for Rescue: so
+against remote theft it is equally sound, and against a wrench attack it is
+equally a race (Lemma~\ref{lem:drl}) --- the spend sits behind only a delay, keys
+on the seized device. The difference is \emph{who the racer is}. Rewind names a
+\emph{remote delegate}; BitVault routes cancellation to the \emph{owner's own}
+alert wallet. Under coercion the owner is captive and, by \ref{d:subjugation}--\ref{d:seizure}
+(Assumption~\ref{ass:power}), that wallet is seized or coerced with everything
+else --- so by default the racer is \emph{co-located and reachable}, and the
+design is deadly-race-susceptible. It clears Criterion~\ref{prin:nga} only if the
+owl wallet is a genuinely remote, autonomous rescuer (the honest \ref{r:remotewinner}, shared
+custody); yet it advertises \textbf{individual} self-custody (``zero counterparty
+risk,'' ``non-custodial''). That is the one combination the reachability corollary
+forbids --- a recall floor (\ref{r:removerace}, individual) \emph{or} a remote racer (\ref{r:remotewinner}, shared),
+never individual custody with a reachable racer.
+
+Two auxiliary claims do not close the gap. First, that time-delayed transactions
+are ``publicly verifiable, making kidnapping attempts pointless'' is a
+\emph{deterrence} claim --- about whether the attack occurs --- not a structural
+one about the game once it does; under Kerckhoffs a $\mathrm{WDY}$ attacker who
+\emph{knows} the delay plans around it: coerce the cancel key up front, outwait a
+$2\,\mathrm{h}$ window, or --- since the canceller is the competing racer ---
+eliminate them to stop the cancellation, the very incentive of
+Lemma~\ref{lem:drl}. ``Cannot be moved \emph{instantly}'' is not ``cannot be
+moved,'' and advertising pointlessness is the false comfort the Lemma's remarks
+name: danger peaks where the marketing promises safety. Second, the ``decoy
+wallet'' is a plausible-deniability layer, which fails Kerckhoffs
+(Assumption~\ref{ass:kerckhoffs}) against an educated attacker who persists past
+the decoy. \emph{(This reading is drawn from BitVault's public description; if its
+cancel path is in fact a pre-signed sweep triggered by a genuinely remote,
+un-coercible watchtower, it is simply the honest \ref{r:remotewinner} case at shared-custody cost,
+and the critique narrows to the individual-custody configuration it markets.)}
+
+A further caveat sharpens \ref{r:remotewinner} itself: it needs the winning racer to
+be not merely remote but genuinely \emph{un-coercible} --- an autonomous watchtower,
+not a human friend. Where the delegate is a person, coercion simply routes through
+the victim to them, and a humane delegate pays; the Balland case
+(\S\ref{sub:empirical}) is exactly this failure, and it is the reality
+clause~\ref{d:nodelegatecoerce} idealises away.
+
+\subsection{TGPO, and the honest comparison}
+
+TGPO clears by the \emph{other} route: the secret is tacit and never on
+the device (Assumption~\ref{ass:tkba}, Theorem~\ref{thm:floor}), so a seizure
+yields nothing feasible --- there is no racer to reach, and the time-lock is
+only a delay \emph{on top of} an already-clean failure. Read through the Four
+Properties (Corollary~\ref{cor:fourprops}), the comparison is a covering-set
+statement: each shipping design buys (or tries to buy) coercion resistance by 
+\emph{trading at least one} property TGPO keeps --- and one of them trades a
+property and \emph{still} fails. TGPO is the only design holding all four.
+\begin{center}\footnotesize
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\linewidth}{@{}l cccc X@{}}
+\toprule
+\textbf{Design} & \textbf{(\ref{p:know})\,Know.} & \textbf{(\ref{p:indiv})\,Indiv.} & \textbf{(\ref{p:nonob})\,Non-ob.} & \textbf{(\ref{p:coerc})\,Coerc.} & \textbf{What it trades} \\
+\midrule
+\textbf{TGPO} (Great Wallet) & \cmark & \cmark & \cmark & \cmark & holds all four (tacit; \ref{r:removerace}) \\
+Rewind Bitcoin               & \xmark & \xmark & \cmark & \cmark & individual custody: a remote delegate (\ref{r:remotewinner}) \\
+BitVault                     & \xmark & \cmark & \xmark & \xmark & non-obscurity: assumes attacker ignorance ($\pm$ geography) --- gray, can backfire \\
+Casa                         & \cmark & \xmark & \cmark & \cmark & custody shared with remote co-signer\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\noindent Row~(\ref{p:know}) is the covering point: TGPO is the \emph{only} knowledge-based
+(deviceless --- the secret is knowledge, never a device or a location) row, because
+every competitor keeps a \emph{transmissible} secret on a device. \textbf{Rewind}
+trades individual custody for a remote delegate (\ref{r:remotewinner}). \textbf{Casa}'s collaborative
+multisig --- the client's keys on separate hardware plus a Casa co-signing key ---
+trades individual custody: the co-signer is a remote party, and a coercion-resistant
+delegate is remote \emph{by definition}, so the cost is individual custody, not
+non-geography (Casa asks the user to visit no site of its own)~\cite{casa}. \textbf{BitVault} trades non-obscurity (its cancel
+and decoy assume attacker ignorance, failing Kerckhoffs) and, per §\ref{sec:classify}
+above, still lands in the gray zone --- the red $\times$ in column~(\ref{p:coerc}) is
+\emph{negative} coercion resistance (it can backfire), not mere absence. The axis
+tilts further to \ref{r:removerace} for a blunter reason (Remark~\ref{rem:r2-cost}):
+the delegated rows are not self-custody at all --- their clearance assumes a
+delegate that refuses even the legitimate owner --- and, the rescue capability being
+\emph{transmissible}, they keep a clean-loss exposure the tacit route does not.
+\emph{Not your keys, not your coins.}
+

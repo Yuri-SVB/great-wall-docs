@@ -1,0 +1,84 @@
+% ════════════════════════════════════════════════════════════════════════════
+\section{Limitations and scope}
+\label{sec:limits}
+% ════════════════════════════════════════════════════════════════════════════
+
+\textbf{The tacit premise is unproven --- the softest assumption.} Everything on
+the tacit route (hence ``TGPO keeps all four properties'') rests on the existence
+of a \emph{perceptual oracle}: a stimulus a human can \emph{recognise} but not
+\emph{articulate}. For TKBA it must simultaneously (i)~admit a \emph{binary
+encoding}; (ii)~be \emph{feasible to memorise} at the stipulated minimum ($\ge 96$
+bits); and (iii)~be \emph{infeasible to transmit within the coercion budget $t$}
+(Definition~\ref{def:tacit}). None of the three is proved here; their conjunction
+is an empirical, psychometric claim awaiting a field study. Perturbed Burning-Ship
+fractal locations are our current instantiation --- the best present candidate,
+with the design record giving the grounds for expecting them to hold --- but until
+a study establishes such an oracle, \textbf{the validity of TKBA remains an
+assumption, not a result}, and it is the softest premise in the paper. Its
+imperfection is precisely the residual window (\S\ref{sec:residual}), where
+transmission becomes possible near the end of the derivation.
+
+\textbf{Memorisation cost, and why it is affordable.} A separate objection to a
+brain-only setup is not whether the oracle \emph{exists} but whether living with it
+is too costly --- carrying $\ge 96$ bits of tacit recall indefinitely. Two things
+bound that cost. First, retention is \emph{assisted}: the \emph{Celestial Peace ---
+Never Forget} (CPNF) companion~\cite{gw-cpnf} schedules spaced-repetition review (an
+SM-2\,/\,Anki-class algorithm), turning a one-off feat of memory into a light,
+decaying maintenance load. Second, the feat is historically ordinary: before mobile
+computation offloaded it, ordinary people routinely held a handful of phone numbers,
+several street addresses, and a working mental map of their city's grid --- recall
+comparable to what TKBA asks. The cost is real but bounded, and it is the price of a
+secret no device can be seized to reveal.
+
+\textbf{Stipulations aligned with standard practice.} Two quantities are
+stipulated, not derived. (a)~The $\sftstar$ floor rests on the feasibility line
+\ref{s:feasible}/\ref{s:infeasible} (Stipulation~\ref{ass:feas}) --- a standard \emph{key-size} stipulation
+($2^{64}$ memory-hard evaluations are beyond reach, in line with accepted
+security-level conventions); we do \emph{not} claim a reduction to a named hard
+problem, and none is needed for a key-sizing argument. (b)~The coercion-time budget
+$t$ is a stipulation from \emph{kidnapping-duration statistics} --- read off the
+physical-attack registry~\cite{lopp-attacks}, with the common-sense monotonicity
+that a kidnapping's material feasibility \emph{falls} with its duration. A
+\emph{long-hold} adversary who sustains coercion past the time-gate ($t > G$) is
+therefore out of scope: the tacit route assumes $t < G$, and against unbounded patience no in-head
+time-gate suffices. Most recorded attacks are in fact short hand-over-now events
+(\S\ref{sub:empirical}).
+
+\textbf{Single-shot utility, and why it is the conservative case.} The kill
+decision is modelled once, risk-neutrally. Risk-neutrality is
+\emph{worst-for-victim}: a risk-averse $\Attacker$ discounts the uncertain kill-gain
+$(1-p_A)\,W$ and so kills \emph{less} readily, while the cost side is already
+carried by $c$ --- so the single-shot risk-neutral model is a fortiori safe.
+\emph{Repeated} encounters are absorbed by the construction's re-key pathway: a
+victim who survives with $K$ uncompromised --- itself a spectacular outcome,
+achieved with no delegate and no geographic split --- has every incentive to harden
+physically for the short time needed to \emph{re-key} the stash to a fresh setup
+(the level-up / shallow-stage-retirement pathway). \emph{Inheritance} we leave
+beyond scope except for its design target: the protocol should render
+\emph{assassinate-then-coerce-heir} non-viable --- simplest remedy, a dead-man
+switch with heirs \emph{also} TGPO-protected, so coercing an heir faces the same
+$\sftstar$ floor.
+
+\textbf{The one-line takeaway.} Under TGPO --- or a geographic setup, available only
+to those who can hold multiple independent sites --- you \emph{survive a WDY attack
+with individually custodied $K$ intact}. Alternatively you resort to shared custody,
+in which case, \emph{unless} your stash is \emph{demonstrably} more available to some
+remote (trusted) delegate than to you, the outcome of a wrench attack is ``gray'' ---
+hence, by the No-Gray-Area Criterion, a sufficiently vicious attacker, or a high
+enough stash ($W > c/\pi$), gets you killed.
+
+\textbf{Composition across level-up.} DRL-safety across the setup pathway (re-keys,
+retirement-via-chain, a second wrench attacker who effectively starts a stage
+deeper) is a \emph{deduction} from the per-encounter results applied at each stage,
+not a fresh theorem; we note it without re-proving it, and leave a full
+multi-encounter treatment to the utility-model extension above.
+
+\textbf{Also out of scope.} Adversarial-agent scenarios (testator/heir mutual
+distrust, malicious interference with rotation); device side-channels (timing, EM,
+acoustic) during active tacit recall; long-horizon cryptographic erosion; and mass
+on-chain correlation beyond standard taproot / private-channel privacy. Finally, the
+framework fixes a \emph{bar} (Criterion~\ref{prin:nga}); it does not claim TGPO is
+the unique construction that clears it, and the residual window
+(\S\ref{sec:residual}) is a genuine bounded sliver argued incentive-safe rather than
+eliminated.
+

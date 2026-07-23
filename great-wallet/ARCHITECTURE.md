@@ -254,6 +254,43 @@ of stage-1 bits could just re-derive via Argon2 in less time —
 while inheritance and acceleration use TLPs on their own independent
 schedules (see the *Inheritance Protocol* section).
 
+**Implementation — on-device calibration of `N`.** The GUI calibrates the
+iteration count `N` **per setup, on the user's own device**, rather than
+shipping a hard-coded value: the user picks a target wall-clock duration,
+the app micro-benchmarks Argon2 at the selected memory profile, and solves
+for the `N` that hits the target. This keeps the time→`N` mapping fresh per
+device while `N` itself stays the durable, reproducible parameter — see the
+*"time is a perishable label on a durable parameter"* framing in
+[`next-steps/chained-protocol-size-and-ux-roadmap.md`](../next-steps/chained-protocol-size-and-ux-roadmap.md)
+§3. It ships as a calibration dialog:
+
+- **Entry.** `Alt+D` opens a spacious modal; `Esc` (or Cancel) requests
+  close and confirms before discarding, so a mis-key never throws away a
+  measurement.
+- **On-device benchmark.** Runs Argon2 at the *current* memory profile in a
+  **worker isolate** (the UI stays responsive), timing **1 warm-up pass + a
+  median of N timed passes** (default 3). The median — not the mean — is the
+  estimator, so a single scheduler hiccup can't skew the result. The run is
+  **cancellable**: Run↔Stop, and closing mid-run kills the isolate.
+- **Progress + ETA.** A determinate progress bar reports `Measuring k / n…`
+  with a live **estimated time remaining** (elapsed time over completed
+  passes), because a default user has no prior expectation of how long a
+  profile takes.
+- **Target → N.** The user picks a **target wall-clock** from presets
+  grounded in the two calibration points above (and
+  `great-wallet/THREAT_MODEL.md`), and the dialog solves
+  `N = ceil(target_per_stage × margin ÷ seconds_per_pass)`. A **per-stage
+  vs all-stages** scope toggle (with a stage-count input) disambiguates
+  whether the target is one inter-stage derivation or the whole chain.
+- **KISS + safety margin.** A **default ×2 safety margin** bakes in the
+  conservative-overshoot guidance (pick the duration conservatively, then
+  rely on the TLP / `jade-clock` layer for per-session flexibility);
+  everything else (pass count, margin, scope internals) hides behind an
+  **Advanced** expander captioned *"if you don't know what these mean, leave
+  them unchanged."*
+- **Apply.** Writes the solved `N` into the setup's iteration field; the CLI
+  `--iterations` reference path is unchanged.
+
 ### Determinism guarantees
 
 All stage-1 and stage-2 encoding/decoding paths must be bit-exact
@@ -454,6 +491,18 @@ Responsibilities:
   scheduler state)
 - Vault encryption/decryption (via tlp-core)
 - Background TLP solver management with checkpointing
+- **Explicit-recall training of the derivation parameters `N` (Argon2
+  iteration count) and `m` (memory profile)**, so a *hard recovery* (device /
+  setup lost) goes smoothly. Unlike the fractal locations — which must stay
+  *tacit* (recognition only) to remain coercion-resistant — `N` and `m` are
+  derivation **parameters, not the secret**: an adversary who learns them still
+  has no points, so drilling them as explicit facts does **not** weaken
+  coercion-resistance of the seed. Note the asymmetry: `m` must be recalled
+  *exactly* (a wrong profile changes the Argon2 digest and breaks every derived
+  fractal), whereas `N` needs only *approximate* recall — checkpoint
+  trial-and-error and stored, recognizable intermediate results close the gap
+  (see `great-wall-core` DESIGN / next-steps). This complements the existing
+  mitigations for a forgotten `N`.
 
 #### Core Concept
 
@@ -479,6 +528,17 @@ Key properties:
   confirmed by the feature, app tells user it's now safe to use system
   to secure stash (risk of loss by forgetting became negligible).
   Regular maintenance reviews are still done following SM-2 doctrine.
+  Until graduation there is a bootstrapping chicken-and-egg paradox —
+  securing an untrained setup needs memorized entropy, while memorizing
+  it needs training — so a **transient provisional key** must be held
+  externally across the consolidation window and destroyed at
+  graduation, after which the setup self-secures (its own entropy gates
+  its own TLP). A first version is **implemented** in the app's Setup
+  mode: the setup is encrypted to a file (AES-256-GCM keyed by Argon2id)
+  and the compact 128- or 256-bit key is carried as a hand-coloured
+  byte-mode QR, a blind-copied hex string for a password manager, or the
+  user's own entropy — never persisted as a durable digital artifact. See
+  [`next-steps/provisional-key-bootstrapping.md`](../next-steps/provisional-key-bootstrapping.md).
 - **Inheritance.** Deadlock by death, memory loss, or mental
   incapacitation is still guarded by companion inheritance protocol.
 
@@ -521,6 +581,15 @@ Begin background TLP computation
 
 Imports from great-wall-core (encode/decode for validation) and
 tlp-core (TLP encrypt/decrypt/solve).
+
+Design detail for the deck contents and the pre-/post-graduation
+lifecycle ("setup standing on its own legs" — the `CPNF-NNNN` own-legs
+key schedule, RSW-TLP deck encryption, panic button, and outsourced
+squaring) is in
+[`next-steps/cpnf-lifecycle-and-deck.md`](../next-steps/cpnf-lifecycle-and-deck.md);
+the buildable first slice (pure SM-2 scheduler + injected clock + card
+model + review session) is specified in
+[`next-steps/cpnf-step1-scheduler.md`](../next-steps/cpnf-step1-scheduler.md).
 
 ### 5. jade-clock
 
@@ -660,6 +729,280 @@ computation — otherwise an attacker could repeatedly prompt "try
 again" under duress until the secret leaks. In Great Wall this
 gating is Argon2 (primary derivation) and, optionally, RSW time-lock
 puzzles for instant setup of arbitrary, user-defined delay.
+
+---
+
+## Guiding UX Principles
+
+Two principles govern the *feel* of every Great Wall surface, app-wide.
+They are design north-stars, not security claims — but they are
+load-bearing: the product asks the user to trust their own memory with
+their savings, and whether that proposition feels *plausible* is largely
+a UX problem.
+
+### 1. Sober, but game-like
+
+The interface should never compete with the fractal for attention or
+lapse into gimmickry, vanity metrics, or gamified nagging — yet it should
+feel tactile, responsive, and quietly rewarding to operate, so that
+practice reads closer to play than to drill. Controls favour direct,
+physical affordances (a rotary hue **wheel** the user clicks to turn, not
+a dropdown). Where a feature could be either a chore or a small pleasure,
+choose the pleasure. (Detailed in
+[`great-wall-ux/SCOPE.md`](../great-wall-ux/SCOPE.md#guiding-ux-principle-sober-but-game-like).)
+
+### 2. An instrument, not an app — re-activating a dormant faculty
+
+Great Wall asks the user to memorise 4–8 fractal "landscapes" and stake
+their retirement on that recall. To a public conditioned by a decade of
+smartphones this sounds implausible — but the faculty it draws on is
+**dormant, not absent**. Within living memory, holding dozens of phone
+numbers and navigating a city from a mental map was unremarkable; that
+capacity atrophied only recently (post-2007), and it can be re-activated.
+The product's task is to address the user's *subconscious memory of having
+been competent*, not to teach an alien new skill. Two design consequences
+follow:
+
+- **Posture: a competence-instrument, not a thinking-service.**
+  Pre-smartphone gadgets signalled that the *operator* was the clever one
+  and the device merely amplified them; the smartphone inverted this (the
+  device thinks; the user is a passenger). Great Wall deliberately takes
+  the first posture — the interface should feel like an instrument the
+  user *operates and masters*. That posture is itself what makes "you will
+  be the one who remembers" believable.
+- **Stability is physicality.** Physical control panels never reflow: a
+  button stays where the hand learned it, so the interface is offloaded to
+  spatial / muscle memory instead of forcing visual re-search each time.
+  Prefer fixed element positions over reflowing ones; labels *beside*
+  controls rather than above (so a changing value never moves anything);
+  persistent-but-greyed affordances over ones that appear and disappear.
+  This is the same spatial-memory machinery the core asks of the user —
+  the chrome should rehearse it, not fight it.
+
+**Grounding, not just romance.** The strongest precedent is the *method of
+loci* (memory palaces): spatial memory is the most robust, trainable form
+of human memory, and the fractal-as-territory is literally that. The bold
+ask sits well inside the demonstrated human ceiling.
+
+**Honesty as a feature.** The proposition's hard edge — "and when I am old,
+or injured?" — must not be waved away; it is answered by design and should
+be *featured*, not hidden: the spaced-repetition graduation gate (the stash
+is not secured until consolidation is measured and confirmed — see
+[celestial-peace-nf-core](#4-celestial-peace-nf-core)), the provisional-key
+bootstrapping window (see
+[`next-steps/provisional-key-bootstrapping.md`](../next-steps/provisional-key-bootstrapping.md)),
+and the inheritance protocol (phoenix-scroll). The romance earns the right
+to be made only because the rigour stands behind it.
+
+**Tone.** Frame this as re-activation and confidence ("you still have this;
+we will prove it to you"), never as decline or guilt ("you have grown
+lazy"). Guilt makes prospects defensive; recovered competence makes them
+curious.
+
+> *Candidate taglines (tentative, for the positioning voice):*
+> - "If ancient sailors could project a centaur onto a couple of dots in
+>   the sky and use it to cross oceans on makeshift boats, you can use a
+>   few weird fractal objects to secure your retirement."
+> - "If a lab rat can learn to navigate a maze, so can you." — deploy with
+>   care: a rat comparison can read as belittling in consumer copy; it is
+>   safer used *scientifically* (spatial-memory / maze-learning research)
+>   or within the doctoral-thesis framing than as a public pitch.
+
+#### Corollary: physicality as a feature (the macro-trend angle)
+
+The same thesis, argued from technology trends rather than cognition.
+The dominant decade-long vector has been **offloading** memory and
+cognition to devices, cloud, and custodians — which makes
+"brain-memory-as-critical-infrastructure" *read* as regressive. But not
+every newest thing is the next thing: some trends overshoot what human
+physicality accommodates and correct. The Metaverse is the clean example
+— pitched as imminent at the peak of lockdown, it hit the ceiling of
+embodiment and reverted.
+
+The useful framing is an **inversion**: the Metaverse tried to *dissolve*
+physicality (drag embodied life into screens) and broke against it; Great
+Wall *enlists* physicality (anchors a digital secret in embodied memory
+and an irreducible physical time-cost). *Same ceiling, opposite side.*
+The offloading trend it runs against is precisely what created the gap it
+fills: anything offloaded to a digital or custodial store is, by
+construction, seizable, copyable, and remotely reachable — and the brain
+is the one substrate that is none of those (see *The Four Properties* and
+*TKBA* above).
+
+Two guard-rails so this stays an argument, not a slogan:
+
+- **Scope it narrowly.** Many offloaded faculties did *not* revert (mental
+  arithmetic, map navigation) and that is fine. The claim is *not* that
+  memory broadly returns; it is that for the high-stakes, coercion-exposed
+  niche of self-custody, the physical brain is the **only** substrate that
+  delivers. The Metaverse is the *illustration* ("physicality wins in some
+  domains"), not the proof.
+- **It dissolves an objection; it does not prove adoption.** "Trends hit
+  ceilings and revert" removes the "this is just backwards" dismissal but
+  says nothing about whether users will choose the effort — that rests on
+  the re-activation framing and the *measured* training system, a separate
+  leg. (Note too: the Metaverse failed on *desire*; this proposition's
+  adoption risk is *effort* — same lesson, different mechanism.)
+
+> *Positioning one-liner (tentative):* "Not every newest thing is the next
+> thing. The Metaverse fought the body and broke; we put your keys
+> somewhere only a body can go."
+
+---
+
+## Canonical-Island Highlighting ("entropy crystals")
+
+A per-stage **visualisation** layer on top of the existing island
+machinery — the cryptography is unchanged. Each stage's distinguished
+island lights up white when its point is selected or generated, so
+building the key reads as **collecting "entropy crystals"** (the *sober,
+but game-like* principle above). Implemented across great-wall-core
+(selection + FFI), great-wall-ux (overlays), and great-wallet (the Setup
+wiring). Future polish that is **not** yet implemented — the stage-tab
+crystal thumbnail and decorative describability-hardening shells — is
+tracked in
+[`next-steps/canonical-island-entropy-crystals.md`](../next-steps/canonical-island-entropy-crystals.md).
+
+### Canonical island — definition
+
+The **canonical island** of a stage is the single distinguished island
+inside that stage's **leaf area** (the leaf rectangle the bisection
+algorithm deterministically produces, which also fixes its *canonical
+zoom*; at base zoom the leaf is typically sub-pixel). It is singled out by
+a deterministic criterion so encode, decode, and the UI all agree: over
+all islands the discovery algorithm finds in the leaf, take the one with
+the **largest pixel count**, ties broken by **earliest PRNG (seeded
+SplitMix64) discovery order**.
+
+Selection is **core-side** (`discovery::select_canonical_index`): only
+core has the seeded discovery order, and ux cannot reproduce it without
+re-porting the whole discovery algorithm. This is the opposite end from
+the encoder's island `score` (`log₂(good_total_area / flood_areaⱼ)` in
+`great-wall-core/DESIGN.md`, an inverse-area weight that favours the
+*smallest* islands for the weighted-median split) — the canonical island
+is the **biggest** island, used purely for visualisation and never for the
+encoded bits.
+
+### Shape — tiled cells, not a raster flood
+
+Core hands ux the canonical island's **every discovery point** plus the
+discovery grid spacing `pixel_delta`. Each point is the centre of a
+`pixel_delta × pixel_delta` cell; ux fills the union flat white
+(`FractalCanvas`, `CanvasIsland`), clipped to the leaf box. This is exact
+and resolution-correct: at canonical zoom the cells tile into a solid
+shape, zoomed out they collapse to a speck, and zoomed *in* past discovery
+resolution they go blocky but never gappy.
+
+Flooding the on-screen escape-count raster was rejected: the display
+raster is rendered at a low iteration cap (`renderMaxIter` = 64) and packs
+escape counts into a byte (`(count % 255) + 1`), so an island whose true
+escape count is ≥ the cap (or ≥ 255) is indistinguishable from "inside the
+set". The discovery points core already provides *are* the authoritative
+shape, so tiling their cells sidesteps the raster and all escape-count
+matching entirely.
+
+### Scale & framing (what made it visible)
+
+Two geometry facts, learned by exercising the engine end-to-end:
+
+- **Resolution.** At the encode discovery resolution
+  (`encodeParams.minGridCells` = 4096, a ~64×64 grid over the leaf) the
+  biggest island is only a 3–30-pixel speck. The app resolves the
+  canonical island at a far finer grid
+  (`EncodingConstants.canonicalIslandMinGridCells` ≈ 2²⁰ ≈ 1.05M),
+  yielding 15–15000 cells while staying under the flood cap
+  (`maxFloodPoints` = 50000). A pure visualisation override; it never
+  touches encoded bits. Cost ≈ 220 ms per stage (one-off; a candidate to
+  move off the UI isolate later).
+- **Framing.** The biggest island is only ~0.5–40 % of the leaf's extent
+  and sits on a *different*, smaller island than the encoded point, so
+  framing the leaf leaves the crystal a few pixels. Focus instead frames
+  the **union of the point and the island's cells**
+  (`SetupController.focusTargetAt`): the crystal fills a good fraction of
+  the view *and* the white point marker stays on screen.
+
+At base/shallow zoom the leaf itself is sub-pixel, so the crystal appears
+only once the stage is **focused** (or the user zooms in to the point); at
+other zooms only the point marker shows.
+
+### Core / FFI surface
+
+Handle-based FFI families in `great-wall-core`
+(`rust_engine/src/ffi.rs`); a handle is used because the point sets are
+variable-length — compute once, then read metadata and copy the points
+without re-running discovery.
+
+- `bs_canonical_island_*` — given a leaf rect + bisection `path` (both
+  returned by `bs_decode_full`) plus the decode's discovery params /
+  `o,p,q` / `rng_seed`: select the canonical island
+  (`discovery::canonical_island`), re-flood from its deterministic
+  interior seed (`Island::seed_re/seed_im` — pure, so it reproduces the
+  island exactly), and return its escape count, **all** discovery points,
+  the `pixel_delta` grid spacing, its bounding box, and pixel count.
+
+### Enumerating every in-view leaf area — the `E` action
+
+`E` highlights the canonical island of **every leaf area currently in
+view** (`great-wall-core/.../leaf_enum.rs`). For a view (origin/step pixel
+grid) the engine samples on an N×N grid (`scan_step`, default every 4 px)
+and classifies each sample by decoding it:
+
+1. skip the sample if it falls inside an already-excluded rectangle;
+2. else decode (`bisect::decode_locate`) → the point is in a **leaf area**
+   (final contracted rect, keyed by bisection `path`) or a
+   **contracted-away (dead)** region;
+3. a dead sample adds its exact **sliver** to the exclusion list; a leaf
+   sample registers that leaf once (keyed by `path`) and adds its rect, so
+   the rest of the leaf is skipped;
+4. registering more than `max_leaves` (default 20) distinct leaves aborts
+   with **`TooMany`** — "too many leaf areas, increase zoom".
+
+One uniform exclusion list holds both processed leaf rects and dead
+slivers, so every later sample landing in either is skipped cheaply.
+
+**Zoom-out guard (decode budget).** A decode is heavy (~hundreds of ms — a
+full bisection with per-level island discovery). At zoom-out almost
+nothing is excluded, so an unbounded scan would decode the whole grid and
+hang. A **`max_decodes` budget** (counting island *discoveries*) aborts
+early with **`BudgetExhausted`**, also surfaced as "zoom in".
+
+**Memoizing the area tree (the real speed-up).** A decode walks the
+bisection tree from the root; the split and contraction at each node
+depend only on the **path prefix**, not on the specific point — so points
+sharing a prefix repeat the expensive upper-level discoveries. The
+enumerator memoizes each node's expansion (`bisect::expand_node` →
+`leaf_enum::NodeCache`) keyed by path, discovering each node **once per
+scan**. That, plus the early dead-region exclusions, turned a
+multi-minute/-hour zoom-out scan into **~0.3 s** (full encode area, 64×64
+grid, 32-bit; measured). `expand_node` is verified bit-identical to
+`decode_locate`.
+
+`bs_leaf_areas_*` FFI family: `compute`(view + decode params +
+`scan_step` + `max_leaves` + `max_decodes`) → `status` (`0` leaves / `1`
+too-many / `2` budget) → `count` → per-leaf `rect` + `path` → `free`.
+
+### UX wiring (great-wallet Setup; great-wall-ux overlays)
+
+- **`E`** enumerates the in-view leaf areas and highlights **each one's**
+  canonical island (flat-white `CanvasIsland` cells). Feedback: a toast +
+  console count, and "too many / too dense — zoom in" on
+  `TooMany`/`BudgetExhausted`. Sound cues: *focus* on start; *confirm* /
+  *warn* / *deny* on the outcome.
+- **Generated point** (per stage): a fixed-size **white cross**
+  (`CrossMarker`) placed on its canonical island — replacing the old white
+  dot at the leaf centre. The island cells render too, so it grows into
+  view on deep zoom; the cross falls back to the leaf centre if no island
+  resolves.
+- **Selected leaf** (select mode): its canonical island **plus a white
+  frame** around it (`SelectionFrame`) — replacing the green selection
+  dot. Clicking anywhere in the leaf selects that leaf's island (a
+  tolerated idiosyncrasy); the selection is *always* framed (around the
+  island when it resolves, else the whole leaf).
+- great-wall-ux overlay additions: `CanvasIsland` (tiled cells),
+  `CrossMarker` (fixed pixel size), `SelectionFrame` (padded axis-aligned
+  rect). The per-stage island is resolved lazily and **cached per stage**;
+  the `E` scan and per-leaf discoveries are bounded by the budget/cap.
+  Moving the heavy discovery off the UI isolate is a follow-up.
 
 ---
 

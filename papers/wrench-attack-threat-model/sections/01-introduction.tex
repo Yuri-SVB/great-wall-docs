@@ -1,0 +1,50 @@
+% ════════════════════════════════════════════════════════════════════════════
+\section{Introduction}
+% ════════════════════════════════════════════════════════════════════════════
+
+Coercion is the unmodeled attack. Standard threat models --- Dolev--Yao on the
+wire~\cite{dolev-yao}, \textsc{ind-cca} for encryption, forward secrecy for
+sessions --- all assume the adversary cannot compel the \emph{holder} of a
+secret. For bearer assets that assumption is empirically false: the physical
+attack registry maintained by Lopp~\cite{lopp-attacks}, and the systematic
+study of the phenomenon in the financial-technologies literature~\cite{aft-wrench},
+document a growing series of incidents in which a Bitcoin holder is physically
+threatened with a ``\$5 wrench'' until they surrender their keys.
+
+Cryptographic hardness does not help here. A wrench attacker does not break the
+cipher; they compel the person who can operate it. Worse, the standard defence
+offered to holders --- \emph{obscurity} (``never tell anyone you own
+Bitcoin'') --- is not a security mechanism at all in the sense of
+Kerckhoffs~\cite{kerckhoffs1883}: it is a bet that the attacker lacks knowledge
+the defender has, and it degrades precisely as adoption spreads that knowledge.
+This ``keep a low profile, never disclose'' counsel is nonetheless the community's
+entrenched consensus, actively promoted by prominent voices (catalogued in the
+accompanying economic analysis~\cite{gw-justification}); and it carries a measurable
+price --- that analysis finds the severity-adjusted actuarial cost of individual
+Bitcoin self-custody already \emph{exceeds} the cost priced into insurance for
+comparable portable valuables such as jewellery.
+
+This paper models coercion directly. Our contributions are:
+
+\begin{enumerate}[nosep,leftmargin=1.6em]
+  \item a \textbf{formal coercion model} (\S\ref{sec:model}) with an explicit
+        adversary, a Kerckhoffs premise, and an engineering ``feasibility
+        line'' that turns asymptotic security into concrete parameter bounds;
+  \item the \textbf{Deadly-Race impossibility chain} (\S\ref{sec:chain}): a
+        classical impossibility (you cannot prove you forgot) that escalates,
+        step by step, into an incentive to murder the victim;
+  \item the \textbf{No-Gray-Area Criterion} (\S\ref{sec:chain}), the design bar
+        that a coercion-resistant scheme must clear, together with a
+        \emph{reachability} dichotomy that classifies every clearance route;
+  \item a \textbf{construction} (\S\ref{sec:gw}), the TGPO orbit, that
+        meets the bar with individual custody, including a proof that the master
+        secret is at least $\sftstar$ from every seizable state; and
+  \item a \textbf{taxonomy} (\S\ref{sec:classify}) that classifies existing
+        designs by \emph{which} clearance route they take --- illustrated on
+        shipping timelock-rescue vaults.
+\end{enumerate}
+
+We call the central results the \textbf{Deadly-Race Lemma} and the
+\textbf{No-Gray-Area Criterion}, after their first statement in the Great Wall
+design record~\cite{gw-threatmodel}.
+

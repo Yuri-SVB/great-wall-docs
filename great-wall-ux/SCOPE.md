@@ -47,13 +47,15 @@ internal module layout.
 
 - Fractal rendering: viewport, zoom, pan, resampling.
 - Escape-count coloring: a **fixed log transform** mapping escape
-  counts onto the palette index, and a **single base palette** ("Classic",
-  inherited from `great-wall-core`) available in **six hue rotations** at
-  60° spacing. No other transforms and no other palette families are
-  offered — see [`TECH_STACK.md`](./TECH_STACK.md) §"Locked sub-decisions"
-  for the rationale (function before aesthetics; ossifying the scheme
-  set so users cannot accidentally chain incompatible mappings against
-  their trained visual memory).
+  counts onto the palette index, and a **single-hue, full-saturation,
+  brightness-ramped** palette — within a scheme the hue is fixed and only
+  brightness varies with the transformed escape count — offered in **six
+  hues** at 60° spacing, **green by default**. No other transforms and no
+  other palette families are offered — see
+  [`TECH_STACK.md`](./TECH_STACK.md) §"Locked sub-decisions" for the
+  rationale (one perceptual dimension: brightness; function before
+  aesthetics; ossifying the scheme set so users cannot accidentally chain
+  incompatible mappings against their trained visual memory).
 - Stage-aware rendering: canonical fractal (stage 1) vs. user-perturbed
   fractal (stage 2, parameterised by `(o, p, q)`).
 - Overlays: point markers, crosshairs, leaf rectangles.
@@ -77,8 +79,13 @@ internal module layout.
   user acquires tacitly (see [`TECH_STACK.md`](./TECH_STACK.md)
   §"Locked sub-decisions / Brightness modulation").
 - Hue selection via a clickable **rotary wheel** on a control panel that
-  snaps through the six hue offsets — the intended affordance for the
-  locked Classic × 6 palette set.
+  snaps through the six hues — the intended affordance for the locked
+  single-hue × 6 palette set.
+- **UI sound cues.** Short, synthesised audio blips (click on tap, plus
+  select / confirm / deny outcomes) for tactile, "game-like" feedback,
+  exposed as a muteable `SoundBoard` primitive the app wires to interaction
+  outcomes. Cues are display-only feedback: they carry no coordinate data
+  and are never logged or persisted.
 - Practice-session UX primitives reusable by `celestial-peace-nf-core`'s
   training flow (point-by-point confirm, hesitation timing surface, grade
   picker chrome).
@@ -94,15 +101,58 @@ internal module layout.
 
 ### Assets and theming
 
-- The Classic base palette (inherited from `great-wall-core`) and its
-  six hue rotations are the entire palette surface (see
+- The single-hue, brightness-ramped palette in its six hues (green by
+  default) is the entire palette surface (see
   [`TECH_STACK.md`](./TECH_STACK.md) §"Locked sub-decisions"). The
   set is a frozen visual vocabulary — once it ships in a tagged
   release its escape-count → RGBA mapping is never silently changed.
   There is no user-extensible palette loader and no toggle for the
   escape-count transform.
 - Iconography and typography tokens for the chrome that surrounds the
-  fractal canvas.
+  fractal canvas. The chrome's monospace face is **Ubuntu Mono**
+  (Ubuntu Font Licence 1.0), carrying the terminal aesthetic of the
+  "sober, but game-like" principle.
+
+#### Console palette ("Gunmetal") — rationale
+
+The app's console (the message/help surface that floats over the foot of
+the viewer) is styled as a translucent, cool, **near-neutral blue-grey**
+("Gunmetal"): background `0xE6131519` (~90% opaque), cool off-white text
+`0xFFE9EDF2`, and a brighter same-cast accent `0xFFB8C2CC` for headers,
+the divider and the top edge. The reasoning, recorded so the decision can
+be revisited:
+
+- **Near-neutral, because the fractal owns the colour.** The six fractal
+  schemes are single-hue and *fully saturated*. Any saturation in the
+  chrome would harmonise with one scheme and clash with its complement, so
+  the panel must read as scheme-agnostic. A low-chroma grey is the only
+  colour that sits neutrally against all six.
+- **…but not a perfect grey, because materials aren't.** A dead-neutral
+  `R=G=B` reads as *abstract* — the colour equivalent of a flawless
+  machined plane; perfect symmetry tends toward the brutalist /
+  uninteresting. Real materials carry a faint cast (dye lot, resin, oxide),
+  and the eye reads that small asymmetry as evidence of *substance*. So the
+  channels are offset only a few levels (a whisper of blue) — enough to say
+  "made of something," far too little to count as a hue. This serves the
+  "instrument, not an app" principle (see
+  [`great-wallet/ARCHITECTURE.md`](../great-wallet/ARCHITECTURE.md#guiding-ux-principles)).
+- **Translucent, so the fractal bleeds through.** The console overlays the
+  canvas rather than taking a layout row (stable layout — the viewer never
+  resizes). ~90% opacity keeps text crisp while letting the fractal's
+  motion register faintly behind the glass.
+- **Temperature-matched text.** Cool background ⇒ cool-white text; a
+  warm-on-cool pairing reads as "printed on" rather than "one material lit
+  by one source."
+- **Accent by brightness, not hue.** Emphasis (headers, active state) uses
+  a *brighter tint of the same cast*, never a saturated colour — keeping
+  the chrome scheme-agnostic on every fractal palette.
+
+Alternatives considered along the temperature axis (all equally valid,
+same low-chroma discipline): Slate-teal (cooler), Graphite (almost
+neutral), Bakelite (warm red-brown), Olive-drab (green), Tube-amber (warm
+yellow). Gunmetal was chosen for the "precision instrument / late-90s
+gadget" feel; Bakelite is the documented fallback for a warmer,
+better-worn-personal-device read.
 
 ### Accessibility
 
@@ -153,7 +203,10 @@ These belong to sibling repos and must not be re-implemented here.
 
 - **Imports from:** `great-wall-core` only — for escape counts and the
   encode/decode entry points. Calls cross the Rust FFI exposed by the
-  core repo.
+  core repo. (This concerns *ecosystem* dependencies; ordinary pub
+  packages for platform plumbing — e.g. `intl` for i18n and an audio
+  plugin for the UI sound cues — are not ecosystem couplings and are
+  not constrained by this rule.)
 - **Imported by:** `great-wallet/app` (and, transitively, any sibling
   that composes UX primitives — currently the training flow in
   `celestial-peace-nf-core` reuses pieces of this library through the
