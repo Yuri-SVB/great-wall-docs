@@ -12,7 +12,7 @@ document a growing series of incidents in which a Bitcoin holder is physically
 threatened with a ``\$5 wrench'' until they surrender their keys.
 
 Cryptographic hardness does not help here. A wrench attacker does not break the
-cipher; they compel the person who can operate it. Worse, the standard defence
+cipher; they compel the person who can operate it. Worse, the standard defense
 offered to holders --- \emph{obscurity} (``never tell anyone you own
 Bitcoin'') --- is not a security mechanism at all in the sense of
 Kerckhoffs~\cite{kerckhoffs1883}: it is a bet that the attacker lacks knowledge
@@ -38,10 +38,11 @@ This paper models coercion directly. Our contributions are:
         \emph{reachability} dichotomy that classifies every clearance route;
   \item a \textbf{construction} (\S\ref{sec:gw}), the TGPO orbit, that
         meets the bar with individual custody, including a proof that the master
-        secret is at least $\sftstar$ from every seizable state; and
+        secret meets the floor from every seizable state bar a bounded residual
+        window; and
   \item a \textbf{taxonomy} (\S\ref{sec:classify}) that classifies existing
         designs by \emph{which} clearance route they take --- illustrated on
-        shipping timelock-rescue vaults.
+        shipping time-lock-rescue vaults.
 \end{enumerate}
 
 We call the central results the \textbf{Deadly-Race Lemma} and the
