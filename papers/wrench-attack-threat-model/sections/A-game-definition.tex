@@ -3,95 +3,151 @@
 \label{app:game}
 % ════════════════════════════════════════════════════════════════════════════
 
-\newcommand{\CRExp}{\mathsf{CR}\text{-}\mathsf{Exp}}
+\newcommand{\DRExp}{\mathsf{DR}\text{-}\mathsf{Exp}}
+\newcommand{\SzExp}{\mathsf{Sz}\text{-}\mathsf{Exp}}
 
 The body states coercion-safety in a \emph{decision-theoretic} register: the
 coercion game $\mathbf{Coerce}_{\Sigma}$ (Definition~\ref{def:game}) asks whether a
 \emph{priced} adversary $\mathrm{WDY}[W,c]$ ever strictly prefers to kill. Readers
 from the cryptographic tradition will expect the complementary
-\emph{experiment-and-advantage} form --- oracles for the adversary's moves, a
-precisely defined winning event, and security as a bound on the winning
-probability. We give it here and show the two agree. The one structural novelty is
-the \textbf{winning event}: it is not ``$\Attacker$ learns $K$'' but
-``$\Attacker$ reaches a \emph{gray} state,'' which is what manufactures the kill
-incentive (Lemma~\ref{lem:drl}) --- so an adversary that provably \emph{cannot}
-learn $K$ can still win.
+\emph{experiment-and-advantage} form. We give it here --- and, mirroring the two
+axes the residual splits into (\S\ref{sec:residual-seizure} for funds,
+\S\ref{sec:residual-dr} for the deadly race), we give \emph{two} experiments over
+one shared WDY interaction: a \textbf{seizure game}, whose winning event is the
+familiar ``the adversary reaches $K$,'' and a \textbf{deadly-race game}, whose
+winning event is the novel ``the adversary reaches a \emph{gray} state'' --- the one
+that manufactures the kill incentive (Lemma~\ref{lem:drl}), and which an adversary
+can trigger even when it provably cannot learn $K$.
 
-\subsection{The experiment}
+\paragraph{Two adversaries, and why the primed one is the worst case.}
+The seizure game keeps the body's adversary $\Attacker$ (holder $\Victim$): it wants
+the \emph{money}, seeks $K$, and would kill only \emph{instrumentally}, where the
+priced calculus $(1-p_A)\,W>c$ makes a kill raise its take
+(Definition~\ref{def:priced}). Its question is fund-safety --- \emph{does $\Attacker$
+reach $K$?} The deadly-race game instead posits a \emph{hypothetical} adversary
+$\Attacker'$ (holder $\Victim'$, primed to keep the two games apart) that wants the
+deadly race \emph{for its own sake}: it plays to reach a gray state. This is
+deliberately the worst case for the kill question. Reaching a gray state is
+\emph{necessary} for any kill to pay (Lemma~\ref{lem:drl}); so if even the
+DR-hunting $\Attacker'$ cannot reach one --- the coercion-resistance result below,
+$\Pr[\text{win}]=0$ --- then the money-seeking $\Attacker$, who would kill only
+instrumentally, never lands in a state where killing $\Victim$ pays.
+\emph{$\Attacker'$ trying and failing to manufacture a deadly race is exactly what
+certifies that $\Attacker$ will not run one.} Throughout, $p_A$ and $\pi$ stay
+unprimed: they are the body's state functionals
+(Definitions~\ref{def:racers},~\ref{def:gray}), read off the resulting position, and
+each game is a different \emph{condition} on them.
 
-\begin{definition}[Coercion-resistance experiment]\label{def:crexp}
-Let $\Pi$ be a custody protocol and $\Attacker$ a WDY adversary
-(Assumption~\ref{ass:power}). The experiment $\CRExp_{\Pi}(\Attacker)$ is:
+\subsection{The shared interaction}
+
+\begin{definition}[The WDY interaction]\label{def:wdy-int}
+Fix a custody protocol $\Pi$, a WDY adversary $\mathcal{X}$
+(Assumption~\ref{ass:power}), and the honest holder $\mathcal{Y}$.
 \begin{enumerate}[nosep,leftmargin=1.7em]
-  \item \textbf{Setup.} The challenger runs $\Pi$'s honest setup for the holder
-  $\Victim$, producing the master secret $K$, the co-located device state $D$
-  (vault and time-lock blobs, commitment scripts, review schedules), and the tacit
-  state $T$ (the holder's recognition capability). Public parameters $\mathrm{pp}$,
-  including the salt $\sigma$, are given to $\Attacker$ (clause~\ref{d:kerckhoffs}).
-  \item \textbf{Interaction.} Within a single attack site, $\Attacker$ queries, in
+  \item \textbf{Setup.} The challenger runs $\Pi$'s honest setup for $\mathcal{Y}$,
+  producing the master secret $K$, the co-located device and explicit-secret state
+  $D$ (vault and time-lock blobs, commitment scripts, review schedules), and the
+  tacit state $T$ (the holder's recognition capability). Public parameters
+  $\mathrm{pp}$, including the salt $\sigma$, are given to $\mathcal{X}$
+  (clause~\ref{d:kerckhoffs}).
+  \item \textbf{Interaction.} Within a single attack site, $\mathcal{X}$ queries, in
   any order:
   \begin{itemize}[nosep,leftmargin=1.5em]
     \item $\mathsf{Seize}$ --- returns the co-located device and explicit-secret
     state $D$ (clauses~\ref{d:seizure},\ref{d:explicit}).
     \item $\mathsf{Coerce}(t)$ --- for a coercion budget $t$, returns every value
-    $\Victim$ is \emph{able} to transmit under full cooperation
+    $\mathcal{Y}$ is \emph{able} to transmit under full cooperation
     (clause~\ref{d:subjugation}); the tacit state $T$ is available only as an
-    \emph{evaluate-only} oracle the challenger runs on $\Victim$'s behalf, never as
-    a transmissible value (clauses~\ref{d:notacit},\ref{d:noperceptual}).
+    \emph{evaluate-only} oracle the challenger runs on $\mathcal{Y}$'s behalf, never
+    as a transmissible value (clauses~\ref{d:notacit},\ref{d:noperceptual}).
     \item $\mathsf{Compute}$ --- any computation on the feasibility line
     (clause~\ref{d:compute}): at most $2^{64}$ cheap and strictly fewer than
     $2^{64}$ memory-hard evaluations.
   \end{itemize}
-  Any remote delegate is not coercible through $\Victim$
+  Any remote delegate is not coercible through $\mathcal{Y}$
   (clause~\ref{d:nodelegatecoerce}).
-  \item \textbf{Outcome.} Let $R$ be the resulting set of racers and
-  $p_A = p_A(R)$ the probability $\Attacker$ then reaches $K$
-  (Definition~\ref{def:game}), and $\pi = p_A(R\setminus\{\Victim\}) - p_A(R)$ the
-  holder's pivotality. The experiment outputs $1$ (``$\Attacker$ \emph{wins}'')
-  iff $\pi > 0$; for the individual-custody case $R = \{\Victim\}$ this is exactly
-  a \emph{gray} outcome, $0 < p_A < 1$ (Definition~\ref{def:gray}).
+  \item \textbf{Resulting position.} Let $R$ be the resulting set of racers,
+  $p_A = p_A(R)$ the probability $\mathcal{X}$ then reaches $K$
+  (Definition~\ref{def:game}), and $\pi = p_A(R\setminus\{\mathcal{Y}\}) - p_A(R)$
+  the holder's pivotality. Each game below is a predicate on this $(p_A,\pi)$.
 \end{enumerate}
+\end{definition}
+
+\subsection{The seizure game --- fund-safety}
+
+\begin{definition}[Seizure experiment; seizure-resistance]\label{def:szexp}
+The \textbf{seizure experiment} $\SzExp_{\Pi}(\Attacker)$ runs the interaction
+(Definition~\ref{def:wdy-int}) with adversary $\mathcal{X} = \Attacker$ and holder
+$\mathcal{Y} = \Victim$, and outputs $1$ (``$\Attacker$ \emph{seizes}'') iff
+$\Attacker$ feasibly reaches $K$ --- equivalently $p_A > 0$
+(Definition~\ref{def:racers}). $\Pi$ is \textbf{seizure-resistant} if
+$\Pr\!\big[\SzExp_{\Pi}(\Attacker) = 1\big] = 0$ for every WDY adversary
+$\Attacker$.
+\end{definition}
+
+This is the fund-safety / seizability axis --- the game face of the \emph{floor}.
+
+\begin{corollary}[TGPO is seizure-resistant up to the residual]\label{cor:tgpo-szsecure}
+The Time-Gated Perceptual Oracle (\S\ref{sec:gw}) is seizure-resistant except on the
+residual \emph{seizure} window (\S\ref{sec:residual-seizure}).
+\end{corollary}
+\begin{proof}
+By Theorem~\ref{thm:floor}, from every seizable state save that window $K_N$ meets
+the floor, so no feasible path to $K$ exists and $p_A = 0$; hence
+$\SzExp$ outputs $0$. On the residual seizure window $\SzExp$ may output $1$ --- the
+$o_N$-live coincidence where $\Attacker$ does reach $K$; the loss there is of
+\emph{funds}, bounded as argued in \S\ref{sec:residual-seizure}.
+\end{proof}
+
+\subsection{The deadly-race game --- deadly-race-safety}
+
+\begin{definition}[Deadly-race experiment]\label{def:crexp}
+The \textbf{deadly-race experiment} $\DRExp_{\Pi}(\Attacker')$ runs the interaction
+(Definition~\ref{def:wdy-int}) with adversary $\mathcal{X} = \Attacker'$ and holder
+$\mathcal{Y} = \Victim'$, and outputs $1$ (``$\Attacker'$ \emph{wins}'') iff
+$\pi > 0$; for the individual-custody case $R = \{\Victim'\}$ this is exactly a
+\emph{gray} outcome, $0 < p_A < 1$ (Definition~\ref{def:gray}).
 \end{definition}
 
 \begin{definition}[Coercion resistance]\label{def:crsecure}
 $\Pi$ is \textbf{coercion-resistant} if
-$\Pr\!\big[\CRExp_{\Pi}(\Attacker) = 1\big] = 0$ for every WDY adversary
-$\Attacker$.
+$\Pr\!\big[\DRExp_{\Pi}(\Attacker') = 1\big] = 0$ for every WDY adversary
+$\Attacker'$.
 \end{definition}
 
-\begin{remark}[Why the winning event is grayness, not secrecy]
-In a secrecy game $\Attacker$ wins by \emph{learning} $K$. Here it wins by
-reaching a state in which $\Victim$ is pivotal --- a feasible-but-partial path
-($p_A > 0$) against a still-competing holder ($p_A < 1$). This is deliberate: the
-harm the model targets is not disclosure but the \emph{incentive to assassinate},
-created precisely at pivotal (gray) states (Lemma~\ref{lem:drl}). Hence an
-adversary that provably cannot learn $K$ --- e.g.\ one facing a graceful-recovery
-vault it cannot open within the custody window --- may nonetheless win, which is
-the paper's central negative result restated as a game. Symmetrically, the
-full-compromise endpoint $p_A = 1$ is \emph{clear}, not a win: the game penalises
-the kill incentive, not disclosure, so an attacker who simply extracts $K$ with no
-gray race is scored $0$ --- the clean loss argued deadly-race-safe in
-Remark~\ref{rem:r2-cost}. This is a statement of \emph{scope}, not of
-indifference: extracting $K$ is of course a real loss for $\Victim$ and a real win
-for $\Attacker$; it is merely \emph{irrelevant to the deadly-race-safety
-question}, which asks only whether the design manufactures an incentive to kill.
-Fund-safety is a \emph{separate} axis, and the construction handles it separately
---- \emph{on top of} removing the gray race, it minimises the window in which the
-stash is seizable at all, via the wipe-before-memory-hard step
-of~\eqref{eq:orbit} and the $\sftstar$ floor (Theorem~\ref{thm:floor}).
+\begin{remark}[Where the two games part --- the clean loss]
+The two experiments read the same position $(p_A,\pi)$ but score it differently, and
+they diverge at exactly one point. At $p_A = 0$ both output $0$ (no feasible path:
+the defender clears both). On the \emph{gray} interval $0 < p_A < 1$ both output $1$
+($\Attacker$ holds a path and $\Victim'$ is pivotal: the defender fails both). They
+part only at \emph{full compromise} $p_A = 1$: the seizure game outputs $1$ ($K$ is
+gone) while the deadly-race game outputs $0$ ($\pi = 0$ --- with the adversary
+already certain to win, removing the holder changes nothing, so no kill incentive
+arises). That single disagreement is the whole content of \emph{``a clean loss is
+deadly-race-safe''} (Remark~\ref{rem:r2-cost}): losing the funds outright is a
+seizure-game defeat but a deadly-race-game \emph{non}-event. Conversely --- the
+paper's negative result restated --- an adversary that provably \emph{cannot} win the
+seizure game (cannot reach $K$; e.g.\ one facing a graceful-recovery vault it cannot
+open within the custody window) can still win the \emph{deadly-race} game by reaching
+a gray state. The deadly-race axis is therefore \emph{not} implied by fund-safety; it
+is a separate axis, exactly as \S\ref{sec:residual-seizure} and
+\S\ref{sec:residual-dr} are separate. Fund-safety the construction handles on its own
+terms --- \emph{on top of} removing the gray race, it minimizes the window in which
+the stash is seizable at all, via the wipe-before-memory-hard step
+of~\eqref{eq:orbit} and the floor (Theorem~\ref{thm:floor}).
 \end{remark}
 
 \begin{remark}[The residual window: from $0$ to $\varepsilon$]
 Definition~\ref{def:crsecure} is the information-theoretic, no-gray-area form. The
-residual window (\S\ref{sec:residual}) replaces the exact $0$ by a bounded
+residual window (\S\ref{sec:residual-dr}) replaces the exact $0$ by a bounded
 $\varepsilon = \Pr[\mathsf{Corr}\cap\mathsf{Esc}]$: call $\Pi$
 \textbf{$\varepsilon$-coercion-resistant} if
-$\Pr[\CRExp_{\Pi}(\Attacker) = 1] \le \varepsilon$ for all $\Attacker$. The claims
+$\Pr[\DRExp_{\Pi}(\Attacker') = 1] \le \varepsilon$ for all $\Attacker'$. The claims
 below are the $\varepsilon = 0$ statements; the residual makes them
 $\varepsilon$-small --- not zero --- in the sliver argued incentive-safe there.
 In plain terms, this sliver is the moment the attack coincides with a \emph{live}
-final orbit point $o_N$ --- currently or imminently materialised --- and
-$\Attacker$ prevents the wipe (or reset) that would otherwise close it; only then
+final orbit point $o_N$ --- currently or imminently materialized --- and
+$\Attacker'$ prevents the wipe (or reset) that would otherwise close it; only then
 is transmissible material briefly within reach, which is why the window is a
 bounded $\varepsilon$ rather than a standing exposure.
 \end{remark}
@@ -105,7 +161,7 @@ No-Gray-Area Criterion (Criterion~\ref{prin:nga}), iff $\Pi$ is coercion-safe in
 the decision-theoretic game (Definition~\ref{def:game}).
 \end{theorem}
 \begin{proof}
-$\CRExp$ outputs $1$ exactly on a reachable state with $\pi > 0$, so
+$\DRExp$ outputs $1$ exactly on a reachable state with $\pi > 0$, so
 $\Pr[\text{win}] = 0$ iff no reachable state is pivotal. By
 Theorem~\ref{thm:safety}, $\pi = 0$ everywhere is equivalent to coercion-safety
 and to Criterion~\ref{prin:nga}. The two clearance routes of
@@ -121,19 +177,19 @@ The Time-Gated Perceptual Oracle (\S\ref{sec:gw}) is coercion-resistant.
 The experiment outputs $1$ only on a \emph{gray} state ($\pi > 0$); both clear
 endpoints $p_A \in \{0,1\}$ give $\pi = 0$ and hence output $0$. By
 Theorem~\ref{thm:floor} every state reachable by $\mathsf{Seize}$,
-$\mathsf{Coerce}$, and $\mathsf{Compute}$ leaves $K$ at least $\sftstar$ away, so
+$\mathsf{Coerce}$, and $\mathsf{Compute}$ leaves $K$ at the floor, so
 the reachable endpoint is the \emph{clear failure} $p_A = 0$ --- the opposite
 endpoint $p_A = 1$ would require feasibly reaching $K$, which the same theorem
 bars. Either way $\pi = 0$, so the experiment never outputs $1$ and
 $\Pr[\text{win}] = 0$. The only place $p_A$ rises above $0$ (to $1$ in the worst
-instant) is the residual window (\S\ref{sec:residual}), where the tacit premise
+instant) is the residual window (\S\ref{sec:residual-seizure}), where the tacit premise
 momentarily fails; accounting for it yields $\varepsilon$-coercion resistance.
 \end{proof}
 
 \begin{remark}[Reading the classification as adversaries]
 Under Definition~\ref{def:crsecure}, the classification of \S\ref{sec:classify} is
-a statement about which designs admit a winning $\Attacker$. Against a
-timelock-rescue vault advertised as \emph{individual} custody, the adversary that
+a statement about which designs admit a winning $\Attacker'$. Against a
+time-lock-rescue vault advertised as \emph{individual} custody, the adversary that
 calls $\mathsf{Seize}$ and then waits out the delay is winning: the rescue racer is
 co-located and reachable (clause~\ref{d:seizure}), so $0 < p_A < 1$ and $\pi > 0$.
 Routing rescue to a genuinely remote, un-coercible delegate removes the reachable

@@ -6,7 +6,7 @@
 \subsection*{Notation}
 
 \noindent The symbols below recur throughout; each is defined in full where it is
-introduced, and gathered here for reference.
+introduced, and all are gathered here for reference.
 
 \vspace{4pt}
 
@@ -28,19 +28,22 @@ WDY & the Wrench--Dolev--Yao adversary, fixed by clauses \ref{d:kerckhoffs}--\re
 $p_A$ & probability $\Attacker$ reaches $K$ after the encounter; \emph{gray} iff $0<p_A<1$ \\
 $t$ & coercion-time budget (how long $\Attacker$ can sustain coercion) \\
 $G$ & protocol time-gate (enforced latency to complete the derivation) \\
-$\mathsf{Corr}$ & residual-window event: the points $\Victim$ has surrendered so far are correct (\S\ref{sec:residual}) \\
-$\mathsf{Esc}$ & residual-window event: the ${\approx}1$--$2$ min shaved by brute-forcing the last points decides escape from the scene (\S\ref{sec:residual}) \\
+$\mathsf{Corr}$ & residual-window event: the points $\Victim$ has surrendered so far are correct (\S\ref{sec:residual-dr}) \\
+$\mathsf{Esc}$ & residual-window event: the ${\approx}1$--$2$ min shaved by brute-forcing the last points decides escape from the scene (\S\ref{sec:residual-dr}) \\
 \addlinespace
-\multicolumn{2}{@{}l}{\textbf{Construction (TGPO orbit)}}\\
+\multicolumn{2}{@{}l}{\textbf{Construction (TGPO orbit \S\ref{sec:gw})}}\\
 \midrule
 $\sigma$ & public, precomputation-resistant timechain salt (Namtso) \\
-$\Hcheap,\ \Hhard$ & cheap hash; memory- and depth-hard (Argon2-class) hash \\
-$o_i$ & orbit state at stage $i$, $o_i = \Hhard(u_i)$; $N$ stages total \\
-$u_i$ & wiped inner value $\Hcheap(o_{i-1}\|\Sh_{i-1})$ \\
-$\Sh_i$ & Shamir polynomial at stage $i$; $k_i$ of its points reconstruct it \\
+$\Hcheap,\ \Hhard$ & unspecified cheap hash; unspecified memory- and depth-hard (Argon2-class) hash \\
+$o_i$ & orbit state at stage $i \in \{0,\dots,N\}$; $o_i = \Hhard(u_{i-1})$ (with $o_0 = \Hcheap(\sigma)$); $N{+}1$ stages total \\
+$N$ & number of \emph{deep} stages --- those requiring at least one memory- and depth-hard hash ($\Hhard$) to derive \\
+$\Sh_i$ & Shamir polynomial at stage $i$; $r_i$ of its points reconstruct it \\
+$u_i$ & $\Hcheap(o_{i}\|\Sh_{i})$: commitment of the wiped values $o_{i}$ and $\Sh_{i}$ \\
+$K_i$ & $\Hcheap(o_{i}\|\Sh_{i})$: master secret correspondent to stage $i$. \\
 $p_{i,j},\ \theta_{i,j}$ & point $j$ of stage $i$; parameters for fractal $j$ of stage $i$ \\
-$k_i$ & Shamir threshold at stage $i$ ($k_i \ge 2$) \\
+$r_i$ & Shamir threshold at stage $i$ ($r_i \ge 2$) \\
 $\sftstar$ & $2^{64}$ memory- and depth-hard evaluations (infeasible) \\
+floor & \emph{prohibitive} cost: $\ge \sftstar$ hard \emph{or} $\ge 2^{96}$ cheap (Stipulation~\ref{ass:feas}) \\
 \bottomrule
 \end{tabularx}
 \endgroup
@@ -65,7 +68,7 @@ security by obscurity is assumed to contribute nothing.
 The \textbf{Wrench--Dolev--Yao (WDY)} adversary inherits the
 Dolev--Yao~\cite{dolev-yao} intruder \emph{on the wire} --- it sees all transmitted
 plaintext and ciphertext --- but departs from it in two ways that matter here. It is
-\emph{computational}, not symbolic: Dolev--Yao's perfect-cryptography idealisation is
+\emph{computational}, not symbolic: Dolev--Yao's perfect-cryptography idealization is
 replaced by the feasibility line (Stipulation~\ref{ass:feas}), so ``cannot break the
 cipher'' becomes ``cannot exceed its work budget''. And it is extended \emph{past the
 wire} with the physical capabilities Dolev--Yao omits --- device seizure and a bounded
@@ -77,45 +80,46 @@ coercion oracle over the holder: the \emph{wrench} the name records. WDY is fixe
   \item\label{d:compute} \textbf{Bounded compute.} $\Attacker$'s computation is bounded by the
         feasibility line (Stipulation~\ref{ass:feas} below): $2^{32}$ cheap
         evaluations feasible, plain $2^{64}$ cheap at the border (the softest
-        number), $2^{64}$ memory-hard ($\sftstar$) infeasible. This is what
+        number), and $2^{64}$ memory-hard ($\sftstar$) and $2^{96}$ cheap both
+        infeasible. This is what
         replaces ``unbounded'': the wall-clock custody window bounds
         $\Attacker$ crudely, the feasibility line \emph{sharply}.
   \item\label{d:frequency} \textbf{Frequency ceiling.} There is a ceiling on how much faster
         $\Attacker$'s hardware evaluates a computation than $\Victim$'s. So an
-        entropy-preserving hash with enough \emph{non-parallelisable} steps ($\Hhard$)
+        entropy-preserving hash with enough \emph{non-parallelizable} steps ($\Hhard$)
         lets $\Victim$'s setup impose an \emph{arbitrarily long} latency on
         $\Attacker$ per evaluation --- at the price of a proportionally longer
         latency on $\Victim$. This is what makes the time-gate meaningful:
-        $\Attacker$ can neither parallelise nor out-clock its way past a sequential
+        $\Attacker$ can neither parallelize nor out-clock its way past a sequential
         memory-hard chain.
   \item\label{d:subjugation} \textbf{Complete subjugation.} This is an information-security model, not
-        a study of physical violence versus physical defence; we do not model
+        a study of physical violence versus physical defense; we do not model
         $\Attacker$'s coercive power against $\Victim$'s resistance. For
         simplicity, and to make the argument \emph{a fortiori}, we assume that
         from the onset of the attack until $\Attacker$ releases $\Victim$,
         $\Attacker$ meets \emph{no resistance whatsoever} and enjoys $\Victim$'s
         \emph{full cooperation}. The sole qualification --- \emph{feigned}
         cooperation in the residual window --- is, as we argue there
-        (\S\ref{sec:residual}), of residual importance.
+        (\S\ref{sec:residual-dr}), of residual importance.
   \item\label{d:seizure} \textbf{Co-located device seizure.} All of $\Victim$'s devices \emph{at
         the attack site} are immediately seized --- vault blobs, time-lock blobs,
         commitment scripts, review schedules. A single WDY encounter has one
         \emph{site}; devices and principals at \emph{other} sites lie beyond its
         reach within the bounded window --- the opening a \emph{geographic}
-        defence exploits (\S\ref{sub:fourprops}).
+        defense exploits (\S\ref{sub:fourprops}).
   \item\label{d:explicit} \textbf{Explicit-secret seizure.} All of $\Victim$'s \emph{explicit}
         (non-tacit) authenticating secrets are immediately seized.
   \item\label{d:notacit} \textbf{No tacit seizure.} $\Victim$'s \emph{tacit} entropy-carrying 
         secrets --- the points --- are captured by seizure \emph{if and only if} they are
-        \emph{available} in transmissible form at the moment of attack (materialised,
+        \emph{available} in transmissible form at the moment of attack (materialized,
         and not wiped before $\Victim$ is subdued) --- that is, exactly when the
         tacitness fails to be effective. When it \emph{is} effective they are not:
         by \ref{d:subjugation} this is a genuine \emph{incapacity to transmit}, not
         any unwillingness --- even a fully cooperating $\Victim$ cannot hand them
-        over, because they are recognisable but non-transmissible. This and
+        over, because they are recognizable but non-transmissible. This and
         \ref{d:noperceptual} are the operational restatement, in the adversary
         model, of the tacit-knowledge premise (Assumption~\ref{ass:tkba}).
-  \item\label{d:noperceptual} \textbf{No perceptual-parameter seizure.} Likewise
+  \item\label{d:noperceptual} \textbf{No perceptual-parameter seizure.} As with
         the tacit entropy-carrying secrets (\ref{d:notacit}), $\Victim$'s
         perceptual-oracle parameters --- the deep fractals --- are seized \emph{iff}
         they are available at the moment of attack; when the tacitness is effective 
@@ -127,7 +131,7 @@ coercion oracle over the holder: the \emph{wrench} the name records. WDY is fixe
         delegate --- a party holding rescue capability on $\Victim$'s behalf beyond
         the attack site (\ref{d:seizure}) --- is past $\Attacker$'s \emph{remote}
         coercive reach: from the encounter with $\Victim$, $\Attacker$ cannot compel
-        it to surrender or act on its state. Without this a delegated defence is
+        it to surrender or act on its state. Without this a delegated defense is
         vacuous. Real delegates span a spectrum of coercion-compliance; collapsing it
         to a clean ``cannot be reached'' is a deliberate simplification --- the kind
         that makes the \emph{a fortiori} argument possible, at the cost of reality's
@@ -136,10 +140,10 @@ coercion oracle over the holder: the \emph{wrench} the name records. WDY is fixe
 The \emph{only} channel to the tacit material withheld by \ref{d:notacit}--\ref{d:noperceptual} is a
 \textbf{bounded coercion oracle}: $\Attacker$ extracts it through the cooperating
 $\Victim$ (\ref{d:subjugation}) over a bounded duration $t$ --- the adversary's
-\textbf{coercion-time budget}, the maximum wall-clock it can sustain coercion,
+\textbf{coercion-time budget}, the maximum wall-clock time for which it can sustain coercion,
 calibrated against the incident durations in the registry~\cite{lopp-attacks}.
 Cooperation is genuine throughout by \ref{d:subjugation}; the one exception, \emph{feigned}
-cooperation, is confined to the residual window (\S\ref{sec:residual}).
+cooperation, is confined to the residual window (\S\ref{sec:residual-dr}).
 \end{assumption}
 
 \begin{remark}[The two non-seizure clauses coincide for design]\label{rem:tacit-coincide}
@@ -153,15 +157,17 @@ points were somehow transmissible without the parameters ever being available,
 then the tacitness of the parameters is irrelevant, the points having already
 fallen. Either way the binary question ``does a single seizure reach $K$?'' turns
 on the two clauses together, and the model may treat them as one.
+\end{remark}
 
+\begin{remark}[Where the distinction still matters]\label{rem:tacit-quantitative}
 The distinction can nonetheless matter for a \emph{quantitative} refinement --- a
-statistical distribution of the wall-clock needed to coerce either (up to some
-number of most-significant bits). A secret that is \emph{theoretically}
-transmissible, but only with pen and paper, an adversarial fork of the
-application, and long hours to days of focused mental effort under perfect
-$\Attacker$--$\Victim$ cooperation, is essentially as good as ideal. Until
-empirical studies of TKBA (Assumption~\ref{ass:tkba}) are done, that nuance is
-purely speculative.
+statistical distribution of the wall-clock needed to coerce either (up to sufficient
+number of most-significant bits) given $\Attacker$'s coercion time budget $t$ 
+(Definition \ref{def:priced}). Still, a secret that is \emph{theoretically} transmissible, 
+but only with pen and paper, an adversarial fork of the application, and long hours 
+to days of focused mental effort under perfect $\Attacker$--$\Victim$ cooperation, 
+is essentially as good as ideal. Until empirical studies of TKBA (Assumption~\ref{ass:tkba}) 
+are done, the actual relevance of that nuance is purely speculative.
 \end{remark}
 
 \subsection{The feasibility line}
@@ -173,29 +179,41 @@ attacker; we replace them with two engineering stipulations that fix what
 \begin{stipulation}[Feasibility line]\label{ass:feas}
 Let a \emph{cheap} evaluation be one call to a non-memory-hard hash $\Hcheap$,
 and a \emph{hard} evaluation one call to an hours-scale Argon2-class function
-$\Hhard$ whose cost is a large number of \emph{non-parallelisable} steps ---
+$\Hhard$ whose cost is a large number of \emph{non-parallelizable} steps ---
 \emph{memory- and depth}-hard,\footnote{\emph{Depth-hard} is meant more sharply
-than \emph{sequential} or \emph{non-parallelisable} alone: the cost is a
-non-parallelisable computation with a \emph{deliberately large number of steps} ---
+than \emph{sequential} or \emph{non-parallelizable} alone: the cost is a
+non-parallelizable computation with a \emph{deliberately large number of steps} ---
 a long sequential \emph{depth} --- the parallelism-resistance axis of
 \emph{depth-robust} memory-hard functions~\cite{depth-robust} --- that $\Attacker$
-can neither parallelise away nor out-clock past (\ref{d:frequency}). We also weighed \emph{memory- and
+can neither parallelize away nor out-clock past (\ref{d:frequency}). We also weighed \emph{memory- and
 sequentiality-hard} (accurate but clumsy) and \emph{memory- and
 iteration-count-hard} (which names the step \emph{count} rather than its
-non-parallelisable structure); \emph{depth} is the single noun that carries both
+non-parallelizable structure); \emph{depth} is the single noun that carries both
 the seriality and the magnitude, and it parallels \emph{memory}.} so
 $\Attacker$'s bounded speed advantage (\ref{d:frequency})
-cannot amortise it~\cite{argon2}.
+cannot amortize it~\cite{argon2}.
 \begin{enumerate}[nosep,leftmargin=2.2em,label=\textbf{S\arabic*},ref=S\arabic*]
   \item\label{s:feasible} \textbf{(feasible).} $2^{32}$ cheap evaluations are within
         $\Attacker$'s budget.
   \item\label{s:infeasible} \textbf{(infeasible).} $2^{64}$ \emph{hard} evaluations --- written
         $\mathbf{64^{*}}$ --- are beyond it.
+  \item\label{s:infeasiblec} \textbf{(infeasible).} $2^{96}$ cheap evaluations are beyond it.
 \end{enumerate}
 The star denotes this memory- and depth-hardness and attaches to \emph{any}
 bit-count --- $32^{*}, 64^{*}, 96^{*}, \dots$ --- each meaning that many $\Hhard$
 evaluations, not just $64^{*}$.
 \end{stipulation}
+
+\noindent\textbf{The floor.} We call a work cost \emph{prohibitive} --- equivalently,
+say it \emph{meets the floor} --- when it satisfies \ref{s:infeasible} \emph{or}
+\ref{s:infeasiblec}: at least $\sftstar$ memory-hard evaluations, \emph{or} at least
+$2^{96}$ cheap ones. The two bounds are independent, and we deliberately fix \emph{no}
+ordering between them. For realistic memory- and depth-hardness the per-evaluation
+$*$ premium is well under $2^{32}$, so $\sftstar < 2^{96}$ and the cheap bound is the
+binding one; but $*$ is a user-tunable lever, and an aggressive enough setting pushes
+that premium past $2^{32} \approx 4.29\times 10^{9}$ --- above $32$ extra bits ---
+making $\sftstar \geq 2^{96}$. Every ``floor'' claim below names \emph{this} threshold,
+not a fixed number, and holds whichever bound binds.
 
 \noindent We keep the star rather than fold it into an equivalent bit-count because
 memory- and depth-hardness has \emph{three} distinct consequences, only the first of
@@ -220,14 +238,14 @@ The construction of \S\ref{sec:gw} rests the secret on \emph{tacit} knowledge.
 We state the premise abstractly here; \S\ref{sec:gw} instantiates it.
 
 \begin{assumption}[Tacit knowledge, TKBA]\label{ass:tkba}
-The secret is a set of fractal locations that are \emph{recognisable but not
+The secret is a set of fractal locations that are \emph{recognizable but not
 transmissible}.
 \begin{itemize}[nosep,leftmargin=1.4em]
-  \item \textbf{TKBA$_1$.} A point is intransmissible without the fractal
+  \item \textbf{TKBA$_1$.} A point is non-transmissible without the fractal
         parameters that render it; $\Victim$ cannot dictate it in the abstract.
   \item \textbf{TKBA$_2$.} The \emph{deep} fractal parameters are not a
         hand-overable artifact; producing them requires walking a memory-hard
-        chain that later locations do not exist before.
+        chain, before which later locations do not exist.
 \end{itemize}
 \end{assumption}
 
@@ -237,7 +255,7 @@ clauses~\ref{d:notacit}--\ref{d:noperceptual} lifted out of the adversary model 
 stated as a premise on the secret. The clauses say $\Attacker$ cannot seize the
 tacit points or the perceptual parameters even under full cooperation
 (\ref{d:subjugation}); TKBA says the same thing about the secret itself ---
-recognisable but not transmissible --- with no adversary mentioned. They are two
+recognizable but not transmissible --- with no adversary mentioned. They are two
 faces of one assumption (exactly as \ref{d:kerckhoffs} and
 Assumption~\ref{ass:kerckhoffs} are two faces of Kerckhoffs), and by
 Remark~\ref{rem:tacit-coincide} the two clauses are themselves one. We keep both
