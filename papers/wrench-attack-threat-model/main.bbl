@@ -23,6 +23,16 @@ Auguste Kerckhoffs.
 \newblock La cryptographie militaire.
 \newblock {\em Journal des sciences militaires}, IX:5--38, 1883.
 
+\bibitem{ratirl}
+Jameson Lopp.
+\newblock Home invasion and torture of streamer {RATIRL} (sweden, 13 january
+  2026).
+\newblock Entry in \emph{Known Physical Bitcoin Attacks},
+  \url{https://github.com/jlopp/physical-bitcoin-attacks}, 2026.
+\newblock Registry incident: a League of Legends streamer who held no
+  cryptocurrency was tortured for hours; attackers took only his Pok\'emon
+  cards; 2 suspects arrested.
+
 \bibitem{gw-justification}
 {Great Wall}.
 \newblock Justification and economics: The security cost of bitcoin
@@ -93,13 +103,6 @@ Ronald~L. Rivest, Adi Shamir, and David~A. Wagner.
   \url{https://github.com/Yuri-SVB/great-wall-docs/blob/main/great-wallet/ARCHITECTURE.md}
   (Jade Clock module), 2026.
 
-\bibitem{balland}
-{DL News}.
-\newblock Ledger co-founder david balland and wife kidnapped in france.
-\newblock DL News,
-  \url{https://www.dlnews.com/articles/regulation/ledger-cofounder-david-balland-and-wife-kidnapped-in-france/},
-  2025.
-
 \bibitem{rewind-bitcoin}
 {Rewind Bitcoin}.
 \newblock Rewind bitcoin --- timelock vaults with rescue.
@@ -116,6 +119,13 @@ Ronald~L. Rivest, Adi Shamir, and David~A. Wagner.
 \newblock \url{https://casa.io/}, 2026.
 \newblock 2-of-3 / 3-of-5 multisig; client keys on separate devices plus a Casa
   co-signing key.
+
+\bibitem{balland}
+{DL News}.
+\newblock Ledger co-founder david balland and wife kidnapped in france.
+\newblock DL News,
+  \url{https://www.dlnews.com/articles/regulation/ledger-cofounder-david-balland-and-wife-kidnapped-in-france/},
+  2025.
 
 \bibitem{grover1996}
 Lov~K. Grover.
