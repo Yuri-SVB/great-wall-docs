@@ -23,7 +23,7 @@
 \usepackage{tikz}
 \usetikzlibrary{positioning,arrows.meta,shapes.geometric,calc}
 
-% ── Brand palette (shared with the Great Wall paper set) ───────────────────
+% ── Paper palette ──────────────────────────────────────────────────────────
 \definecolor{accent}{HTML}{2F6F4E}
 \definecolor{accentdark}{HTML}{234F38}
 \definecolor{accentlight}{HTML}{EBF3EE}
@@ -107,8 +107,7 @@
 {\normalsize\itshape\color{graytext}A formal threat model for physical-coercion
  (``wrench'') attacks,\\ and a construction that clears it}\\[12pt]
 {\color{accent}\rule{78mm}{0.5pt}}\\[9pt]
-{\itshape\color{graytext}Great Wall coercion-resistance paper series}\\[4pt]
-{\small\color{graytext}Yuri da Silva Villas Boas \textperiodcentered{} First manuscript, July 2026}
+{\small\color{graytext}Yuri da Silva Villas Boas \textperiodcentered{} Working paper, August 2026}
 \end{center}
 
 \vspace{6pt}
@@ -156,6 +155,13 @@ hostage token; shared custody; geographic custody.\normalsize
 \input{sections/08-limitations}
 \input{sections/09-ethics}
 \input{sections/10-conclusion}
+
+% ── Availability ────────────────────────────────────────────────────────────
+\paragraph*{Availability.}
+TGPO is implemented in an open-source reference application
+(\url{https://github.com/Yuri-SVB/Great-Wallet}); the protocol's public design
+documentation and the registry-coding script behind \S\ref{sub:empirical} are
+maintained at \url{https://github.com/Yuri-SVB/great-wall-docs}.
 
 \appendix
 \input{sections/A-game-definition}

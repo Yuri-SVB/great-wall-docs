@@ -34,17 +34,17 @@ Jameson Lopp.
   cards; 2 suspects arrested.
 
 \bibitem{gw-justification}
-{Great Wall}.
+Yuri da~Silva Villas~Boas.
 \newblock Justification and economics: The security cost of bitcoin
   self-custody.
-\newblock Great Wall documentation,
+\newblock Technical report,
   \url{https://github.com/Yuri-SVB/great-wall-docs/blob/main/justification-and-economics/JUSTIFICATION.pdf},
   2026.
 
 \bibitem{gw-threatmodel}
-{Great Wall}.
-\newblock Great wall ecosystem --- threat model.
-\newblock Great Wall documentation,
+Yuri da~Silva Villas~Boas.
+\newblock Coercion-resistant self-custody --- threat model and design record.
+\newblock Technical documentation,
   \url{https://github.com/Yuri-SVB/great-wall-docs/blob/main/great-wallet/THREAT_MODEL.md},
   2026.
 
@@ -62,9 +62,9 @@ Alex Biryukov, Daniel Dinu, and Dmitry Khovratovich.
   pages 292--302, 2016.
 
 \bibitem{gw-fourprops}
-{Great Wall}.
+Yuri da~Silva Villas~Boas.
 \newblock The four properties and tacit knowledge-based authentication (tkba).
-\newblock Great Wall documentation,
+\newblock Technical documentation,
   \url{https://github.com/Yuri-SVB/great-wall-docs/blob/main/great-wallet/ARCHITECTURE.md}
   and
   \url{https://github.com/Yuri-SVB/great-wall-docs/blob/main/justification-and-economics/JUSTIFICATION.pdf},
@@ -72,8 +72,8 @@ Alex Biryukov, Daniel Dinu, and Dmitry Khovratovich.
 
 \bibitem{gw-design}
 Yuri da~Silva Villas~Boas.
-\newblock Great wall core --- burning ship encoder design document.
-\newblock Great Wall documentation,
+\newblock Burning ship encoder --- design document.
+\newblock Technical documentation,
   \url{https://github.com/Yuri-SVB/great-wall-docs/blob/main/great-wall-core/DESIGN.md},
   2026.
 \newblock Public-facing protocol and instantiation-parameter reference.
@@ -82,7 +82,7 @@ Yuri da~Silva Villas~Boas.
 Yuri da~Silva Villas~Boas.
 \newblock A memorization-free, precomputation-resistant salt from the bitcoin
   timechain.
-\newblock Great Wall companion paper (Namtso),
+\newblock Companion paper (Namtso),
   \url{https://github.com/Yuri-SVB/namtso-the-sacred-salt}, 2026.
 
 \bibitem{shamir1979}
@@ -97,9 +97,9 @@ Ronald~L. Rivest, Adi Shamir, and David~A. Wagner.
   1996.
 
 \bibitem{gw-jadeclock}
-{Great Wall}.
+Yuri da~Silva Villas~Boas.
 \newblock Jade clock --- outsourced anonymous timelock.
-\newblock Great Wall documentation,
+\newblock Technical documentation,
   \url{https://github.com/Yuri-SVB/great-wall-docs/blob/main/great-wallet/ARCHITECTURE.md}
   (Jade Clock module), 2026.
 
@@ -176,11 +176,29 @@ Dan Boneh, Joseph Bonneau, Benedikt B{\"u}nz, and Ben Fisch.
   Lecture Notes in Computer Science}, pages 757--788. Springer, 2018.
 
 \bibitem{gw-cpnf}
-{Great Wall}.
-\newblock Celestial peace, never forget (cpnf): A spaced-repetition companion
-  for setup recall.
-\newblock Great Wall documentation,
+Yuri da~Silva Villas~Boas.
+\newblock A spaced-repetition companion for setup recall.
+\newblock Technical documentation,
   \url{https://github.com/Yuri-SVB/great-wall-docs/blob/main/great-wallet/ARCHITECTURE.md}
-  (Celestial Peace --- Never Forget module), 2026.
+  (memorization-assistant module), 2026.
+
+\bibitem{coinkite-entropy}
+{Coinkite Inc.}
+\newblock Entropy technical backgrounder.
+\newblock Coldcard vendor post-mortem and advisory,
+  \url{https://blog.coinkite.com/entropy-technical-backgrounder}, 2026.
+\newblock Vendor's candid account of the defect and same-day patch; identifies
+  hand-generated (50+ fair dice rolls) seeds as the cohort unaffected by the
+  2026-07-30 sweep.
+
+\bibitem{block-coldcard-postmortem}
+{Block, Inc.}
+\newblock Predictable {RNG} fallback and 32-bit reseed in {Coldcard} firmware.
+\newblock Block Engineering post-mortem,
+  \url{https://engineering.block.xyz/blog/predictable-rng-fallback-and-32-bit-reseed-in-coldcard-firmware},
+  2026.
+\newblock Discovery write-up of the July 2026 seed-entropy incident: a
+  March-2021 preprocessor defect left a provisional software PRNG as the silent
+  production entropy path.
 
 \end{thebibliography}
