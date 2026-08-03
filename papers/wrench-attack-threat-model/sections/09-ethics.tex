@@ -32,6 +32,35 @@ design against the very incentive we name. Publishing the Deadly Race, \emph{tog
 with} a bar that rejects the designs which create it, is net-protective of the
 holders it concerns.
 
+% Coldcard July-2026 incident facts (figures, dates, spared-cohort claim) follow
+% the Block / Coinkite post-mortems as rendered in the repo's vetted incident
+% copy; RE-VERIFY against the primary advisories before venue submission
+% (ROADMAP \S6).
+\textbf{The quiet years compound --- a supply-side precedent.} The ecosystem has
+already run this experiment on itself, on the \emph{generation} side of the key
+lifecycle. A March-2021 firmware defect left a ``provisional'' software PRNG
+silently live as the production entropy path of a major hardware wallet
+(Coldcard); the weakness was invisible to inspection --- pseudorandom output
+passes every eyeball test, which is why entropy health cannot be observed from
+outside --- and it stayed quiet for over five years, until ${\approx}\$70$M was
+swept from ${\approx}1{,}200$ wallets in under an hour on 30 July
+2026~\cite{block-coldcard-postmortem,coinkite-entropy}. The episode teaches two
+things, and both transfer to coercion verbatim. First, the quiet years were not
+obscurity \emph{working}: the loss was contracted the moment the defect shipped,
+and every silent month enrolled more holders into the eventual sweep ---
+exposure compounding while it read, to everyone, as safety. Second, there was no
+``quiet fix'' even in principle: a warning channel wide enough to reach the
+holders is wide enough to reach the attacker, so disclosure and attack start the
+same clock, and the only tenable posture is a design that survives full
+disclosure (the vendor's same-day patch and candid post-mortem being the honest
+version of exactly that). Wrench-resistance sits in the same epistemic position
+as entropy health: a holder cannot observe from outside whether their custody
+design protects them or endangers them. The community's collective silence about
+deadly-race dangers --- the norm against saying plainly that
+feasible-but-slower recovery paths endanger their owners --- compounds exposure
+the same way the quiet years did, while it, too, reads as prudence. Naming the
+incentive is the disclosure; the quiet alternative is how it gets worse.
+
 \textbf{Framing and restraint.} We keep the framing on protecting at-risk holders,
 disclose our own bounded residual honestly (\S\ref{sec:residual-seizure}) rather than
 overclaim, and treat the shipping alternatives we classify (\S\ref{sec:classify}) as

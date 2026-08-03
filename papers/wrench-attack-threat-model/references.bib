@@ -199,6 +199,28 @@
   year         = {2026}
 }
 
+@misc{block-coldcard-postmortem,
+  author       = {{Block, Inc.}},
+  title        = {Predictable {RNG} Fallback and 32-bit Reseed in {Coldcard} Firmware},
+  howpublished = {Block Engineering post-mortem,
+                  \url{https://engineering.block.xyz/blog/predictable-rng-fallback-and-32-bit-reseed-in-coldcard-firmware}},
+  note         = {Discovery write-up of the July 2026 seed-entropy incident:
+                  a March-2021 preprocessor defect left a provisional software
+                  PRNG as the silent production entropy path},
+  year         = {2026}
+}
+
+@misc{coinkite-entropy,
+  author       = {{Coinkite Inc.}},
+  title        = {Entropy Technical Backgrounder},
+  howpublished = {Coldcard vendor post-mortem and advisory,
+                  \url{https://blog.coinkite.com/entropy-technical-backgrounder}},
+  note         = {Vendor's candid account of the defect and same-day patch;
+                  identifies hand-generated (50+ fair dice rolls) seeds as the
+                  cohort unaffected by the 2026-07-30 sweep},
+  year         = {2026}
+}
+
 % ── Companion Great Wall material ──────────────────────────────────────────
 
 @misc{gw-design,
