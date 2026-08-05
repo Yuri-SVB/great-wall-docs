@@ -205,8 +205,9 @@
   howpublished = {Block Engineering post-mortem,
                   \url{https://engineering.block.xyz/blog/predictable-rng-fallback-and-32-bit-reseed-in-coldcard-firmware}},
   note         = {Discovery write-up of the July 2026 seed-entropy incident:
-                  a March-2021 preprocessor defect left a provisional software
-                  PRNG as the silent production entropy path},
+                  a preprocessor-guard defect, shipped in firmware v4.0.0
+                  (2021-03-17), left a fallback software PRNG as the silent
+                  production entropy path},
   year         = {2026}
 }
 
@@ -215,9 +216,21 @@
   title        = {Entropy Technical Backgrounder},
   howpublished = {Coldcard vendor post-mortem and advisory,
                   \url{https://blog.coinkite.com/entropy-technical-backgrounder}},
-  note         = {Vendor's candid account of the defect and same-day patch;
-                  identifies hand-generated (50+ fair dice rolls) seeds as the
-                  cohort unaffected by the 2026-07-30 sweep},
+  note         = {Vendor's candid account of the defect; fixed firmware for
+                  all affected models by 2026-08-01; seeds created with 50+
+                  fair, independent dice rolls deemed not at risk},
+  year         = {2026}
+}
+
+@misc{coindesk-coldcard,
+  author       = {{CoinDesk}},
+  title        = {How Bitcoin Cold Wallets Lost \$70 Million in an Attack That
+                  Never Touched the Devices},
+  howpublished = {CoinDesk,
+                  \url{https://www.coindesk.com/tech/2026/08/01/how-bitcoin-cold-wallets-lost-usd70-million-in-an-attack-that-never-touched-the-devices}},
+  note         = {First-wave figures: 1,082.65 BTC (about \$70M) drained from
+                  1,196 addresses in a 41-minute window on 2026-07-30, per
+                  Galaxy Research's mapping},
   year         = {2026}
 }
 
