@@ -33,6 +33,31 @@ Jameson Lopp.
   cryptocurrency was tortured for hours; attackers took only his Pok\'emon
   cards; 2 suspects arrested.
 
+\bibitem{certik-intel3d-h1-2026}
+{CertiK}.
+\newblock Intel3d: {H1} 2026 wrench attacks.
+\newblock CertiK Intel3D report,
+  \url{https://www.certik.com/certik-report/intel3d/intel3d-wrench-h1-2026},
+  2026.
+\newblock 52 verified incidents in H1 2026 (39 in H1 2025); \$124.1M losses
+  against \$10.5M; home invasions 20 of 52, up from 1; France 33 of 52;
+  targeting driven by leaked databases, tax records and exchange data. Sources
+  include French Interior Ministry statements and court documents, independent
+  of the physical-attack registry.
+
+\bibitem{fisc-leak-2026}
+{Journal du Coin}.
+\newblock France: une employ\'ee du fisc vendait des informations
+  confidentielles.
+\newblock
+  \url{https://journalducoin.com/actualites/france-employee-fisc-vendait-informations-confidentielles/},
+  2026.
+\newblock Reported 2026-01-07: an employee of the French tax administration
+  placed under judicial investigation for illicit consultation of the internal
+  ``Mira'' database and transmission of the results; investigators report
+  queries targeting cryptocurrency investors. Allegations under investigation,
+  not a conviction.
+
 \bibitem{gw-justification}
 Yuri da~Silva Villas~Boas.
 \newblock Justification and economics: The security cost of bitcoin
@@ -119,6 +144,16 @@ Yuri da~Silva Villas~Boas.
 \newblock \url{https://casa.io/}, 2026.
 \newblock 2-of-3 / 3-of-5 multisig; client keys on separate devices plus a Casa
   co-signing key.
+
+\bibitem{certik-skynet-2026}
+{CertiK}.
+\newblock Skynet wrench attacks report.
+\newblock CertiK Skynet report,
+  \url{https://www.certik.com/skynet-report/skynet-wrench-attacks-report},
+  2026.
+\newblock 72 verified physical-coercion incidents globally in 2025 (+75\% year
+  on year); \$40.9M confirmed losses, stated to be under-reported; Europe over
+  40\% of incidents, France the highest national count.
 
 \bibitem{balland}
 {DL News}.
