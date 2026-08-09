@@ -87,6 +87,41 @@ the victim to them, and a humane delegate pays; the Balland case
 (\S\ref{sub:empirical}) is exactly this failure, and it is the reality
 clause~\ref{d:nodelegatecoerce} idealizes away.
 
+\subsection{The industry recommendation set}
+\label{sub:industry}
+
+The two designs above are products; the same structure appears in the
+\emph{standard advice}. Industry threat-intelligence reporting on wrench attacks
+states the objective in terms close to ours --- custody should ``remain resilient
+even when a human is under duress'' --- and recommends, among other controls,
+\textbf{withdrawal delays}, transaction-size thresholds, \textbf{staged vault
+architecture}, \textbf{emergency freeze} processes, and multisig or MPC with
+\textbf{geographically distributed signers}~\cite{certik-intel3d-h1-2026}.
+
+Criterion~\ref{prin:nga} does not reject this advice; it \emph{partitions} it, and
+that partition is the framework's practical content. Each of these controls
+interposes a delay or a veto, so each defines a competing racer, and the question
+Lemma~\ref{lem:drl} forces is only whether $\Attacker$ can reach whoever holds the
+release:
+\begin{itemize}[nosep,leftmargin=1.6em]
+  \item Where the freeze or cancellation authority rests with a \emph{remote,
+        institutionally separated} party --- a provider desk, an autonomous
+        watchtower, a co-signer beyond reach --- the control clears the bar by
+        route~\ref{r:remotewinner}, at that route's standing cost: custody is no
+        longer individual.
+  \item Where the delay is one the \emph{holder} can release, or the freeze
+        authority is a device or a person on the scene, the control leaves
+        $\Attacker$ a feasible-but-slower path and is therefore a race --- the
+        gray outcome the Criterion forbids, and the configuration in which the
+        control is worse than its absence.
+\end{itemize}
+Geographic distribution of signers is the same statement made in space rather
+than in time (Definition~\ref{def:geographic}), and inherits the same condition.
+The recommendations are thus sound \emph{exactly when} the reachability question
+has been asked and answered --- and it is that question, rather than the length of
+the delay, that separates a delay which buys rescue from a delay which buys
+$\Attacker$ a reason to eliminate the other racer.
+
 \subsection{TGPO, and the honest comparison}
 
 TGPO clears by the \emph{other} route: the secret is tacit and never on
@@ -149,6 +184,24 @@ not as a ``Bitcoin attack'', so this is a \emph{lower} bound --- yet even so it 
 the assassination outcome the Deadly-Race Lemma (Lemma~\ref{lem:drl}) predicts is
 attested in practice, and that the cost $c$ is weighed against an action attackers
 demonstrably take.
+
+\emph{A separately sourced count agrees on the trend.} The registry is a
+media-sourced convenience sample, so an independent base matters. Industry
+threat-intelligence reporting --- assembled from law-enforcement disclosures,
+court documents, interior-ministry statements and victim testimony rather than
+from the registry --- records $72$ verified incidents in 2025, up $75\%$ year on
+year, with confirmed losses of \$$40.9$M that the report itself calls an
+undercount~\cite{certik-skynet-2026}; and $52$ incidents in the first half of
+2026 against $39$ a year earlier, with losses of \$$124.1$M against
+\$$10.5$M~\cite{certik-intel3d-h1-2026}. Stricter verification yields counts
+below the registry's headline sweep, as expected; the direction, the European
+concentration, and the category mix agree. Two features bear directly on this
+paper. Reported \emph{home invasions} rose from $1$ to $20$ of $52$ incidents
+year on year --- coercion is moving to where the holder lives, which is the
+setting the model assumes. And their \emph{confirmed} homicide count is far below
+our headline coding ($1$ in the half-year, against our $18$ over twelve years),
+which is what two different evidentiary bars should produce and which reinforces
+that the share coded here is a floor, not an estimate.
 
 \emph{Short attacks dominate; the registry over-counts the dramatic.} Most wrench
 attacks are \emph{hand-over-now} events --- a threat, an immediate transfer, minutes
