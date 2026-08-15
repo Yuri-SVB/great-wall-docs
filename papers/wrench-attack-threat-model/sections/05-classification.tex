@@ -169,16 +169,16 @@ The two stipulations that lean on the physical-attack registry~\cite{lopp-attack
 --- the coercion-time budget $t$ (\S\ref{sec:limits}) and the murder-cost weighing of the
 residual-window analysis (\S\ref{sec:residual-dr}) --- admit directional empirical support. The registry records each
 incident only as \emph{date, victim, location, headline}; it carries no duration or
-outcome field, so we code the $342$ incident headlines (accessed 2026-07-19) by
+outcome field, so we code the $352$ incident headlines (accessed 2026-08-14) by
 keyword. The coding is coarse and the categories overlap; a reproducible script
 accompanies the paper.\footnote{\texttt{registry-analysis/} in the source tree gives
-the exact keyword patterns, per-year counts, and caveats.} Three things stand out.
+the exact keyword patterns, per-year counts, and caveats.} Several things stand out.
 
 \emph{The attack is frequent and worsening.} Recorded incidents climb from a handful
-a year before 2017 to a peak of $82$ in 2025 --- the growth the introduction cites,
+a year before 2017 to a peak of $85$ in 2025 --- the growth the introduction cites,
 now counted rather than asserted.
 
-\emph{The terminal move is real.} At least $5.3\%$ ($18/342$) of headlines record a
+\emph{The terminal move is real.} At least $5.1\%$ ($18/352$) of headlines record a
 \emph{killed} or \emph{murdered} victim. A homicide is usually reported as a homicide,
 not as a ``Bitcoin attack'', so this is a \emph{lower} bound --- yet even so it shows
 the assassination outcome the Deadly-Race Lemma (Lemma~\ref{lem:drl}) predicts is
@@ -212,27 +212,95 @@ establishing it. That TKBA is realistically \emph{less} effective against a
 long-duration attack --- where hours of pen-and-paper effort under coercion
 \emph{might} walk a deep stage --- is granted, but it is \emph{speculative} pending
 the field study of \S\ref{sec:limits}. What is \emph{not} speculative is that the
-fielded alternatives fail; the next case makes that concrete.
+fielded alternatives fail; the cases below make that concrete.
 
 \begin{center}\small
 \begin{tabular}{@{}lrr@{}}
 \toprule
 \textbf{Signal (headline keyword coding)} & \textbf{Incidents} & \textbf{Share} \\
 \midrule
-Killed / murdered victim \emph{(a lower bound)} & $18$  & $5.3\%$  \\
-Kidnap / hostage / ransom (long-hold)           & $133$ & $38.9\%$ \\
-Armed robbery at gunpoint (short-hold)          & $93$  & $27.2\%$ \\
-Home invasion / break-in / raid                 & $35$  & $10.2\%$ \\
-Torture or physical violence                    & $78$  & $22.8\%$ \\
+Killed / murdered victim \emph{(a lower bound)} & $18$  & $5.1\%$  \\
+Kidnap / hostage / ransom (long-hold)           & $139$ & $39.5\%$ \\
+Armed robbery at gunpoint (short-hold)          & $101$ & $28.7\%$ \\
+Home invasion / break-in / raid                 & $40$  & $11.4\%$ \\
+Torture or physical violence                    & $82$  & $23.3\%$ \\
 \bottomrule
 \end{tabular}
 \end{center}
 
 \noindent Categories overlap (a kidnapping may also be violent or fatal) and do not
-sum to $100\%$; shares are of all $342$ incidents, and the modality labels are a
+sum to $100\%$; shares are of all $352$ incidents, and the modality labels are a
 headline proxy, not a measured duration. The sample is media-reported and
 survivorship-biased --- deterred, unreported, and silently-fatal cases are absent ---
 so every figure is directional and the fatality share in particular is a floor.
+
+\medskip\noindent\textbf{The mix is not universal, and the Lemma's bite tracks it.} The
+global shares above average over jurisdictions whose compositions differ by an order of magnitude.
+Taking the ratio of long-hold to short-hold codings, $K{:}G$:
+
+\begin{center}\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+\textbf{Jurisdiction} & \textbf{$n$} & \textbf{Kidnap} & \textbf{Gunpoint} & \textbf{$K{:}G$} \\
+\midrule
+Brazil \emph{(small $n$)}  & $12$  & $75.0\%$ & $8.3\%$  & $9.0$ \\
+France                     & $61$  & $57.4\%$ & $8.2\%$  & $7.0$ \\
+\emph{All incidents}       & $352$ & $39.5\%$ & $28.7\%$ & $1.4$ \\
+United States              & $59$  & $28.8\%$ & $40.7\%$ & $0.7$ \\
+Russia \emph{(small $n$)}  & $10$  & $30.0\%$ & $50.0\%$ & $0.6$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent The comparison that carries weight is France against the United States: the two largest
+national subsets, of near-identical size ($61$ and $59$), with \emph{inverted} compositions --- a
+tenfold difference in $K{:}G$. This is the sharpest available check on the media-inflation caveat
+just stated. That caveat explains a \emph{level} --- why the registry over-counts dramatic incidents
+everywhere --- but it cannot explain this \emph{ordering} without the further claim that French
+reporting is ten times more kidnap-selective than American, in a market that is at least as heavily
+covered. The parsimonious reading is that modality composition genuinely varies with local
+conditions --- firearm availability, the presence of organised kidnap-for-ransom capability --- as
+it does for kidnapping outside this domain entirely.
+
+Two confounds remain and are not dismissed. Outside France and the United States the subsets are
+too small to carry an argument, so the other rows are directional only. And the coding is applied to
+English-language headlines, several of them translations, so a systematic vocabulary difference ---
+French sources reaching for ``kidnapped'' where American ones reach for ``robbed at gunpoint'' ---
+would produce part of this spread without any difference in the underlying events.
+
+If the composition is real, it matters for scope rather than for validity. The Deadly-Race Lemma
+(Lemma~\ref{lem:drl}) is a statement about the \emph{released} holder, and release is the trigger
+(Remark~\ref{rem:release-trigger}); a hand-over-now robbery at gunpoint approximates the clean
+$p_A = 1$ endpoint --- the attacker takes what is reachable and leaves --- whereas a multi-hour hold
+ending in a deliberate release is exactly the gray outcome. Coercion risk is therefore not merely
+higher in some jurisdictions but \emph{differently shaped}, and the No-Gray-Area Criterion
+(Criterion~\ref{prin:nga}) does its work where long holds dominate. That is the regime the record is
+currently growing into: France alone accounts for a majority of the incidents recorded in 2026.
+
+\medskip\noindent\textbf{The attacker often does not need the holder at all.} A fourth
+signal falls outside the keyword table because it was coded by hand: in $12$ of the $352$
+incidents ($3.4\%$) the person seized was \emph{not} a holder but a relative held to compel
+one --- a parent, a spouse, an adult child.\footnote{Keyword screening surfaced $16$ candidates;
+each was read individually and four were discarded as false positives, including one in which
+``son of'' named a \emph{perpetrator} rather than a victim. \texttt{registry-analysis/} carries the
+screen and the full audited list. Because the coding reads a one-line headline, an incident that
+does not name a relative is no evidence that none was involved: $3.4\%$ is a floor, and the coding
+can only understate it.} Two features of this subset matter more than its size.
+
+It is \emph{recent and concentrating}: eleven of the twelve fall in 2023 or later, and \emph{nine}
+occur in a single jurisdiction (France) whose recorded incidents rose from about one a year through
+2024 to $22$ in 2025 and $34$ by August 2026. Whatever share of that rise is genuine incidence
+rather than reporting intensity, the tactic is not a historical scatter; it is being adopted.
+
+And it is the hostage token of \S\ref{sub:hostage} observed in the field. Such an attacker needs no
+cryptographic access and no cooperation that a protocol could withhold --- only leverage, and a
+relative supplies it. This bears directly on the delegated route~(\ref{r:remotewinner}), whose
+clearance rests on the deciding party lying beyond $\Attacker$'s coercive reach. The delegate a
+holder is most likely to actually appoint --- a spouse, a parent, an adult child --- is precisely
+the party this subset shows being seized. The route is not thereby refuted: it is bounded. A
+delegate who is reachable is not a second racer but a second victim, so \ref{r:remotewinner}
+clears the bar only for delegates whose unreachability is structural rather than assumed --- and
+that requirement, not the arrangement's convenience, is what the data prices.
 
 \medskip\noindent\textbf{A case in point --- Balland.} The January 2025 abduction of
 David Balland, a co-founder of the hardware-wallet maker Ledger~\cite{balland}, is

@@ -1,0 +1,49 @@
+=== France cut of the registry ===
+61 of 352 incidents  (17.3% of the global dataset)
+
+year         France   global   share
+2014              0        1    0.0%
+2015              0        5    0.0%
+2016              0        4    0.0%
+2017              1       12    8.3%
+2018              0       26    0.0%
+2019              0       10    0.0%
+2020              0       15    0.0%
+2021              1       36    2.8%
+2022              1       36    2.8%
+2023              1       26    3.8%
+2024              1       42    2.4%
+2025             22       85   25.9%
+2026             34       54   63.0%
+
+monthly, France (2025/2026):
+  2025   3  1  0  0  4  2  1  3  1  2  2  3   (Jan..Dec, total 22)
+  2026   8  4  8  4  4  4  1  1  0  0  0  0   (Jan..Dec, total 34)
+
+headline coding -- France vs global (categories overlap, do not sum to 100%)
+                                                         France     global   skew
+  killed/murdered (lower bound)                            1.6%       5.1%  DOWN -3.5pp  (n=1)
+  kidnap/hostage/ransom (long-hold)                       57.4%      39.5%  UP +17.9pp  (n=35)
+  armed robbery at gunpoint (short-hold)                   8.2%      28.7%  DOWN -20.5pp  (n=5)
+  home invasion / break-in / raid                         11.5%      11.4%     +0.1pp  (n=7)
+  torture / physical violence                             16.4%      23.3%  DOWN -6.9pp  (n=10)
+  ATM/BTM/machine (not holder coercion)                    0.0%       3.7%  DOWN -3.7pp  (n=0)
+
+who was coerced -- NEW axis, not in the manuscript's published coding
+  family member / partner involved                        36.1%      15.9%  (n=22)
+  associate / colleague / employee involved                3.3%       4.0%  (n=2)
+  PROXY VICTIM -- relative seized to reach the holder      14.8%       4.5%  (n=9)
+
+  the 9 proxy-victim cases in France (audit them, then cite them):
+    August 24, 2023        [Man posing as Amazon delivery driver kidnapped 60-year-old father of Malta-based gaming influen
+    January 1, 2025        [Crypto influencer's father was kidnapped on New Year's Eve](https://archive.is/ATZ7u) [(origina
+    May 1, 2025            [Father of crypto millionaire abducted in broad daylight, 5M EUR ransom demanded, finger severed
+    May 13, 2025           [Attempted abduction of crypto exchange CEO's daughter in broad daylight, caught on camera, atta
+    October 1, 2025        [A woman and her two children were threatened by two masked individuals in order to blackmail he
+    December 1, 2025       [The father of a crypto entrepreneur based in Dubai was kidnapped by 4 people.](https://archive.
+    December 12, 2025      [A 17-year-old teenager kidnapped by two men to blackmail his older brother, a trader in Dubai.]
+    January 14, 2026       [A couple kidnapped for their son's money, €8 million in cryptocurrency.](https://archive.is/GkW
+    January 25, 2026       [A 74-year-old man was kidnapped by individuals seeking to extort cryptocurrency from his son. T
+  ANY third party named                                   37.7%      19.6%  (n=23)
+
+Caveats: coding is on the one-line headline only; categories overlap; the registry is a media/convenience sample, so deterred, unreported and privately settled cases are structurally absent, and coverage is English-biased. The fatality figure is a FLOOR, not an estimate. The proximity axis is coarse: a headline that does not name a relative is not evidence that none was involved.

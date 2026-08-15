@@ -14,20 +14,20 @@ python3 analyze.py registry.md
 ## Snapshot used in the paper
 
 - **Source:** `jlopp/physical-bitcoin-attacks`, `README.md` (branch `master`).
-- **Accessed:** 2026-07-19.
-- **Incidents:** 342.
+- **Accessed:** 2026-08-14.
+- **Incidents:** 352.
 
 | Signal (headline keyword coding) | Incidents | Share |
 |---|---:|---:|
-| Killed / murdered victim (**lower bound**) | 18 | 5.3% |
-| Kidnap / hostage / ransom (long-hold) | 133 | 38.9% |
-| Armed robbery at gunpoint (short-hold) | 93 | 27.2% |
-| Home invasion / break-in / raid | 35 | 10.2% |
-| Torture / physical violence | 78 | 22.8% |
-| ATM / BTM / machine (not holder coercion) | 13 | 3.8% |
+| Killed / murdered victim (**lower bound**) | 18 | 5.1% |
+| Kidnap / hostage / ransom (long-hold) | 139 | 39.5% |
+| Armed robbery at gunpoint (short-hold) | 101 | 28.7% |
+| Home invasion / break-in / raid | 40 | 11.4% |
+| Torture / physical violence | 82 | 23.3% |
+| ATM / BTM / machine (not holder coercion) | 13 | 3.7% |
 
-Incidents per year rise from 1 (2014) to a peak of 82 (2025); 2026 is partial
-(47 through the access date).
+Incidents per year rise from 1 (2014) to a peak of 85 (2025); 2026 is partial
+(54 through the access date).
 
 ## Method and caveats (read before citing)
 
@@ -45,3 +45,20 @@ Incidents per year rise from 1 (2014) to a peak of 82 (2025); 2026 is partial
   ransom for long holds.
 - Figures are **directional corroboration** of a decision-theoretic prediction,
   not a hazard model.
+
+## Country cuts — `analyze_country.py`
+
+```sh
+python3 analyze_country.py registry.md France
+```
+
+Reuses `analyze.py`'s `CATEGORIES` unchanged, so country figures stay comparable to the table above,
+and adds a country-vs-global skew column plus a **proximity** axis that `analyze.py` does not have:
+was the person coerced the holder, or a relative held to compel one?
+
+**The proximity axis is a screen, not a coding.** It over-fires and every hit must be read before it
+is counted — on the 2026-08-14 snapshot it surfaced 16 proxy-victim candidates of which **4 were
+false positives** (in one, "Son of \<CEO\>" named a *perpetrator*). The audited count is **12/352
+(3.4%)**, and that is the figure the manuscript uses. Never quote the raw screen.
+
+`FRANCE.md` holds the worked France cut, including the audit table and the twelve verified cases.
