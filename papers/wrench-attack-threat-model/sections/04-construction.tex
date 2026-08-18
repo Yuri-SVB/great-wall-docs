@@ -202,6 +202,46 @@ Every case except the residual leaves $K_N$ at the floor
 (Stipulation~\ref{ass:feas}).
 \end{proof}
 
+\begin{remark}[Shallow-stage oracle use adds nothing to the floor]
+\label{rem:shallow-null}
+The oracle may be exercised on stages sitting below the memory-hard chain ---
+stage~$0$ above all, whose board $o_0 = \Hcheap(\sigma)$ follows from the public
+salt at no derivation cost. \emph{By itself this buys no coercion resistance.}
+The case analysis already hands $\Attacker$ the shallow points for free (the
+\emph{wrench of stage~0} case above, and the setting-aside of $K_0$ in
+\S\ref{sec:gw}): a stage reachable without $\Hhard$ work contributes no
+$\Hhard$-gated guessing to any path toward $K_N$, so routing its bits through the
+perceptual oracle leaves Theorem~\ref{thm:floor} exactly where it stood. In the
+ideal model the resistance is carried by the deep stages and by them alone, and
+nothing below the chain should be counted toward it.
+\end{remark}
+
+\begin{remark}[Redundant oracle use as adversary education]
+\label{rem:adversary-education}
+The reference implementation nevertheless routes the shallow stages through the
+perceptual oracle, and the reason lies not in the ideal model but in the gap
+between it and a realistic $\Attacker$. Assumption~\ref{ass:tkba} is a claim
+about $\Victim$ that a protocol-ignorant $\Attacker$ has no reason to credit on
+$\Victim$'s word --- disbelief is the ordinary case, and it is what the
+2026 streamer incident records~\cite{ratirl}. Performing the oracle where it is
+not needed makes the ceremony \emph{observable}: $\Attacker$ watches $\Victim$
+recognize points on a board rather than recite anything, and is shown in band ---
+on bits whose exposure costs nothing (Remark~\ref{rem:shallow-null}) --- that the
+remainder of the derivation demands a faculty $\Victim$ has but cannot hand over.
+The intended effect is on $\Attacker$'s belief: a coercer who has seen the
+mechanism work is less prone to read non-transmissibility as refusal, and
+correspondingly likelier to judge the attempt futile and abandon it.
+
+The force of this is that it is a \emph{demonstration} rather than an assertion.
+Declarations about the protocol are claims $\Attacker$ may discount at no cost;
+observed behaviour is evidence, and it is cheap to supply precisely because the
+shallow bits are worthless to protect. It does not, however, discharge NNPP
+(Assumption~\ref{lem:nnpl}): $\Attacker$ still cannot verify that no second copy
+of the secret exists, and no amount of demonstration reduces the kill incentive
+by proof. What it moves is the probability that $\Attacker$ correctly classifies
+the situation he is in --- a term in his decision, not in the impossibility.
+\end{remark}
+
 \subsection{The tolerated residual seizure window}
 \label{sec:residual-seizure}
 
