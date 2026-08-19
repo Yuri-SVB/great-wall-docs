@@ -246,6 +246,51 @@ Dan Boneh, Joseph Bonneau, Benedikt B{\"u}nz, and Ben Fisch.
 \newblock In {\em Advances in Cryptology --- CRYPTO 2018}, volume 10991 of {\em
   Lecture Notes in Computer Science}, pages 757--788. Springer, 2018.
 
+\bibitem{selten-kidnapping}
+Reinhard Selten.
+\newblock A simple game model of kidnapping.
+\newblock In Rudolf Henn and Otto Moeschlin, editors, {\em Mathematical
+  Economics and Game Theory: Essays in Honor of Oskar Morgenstern}, volume 141
+  of {\em Lecture Notes in Economics and Mathematical Systems}, pages 139--156.
+  Springer, Berlin, Heidelberg, 1977.
+\newblock The canonical game-theoretic model of kidnapping: a two-person
+  sequential game between kidnapper and the hostage's family, in which the
+  threat to execute is assumed credible \emph{even though the kidnapper cannot
+  improve his situation by carrying it out}.
+
+\bibitem{stigler-enforcement}
+George~J. Stigler.
+\newblock The optimum enforcement of laws.
+\newblock {\em Journal of Political Economy}, 78(3):526--536, 1970.
+\newblock Origin of marginal deterrence in the economic theory of crime:
+  penalties must be graduated, or an offender already exposed to the maximum
+  has no reason to stop short of the worse act.
+
+\bibitem{shavell-marginal-deterrence}
+Steven Shavell.
+\newblock A note on marginal deterrence.
+\newblock {\em International Review of Law and Economics}, 12(3):345--355,
+  1992.
+\newblock Formal treatment of marginal deterrence; witness elimination is its
+  standard illustration --- where the marginal sanction for a further killing
+  is near zero, nothing deters it.
+
+\bibitem{iqbal-selten-extension}
+Azhar Iqbal, Virginie Masson, and Derek Abbott.
+\newblock Kidnapping model: An extension of {Selten}'s game.
+\newblock {\em Royal Society Open Science}, 4(12):171484, 2017.
+\newblock Relaxes Selten's assumption that the capture probability is
+  independent of the hostage's fate, modelling the higher enforcement effort
+  that follows an execution.
+
+\bibitem{lapan-sandler-bargain}
+Harvey~E. Lapan and Todd Sandler.
+\newblock To bargain or not to bargain: That is the question.
+\newblock {\em American Economic Review}, 78(2):16--21, 1988.
+\newblock Papers and Proceedings. On precommitment to no-negotiation policies
+  and deterrence expenditure --- the question of whether the encounter occurs,
+  not of the game once it has.
+
 \bibitem{gw-cpnf}
 Yuri da~Silva Villas~Boas.
 \newblock A spaced-repetition companion for setup recall.

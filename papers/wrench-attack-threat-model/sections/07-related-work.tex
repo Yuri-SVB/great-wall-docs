@@ -42,3 +42,46 @@ sense of Rivest, Shamir, and Wagner~\cite{rsw1996}; verifiable delay
 functions~\cite{boneh-vdf} are the modern, publicly checkable form of the same
 primitive, and either may instantiate the outsourced time-lock the orbit optionally
 uses (\S\ref{sec:gw}).
+
+\textbf{Kidnap economics and marginal deterrence.} The Lemma's shape is not new,
+and it would be wrong to present it as though it were. Selten's kidnapping
+game~\cite{selten-kidnapping} is the canonical formalization of the encounter we
+model, and the criminological literature on \emph{marginal deterrence} ---
+Stigler~\cite{stigler-enforcement}, formalized by
+Shavell~\cite{shavell-marginal-deterrence} --- has long carried the observation
+that an offender facing no incremental sanction has no reason to stop short of
+the worse act, with \emph{witness elimination} as its standard illustration.
+Read at that level of abstraction, the Deadly-Race Lemma is a witness-elimination
+argument in which the thing the victim retains is not testimony but a claim on a
+rivalrous prize. Independent arrival at the same mechanism from an unrelated
+field corroborates it; we claim no priority over either literature.
+
+What is worth stating precisely is \emph{where} our setting departs from
+Selten's, because the departure is the reason our conclusion differs from his.
+Selten assumes the kidnapper's threat to execute is credible \emph{even though
+executing cannot improve his position} --- and in classic kidnap-for-ransom that
+assumption is correct, because the prize is a ransom transferred by a third
+party and is not contestable once paid. The hostage's survival threatens nothing
+the kidnapper holds. Bitcoin self-custody removes exactly that property. The
+prize is rivalrous and bearer, and a design that leaves $\Victim$ a
+feasible path leaves it \emph{contestable after release}: a surviving
+$\Victim$ may spend first and take $W$. In Selten's terms our
+$(1-p_A)$ is identically zero; the Deadly Race is his game with a non-degenerate
+post-release contest, and it is that single structural change that turns
+execution from a threat instrument into an action with positive expected value.
+The contribution here is therefore not the mechanism but its locus: marginal
+deterrence studies how a \emph{legislator's} penalty schedule moves this margin,
+whereas we show that a \emph{custody designer} moves the same margin, and that a
+widely shipped class of designs moves it the wrong way.
+
+Two qualifications follow. First, the counterweight is real and we do not
+minimize it: Iqbal, Masson and Abbott~\cite{iqbal-selten-extension} extend
+Selten precisely by letting the capture probability rise when the hostage is
+executed, which is our $c$ made explicit. Our claim is that the gain side can
+exceed $c$ for large $W$, not that $c$ is small --- and Lemma~\ref{lem:drl} is
+stated as a threshold condition for exactly that reason. Second, the deterrence
+literature in this vein --- Lapan and Sandler on precommitment to
+non-negotiation~\cite{lapan-sandler-bargain} --- addresses whether the encounter
+\emph{occurs}. Our results concern the game once it has, and we are careful to
+keep the two apart wherever a design claims deterrence as a structural property
+(\S\ref{sec:classify}).
