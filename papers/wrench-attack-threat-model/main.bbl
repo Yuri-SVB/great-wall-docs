@@ -138,6 +138,29 @@ Yuri da~Silva Villas~Boas.
 \newblock Bitvault --- time-delayed bitcoin self-custody.
 \newblock \url{https://www.bitvault.sv/}, 2026.
 
+\bibitem{jade-duress-pin}
+{Blockstream}.
+\newblock Enable a duress {PIN}.
+\newblock Blockstream Help Center,
+  \url{https://help.blockstream.com/hc/en-us/articles/20182481765657-Enable-a-duress-PIN},
+  2026.
+\newblock Vendor documentation using ``duress PIN'' and ``wallet-erase PIN''
+  for the same erase feature: ``an alternate PIN that you can enable to
+  automatically delete the encrypted wallet information from Jade if entered.''
+  Accessed 2026-08-17.
+
+\bibitem{jade-erase-pin}
+{Blockstream}.
+\newblock How do {I} set up a wallet-erase {PIN}?
+\newblock Blockstream Help Center,
+  \url{https://help.blockstream.com/hc/en-us/articles/9446043439257-How-do-I-set-up-a-wallet-erase-PIN},
+  2026.
+\newblock Vendor documentation for the Jade wallet-erase PIN: an alternate PIN
+  that deletes the recovery phrase from the device, described as ``especially
+  useful in the event of a physical threat,'' displaying ``Internal Error'' on
+  entry, and carrying the instruction to ``make sure you have a backup before
+  proceeding.'' Accessed 2026-08-17.
+
 \bibitem{casa}
 {Casa}.
 \newblock Casa --- collaborative multisig bitcoin custody.
