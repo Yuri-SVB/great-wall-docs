@@ -122,7 +122,7 @@ has been asked and answered --- and it is that question, rather than the length 
 the delay, that separates a delay which buys rescue from a delay which buys
 $\Attacker$ a reason to eliminate the other racer.
 
-\subsection{Self-destruct (wallet-erase) PINs}
+\subsection{Self-destruct (wallet-erase) PINs, and the decoy beside them}
 \label{sub:selfdestruct}
 
 The designs above interpose a delay or a veto. A large and widely shipped class
@@ -142,24 +142,70 @@ $\Attacker$ learns of it only once it is complete, so there is no interval in
 which he can intervene to prevent it. Nothing in what follows turns on
 $\Attacker$ out-racing the mechanism, because he cannot.
 
-It turns instead on what the erasure leaves behind, and there the vendor's own
-instructions settle the question. The same documentation warns that afterwards
-``there is no way to regain access to your funds except by restoring using your
-recovery phrase,'' and directs the holder to ``make sure you have a backup
-before proceeding''~\cite{jade-erase-pin}. The feature therefore
-\emph{presupposes} a surviving backup: a holder who follows the documentation
-has one, and a holder who does not has destroyed the stash rather than defended
-it. What erasure removes is not the secret but the \emph{device path} to it.
+\medskip\noindent\textbf{The claim decomposes, and only one half is real.} What
+the design offers $\Victim$ is not one mechanism but two, stacked and easily
+conflated:
+\begin{enumerate}[nosep,leftmargin=2.4em,label=(\alph*),ref=\alph*]
+  \item\label{sd:erase} \emph{the erasure} --- a genuine, irreversible state
+        change, which happens whatever $\Attacker$ knows or believes; and
+  \item\label{sd:belief} \emph{the belief} that nothing further remains to be
+        had --- manufactured by the ``Internal Error'' report and the return to
+        setup, which are engineered to read as breakage rather than as a move.
+\end{enumerate}
+Only~\ref{sd:erase} is Kerckhoffs-independent. The whole question is how much
+coercion resistance it carries on its own, and the answer, from the vendor's own
+instructions, is \emph{none}.
 
-This is the configuration Criterion~\ref{prin:nga} forbids, and NNPP
-(Assumption~\ref{lem:nnpl}) is what makes it hold. $\Attacker$ cannot verify
-that no further copy exists --- and here he need not even reason his way to the
-suspicion, since the manual states that one should. He is therefore correct, by
-the design's own construction, to read the erasure as the closing of one route
-rather than the end of the matter. The route that remains runs through
-$\Victim$'s memory of a seed phrase, or of where a backup is kept: the erasure
-has deleted the path that required hurting no one and retained the path that
-does.
+The same documentation warns that afterwards ``there is no way to regain access
+to your funds except by restoring using your recovery phrase,'' and directs the
+holder to ``make sure you have a backup before
+proceeding''~\cite{jade-erase-pin}. The feature therefore \emph{presupposes} a
+surviving backup: a holder who follows the documentation has one, and a holder
+who does not has destroyed the stash rather than defended it. What
+erasure removes is thus not the secret but the \emph{device path} to it --- and a
+path that cost $\Attacker$ nothing to lose, since \ref{sd:erase} leaves
+$\Victim$ alive, present, and still holding everything needed to restore. In the
+ideal model \ref{sd:erase} contributes exactly nothing to the floor, for the same
+reason a stage below the memory-hard chain contributes nothing to it
+(Remark~\ref{rem:shallow-null}): what is reachable without work is not a barrier.
+
+All of the design's protective content therefore sits in~\ref{sd:belief}, which
+is an obscurity bet and nothing else. This is the configuration
+Criterion~\ref{prin:nga} forbids, and NNPP (Assumption~\ref{lem:nnpl}) is what
+makes it hold: $\Attacker$ cannot verify that no further copy exists --- and here
+he need not even reason his way to the suspicion, since the manual states that
+one should. He is therefore correct, by the design's own construction, to read
+the erasure as the closing of one route rather than the end of the matter. The
+route that remains runs through $\Victim$'s memory of a seed phrase, or of where
+a backup is kept: the erasure has deleted the path that required hurting no one
+and retained the path that does.
+
+\begin{remark}[The obscure self-destruct is the obscure scheme with no winning branch]
+\label{rem:two-ignorances}
+Obscure defenses are usually compared by \emph{how likely} $\Attacker$ is to be
+ignorant. The sharper comparison is \emph{how many} independent ignorances each
+one needs, and here the self-destruct is strictly the worse bet --- worse, in
+particular, than the decoy it is commonly sold beside.
+
+A decoy needs one premise: that $\Attacker$ does not know decoys exist. Grant him
+that ignorance and the decoy \emph{terminates the encounter} --- he leaves with a
+plausible balance and a story that closes.
+
+A self-destruct needs two, and they are independent. It needs $\Attacker$ ignorant
+of the feature (sub-Kerckhoffs), so that he reads the failure as breakage rather
+than as a deliberate move; and it needs him ignorant of NNPP's consequence
+(sub-NNPP), so that he does not reason to an undisclosed backup. The second is
+not implied by the first, and this is the design's central weakness: \emph{even
+total success at the first leaves the encounter open.} ``This device is broken''
+does not entail ``this person has no bitcoin''; it entails that the instrument
+for reaching it is broken, whose natural sequel is the question \emph{where is
+your backup?} --- addressed to a $\Victim$ who is still present and still knows.
+
+So the self-destruct fails against an informed $\Attacker$ for the ordinary
+Kerckhoffs reason, and against an ignorant one it fails anyway, because the
+belief it manufactures does not discharge the encounter. It is the one obscure
+scheme with no branch on which it wins.
+\end{remark}
 
 \begin{remark}[Two bluffs the erasure invites]\label{rem:erase-bluffs}
 An $\Attacker$ who knows the design (Assumption~\ref{ass:power}) need not walk
@@ -194,7 +240,40 @@ worth keeping the self-destruct distinct from the \emph{cancel} key named
 alongside it there. A cancel reverses a pending action and thereby names a second
 racer; a self-destruct destroys a path and names none. Only the former is subject
 to Lemma~\ref{lem:drl}, which is why the two fail differently despite sharing a
-tier.
+tier. Remark~\ref{rem:obscure-perceptual} has already disposed of the tier as a
+whole, by the dilemma that an $\Attacker$ whose ignorance can be assumed makes
+the elaborate mechanism unnecessary, and one whose ignorance cannot makes it
+ineffective; the present subsection is that dilemma instantiated in a shipping
+product.
+
+\medskip\noindent\textbf{The companion decoy, classified separately.} The same
+device ships a second and quite different obscure mechanism, and the two should
+not be run together. A BIP-39 passphrase ``is added to your Jade's
+recovery phrase or SeedQR and is used to create your wallet''; ``any number of
+passphrases can be entered to change the wallet you will log into''; and the
+device ``will not store your passphrase''~\cite{jade-passphrase}. Distinct
+passphrases therefore yield distinct wallets from one recovery phrase, and the
+familiar community practice is to keep a low-balance wallet at the empty
+passphrase to be surrendered under coercion.
+
+Two observations. First, and to the vendor's credit, \emph{Blockstream does not
+market it this way}: the passphrase documentation claims no deniability, decoy
+or duress use, in pointed contrast to the erase-PIN pages, which name physical
+threat explicitly. The duress framing here is the community's,
+not the manufacturer's, and the distinction is worth preserving in any account of
+who claimed what.
+
+Second, the mechanism is the plausible-deniability layer already treated in
+\S\ref{sub:fourprops} and dismissed for the same Kerckhoffs reason: it rests on
+$\Attacker$'s ignorance, and an $\Attacker$ who knows that passphrase wallets
+exist simply persists past the surrendered one, with NNPP guaranteeing $\Victim$
+cannot close the question. It is not, however, the \emph{same} failure as the
+self-destruct's, and by Remark~\ref{rem:two-ignorances} it is the less bad of the
+two: the decoy at least has a branch on which it wins, since an $\Attacker$ who
+believes it has been paid and can leave. The self-destruct has none. That a
+single product ships both, marketing only the weaker one for physical threat, is
+the clearest illustration in this section of how little the design space has been
+mapped against the Criterion.
 
 \begin{remark}[The Obscurity Paradox --- non-obscure designs strengthen obscure ones]
 \label{rem:obscurity-paradox}
