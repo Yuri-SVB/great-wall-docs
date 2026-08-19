@@ -415,8 +415,9 @@ cost $G$ (a memory-hard derivation, or a time-lock) --- so that $K$ is unavailab
 before $G$ elapses; $G$ is the design parameter, set against the adversary's
 coercion-time budget $t$ (\ref{d:subjugation}). Time-gating is a \emph{mechanism}, not a strength:
 a given time-gated protocol instantiates one of the three levels above according
-to the outcome it forces --- \textbf{naive} if it relies on an obscure abort or
-cancel key (safe only against a sub-Kerckhoffs attacker); \textbf{weak} if the gate
+to the outcome it forces --- \textbf{naive} if it relies on an obscure
+\emph{self-destruct} (the holder destroying the device's own copy) or a cancel
+key (safe only against a sub-Kerckhoffs attacker); \textbf{weak} if the gate
 leaves a feasible-but-slower path, keeping $\pi > 0$; \textbf{strong} if every
 reachable state has $\pi = 0$ (Theorem~\ref{thm:safety}), no matter the mechanism.
 It is the running example of the taxonomy.
@@ -660,7 +661,7 @@ $\Attacker$ reach both at once (see Remark~\ref{rem:escape-closes}).
 The same move fails for \emph{obscurity}. Gating the perceptual oracle on knowledge
 of the protocol alone --- merely hoping $\Attacker$ lacks it --- makes no sense, by
 a dilemma. If $\Attacker$'s ignorance could be taken for granted, then simpler
-obscure schemes (denial, decoy, or an obscure abort) would already suffice, and the
+obscure schemes (denial, decoy, or a self-destruct) would already suffice, and the
 perceptual oracle buys nothing. If it cannot --- i.e.\ under Kerckhoffs
 (\ref{d:kerckhoffs}) --- and the only thing gating the perceptual parameters is
 knowledge of their existence, then by definition they are \emph{available} at the
