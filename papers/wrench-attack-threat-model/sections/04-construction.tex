@@ -234,12 +234,23 @@ correspondingly likelier to judge the attempt futile and abandon it.
 
 The force of this is that it is a \emph{demonstration} rather than an assertion.
 Declarations about the protocol are claims $\Attacker$ may discount at no cost;
-observed behaviour is evidence, and it is cheap to supply precisely because the
+observed behavior is evidence, and it is cheap to supply precisely because the
 shallow bits are worthless to protect. It does not, however, discharge NNPP
 (Assumption~\ref{lem:nnpl}): $\Attacker$ still cannot verify that no second copy
 of the secret exists, and no amount of demonstration reduces the kill incentive
 by proof. What it moves is the probability that $\Attacker$ correctly classifies
 the situation he is in --- a term in his decision, not in the impossibility.
+
+There is nonetheless a second-order effect on that same decision, and it runs in
+$\Victim$'s favor. Once $\Attacker$ credits that an effective
+coercion-resistance mechanism is in place, he is crediting that lying is not
+$\Victim$'s only available tool --- and a holder with effective alternatives to
+lying has correspondingly less reason to resort to it. $\Victim$'s claims,
+truthful or otherwise, thereby become \emph{more} plausible rather than less,
+even though NNPP has not been discharged. This is the \emph{Obscurity Paradox}
+(Remark~\ref{rem:obscurity-paradox}). We take this up in
+\S\ref{sub:selfdestruct}, where it is what most sharply separates the
+non-obscure designs from the obscure ones.
 \end{remark}
 
 \subsection{The tolerated residual seizure window}
