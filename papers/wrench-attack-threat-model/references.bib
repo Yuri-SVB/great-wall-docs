@@ -354,6 +354,44 @@
                   further killing is near zero, nothing deters it}
 }
 
+@misc{coldcard-trick-pins,
+  author       = {{Coinkite}},
+  title        = {Settings Menu --- Trick {PINs}},
+  howpublished = {COLDCARD Documentation,
+                  \url{https://coldcard.com/docs/settings/}},
+  note         = {Vendor documentation for the trick-PIN actions: \emph{Brick
+                  Self}, \emph{Wipe Seed}, \emph{Look Blank}, and a
+                  \emph{Duress Wallet} described as ``a personal safety
+                  feature'' --- ``If you must reveal a PIN under duress, give
+                  the duress PIN instead of your Main PIN.'' Accessed 2026-08-24},
+  year         = {2026}
+}
+
+@misc{coldcard-pin-entry,
+  author       = {{Coinkite}},
+  title        = {{PIN} Entry --- {COLDCARD} Firmware Documentation},
+  howpublished = {\url{https://github.com/Coldcard/firmware/blob/master/docs/pin-entry.md}},
+  note         = {Vendor firmware documentation. The duress wallet is derived
+                  from the real wallet by a one-way process; enabling the brick
+                  PIN warrants ``triple-check your backups are correct''; and on
+                  the case where the decoy is not believed, ``you may be asked
+                  what the actual duress PIN is, while under duress. We suggest
+                  providing the `brickme' PIN in that case.'' Accessed 2026-08-24},
+  year         = {2026}
+}
+
+@misc{trezor-wipe-code,
+  author       = {{SatoshiLabs}},
+  title        = {Create Wipe Code to Erase Device},
+  howpublished = {Trezor Knowledge Base,
+                  \url{https://trezor.io/learn/security-privacy/personal-security-standards/create-wipe-code-to-erase-device}},
+  note         = {Vendor documentation calling the feature a ``self-destruct''
+                  {PIN} code which ``erases all private data, including the
+                  wallet backup (recovery seed).'' The page makes no mention of
+                  duress, coercion or physical threat. Accessed 2026-08-24},
+  year         = {2026}
+}
+
 @misc{block-coldcard-postmortem,
   author       = {{Block, Inc.}},
   title        = {Predictable {RNG} Fallback and 32-bit Reseed in {Coldcard} Firmware},

@@ -205,6 +205,41 @@ So the self-destruct fails against an informed $\Attacker$ for the ordinary
 Kerckhoffs reason, and against an ignorant one it fails anyway, because the
 belief it manufactures does not discharge the encounter. It is the one obscure
 scheme with no branch on which it wins.
+
+We did not have to derive that regress: a vendor documents it. Coldcard ships
+trick PINs whose actions include a duress wallet --- ``a personal safety
+feature\ldots{} If you must reveal a PIN under duress, give the duress PIN
+instead of your Main PIN'' --- alongside \emph{Brick Self} and \emph{Wipe
+Seed}~\cite{coldcard-trick-pins}. Its firmware documentation then addresses the
+case where the decoy is not believed, and its advice is to escalate to
+destruction: ``you may be asked what the actual duress PIN is, while under
+duress. We suggest providing the `brickme' PIN in that
+case''~\cite{coldcard-pin-entry}. That is the manufacturer contemplating an
+$\Attacker$ who knows decoys exist, and recommending, as the answer, an
+irreversible erasure performed with $\Victim$ still in the room and still able
+to be asked for a backup --- the ignorance-count argument above, arrived at
+independently and published as guidance. The same document instructs the holder
+to ``triple-check your backups are correct'' before enabling that PIN, so the
+backup presupposition of \S\ref{sub:selfdestruct} is not peculiar to one vendor
+either.
+\end{remark}
+
+\begin{remark}[The class, and what each vendor actually claims for it]
+\label{rem:vendor-claims}
+Three vendors ship the pair, which is what makes this a design consensus rather
+than one firm's misstep; but they do not make the same claims, and the
+difference is worth recording precisely. Blockstream markets the \emph{erasure}
+for physical threat while claiming nothing of the kind for its passphrase
+wallets. Coldcard markets \emph{both} halves, describing the duress wallet as a
+safety feature and the brick PIN as the fallback when it fails. Trezor is the
+mirror image of Blockstream: its passphrase wallets are sold on deniability,
+while its wipe code --- which the vendor itself calls a ``self-destruct'' PIN,
+and which erases the recovery seed with it --- is documented without any mention
+of duress, coercion or physical threat~\cite{trezor-wipe-code}. Two of the three
+therefore decline to make the coercion claim on one of their two mechanisms. We
+note it because the criterion is not advanced against vendors, and a vendor that
+ships a mechanism without claiming it defeats coercion has not made the error
+this section is about.
 \end{remark}
 
 \begin{remark}[Two bluffs the erasure invites]\label{rem:erase-bluffs}

@@ -161,6 +161,40 @@ Yuri da~Silva Villas~Boas.
   entry, and carrying the instruction to ``make sure you have a backup before
   proceeding.'' Accessed 2026-08-17.
 
+\bibitem{coldcard-trick-pins}
+{Coinkite}.
+\newblock Settings menu --- trick {PINs}.
+\newblock COLDCARD Documentation, \url{https://coldcard.com/docs/settings/},
+  2026.
+\newblock Vendor documentation for the trick-PIN actions: \emph{Brick Self},
+  \emph{Wipe Seed}, \emph{Look Blank}, and a \emph{Duress Wallet} described as
+  ``a personal safety feature'' --- ``If you must reveal a PIN under duress,
+  give the duress PIN instead of your Main PIN.'' Accessed 2026-08-24.
+
+\bibitem{coldcard-pin-entry}
+{Coinkite}.
+\newblock {PIN} entry --- {COLDCARD} firmware documentation.
+\newblock
+  \url{https://github.com/Coldcard/firmware/blob/master/docs/pin-entry.md},
+  2026.
+\newblock Vendor firmware documentation. The duress wallet is derived from the
+  real wallet by a one-way process; enabling the brick PIN warrants
+  ``triple-check your backups are correct''; and on the case where the decoy is
+  not believed, ``you may be asked what the actual duress PIN is, while under
+  duress. We suggest providing the `brickme' PIN in that case.'' Accessed
+  2026-08-24.
+
+\bibitem{trezor-wipe-code}
+{SatoshiLabs}.
+\newblock Create wipe code to erase device.
+\newblock Trezor Knowledge Base,
+  \url{https://trezor.io/learn/security-privacy/personal-security-standards/create-wipe-code-to-erase-device},
+  2026.
+\newblock Vendor documentation calling the feature a ``self-destruct'' {PIN}
+  code which ``erases all private data, including the wallet backup (recovery
+  seed).'' The page makes no mention of duress, coercion or physical threat.
+  Accessed 2026-08-24.
+
 \bibitem{jade-passphrase}
 {Blockstream}.
 \newblock How does a passphrase work on {Jade}?
