@@ -195,6 +195,16 @@ Yuri da~Silva Villas~Boas.
   seed).'' The page makes no mention of duress, coercion or physical threat.
   Accessed 2026-08-24.
 
+\bibitem{trezor-wipe-deniability}
+{brianddk}.
+\newblock Add plausible deniability to wipe-code interface.
+\newblock Issue \#2055,
+  \url{https://github.com/trezor/trezor-firmware/issues/2055}, 2022.
+\newblock Opened 2022-01-10: requests a user-defined message on wipe-code entry
+  so an erasure can be presented as a hardware fault under duress, rather than
+  the device reporting that the wipe code was entered. Closed as \emph{not
+  planned}.
+
 \bibitem{jade-passphrase}
 {Blockstream}.
 \newblock How does a passphrase work on {Jade}?
