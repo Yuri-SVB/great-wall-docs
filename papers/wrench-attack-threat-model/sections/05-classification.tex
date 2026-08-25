@@ -151,6 +151,9 @@ conflated:
   \item\label{sd:belief} \emph{the belief} that nothing further remains to be
         had --- manufactured by the ``Internal Error'' report and the return to
         setup, which are engineered to read as breakage rather than as a move.
+        This is a \emph{presentation} choice and not a property of erasure as
+        such; Remark~\ref{rem:vendor-claims} records a vendor asked directly for
+        it who declined.
 \end{enumerate}
 Only~\ref{sd:erase} is Kerckhoffs-independent. The whole question is how much
 coercion resistance it carries on its own, and the answer, from the vendor's own
@@ -235,7 +238,17 @@ safety feature and the brick PIN as the fallback when it fails. Trezor is the
 mirror image of Blockstream: its passphrase wallets are sold on deniability,
 while its wipe code --- which the vendor itself calls a ``self-destruct'' PIN,
 and which erases the recovery seed with it --- is documented without any mention
-of duress, coercion or physical threat~\cite{trezor-wipe-code}. Two of the three
+of duress, coercion or physical threat~\cite{trezor-wipe-code}. That vendor was
+moreover asked, in January 2022, to make the wipe \emph{concealable}: a
+user-defined message on entry, so that an erasure could be presented as a
+hardware fault rather than announcing itself. The request was closed as \emph{not
+planned}, and the device still reports the wipe
+plainly~\cite{trezor-wipe-deniability}. Component~\ref{sd:belief} is therefore
+not intrinsic to the self-destruct class at all: it is a presentation one vendor
+builds and another, asked for it directly, refused. What \S\ref{sub:selfdestruct}
+analyses under~\ref{sd:belief} is specific to the ``Internal Error'' design, and
+a wipe that announces itself carries \ref{sd:erase} alone --- which, by the
+argument above, is no coercion resistance at all, and is not sold as any. Two of the three
 therefore decline to make the coercion claim on one of their two mechanisms. We
 note it because the criterion is not advanced against vendors, and a vendor that
 ships a mechanism without claiming it defeats coercion has not made the error
