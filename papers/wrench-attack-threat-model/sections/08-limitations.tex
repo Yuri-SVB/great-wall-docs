@@ -4,100 +4,77 @@
 % ════════════════════════════════════════════════════════════════════════════
 
 \textbf{The tacit premise is unproven --- the softest assumption.} Everything on
-the tacit route (hence ``TGPO keeps all Four Properties'') rests on the existence
-of a \emph{perceptual oracle}: a stimulus a human can \emph{recognize} but not
-\emph{articulate}. For TKBA it must simultaneously (i)~admit a \emph{binary
-encoding}; (ii)~be \emph{feasible to memorize} at the stipulated minimum ($\ge 96$
-bits); and (iii)~be \emph{infeasible to transmit within the coercion-time budget $t$}
+the tacit route rests on a \emph{perceptual oracle}: a stimulus a human can
+\emph{recognize} but not \emph{articulate}, which for TKBA must simultaneously
+admit a binary encoding, be feasible to memorize at $\ge 96$ bits, and be
+infeasible to transmit within the coercion budget $t$
 (Definition~\ref{def:tacit}). None of the three is proved here; their conjunction
-is an empirical, psychometric claim awaiting a field study. Perturbed Burning-Ship
-fractal locations are our current instantiation --- the best present candidate,
-with the design record giving the grounds for expecting them to hold --- but until
-a study establishes such an oracle, \textbf{the validity of TKBA remains an
-assumption, not a result}, and it is the softest premise in the paper. Its
-imperfection is precisely the residual window (\S\ref{sec:residual-seizure}), where
-transmission becomes possible near the end of the derivation.
-
-\textbf{Memorization cost, and why it is affordable.} A separate objection to a
-brain-only setup is not whether the oracle \emph{exists} but whether living with it
-is too costly --- carrying $\ge 96$ bits of tacit recall indefinitely. Two things
-bound that cost. First, retention is \emph{assisted}: a spaced-repetition
-companion tool~\cite{gw-cpnf} schedules review (an
-SM-2\,/\,Anki-class algorithm), turning a one-off feat of memory into a light,
-decaying maintenance load. Second, the feat is historically ordinary: before mobile
-computation offloaded it, ordinary people routinely held a handful of phone numbers,
-several street addresses, and a working mental map of their city's grid --- recall
-comparable to what TKBA asks. The cost is real but bounded, and it is the price of a
-secret no device can be seized to reveal.
+is an empirical, psychometric claim awaiting a field study. Perturbed
+Burning-Ship fractal locations are our instantiation, but until such a study
+\textbf{the validity of TKBA remains an assumption, not a result}, and it is the
+softest premise in the paper. Its imperfection is precisely the residual window
+(\S\ref{sec:residual-seizure}).
 
 % Spared-cohort fact verified (2026-08-03) against the vendor advisory: seeds
 % created with ``at least 50 fair, independent, private dice rolls'' are not
 % considered at risk. The adoption-shift sentence is an observation of
 % community practice as of Aug 2026 --- keep it hedged.
-\textbf{Adoption precedent --- demanding standards clear once the pain is
-legible.} The cost objection also has an empirical form --- \emph{users will
-never accept this much ceremony} --- and it met a natural experiment in the
-July 2026 seed-entropy incident (\S\ref{sec:ethics}). Per the vendor's own
-advisory, seeds created with $50$-plus fair, independent dice rolls were not
-at risk from the defect~\cite{coinkite-entropy};
-within days, community guidance converged on exactly that manifestly
-labor-intensive procedure as the default counsel. Effort tolerance, in other
-words, is not a constant of the population; it reprices overnight once a
-threat is legible. TKBA's memorization load stands to the wrench-attack class
-as dice-rolling stands to entropy failure --- demanding, verifiable by the
-holder alone, and adoptable at scale when the danger is understood --- and
-making the danger legible \emph{before} the corresponding incident is
-precisely what a formal bar is for.
+\textbf{Living with it is affordable, and the objection has an empirical
+answer.} Whether carrying $\ge 96$ bits of tacit recall is too costly is a
+separate question from whether the oracle exists; retention is
+\emph{assisted}~\cite{gw-cpnf}, and the feat is historically ordinary. The
+objection's stronger form --- \emph{users will never accept this much ceremony}
+--- met a natural experiment in the July 2026 seed-entropy incident
+(\S\ref{sec:ethics}): seeds made with $50$-plus fair dice rolls were not at risk
+per the vendor's advisory~\cite{coinkite-entropy}, and within days community
+guidance converged on that labor-intensive procedure. A second datum sits
+in the market for the rival method: holders pay for consulting that builds a
+decoy, and rehearse the story until it is believable
+(Remark~\ref{rem:decoy-market}). Both data are anecdotal and neither burden is
+TKBA's, but together they locate the asymmetry --- TKBA's efficacy is conjectural,
+resting on a premise no study has established, whereas the decoy's is condemned
+in theory by Kerckhoffs and NNPP and in the record by the registry
+(\S\ref{sub:empirical}). Effort tolerance is not a constant of the population; it
+reprices once a threat is legible, and it is already being spent --- on the one of
+the two that theory and the record jointly condemn. Making the wrench-attack class
+legible \emph{before} the corresponding incident is what a formal bar is for
+(Appendix~\ref{app:quantum}).
+
+\textbf{Quantum.}\label{sec:quantum} A quantum search over an $n$-bit space needs
+${\sim}2^{n/2}$ \emph{coherent} oracle evaluations~\cite{grover1996}, each here a
+deeply sequential Argon2d computation whose full \emph{depth} the coherence must
+survive --- a cost the resource-estimation literature finds decisive against far
+cheaper oracles~\cite{grassl-grover-aes}. A few-minutes $\Hhard$ already places
+Grover out of reach, so sub-256-bit standards are quantum-defensible \emph{without}
+a 256-bit seed. The one bound Grover dents --- the cheap $2^{96}$ brute, halved to
+${\sim}2^{48}$ --- is confined to the residual window and buys nothing the
+classical $2^{32}$ brute there does not (Appendix~\ref{app:quantum}).
 
 \textbf{Stipulations aligned with standard practice.} Two quantities are
-stipulated, not derived. (a)~The floor rests on the feasibility line
-\ref{s:feasible}, \ref{s:infeasible}, \ref{s:infeasiblec} (Stipulation~\ref{ass:feas}) 
---- a standard \emph{key-size} stipulation ($2^{64}$ memory-hard and $2^{96}$ cheap
-evaluations are beyond reach, in line with accepted security-level conventions); we do \emph{not} claim a reduction 
-to a named hard problem, and none is needed for a key-sizing argument. (b)~The coercion-time 
-budget $t$ is a stipulation from \emph{kidnapping-duration statistics} --- read off the
-physical-attack registry~\cite{lopp-attacks}, with the common-sense monotonicity
-that a kidnapping's material feasibility \emph{falls} with its duration. A
-\emph{long-hold} adversary who sustains coercion past the time-gate ($t > G$) is
-therefore out of scope: the tacit route assumes $t < G$, and against unbounded patience no in-head
-time-gate suffices. Most recorded attacks are in fact short hand-over-now events
-(\S\ref{sub:empirical}).
+stipulated, not derived. The floor rests on the feasibility line
+(Stipulation~\ref{ass:feas}) --- a standard \emph{key-size} stipulation; we claim
+no reduction to a named hard problem, and none is needed for key sizing. The
+coercion-time budget $t$ is read off the registry~\cite{lopp-attacks}, with the
+monotonicity that a kidnapping's feasibility \emph{falls} with its duration, so a
+\emph{long-hold} adversary sustaining coercion past the gate is out of scope:
+against unbounded patience no in-head time-gate suffices. Most recorded attacks
+are short hand-over-now events (\S\ref{sub:empirical}).
 
 \textbf{Single-shot utility, and why it is the conservative case.} The kill
-decision is modeled once, risk-neutrally. Risk-neutrality is
-\emph{worst-for-victim}: a risk-averse $\Attacker$ discounts the uncertain kill-gain
-$(1-p_A)\,W$ and so kills \emph{less} readily, while the cost side is already
-carried by $c$ --- so the single-shot risk-neutral model is a fortiori safe.
-\emph{Repeated} encounters are absorbed by the construction's re-key pathway: a
-victim who survives with $K$ uncompromised --- itself a spectacular outcome,
-achieved with no delegate and no geographic split --- has every incentive to harden
-physically for the short time needed to \emph{re-key} the stash to a fresh setup
-(the level-up / shallow-stage-retirement pathway). \emph{Inheritance} we leave
-beyond scope except for its design target: the protocol should render
-\emph{assassinate-then-coerce-heir} non-viable --- simplest remedy, a dead-man
-switch with heirs \emph{also} TGPO-protected, so coercing an heir faces the same
-floor.
+decision is modeled once, risk-neutrally --- \emph{worst-for-victim}, since a
+risk-averse $\Attacker$ discounts the uncertain gain and kills \emph{less}
+readily. \emph{Repeated} encounters are absorbed by the re-key pathway: a victim
+who survives with $K$ uncompromised has every incentive to re-key to a fresh
+setup. \emph{Inheritance} is beyond scope except for its design target --- the
+protocol should render \emph{assassinate-then-coerce-heir} non-viable, simplest
+remedy a dead-man switch with heirs also TGPO-protected.
 
-\textbf{The one-line takeaway.} Under TGPO --- or a geographic setup, available only
-to those who can hold multiple independent sites --- you \emph{survive a WDY attack
-with individually custodied $K$ intact}. Alternatively you resort to shared custody,
-in which case, \emph{unless} your stash is \emph{demonstrably} more available to some
-remote (trusted) delegate than to you, the outcome of a wrench attack is ``gray'' ---
-hence, by the No-Gray-Area Criterion, a sufficiently vicious attacker, or a high
-enough stash ($W > c/\pi$), gets you killed.
-
-\textbf{Composition across level-up.} DRL-safety across the setup pathway (re-keys,
-retirement-via-chain, a second wrench attacker who effectively starts a stage
-deeper) is a \emph{deduction} from the per-encounter results applied at each stage,
-not a fresh theorem; we note it without re-proving it, and leave a full
-multi-encounter treatment to the utility-model extension above.
-
-\textbf{Also out of scope.} Adversarial-agent scenarios (testator/heir mutual
-distrust, malicious interference with rotation); device side-channels (timing, EM,
-acoustic) during active tacit recall; long-horizon cryptographic erosion; and mass
-on-chain correlation beyond standard taproot / private-channel privacy. Finally, the
-framework fixes a \emph{bar} (Criterion~\ref{prin:nga}); it does not claim TGPO is
-the unique construction that clears it, and the residual window
-(\S\ref{sec:residual-dr}) is a genuine bounded sliver argued incentive-safe rather than
-eliminated.
+\textbf{Also out of scope.} Adversarial-agent scenarios; device side-channels
+during active tacit recall; long-horizon cryptographic erosion; and mass on-chain
+correlation beyond standard taproot privacy. Finally, the framework fixes a
+\emph{bar}; it does not claim TGPO is the unique construction clearing it, and the
+residual window (\S\ref{sec:residual-dr}) is a bounded sliver argued
+incentive-safe rather than eliminated --- an incentive argument against
+$\mathrm{WDY}[W,c]$, not a theorem, and turning it into a quantitative bound
+remains open.
 

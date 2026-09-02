@@ -3,85 +3,73 @@
 \label{sec:related}
 % ════════════════════════════════════════════════════════════════════════════
 
-\textbf{Coercion resistance.} The term is due to Juels, Catalano, and
+\textbf{Coercion resistance.} The term is due to Juels, Catalano and
 Jakobsson~\cite{juels-coercion}, in electronic voting: a scheme is
-coercion-resistant if a voter \emph{cannot prove} to a coercer how they voted, so
-the coercer cannot verify compliance and the reason to coerce collapses. Our sense
-is different and complementary. There the protected act is a \emph{choice} the
-coercer wants to dictate and safety comes from \emph{unprovability}; here the
-protected object is a \emph{bearer secret} the coercer wants to extract, and the
-danger is not that compliance is unverifiable but that a released holder remains a
-racer worth killing (Lemma~\ref{lem:drl}). We inherit the word, not the model.
+coercion-resistant if a voter \emph{cannot prove} how they voted, so the coercer
+cannot verify compliance and the reason to coerce collapses. Our sense is
+complementary. There the protected act is a \emph{choice} and safety comes from
+\emph{unprovability}; here the protected object is a \emph{bearer secret}, and the
+danger is not unverifiable compliance but that a released holder remains a racer
+worth killing. We inherit the word, not the model.
 
 \textbf{Secrets recognized but not articulated.} The tacit premise
-(Assumption~\ref{ass:tkba}) --- a secret its holder can \emph{recognize} but cannot
-\emph{transmit} --- has direct antecedents. Bojinov, Sanchez, Reber, Boneh, and
-Lincoln~\cite{bojinov-rubberhose} train an authentication secret by \emph{implicit
-learning} so that even a cooperating, coerced user cannot articulate it
-(``rubber-hose'' resistance); this is the closest prior instantiation of our TKBA,
-and TGPO can be read as carrying the same idea from an authentication token to a
-self-custody key behind a memory-hard time-gate. The broader phenomenon --- identity
-carried in a behavior that resists articulation --- is old: keystroke dynamics treat
-idiosyncratic typing rhythm as a biometric~\cite{monrose-keystroke}, and WWII traffic
-analysis identified individual wireless operators by the ``fist'' of their Morse
-keying long before either was formalized~\cite{kahn-codebreakers}.
+(Assumption~\ref{ass:tkba}) has direct antecedents. Bojinov, Sanchez, Reber, Boneh
+and Lincoln~\cite{bojinov-rubberhose} train an authentication secret by
+\emph{implicit learning} so that even a cooperating, coerced user cannot
+articulate it --- the closest prior instantiation of our TKBA, with TGPO carrying
+the idea from an authentication token to a self-custody key behind a memory-hard
+time-gate. The broader phenomenon is old: keystroke dynamics treat typing rhythm
+as a biometric~\cite{monrose-keystroke}, and WWII traffic analysis identified
+wireless operators by the ``fist'' of their Morse keying~\cite{kahn-codebreakers}.
 
 \textbf{Deniability versus unprovability.} Deniable
-encryption~\cite{canetti-deniable} and the duress-PIN / panic-password schemes it
-inspired let a coerced user \emph{plausibly lie} --- surrender a fake key, or open a
-decoy. NNPP (Assumption~\ref{lem:nnpl}) is the sharp negative counterpart: rather
-than proving a false positive (``this is the key''), the holder would need to prove a
-true negative (``no other key exists''), which cannot be done. Deniability offers a
-lie the coercer cannot disprove; we show the holder cannot furnish the assurance the
-coercer would need, which is exactly why the coercer's only remaining lever is the
-victim (\S\ref{sec:chain}). Note too (\S\ref{sub:fourprops}) that decoy and duress
-schemes rest on the adversary's ignorance and so fail Kerckhoffs.
+encryption~\cite{canetti-deniable} and the duress-PIN schemes it inspired let a
+coerced user \emph{plausibly lie}. NNPP is the sharp negative counterpart: rather
+than proving a false positive (``this is the key''), the holder would need to prove
+a true negative (``no other key exists''), which cannot be done. Deniability offers
+a lie the coercer cannot disprove; we show the holder cannot furnish the assurance
+the coercer needs, which is why the coercer's only remaining lever is the victim.
+Such schemes also rest on the adversary's ignorance and so fail Kerckhoffs
+(\S\ref{sub:selfdestruct}).
 
-\textbf{Time-gates.} The construction's wall-clock gate is a time-lock puzzle in the
-sense of Rivest, Shamir, and Wagner~\cite{rsw1996}; verifiable delay
-functions~\cite{boneh-vdf} are the modern, publicly checkable form of the same
-primitive, and either may instantiate the outsourced time-lock the orbit optionally
-uses (\S\ref{sec:gw}).
+\textbf{Time-gates.} The construction's wall-clock gate is a time-lock puzzle in
+the sense of Rivest, Shamir and Wagner~\cite{rsw1996}; verifiable delay
+functions~\cite{boneh-vdf} are the modern publicly checkable form, and either may
+instantiate the outsourced time-lock the orbit optionally uses.
 
-\textbf{Kidnap economics and marginal deterrence.} The Lemma's shape is not new,
-and it would be wrong to present it as though it were. Selten's kidnapping
+\textbf{Kidnap economics and marginal deterrence.} The Lemma's shape is not
+new, and it would be wrong to present it as though it were. Selten's kidnapping
 game~\cite{selten-kidnapping} is the canonical formalization of the encounter we
 model, and the criminological literature on \emph{marginal deterrence} ---
 Stigler~\cite{stigler-enforcement}, formalized by
 Shavell~\cite{shavell-marginal-deterrence} --- has long carried the observation
-that an offender facing no incremental sanction has no reason to stop short of
-the worse act, with \emph{witness elimination} as its standard illustration.
-Read at that level of abstraction, the Deadly-Race Lemma is a witness-elimination
-argument in which the thing the victim retains is not testimony but a claim on a
-rivalrous prize. Independent arrival at the same mechanism from an unrelated
-field corroborates it; we claim no priority over either literature.
+that an offender facing no incremental sanction has no reason to stop short of the
+worse act, with \emph{witness elimination} as its standard illustration. At that
+level of abstraction the Deadly-Race Lemma is a witness-elimination argument in
+which what the victim retains is not testimony but a claim on a rivalrous prize.
+We claim no priority over either literature.
 
-What is worth stating precisely is \emph{where} our setting departs from
-Selten's, because the departure is the reason our conclusion differs from his.
-Selten assumes the kidnapper's threat to execute is credible \emph{even though
-executing cannot improve his position} --- and in classic kidnap-for-ransom that
-assumption is correct, because the prize is a ransom transferred by a third
-party and is not contestable once paid. The hostage's survival threatens nothing
-the kidnapper holds. Bitcoin self-custody removes exactly that property. The
-prize is rivalrous and bearer, and a design that leaves $\Victim$ a
-feasible path leaves it \emph{contestable after release}: a surviving
-$\Victim$ may spend first and take $W$. In Selten's terms our
-$(1-p_A)$ is identically zero; the Deadly Race is his game with a non-degenerate
-post-release contest, and it is that single structural change that turns
+What is worth stating precisely is \emph{where} our setting departs from Selten's,
+because the departure is why our conclusion differs. Selten assumes the
+kidnapper's threat to execute is credible \emph{even though executing cannot
+improve his position} --- correct in classic kidnap-for-ransom, where the prize is
+transferred by a third party and is not contestable once paid, so the hostage's
+survival threatens nothing the kidnapper holds. Bitcoin self-custody removes
+exactly that property: the prize is rivalrous and bearer, so a design leaving
+$\Victim$ a feasible path leaves it \emph{contestable after release}. In Selten's
+terms our $(1-p_A)$ is identically zero; the Deadly Race is his game with a
+non-degenerate post-release contest, and that single structural change turns
 execution from a threat instrument into an action with positive expected value.
-The contribution here is therefore not the mechanism but its locus: marginal
-deterrence studies how a \emph{legislator's} penalty schedule moves this margin,
-whereas we show that a \emph{custody designer} moves the same margin, and that a
-widely shipped class of designs moves it the wrong way.
+The contribution is therefore not the mechanism but its locus: marginal deterrence
+studies how a \emph{legislator's} penalty schedule moves this margin, whereas a
+\emph{custody designer} moves the same margin --- and a widely shipped class of
+designs moves it the wrong way.
 
-Two qualifications follow. First, the counterweight is real and we do not
-minimize it: Iqbal, Masson and Abbott~\cite{iqbal-selten-extension} extend
-Selten precisely by letting the capture probability rise when the hostage is
-executed, which is our $c$ made explicit. Our claim is that the gain side can
-exceed $c$ for large $W$, not that $c$ is small --- and Lemma~\ref{lem:drl} is
-stated as a threshold condition for exactly that reason. Second, the deterrence
-literature in this vein --- Lapan and Sandler on precommitment to
-non-negotiation~\cite{lapan-sandler-bargain} --- addresses whether the encounter
-\emph{occurs}. Our results concern the game once it has, and we are careful to
-keep the two apart wherever a design claims deterrence as a structural property
-(\S\ref{sec:classify}).
+Two qualifications. Iqbal, Masson and Abbott~\cite{iqbal-selten-extension} extend
+Selten by letting the capture probability rise when the hostage is executed, which
+is our $c$ made explicit; our claim is that the gain side can exceed $c$ for large
+$W$, not that $c$ is small, which is why Lemma~\ref{lem:drl} is a threshold
+condition. And the deterrence literature in this vein --- Lapan and Sandler on
+precommitment to non-negotiation~\cite{lapan-sandler-bargain} --- addresses
+whether the encounter \emph{occurs}, whereas our results concern the game once it
+has (\S\ref{sec:classify}).

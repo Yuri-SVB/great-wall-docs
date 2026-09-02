@@ -38,6 +38,30 @@ unprimed: they are the body's state functionals
 (Definitions~\ref{def:racers},~\ref{def:gray}), read off the resulting position, and
 each game is a different \emph{condition} on them.
 
+\subsection{The one-move coercion game}
+\label{app:game-onemove}
+
+\noindent \S\ref{sub:nga} states this game in prose; here it is in full.
+
+\begin{definition}[Coercion game and coercion-safety]\label{def:game}
+Fix a scheme $\Sigma$ and a priced adversary $\mathrm{WDY}[W,c]$. In
+$\mathbf{Coerce}_{\Sigma}$: (1)~$\Attacker$ mounts an encounter
+(\ref{d:subjugation}--\ref{d:noperceptual}), reaching a state with a set $R$ of
+\emph{racers} --- the released $\Victim$ and any remote delegate --- and $p_A(S)$
+is its probability of prevailing against racer set $S$ (monotone: fewer racers,
+weakly higher $p_A$), so Definition~\ref{def:racers}'s scalar is $p_A(R)$.
+(2)~$\Attacker$ picks $a \in \{\textsf{spare}, \textsf{kill}\}$, where
+$\textsf{kill}$ removes $\Victim$ from $R$ --- by reachability it can eliminate
+only racers it can \emph{reach}, never a remote delegate. (3)~The race resolves,
+with payoff
+\[
+  U_\Attacker(a) \;=\; p_A(S_a)\cdot W \;-\; c\cdot\mathbf 1[a=\textsf{kill}],
+  \qquad S_{\textsf{spare}} = R,\quad S_{\textsf{kill}} = R\setminus\{\Victim\}.
+\]
+$\Sigma$ is \textbf{coercion-safe} if no $\mathrm{WDY}[W,c]$, at any reachable
+state, strictly prefers $\textsf{kill}$.
+\end{definition}
+
 \subsection{The shared interaction}
 
 \begin{definition}[The WDY interaction]\label{def:wdy-int}

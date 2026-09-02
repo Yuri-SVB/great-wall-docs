@@ -3,363 +3,119 @@
 \label{sec:classify}
 % ════════════════════════════════════════════════════════════════════════════
 
-Corollary~\ref{cor:reach} gives a classification axis: a design that clears
+Corollary~\ref{cor:reach} gives the classification axis: a design that clears
 Criterion~\ref{prin:nga} does so either by \emph{removing the race} or by
-\emph{removing $\Attacker$'s reach over the racer}. The framework should
-classify shipping designs, and it does --- via the reachability corollary, not
-by calling them broken.
+\emph{removing $\Attacker$'s reach over the racer}. This section places the
+shipping designs on it --- stating each verdict and its reason, with the full
+analyses in Appendix~\ref{app:classify}.
 
-\subsection{Time-lock-rescue vaults}
+\subsection{Time-lock-rescue vaults, and the reachable-racer failure}
 
-Take \textbf{Rewind Bitcoin}~\cite{rewind-bitcoin} as the exemplar. Funds sit in
-a Bitcoin-native time-lock vault; unlocking starts a multi-day countdown; if an
-unauthorized unlock is triggered, the owner \emph{or a trusted delegate} has that
-window to press ``Rescue'' and sweep to a cold panic address.
+\textbf{Rewind Bitcoin}~\cite{rewind-bitcoin} holds funds in a time-lock vault:
+unlocking starts a multi-day countdown within which the owner \emph{or a trusted
+delegate} may press ``Rescue'' and sweep to a cold panic address. Against
+\emph{remote} theft this is sound. But the spend capability sits behind \emph{only
+a delay}, keys on the seized device and no recall floor, so a wrench attacker
+holds a feasible path --- unlock, wait out the countdown. That is a race, and
+Rewind's answer is exactly \ref{r:remotewinner}: a remote delegate the attacker
+cannot reach presses Rescue. A legitimate clearance whose cost is that
+\textbf{custody is no longer individual}, and which holds only while the delegate
+is genuinely remote (Remark~\ref{rem:escape-closes}).
 
-Against \emph{remote} theft it is sound: a thief who steals keys trips the
-countdown, the owner notices, and rescues. But the spend capability sits behind
-\emph{only a delay}, with keys on the seized device and no recall floor --- so a
-wrench attacker who seizes the device \emph{does} hold a feasible path (unlock,
-wait out the countdown). That is a race, in the sense of Lemma~\ref{lem:drl}.
-Rewind's answer is exactly the second route of Corollary~\ref{cor:reach}: it puts
-the winning racer out of $\Attacker$'s reach --- a \emph{remote delegate} the
-attacker cannot find or eliminate presses Rescue --- so the attack fails
-cleanly. This is a legitimate clearance, but the remote-racer kind: its cost is
-that \textbf{custody is no longer individual}.
-
-\begin{remark}[When the escape closes]\label{rem:escape-closes}
-The remedy holds only while the delegate is genuinely remote. If the delegate is
-a friend who happens to be visiting during the attack, \emph{both} problems
-apply at once --- custody was already non-individual, and the racer is now
-co-located and reachable --- so the design becomes deadly-race-susceptible
-again. The user is thus forced into an awkward corner: trust someone they can
-rarely be near, and accept a perverse incentive to avoid physical proximity to a
-trusted friend. The same closure afflicts the remote-delegate route to a
-perceptual oracle (Remark~\ref{rem:delegate-perceptual}).
-\end{remark}
-
-\subsection{A second time-lock design --- BitVault}
-
-\textbf{BitVault}~\cite{bitvault} is the same species with a different rescue
-verb. Funds sit in a multisig with \emph{time-delayed transactions} (a
-configurable $2\,\mathrm{h}$--$15\,\mathrm{day}$ window); a spend enters the
-delay, an alert reaches the owner's chosen ``owl wallet,'' and the owner may
-\emph{cancel} before settlement. It is marketed as coercion-resistant
-self-custody --- it ``protects your Bitcoin even if you're physically forced to
-hand over your keys.''
-
-The structure is Rewind's, with cancel-during-delay standing in for Rescue: so
-against remote theft it is equally sound, and against a wrench attack it is
-equally a race (Lemma~\ref{lem:drl}) --- the spend sits behind only a delay, keys
-on the seized device. The difference is \emph{who the racer is}. Rewind names a
-\emph{remote delegate}; BitVault routes cancellation to the \emph{owner's own}
-alert wallet. Under coercion the owner is captive and, by \ref{d:subjugation}--\ref{d:seizure}
-(Assumption~\ref{ass:power}), that wallet is seized or coerced with everything
-else --- so by default the racer is \emph{co-located and reachable}, and the
-design is deadly-race-susceptible. It clears Criterion~\ref{prin:nga} only if the
-owl wallet is a genuinely remote, autonomous rescuer (the honest \ref{r:remotewinner}, shared
-custody); yet it advertises \textbf{individual} self-custody (``zero counterparty
-risk,'' ``non-custodial''). That is the one combination the reachability corollary
-forbids --- a recall floor (\ref{r:removerace}, individual) \emph{or} a remote racer (\ref{r:remotewinner}, shared),
-never individual custody with a reachable racer.
-
-Two auxiliary claims do not close the gap. First, that time-delayed transactions
-are ``publicly verifiable, making kidnapping attempts pointless'' is a
-\emph{deterrence} claim --- about whether the attack occurs --- not a structural
-one about the game once it does; under Kerckhoffs a $\mathrm{WDY}$ attacker who
-\emph{knows} the delay plans around it: coerce the cancel key up front, outwait a
-$2\,\mathrm{h}$ window, or --- since the canceler is the competing racer ---
-eliminate them to stop the cancellation, the very incentive of
-Lemma~\ref{lem:drl}. ``Cannot be moved \emph{instantly}'' is not ``cannot be
-moved,'' and advertising pointlessness is the false comfort the Lemma's remarks
-name: danger peaks where the marketing promises safety. Second, the ``decoy
-wallet'' is a plausible-deniability layer, which fails Kerckhoffs
-(Assumption~\ref{ass:kerckhoffs}) against an educated attacker who persists past
-the decoy. \emph{(This reading is drawn from BitVault's public description; if its
-cancel path is in fact a pre-signed sweep triggered by a genuinely remote,
-un-coercible watchtower, it is simply the honest \ref{r:remotewinner} case at shared-custody cost,
-and the critique narrows to the individual-custody configuration it markets.)}
-
-A further caveat sharpens \ref{r:remotewinner} itself: it needs the winning racer to
-be not merely remote but genuinely \emph{un-coercible} --- an autonomous watchtower,
-not a human friend. Where the delegate is a person, coercion simply routes through
-the victim to them, and a humane delegate pays; the Balland case
-(\S\ref{sub:empirical}) is exactly this failure, and it is the reality
-clause~\ref{d:nodelegatecoerce} idealizes away.
+\textbf{BitVault}~\cite{bitvault} is the same species. No authoritative
+specification is published; the account rests on the vendor's pages, a
+self-attributed concept whitepaper~\cite{bssl} and correspondence, which do not
+agree in every particular. We note this to bound the claim, not as an allegation:
+we have no evidence that any material was withdrawn. Taking that whitepaper as
+valid, the spending paths carry timelocks --- a primary needing a custodian
+co-signature, a one-year fallback on the user's own two keys, a three-year
+custodian path --- and both cases fail. Before the one-year date $\Attacker$
+coerces $A$ and $B$ and kills, the only party who would tell the gatekeeper to
+withhold being $\Victim$: removal is what buys settlement (Lemma~\ref{lem:drl}).
+After it he coerces $A$ and $B$ and spends at once, ungatekept --- no delay, no
+notification, nothing to cancel. \S\ref{app:classify-bitvault} gives the sources
+and their limits. A caveat sharpens \ref{r:remotewinner} itself: the
+winning racer must be not merely remote but \emph{un-coercible} --- an autonomous
+watchtower, not a human friend, since coercion routes through the victim to a
+person and a humane delegate pays (\S\ref{sub:empirical}).
 
 \subsection{The industry recommendation set}
 \label{sub:industry}
 
-The two designs above are products; the same structure appears in the
-\emph{standard advice}. Industry threat-intelligence reporting on wrench attacks
-states the objective in terms close to ours --- custody should ``remain resilient
-even when a human is under duress'' --- and recommends, among other controls,
-\textbf{withdrawal delays}, transaction-size thresholds, \textbf{staged vault
-architecture}, \textbf{emergency freeze} processes, and multisig or MPC with
-\textbf{geographically distributed signers}~\cite{certik-intel3d-h1-2026}.
+The same structure appears in the \emph{standard advice}. Threat-intelligence
+reporting states the objective in terms close to ours --- custody should ``remain
+resilient even when a human is under duress'' --- and recommends withdrawal
+delays, transaction-size thresholds, staged vault architecture, emergency freeze
+processes, and multisig with geographically distributed
+signers~\cite{certik-intel3d-h1-2026}. Criterion~\ref{prin:nga} does not reject
+this advice; it \emph{partitions} it, and that partition is the framework's
+practical content. Each control interposes a delay or a veto, hence defines a
+competing racer, so the only question is whether $\Attacker$ can reach whoever
+holds the release. Where that authority rests with a remote, institutionally
+separated party, the control clears the bar by \ref{r:remotewinner} at that
+route's standing cost; where the delay is one the \emph{holder} can release, or
+the freeze authority is a device or person on the scene, it leaves a
+feasible-but-slower path --- the gray outcome the Criterion forbids, and the
+configuration in which the control is worse than its absence. It is the
+reachability question, not the length of the delay, that separates a delay which
+buys rescue from one which buys $\Attacker$ a reason to eliminate the other
+racer.
 
-Criterion~\ref{prin:nga} does not reject this advice; it \emph{partitions} it, and
-that partition is the framework's practical content. Each of these controls
-interposes a delay or a veto, so each defines a competing racer, and the question
-Lemma~\ref{lem:drl} forces is only whether $\Attacker$ can reach whoever holds the
-release:
-\begin{itemize}[nosep,leftmargin=1.6em]
-  \item Where the freeze or cancellation authority rests with a \emph{remote,
-        institutionally separated} party --- a provider desk, an autonomous
-        watchtower, a co-signer beyond reach --- the control clears the bar by
-        route~\ref{r:remotewinner}, at that route's standing cost: custody is no
-        longer individual.
-  \item Where the delay is one the \emph{holder} can release, or the freeze
-        authority is a device or a person on the scene, the control leaves
-        $\Attacker$ a feasible-but-slower path and is therefore a race --- the
-        gray outcome the Criterion forbids, and the configuration in which the
-        control is worse than its absence.
-\end{itemize}
-Geographic distribution of signers is the same statement made in space rather
-than in time (Definition~\ref{def:geographic}), and inherits the same condition.
-The recommendations are thus sound \emph{exactly when} the reachability question
-has been asked and answered --- and it is that question, rather than the length of
-the delay, that separates a delay which buys rescue from a delay which buys
-$\Attacker$ a reason to eliminate the other racer.
-
-\subsection{Self-destruct (wallet-erase) PINs, and the decoy beside them}
+\subsection{Self-destruct (wallet-erase) PINs}
 \label{sub:selfdestruct}
 
 The designs above interpose a delay or a veto. A large and widely shipped class
-does something categorically different: it \emph{erases}. An alternate PIN, when
-entered, destroys the device's copy of the secret. Blockstream's Jade documents
-such a PIN under both of the names its help center uses for it --- \emph{duress}
-and \emph{wallet-erase} --- as an alternate PIN that ``automatically delete[s]
-the encrypted wallet information from Jade if entered,'' presented as
-``especially useful in the event of a physical threat, as you can provide this
-PIN to an attacker.'' On entry the device reports only ``Internal Error,'' so
-that the erasure reads as a
-malfunction~\cite{jade-duress-pin,jade-erase-pin}.
+does something categorically different: it \emph{erases}. Blockstream's Jade
+documents such a PIN under both names its help center uses --- \emph{duress} and
+\emph{wallet-erase} --- as an alternate PIN that ``automatically delete[s] the
+encrypted wallet information from Jade if entered,'' ``especially useful in the
+event of a physical threat, as you can provide this PIN to an attacker''; the
+device then reports only ``Internal Error,'' so the erasure reads as a
+malfunction~\cite{jade-duress-pin,jade-erase-pin}. Grant it the strength the delay architectures lack: it is
+\emph{instantaneous and covert}, so $\Attacker$ cannot intervene. The claim nonetheless decomposes into a real half and an obscurity bet
+--- \textbf{(a)} the \emph{erasure}, which happens whatever $\Attacker$ knows, and
+\textbf{(b)} the \emph{belief} that nothing further remains, manufactured by the
+``Internal Error'' report. Only the erasure is Kerckhoffs-independent, and how much coercion
+resistance it carries alone is answered by the vendor's own instructions:
+\emph{none}. The same documentation warns that afterwards ``there is no way to
+regain access to your funds except by restoring using your recovery phrase,'' and
+directs the holder to ``make sure you have a backup before
+proceeding''~\cite{jade-erase-pin}. The
+feature \emph{presupposes} a surviving backup: a holder who follows the
+documentation has one, and one who does not has destroyed the stash rather than
+defended it. What erasure removes is therefore not the secret but the
+\emph{device path} to it --- a path that cost $\Attacker$ nothing to lose, since
+$\Victim$ is left alive, present and still able to restore, and one contributing
+nothing to the floor (Remark~\ref{rem:shallow-null}). The route that remains
+runs through $\Victim$'s memory of a seed phrase, or of where a backup is kept ---
+\textbf{the erasure has deleted the path that required hurting no one and retained
+the path that does.}
 
-Grant the design the strength it genuinely has, and which the delay
-architectures above lack. The erasure is \emph{instantaneous and covert}:
-$\Attacker$ learns of it only once it is complete, so there is no interval in
-which he can intervene to prevent it. Nothing in what follows turns on
-$\Attacker$ out-racing the mechanism, because he cannot.
-
-\medskip\noindent\textbf{The claim decomposes, and only one half is real.} What
-the design offers $\Victim$ is not one mechanism but two, stacked and easily
-conflated:
-\begin{enumerate}[nosep,leftmargin=2.4em,label=(\alph*),ref=\alph*]
-  \item\label{sd:erase} \emph{the erasure} --- a genuine, irreversible state
-        change, which happens whatever $\Attacker$ knows or believes; and
-  \item\label{sd:belief} \emph{the belief} that nothing further remains to be
-        had --- manufactured by the ``Internal Error'' report and the return to
-        setup, which are engineered to read as breakage rather than as a move.
-        This is a \emph{presentation} choice and not a property of erasure as
-        such; Remark~\ref{rem:vendor-claims} records a vendor asked directly for
-        it who declined.
-\end{enumerate}
-Only~\ref{sd:erase} is Kerckhoffs-independent. The whole question is how much
-coercion resistance it carries on its own, and the answer, from the vendor's own
-instructions, is \emph{none}.
-
-The same documentation warns that afterwards ``there is no way to regain access
-to your funds except by restoring using your recovery phrase,'' and directs the
-holder to ``make sure you have a backup before
-proceeding''~\cite{jade-erase-pin}. The feature therefore \emph{presupposes} a
-surviving backup: a holder who follows the documentation has one, and a holder
-who does not has destroyed the stash rather than defended it. What
-erasure removes is thus not the secret but the \emph{device path} to it --- and a
-path that cost $\Attacker$ nothing to lose, since \ref{sd:erase} leaves
-$\Victim$ alive, present, and still holding everything needed to restore. In the
-ideal model \ref{sd:erase} contributes exactly nothing to the floor, for the same
-reason a stage below the memory-hard chain contributes nothing to it
-(Remark~\ref{rem:shallow-null}): what is reachable without work is not a barrier.
-
-All of the design's protective content therefore sits in~\ref{sd:belief}, which
-is an obscurity bet and nothing else. This is the configuration
-Criterion~\ref{prin:nga} forbids, and NNPP (Assumption~\ref{lem:nnpl}) is what
-makes it hold: $\Attacker$ cannot verify that no further copy exists --- and here
-he need not even reason his way to the suspicion, since the manual states that
-one should. He is therefore correct, by the design's own construction, to read
-the erasure as the closing of one route rather than the end of the matter. The
-route that remains runs through $\Victim$'s memory of a seed phrase, or of where
-a backup is kept: the erasure has deleted the path that required hurting no one
-and retained the path that does.
-
-\begin{remark}[The obscure self-destruct is the obscure scheme with no winning branch]
-\label{rem:two-ignorances}
-Obscure defenses are usually compared by \emph{how likely} $\Attacker$ is to be
-ignorant. The sharper comparison is \emph{how many} independent ignorances each
-one needs, and here the self-destruct is strictly the worse bet --- worse, in
-particular, than the decoy it is commonly sold beside.
-
-A decoy needs one premise: that $\Attacker$ does not know decoys exist. Grant him
-that ignorance and the decoy \emph{terminates the encounter} --- he leaves with a
-plausible balance and a story that closes.
-
-A self-destruct needs two, and they are independent. It needs $\Attacker$ ignorant
-of the feature (sub-Kerckhoffs), so that he reads the failure as breakage rather
-than as a deliberate move; and it needs him ignorant of NNPP's consequence
-(sub-NNPP), so that he does not reason to an undisclosed backup. The second is
-not implied by the first, and this is the design's central weakness: \emph{even
-total success at the first leaves the encounter open.} ``This device is broken''
-does not entail ``this person has no bitcoin''; it entails that the instrument
-for reaching it is broken, whose natural sequel is the question \emph{where is
-your backup?} --- addressed to a $\Victim$ who is still present and still knows.
-
-So the self-destruct fails against an informed $\Attacker$ for the ordinary
-Kerckhoffs reason, and against an ignorant one it fails anyway, because the
-belief it manufactures does not discharge the encounter. It is the one obscure
-scheme with no branch on which it wins.
-
-We did not have to derive that regress: a vendor documents it. Coldcard ships
-trick PINs whose actions include a duress wallet --- ``a personal safety
-feature\ldots{} If you must reveal a PIN under duress, give the duress PIN
-instead of your Main PIN'' --- alongside \emph{Brick Self} and \emph{Wipe
-Seed}~\cite{coldcard-trick-pins}. Its firmware documentation then addresses the
-case where the decoy is not believed, and its advice is to escalate to
-destruction: ``you may be asked what the actual duress PIN is, while under
-duress. We suggest providing the `brickme' PIN in that
-case''~\cite{coldcard-pin-entry}. That is the manufacturer contemplating an
-$\Attacker$ who knows decoys exist, and recommending, as the answer, an
-irreversible erasure performed with $\Victim$ still in the room and still able
-to be asked for a backup --- the ignorance-count argument above, arrived at
-independently and published as guidance. The same document instructs the holder
-to ``triple-check your backups are correct'' before enabling that PIN, so the
-backup presupposition of \S\ref{sub:selfdestruct} is not peculiar to one vendor
-either.
-\end{remark}
-
-\begin{remark}[The class, and what each vendor actually claims for it]
-\label{rem:vendor-claims}
-Three vendors ship the pair, which is what makes this a design consensus rather
-than one firm's misstep; but they do not make the same claims, and the
-difference is worth recording precisely. Blockstream markets the \emph{erasure}
-for physical threat while claiming nothing of the kind for its passphrase
-wallets. Coldcard markets \emph{both} halves, describing the duress wallet as a
-safety feature and the brick PIN as the fallback when it fails. Trezor is the
-mirror image of Blockstream: its passphrase wallets are sold on deniability,
-while its wipe code --- which the vendor itself calls a ``self-destruct'' PIN,
-and which erases the recovery seed with it --- is documented without any mention
-of duress, coercion or physical threat~\cite{trezor-wipe-code}. That vendor was
-moreover asked, in January 2022, to make the wipe \emph{concealable}: a
-user-defined message on entry, so that an erasure could be presented as a
-hardware fault rather than announcing itself. The request was closed as \emph{not
-planned}, and the device still reports the wipe
-plainly~\cite{trezor-wipe-deniability}. Component~\ref{sd:belief} is therefore
-not intrinsic to the self-destruct class at all: it is a presentation one vendor
-builds and another, asked for it directly, refused. What \S\ref{sub:selfdestruct}
-analyses under~\ref{sd:belief} is specific to the ``Internal Error'' design, and
-a wipe that announces itself carries \ref{sd:erase} alone --- which, by the
-argument above, is no coercion resistance at all, and is not sold as any. Two of the three
-therefore decline to make the coercion claim on one of their two mechanisms. We
-note it because the criterion is not advanced against vendors, and a vendor that
-ships a mechanism without claiming it defeats coercion has not made the error
-this section is about.
-\end{remark}
-
-\begin{remark}[Two bluffs the erasure invites]\label{rem:erase-bluffs}
-An $\Attacker$ who knows the design (Assumption~\ref{ass:power}) need not walk
-into the erasure at all. Two alternatives stand open to him, each a wager rather
-than a certainty:
-\begin{enumerate}[nosep,leftmargin=1.6em]
-  \item \emph{Take the device hostage up front.} Rather than enter any PIN,
-        seize the device and hold it as a hostage token (\S\ref{sub:hostage},
-        Remark~\ref{rem:hostage}). An erase PIN is irrelevant to a coercer who
-        never authenticates; and by Remark~\ref{rem:hostage-probe} the terms on
-        which $\Victim$ ransoms the device are themselves a probe for the very
-        backups $\Victim$ cannot disprove.
-  \item \emph{Coerce against deployment.} Brutalize $\Victim$ to deter the PIN's
-        use in the first place, wagering that a holder under sufficient duress
-        will not spend the one irreversible move available to them.
-\end{enumerate}
-Neither wager is sure to pay, and that is precisely the point: both are bluff
-games, and the holder who has bet on an erasure has entered one without holding
-the means to end it. A $\Victim$ who erases and then \emph{truthfully} denies
-retaining any backup arrives at the position the registry already records --- the
-streamer whose denial was simply disbelieved, and who was tortured for hours
-regardless~\cite{ratirl} (\S\ref{sub:empirical}).
-\end{remark}
-
-The ``Internal Error'' disguise inherits the same objection from a different
-direction: it is a bet on $\Attacker$'s ignorance of a consumer product, and it
-degrades exactly as that product's own public documentation becomes known
-(\S\ref{sub:fourprops}). The class therefore lands in the \textbf{naive} tier of
-Definition~\ref{def:timegate} precisely as that definition describes it --- an
-obscure self-destruct, safe only against a sub-Kerckhoffs attacker --- and it is
-worth keeping the self-destruct distinct from the \emph{cancel} key named
-alongside it there. A cancel reverses a pending action and thereby names a second
-racer; a self-destruct destroys a path and names none. Only the former is subject
-to Lemma~\ref{lem:drl}, which is why the two fail differently despite sharing a
-tier. Remark~\ref{rem:obscure-perceptual} has already disposed of the tier as a
-whole, by the dilemma that an $\Attacker$ whose ignorance can be assumed makes
-the elaborate mechanism unnecessary, and one whose ignorance cannot makes it
-ineffective; the present subsection is that dilemma instantiated in a shipping
-product.
-
-\medskip\noindent\textbf{The companion decoy, classified separately.} The same
-device ships a second and quite different obscure mechanism, and the two should
-not be run together. A BIP-39 passphrase ``is added to your Jade's
-recovery phrase or SeedQR and is used to create your wallet''; ``any number of
-passphrases can be entered to change the wallet you will log into''; and the
-device ``will not store your passphrase''~\cite{jade-passphrase}. Distinct
-passphrases therefore yield distinct wallets from one recovery phrase, and the
-familiar community practice is to keep a low-balance wallet at the empty
-passphrase to be surrendered under coercion.
-
-Two observations. First, and to the vendor's credit, \emph{Blockstream does not
-market it this way}: the passphrase documentation claims no deniability, decoy
-or duress use, in pointed contrast to the erase-PIN pages, which name physical
-threat explicitly. The duress framing here is the community's,
-not the manufacturer's, and the distinction is worth preserving in any account of
-who claimed what.
-
-Second, the mechanism is the plausible-deniability layer already treated in
-\S\ref{sub:fourprops} and dismissed for the same Kerckhoffs reason: it rests on
-$\Attacker$'s ignorance, and an $\Attacker$ who knows that passphrase wallets
-exist simply persists past the surrendered one, with NNPP guaranteeing $\Victim$
-cannot close the question. It is not, however, the \emph{same} failure as the
-self-destruct's, and by Remark~\ref{rem:two-ignorances} it is the less bad of the
-two: the decoy at least has a branch on which it wins, since an $\Attacker$ who
-believes it has been paid and can leave. The self-destruct has none. That a
-single product ships both, marketing only the weaker one for physical threat, is
-the clearest illustration in this section of how little the design space has been
-mapped against the Criterion.
-
-\begin{remark}[The Obscurity Paradox --- non-obscure designs strengthen obscure ones]
-\label{rem:obscurity-paradox}
-TGPO enters neither bluff. There is nothing to erase, the deep secret having
-never been on the device (Theorem~\ref{thm:floor}), and so nothing whose
-non-deployment can be coerced. But the comparison yields more than the absence
-of a failure mode, and the surplus runs in a direction the obscurity argument
-would not predict.
-
-An obscure defense asks $\Attacker$ to believe a \emph{claim} --- that this is
-the only wallet, that nothing further remains --- against both an incentive to
-disbelieve it and, by NNPP, no means of settling it. A non-obscure defense
-changes what making that claim costs, and it does so by the mechanism set out in
-Remark~\ref{rem:adversary-education}: an $\Attacker$ who credits that an
-effective mechanism is in place is crediting that lying is not $\Victim$'s only
-available tool, and a holder with effective alternatives has correspondingly
-less reason to resort to one.
-
-The ordering this inverts is worth stating plainly, and we name it \textbf{the
-Obscurity Paradox}: \emph{a publicly specified, Kerckhoffs-clean design improves
-the standing of precisely those obscure denials it was built to make
-unnecessary.} Obscurity remains unsound as a primary defense, for the reasons
-\S\ref{sub:fourprops} gives. It is not, however, indifferent which design it
-accompanies --- a denial made from within a mechanism that removes the need to
-lie is a stronger denial than the same words spoken from within one that
-requires it.
-\end{remark}
+That also makes it the worse of the two obscure bets it is sold beside, by an
+ignorance count (Remark~\ref{rem:two-ignorances}): a decoy needs $\Attacker$
+ignorant only of decoys, and granted that it \emph{terminates the encounter},
+whereas a self-destruct needs him ignorant of the feature \emph{and} of NNPP's
+consequence --- so even total success at the first leaves the encounter open,
+``this device is broken'' inviting \emph{where is your backup?} from a $\Victim$
+still present and still knowing. It is the one obscure scheme with no branch on
+which it wins, and its own vendors document the regress: Coldcard's firmware
+guidance, for the case where the duress wallet is disbelieved, advises escalating
+to the \emph{brickme} PIN~\cite{coldcard-trick-pins,coldcard-pin-entry} --- an
+irreversible erasure performed with $\Victim$ still in the room. The class lands
+in the \textbf{naive} tier. Appendix~\ref{app:classify} records what each of the
+three vendors shipping the pair actually \emph{claims} for it (two decline the
+coercion claim on one of their two mechanisms), the two bluffs an informed
+$\Attacker$ can play instead of entering any PIN, the companion decoy --- sold as
+coercion protection and coached for believability
+(Remark~\ref{rem:decoy-market}) --- and the \emph{Obscurity Paradox}.
 
 \subsection{TGPO, and the honest comparison}
 
-TGPO clears by the \emph{other} route: the secret is tacit and never on
-the device (Assumption~\ref{ass:tkba}, Theorem~\ref{thm:floor}), so a seizure
-yields nothing feasible --- there is no racer to reach, and the time-lock is
-only a delay \emph{on top of} an already-clean failure. Read through the Four
-Properties (Corollary~\ref{cor:fourprops}), the comparison is a covering-set
-statement: each shipping design buys (or tries to buy) coercion resistance by 
-\emph{trading at least one} property TGPO keeps --- and one of them trades a
-property and \emph{still} fails. TGPO is the only design holding all four.
+TGPO clears by the \emph{other} route: the secret is tacit and never on the
+device, so a seizure yields nothing feasible and there is no racer to reach. Read
+through the Four Properties the comparison is a covering-set statement --- each
+shipping design trades at least one property TGPO keeps, and one trades a property
+and \emph{still} fails.
 \begin{center}\footnotesize
 \renewcommand{\arraystretch}{1.3}
 \begin{tabularx}{\linewidth}{@{}l cccc X@{}}
@@ -368,217 +124,74 @@ property and \emph{still} fails. TGPO is the only design holding all four.
 \midrule
 \textbf{TGPO} (this work) & \cmark & \cmark & \cmark & \cmark & holds all four (tacit; \ref{r:removerace}) \\
 Rewind Bitcoin               & \xmark & \xmark & \cmark & \cmark & individual custody: a remote delegate (\ref{r:remotewinner}) \\
-BitVault                     & \xmark & \cmark & \xmark & \xmark & non-obscurity: assumes attacker ignorance ($\pm$ geography) --- gray, can backfire \\
+BitVault                     & \qmark & \xmark & \qmark & \xmark & individual custody both ways --- denial blocks the user, collusion spends past three years \\
 Casa                         & \cmark & \xmark & \cmark & \cmark & custody shared with remote co-signer\\
+Self-destruct PIN            & \xmark & \cmark & \xmark & \xmark & non-obscurity: the erasure must read as malfunction (Coldcard, Jade) \\
 \bottomrule
 \end{tabularx}
 \end{center}
-\noindent Row~(\ref{p:know}) is the covering point: TGPO is the \emph{only} knowledge-based
-(deviceless --- the secret is knowledge, never a device or a location) row, because
-every competitor keeps a \emph{transmissible} secret on a device. \textbf{Rewind}
-trades individual custody for a remote delegate (\ref{r:remotewinner}). \textbf{Casa}'s collaborative
-multisig --- the client's keys on separate hardware plus a Casa co-signing key ---
-trades individual custody: the co-signer is a remote party, and a coercion-resistant
-delegate is remote \emph{by definition}, so the cost is individual custody, not
-non-geography (Casa asks the user to visit no site of its own)~\cite{casa}. \textbf{BitVault} trades non-obscurity (its cancel
-and decoy assume attacker ignorance, failing Kerckhoffs) and, per \S\ref{sec:classify}
-above, still lands in the gray zone --- the red $\times$ in column~(\ref{p:coerc}) is
-\emph{negative} coercion resistance (it can backfire), not mere absence. The axis
-tilts further to \ref{r:removerace} for a blunter reason (Remark~\ref{rem:r2-cost}):
-the delegated rows are not self-custody at all --- their clearance assumes a
-delegate that refuses even the legitimate owner --- and, the rescue capability being
-\emph{transmissible}, they keep a clean-loss exposure the tacit route does not.
-\emph{Not your keys, not your coins.}
+\noindent Row~(\ref{p:know}) is the covering point: TGPO is the \emph{only}
+knowledge-based row, every competitor keeping a \emph{transmissible} secret on a
+device. Casa's collaborative multisig trades individual custody, a
+coercion-resistant delegate being remote \emph{by definition}~\cite{casa}. The axis tilts further to \ref{r:removerace}
+for a blunter reason: the delegated rows (Rewind, Casa) are not self-custody at all
+(Remark~\ref{rem:r2-cost}).
 
 \subsection{Empirical grounding in the registry}
 \label{sub:empirical}
 
-The two stipulations that lean on the physical-attack registry~\cite{lopp-attacks}
---- the coercion-time budget $t$ (\S\ref{sec:limits}) and the murder-cost weighing of the
-residual-window analysis (\S\ref{sec:residual-dr}) --- admit directional empirical support. The registry records each
-incident only as \emph{date, victim, location, headline}; it carries no duration or
-outcome field, so we code the $352$ incident headlines (accessed 2026-08-14) by
-keyword. The coding is coarse and the categories overlap; a reproducible script
-accompanies the paper.\footnote{\texttt{registry-analysis/} in the source tree gives
-the exact keyword patterns, per-year counts, and caveats.} Several things stand out.
+The two stipulations leaning on the physical-attack registry~\cite{lopp-attacks}
+--- the coercion-time budget and the murder-cost weighing of
+\S\ref{sec:residual-dr} --- admit directional support. The registry records only
+\emph{date, victim, location, headline}, so we code its $352$ incident headlines
+(accessed 2026-08-14) by keyword; the coding is coarse and a reproducible script
+accompanies the paper.\footnote{\texttt{registry-analysis/} gives the keyword
+patterns, per-year counts and caveats; Appendix~\ref{app:classify} gives the
+method, the coding tables, the jurisdictional confounds and the case analyses.}
+Four findings bear on the paper.
 
-\emph{The attack is frequent and worsening.} Recorded incidents climb from a handful
-a year before 2017 to a peak of $85$ in 2025 --- the growth the introduction cites,
-now counted rather than asserted.
+\emph{The attack is frequent and worsening}: recorded incidents climb from a
+handful a year before 2017 to a peak of $85$ in 2025, and a separately sourced
+count --- threat-intelligence reporting from law-enforcement disclosures and court
+documents --- agrees, with $72$ verified incidents in 2025, up $75\%$ year on
+year~\cite{certik-skynet-2026}, and $52$ in the first half of 2026 against $39$ a
+year earlier~\cite{certik-intel3d-h1-2026}. Reported \emph{home invasions} there
+rose from $1$ to $20$ of $52$: coercion is moving to where the holder lives, the
+setting the model assumes.
 
-\emph{The terminal move is real.} At least $5.1\%$ ($18/352$) of headlines record a
-\emph{killed} or \emph{murdered} victim. A homicide is usually reported as a homicide,
-not as a ``Bitcoin attack'', so this is a \emph{lower} bound --- yet even so it shows
-the assassination outcome the Deadly-Race Lemma (Lemma~\ref{lem:drl}) predicts is
-attested in practice, and that the cost $c$ is weighed against an action attackers
-demonstrably take.
+\emph{The terminal move is real}: at least $5.1\%$ ($18/352$) of headlines record
+a \emph{killed} or \emph{murdered} victim. A homicide is usually reported as a
+homicide rather than as a ``Bitcoin attack,'' so this is a \emph{lower} bound ---
+yet even so the outcome Lemma~\ref{lem:drl} predicts is attested in practice.
 
-\emph{A separately sourced count agrees on the trend.} The registry is a
-media-sourced convenience sample, so an independent base matters. Industry
-threat-intelligence reporting --- assembled from law-enforcement disclosures,
-court documents, interior-ministry statements and victim testimony rather than
-from the registry --- records $72$ verified incidents in 2025, up $75\%$ year on
-year, with confirmed losses of \$$40.9$M that the report itself calls an
-undercount~\cite{certik-skynet-2026}; and $52$ incidents in the first half of
-2026 against $39$ a year earlier, with losses of \$$124.1$M against
-\$$10.5$M~\cite{certik-intel3d-h1-2026}. Stricter verification yields counts
-below the registry's headline sweep, as expected; the direction, the European
-concentration, and the category mix agree. Two features bear directly on this
-paper. Reported \emph{home invasions} rose from $1$ to $20$ of $52$ incidents
-year on year --- coercion is moving to where the holder lives, which is the
-setting the model assumes. And their \emph{confirmed} homicide count is far below
-our headline coding ($1$ in the half-year, against our $18$ over twelve years),
-which is what two different evidentiary bars should produce and which reinforces
-that the share coded here is a floor, not an estimate.
+\emph{The mix is not universal, and the Lemma's bite tracks it}: by the ratio of
+long-hold to short-hold codings, France and the United States --- the two largest
+national subsets, of near-identical size ($61$ and $59$) --- have \emph{inverted}
+compositions, $7.0$ against $0.7$. Media inflation explains a \emph{level} but not
+this \emph{ordering}, and the difference matters for scope rather than validity: a
+hand-over-now robbery approximates the clean $p_A = 1$ endpoint, a multi-hour hold
+ending in deliberate release is exactly the gray outcome. The Criterion does its
+work where long holds dominate --- and France alone accounts for a majority of the
+incidents recorded in 2026.
 
-\emph{Short attacks dominate; the registry over-counts the dramatic.} Most wrench
-attacks are \emph{hand-over-now} events --- a threat, an immediate transfer, minutes
-on scene; the long, cinematic kidnapping is the exception. A media-sourced registry
-inverts this, because a mutilation-kidnapping is news where a knifepoint mugging is
-not, so the kidnap share coded below \emph{over}-states the long tail rather than
-establishing it. That TKBA is realistically \emph{less} effective against a
-long-duration attack --- where hours of pen-and-paper effort under coercion
-\emph{might} walk a deep stage --- is granted, but it is \emph{speculative} pending
-the field study of \S\ref{sec:limits}. What is \emph{not} speculative is that the
-fielded alternatives fail; the cases below make that concrete.
+\emph{The attacker often does not need the holder at all}: in $12$ of the $352$
+incidents ($3.4\%$, hand-coded and audited) the person seized was \emph{not} a
+holder but a relative held to compel one, eleven in 2023 or later and nine in
+France. This is \emph{not} the hostage token of \S\ref{sub:hostage} --- the
+leverage is a person rather than a seizable object, so devicelessness does not
+reach it --- but clause~\ref{d:nodelegatecoerce} failing in the field, and it
+bounds \ref{r:remotewinner}: the delegate a holder is most likely to appoint is
+precisely the party being seized, and a reachable delegate is not a second racer
+but a second victim.
 
-\begin{center}\small
-\begin{tabular}{@{}lrr@{}}
-\toprule
-\textbf{Signal (headline keyword coding)} & \textbf{Incidents} & \textbf{Share} \\
-\midrule
-Killed / murdered victim \emph{(a lower bound)} & $18$  & $5.1\%$  \\
-Kidnap / hostage / ransom (long-hold)           & $139$ & $39.5\%$ \\
-Armed robbery at gunpoint (short-hold)          & $101$ & $28.7\%$ \\
-Home invasion / break-in / raid                 & $40$  & $11.4\%$ \\
-Torture or physical violence                    & $82$  & $23.3\%$ \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\noindent Categories overlap (a kidnapping may also be violent or fatal) and do not
-sum to $100\%$; shares are of all $352$ incidents, and the modality labels are a
-headline proxy, not a measured duration. The sample is media-reported and
-survivorship-biased --- deterred, unreported, and silently-fatal cases are absent ---
-so every figure is directional and the fatality share in particular is a floor.
-
-\medskip\noindent\textbf{The mix is not universal, and the Lemma's bite tracks it.} The
-global shares above average over jurisdictions whose compositions differ by an order of magnitude.
-Taking the ratio of long-hold to short-hold codings, $K{:}G$:
-
-\begin{center}\small
-\begin{tabular}{@{}lrrrr@{}}
-\toprule
-\textbf{Jurisdiction} & \textbf{$n$} & \textbf{Kidnap} & \textbf{Gunpoint} & \textbf{$K{:}G$} \\
-\midrule
-Brazil \emph{(small $n$)}  & $12$  & $75.0\%$ & $8.3\%$  & $9.0$ \\
-France                     & $61$  & $57.4\%$ & $8.2\%$  & $7.0$ \\
-\emph{All incidents}       & $352$ & $39.5\%$ & $28.7\%$ & $1.4$ \\
-United States              & $59$  & $28.8\%$ & $40.7\%$ & $0.7$ \\
-Russia \emph{(small $n$)}  & $10$  & $30.0\%$ & $50.0\%$ & $0.6$ \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\noindent The comparison that carries weight is France against the United States: the two largest
-national subsets, of near-identical size ($61$ and $59$), with \emph{inverted} compositions --- a
-tenfold difference in $K{:}G$. This is the sharpest available check on the media-inflation caveat
-just stated. That caveat explains a \emph{level} --- why the registry over-counts dramatic incidents
-everywhere --- but it cannot explain this \emph{ordering} without the further claim that French
-reporting is ten times more kidnap-selective than American, in a market that is at least as heavily
-covered. The parsimonious reading is that modality composition genuinely varies with local
-conditions --- firearm availability, the presence of organized kidnap-for-ransom capability --- as
-it does for kidnapping outside this domain entirely.
-
-Two confounds remain and are not dismissed. Outside France and the United States the subsets are
-too small to carry an argument, so the other rows are directional only. And the coding is applied to
-English-language headlines, several of them translations, so a systematic vocabulary difference ---
-French sources reaching for ``kidnapped'' where American ones reach for ``robbed at gunpoint'' ---
-would produce part of this spread without any difference in the underlying events.
-
-If the composition is real, it matters for scope rather than for validity. The Deadly-Race Lemma
-(Lemma~\ref{lem:drl}) is a statement about the \emph{released} holder, and release is the trigger
-(Remark~\ref{rem:release-trigger}); a hand-over-now robbery at gunpoint approximates the clean
-$p_A = 1$ endpoint --- the attacker takes what is reachable and leaves --- whereas a multi-hour hold
-ending in a deliberate release is exactly the gray outcome. Coercion risk is therefore not merely
-higher in some jurisdictions but \emph{differently shaped}, and the No-Gray-Area Criterion
-(Criterion~\ref{prin:nga}) does its work where long holds dominate. That is the regime the record is
-currently growing into: France alone accounts for a majority of the incidents recorded in 2026.
-
-\medskip\noindent\textbf{The attacker often does not need the holder at all.} A fourth
-signal falls outside the keyword table because it was coded by hand: in $12$ of the $352$
-incidents ($3.4\%$) the person seized was \emph{not} a holder but a relative held to compel
-one --- a parent, a spouse, an adult child.\footnote{Keyword screening surfaced $16$ candidates;
-each was read individually and four were discarded as false positives, including one in which
-``son of'' named a \emph{perpetrator} rather than a victim. \texttt{registry-analysis/} carries the
-screen and the full audited list. Because the coding reads a one-line headline, an incident that
-does not name a relative is no evidence that none was involved: $3.4\%$ is a floor, and the coding
-can only understate it.} Two features of this subset matter more than its size.
-
-It is \emph{recent and concentrating}: eleven of the twelve fall in 2023 or later, and \emph{nine}
-occur in a single jurisdiction (France) whose recorded incidents rose from about one a year through
-2024 to $22$ in 2025 and $34$ by August 2026. Whatever share of that rise is genuine incidence
-rather than reporting intensity, the tactic is not a historical scatter; it is being adopted.
-
-And it is the hostage token of \S\ref{sub:hostage} observed in the field. Such an attacker needs no
-cryptographic access and no cooperation that a protocol could withhold --- only leverage, and a
-relative supplies it. This bears directly on the delegated route~(\ref{r:remotewinner}), whose
-clearance rests on the deciding party lying beyond $\Attacker$'s coercive reach. The delegate a
-holder is most likely to actually appoint --- a spouse, a parent, an adult child --- is precisely
-the party this subset shows being seized. The route is not thereby refuted: it is bounded. A
-delegate who is reachable is not a second racer but a second victim, so \ref{r:remotewinner}
-clears the bar only for delegates whose unreachability is structural rather than assumed --- and
-that requirement, not the arrangement's convenience, is what the data prices.
-
-\medskip\noindent\textbf{A case in point --- Balland.} The January 2025 abduction of
-David Balland, a co-founder of the hardware-wallet maker Ledger~\cite{balland}, is
-instructive precisely because it is an \emph{embarrassment to the self-custody creed}.
-A professional champion of self-custody was seized from his home and mutilated --- a
-finger severed to force payment --- and neither wealth nor prominence prevented it. He
-was freed by an elite \emph{state} police unit, and the ransom --- paid not by Balland
-but by an associate --- was clawed back largely because part of it moved in a
-\emph{centralized} stablecoin whose issuer could freeze it. A self-custody pioneer
-made whole by the state and by centralization: two mechanisms external to, and in
-tension with, the creed. Only the issuer freeze is independently verifiable; the
-remainder rests on the parties' accounts, according to which roughly $5\%$ was never recovered.
-The case also indicts the delegated route (\ref{r:remotewinner}): an associate
-\emph{did} pay, which is exactly the compliance clause~\ref{d:nodelegatecoerce}
-assumes away --- a real instance of the indirect coercion,
-routed through the victim's body to a third party who will not refuse. For a brief
-hand-over-now robbery a remote delegate is unreachable in time and so seems to help;
-but merely \emph{not carrying} the device --- leaving the wallet in a home vault ---
-does the same, while for the long attack the delegate is not out of reach but is the
-ransom channel itself. The lesson is not that Balland erred: it is that, against a
-determined long-hold attacker, the fielded options collapse to state rescue and
-centralized freezing, whereas the tacit route removes the leverage --- no standing
-device, no hostage token, no delegate to pay --- rather than relying on ex-post
-recovery.
-
-\medskip\noindent\textbf{A case in point --- RATIRL.} The registry coded above records
-the obscurity route's failure directly. In one of its 2026 incidents (Sweden, 13
-January)~\cite{ratirl} a League of Legends streamer was bound and tortured for hours by
-armed intruders demanding cryptocurrency he denied holding; unable to credit the
-denial, they persisted long past any value the robbery could rationally return,
-leaving finally with only his Pok\'emon-card collection. This is
-Corollary~\ref{cor:disclosure} in the field: where the community norm is ``deny that
-you own Bitcoin,'' a coerced denial is \emph{pre-discredited} --- presumed to be the
-denial-script --- so a Kerckhoffs-educated $\Attacker$ gets no exculpatory update, and
-the rational continuation of an interrogation that opens with a denial is \emph{more}
-coercion, not less. The case fixes the
-\emph{sign}: obscurity does not merely fail to protect --- it can convert a robbery
-into a torture, the \emph{negative} coercion resistance the red $\times$ of
-column~(\ref{p:coerc}) marks, not a mere absence. And it does so on \emph{every}
-reading of the denial, which forks three ways --- each indicting obscurity.
-\textbf{(i)}~If the denial was a defensive lie (there was a stash), secrecy still did
-not avert the assault --- a textbook Kerckhoffs failure --- and his only residual
-recourse is to \emph{double down} on it and wager against a repeat. \textbf{(ii)}~If it
-was true (no stash), he bore obscurity's \emph{negative externality}: a genuine
-non-holder attacked only because real holders are coached to look exactly like him ---
-the very coaching that collapses the statistical holder/non-holder distinction.
-\textbf{(iii)}~If the truth is in between --- a real but smaller-than-presumed stash,
-too small to be worth the judicial exposure the attack incurred --- \emph{both}
-pathologies operate at once: others' obscurity redirected the attack onto him, and his
-own failed to stop it. That all three are simultaneously plausible is itself the
-verdict: in the aggregate, across a growing population of holders and lookalikes, each
-is already occurring --- and the obscurity culture, exactly as Kerckhoffs predicts,
-prevents none of them.
+Two fielded cases sharpen the classification, and both are analysed in
+Appendix~\ref{app:classify}. The 2025 abduction and mutilation of \textbf{David
+Balland}~\cite{balland} ended in rescue by an elite \emph{state} police unit and
+recovery via a \emph{centralized} stablecoin freeze, with an associate paying the
+ransom --- exactly what clause~\ref{d:nodelegatecoerce} assumes away. And the 2026
+\textbf{RATIRL} incident~\cite{ratirl}, in which a streamer was tortured for hours
+over cryptocurrency he denied holding, is Corollary~\ref{cor:disclosure} in the
+field: where the norm is ``deny that you own Bitcoin,'' a coerced denial is
+\emph{pre-discredited}, so the rational continuation of an interrogation opening
+with one is \emph{more} coercion. It fixes the \emph{sign} --- obscurity does not
+merely fail to protect, it can convert a robbery into a torture.

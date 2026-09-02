@@ -1,0 +1,65 @@
+% ════════════════════════════════════════════════════════════════════════════
+\section{Supplement to the quantum note and the limitations}
+\label{app:quantum}
+% ════════════════════════════════════════════════════════════════════════════
+
+\subsection{Grover against the cheap bound}
+\label{app:quantum-grover}
+
+\begin{remark}[The one bound Grover does dent: the live-$o_N$ residual]\label{rem:grover-residual}
+The duality's \emph{cheap} bound is a different matter. The floor also clears
+$\sftstar$ via a cheap $2^{96}$ ledger brute of $\Sh_N$ (Stipulation~\ref{ass:feas},
+\ref{s:infeasiblec}), and that cheap side inherits \emph{no} depth-hardness to guard
+it: Grover halves it outright to $\sim 2^{48}$. Concretely, a Quantum WDY attacker
+landing on an imminently- or currently-live final board $o_N$ --- the same coincidence
+that opens the tolerated residual window (\S\ref{sec:residual-seizure}) --- faces only the cheap
+$2^{96}$ brute of the terminal secret, and Grover reduces that to a
+$\sim 2^{48}$ (``$48$-qubit'') floor.\footnote{Each Grover attempt is one cheap
+evaluation of the terminal step --- a single $\Hcheap(o_N \,\|\, \Sh_N)$
+key-derivation followed by the ledger decryption/spend check --- and \emph{nothing}
+more: the search is over the $96$-bit $\Sh_N$ \emph{directly}, so Shamir
+reconstruction (the holder's step of interpolating $\Sh_N$ from $r_N$ recognized
+points) never enters the oracle loop. One quantum attempt is thus KDF $+$
+decryption, not Shamir $+$ KDF $+$ decryption.} This touches nothing but the
+residual: it does \emph{not} reach the memory-hard $\sftstar$ bound (guarded above),
+and it applies only inside the already-$\varepsilon$-bounded live-$o_N$ sliver, whose
+incentive-safety argument (\S\ref{sec:residual-dr}) turns on the kill economics, not on
+the brute's width --- a $2^{48}$ Grover search buys $\Attacker$ nothing a classical
+$2^{32}$ brute in that same window does not already grant.
+\end{remark}
+
+
+\subsection{Memorization cost and the adoption precedent}
+\label{app:quantum-adoption}
+
+\textbf{Memorization cost, and why it is affordable.} A separate objection to a
+brain-only setup is not whether the oracle \emph{exists} but whether living with it
+is too costly --- carrying $\ge 96$ bits of tacit recall indefinitely. Two things
+bound that cost. First, retention is \emph{assisted}: a spaced-repetition
+companion tool~\cite{gw-cpnf} schedules review (an
+SM-2\,/\,Anki-class algorithm), turning a one-off feat of memory into a light,
+decaying maintenance load. Second, the feat is historically ordinary: before mobile
+computation offloaded it, ordinary people routinely held a handful of phone numbers,
+several street addresses, and a working mental map of their city's grid --- recall
+comparable to what TKBA asks. The cost is real but bounded, and it is the price of a
+secret no device can be seized to reveal.
+
+\textbf{Adoption precedent --- demanding standards clear once the pain is
+legible.} The cost objection also has an empirical form --- \emph{users will
+never accept this much ceremony} --- and it met a natural experiment in the
+July 2026 seed-entropy incident (\S\ref{sec:ethics}). Per the vendor's own
+advisory, seeds created with $50$-plus fair, independent dice rolls were not
+at risk from the defect~\cite{coinkite-entropy};
+within days, community guidance converged on exactly that manifestly
+labor-intensive procedure as the default counsel. Effort tolerance, in other
+words, is not a constant of the population; it reprices overnight once a
+threat is legible. The wrench-attack class already shows the same willingness in
+a smaller way, and spends it badly: decoy construction is sold as a paid service
+tier and published guidance coaches the performance
+(Remark~\ref{rem:decoy-market}). The effort budget exists; what it currently buys
+is a scheme the Criterion rejects. TKBA's memorization load stands to the wrench-attack class
+as dice-rolling stands to entropy failure --- demanding, verifiable by the
+holder alone, and adoptable at scale when the danger is understood --- and
+making the danger legible \emph{before} the corresponding incident is
+precisely what a formal bar is for.
+

@@ -25,31 +25,7 @@ leak channel usually the holder's own mouth: threat-intelligence reporting on th
 exchange data}, alongside insider sales of customer lists and dark-web recruitment
 for employee access~\cite{certik-intel3d-h1-2026} --- records held by third
 parties, which the holder can neither audit nor revoke once
-created.\footnote{The counsel's strongest form answers that such records need
-never exist: acquire only without identity verification, and keep no reportable
-trail. We grant that this reduces exposure and that it is legitimate personal
-hygiene. Three things nonetheless keep it from functioning as a security
-mechanism. \emph{First, exposure ratchets.} A record cannot be uncreated and a
-leak cannot be un-leaked, so the strategy pays only \emph{ex ante}, and only for
-the holder whose data has never once escaped; for everyone else there is no
-longer anything protectable to protect. Worse, the two curves run against the
-holder: the cost of maintaining discretion compounds with every year held and
-every counterparty met, while its marginal return falls as the stock of records
-already leaked grows. \emph{Second, for the compliant holder the strategy is not
-lawfully available.} Where holdings or gains are legally reportable, leaving no
-fiscal record is not discretion but non-declaration --- tax evasion, a criminal
-offense --- so the counsel reduces to an instruction the law-abiding holder
-cannot follow. Nor is the resulting record safe by virtue of sitting with the
-state: in France, the jurisdiction carrying the largest share of recorded
-incidents, an employee of the tax administration was placed under judicial
-investigation in 2025 for allegedly consulting the authority's internal database
-and passing the results to organized crime, with investigators reporting queries
-aimed specifically at cryptocurrency investors~\cite{fisc-leak-2026}. The
-compliant holder is thus asked to choose between an offense and a database that
-has been mined for targets. \emph{Third, and decisive here}, discretion is not a
-\emph{mechanism} at all: under Assumption~\ref{ass:kerckhoffs} the adversary is
-granted the holder's situation, so any defense contingent on their ignorance is
-out of scope by construction.}
+created.\footnote{The counsel's strongest form answers that such records need never exist: acquire only without identity verification, and keep no reportable trail. We grant that this reduces exposure, but three things keep it from being a security \emph{mechanism}: exposure ratchets, a leak being impossible to un-leak; the compliant holder cannot lawfully follow it, since where holdings are reportable, leaving no fiscal record is non-declaration; and, decisively here, Assumption~\ref{ass:kerckhoffs} puts any ignorance-contingent defense out of scope by construction. Appendix~\ref{app:intro} gives the argument in full.}
 This ``keep a low profile, never disclose'' counsel is nonetheless the community's
 entrenched consensus, actively promoted by prominent voices (cataloged in the
 accompanying economic analysis~\cite{gw-justification}); and it carries a measurable
@@ -57,28 +33,41 @@ price --- that analysis finds the severity-adjusted actuarial cost of individual
 Bitcoin self-custody already \emph{exceeds} the cost priced into insurance for
 comparable portable valuables such as jewellery.
 
-This paper models coercion directly. Our contributions are:
+This paper models coercion directly, and uses the model to systematize a design
+space built without one. It is worth saying at the outset what kind of result that
+yields, since it is not the kind a cryptographic reading looks for: a
+\emph{decision-theoretic} impossibility with empirical grounding, addressed to the
+designers of custody systems, with no primitive proposed, no reduction given and
+nothing cryptanalyzed. The Deadly-Race Lemma holds \emph{whatever} the underlying
+cryptography, because it lives in the incentive layer that threat models omit ---
+which is why ``the crypto is strong'' is no answer to it. Our contributions are:
 
 \begin{enumerate}[nosep,leftmargin=1.6em]
   \item a \textbf{formal coercion model} (\S\ref{sec:model}) with an explicit
-        adversary, a Kerckhoffs premise, and an engineering ``feasibility
-        line'' that turns asymptotic security into concrete parameter bounds;
+        adversary, a Kerckhoffs premise, and an engineering ``feasibility line''
+        that turns asymptotic security into concrete parameter bounds;
   \item the \textbf{Deadly-Race impossibility chain} (\S\ref{sec:chain}): a
         classical impossibility (you cannot prove you forgot) that escalates,
         step by step, into an incentive to murder the victim;
   \item the \textbf{No-Gray-Area Criterion} (\S\ref{sec:chain}), the design bar
-        that a coercion-resistant scheme must clear, together with a
-        \emph{reachability} dichotomy that classifies every clearance route;
-  \item a \textbf{construction} (\S\ref{sec:gw}), the TGPO orbit, that
-        meets the bar with individual custody, including a proof that the master
-        secret meets the floor from every seizable state bar a bounded residual
-        window; and
-  \item a \textbf{taxonomy} (\S\ref{sec:classify}) that classifies existing
-        designs by \emph{which} clearance route they take --- illustrated on
-        shipping time-lock-rescue vaults.
+        --- established as a theorem, not a stipulation --- with a
+        \emph{reachability} dichotomy partitioning every clearance route and a
+        \emph{trichotomy} enumerating the mechanisms that can take one;
+  \item a \textbf{systematization of what is deployed} (\S\ref{sec:classify})
+        against that taxonomy: two time-lock-rescue vaults, the standard industry
+        control set, and the self-destruct PIN class shipped by three vendors,
+        each placed by which route it takes or why it takes none --- which
+        refutes, from the vendors' own documentation, the assumption that a duress
+        PIN is a coercion defense;
+  \item an \textbf{empirical grounding} (\S\ref{sub:empirical}) in a coding of
+        $352$ physical-attack incidents, calibrating the stipulations, attesting
+        the predicted terminal outcome, and bounding the delegated route; and
+  \item a \textbf{construction} (\S\ref{sec:gw}), the TGPO orbit, establishing
+        that the remaining route is reachable with custody kept individual.
 \end{enumerate}
 
 We call the central results the \textbf{Deadly-Race Lemma} and the
 \textbf{No-Gray-Area Criterion}, after their first statement in the protocol's
-public design record~\cite{gw-threatmodel}.
+public design record~\cite{gw-threatmodel}. Supporting material is gathered in the
+appendices; the paper is intended to be read without them.
 

@@ -1,0 +1,92 @@
+% ════════════════════════════════════════════════════════════════════════════
+\section{Notation, and two refinements of the model}
+\label{app:notation}
+% ════════════════════════════════════════════════════════════════════════════
+
+\subsection{Notation}
+
+\noindent The symbols below recur throughout; each is defined in full where it is
+introduced, and all are gathered here for reference.
+
+\vspace{4pt}
+
+\begingroup\small
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\linewidth}{@{}l X@{}}
+\toprule
+\multicolumn{2}{@{}l}{\textbf{Principals, assets, economics}}\\
+\midrule
+$\Victim,\ \Attacker$ & holder (victim) and coercer (attacker) \\
+$K$ & master secret gating the asset \\
+$W$ & value of the asset to $\Victim$ \\
+$c$ & expected disutility to $\Attacker$ of killing $\Victim$ \\
+$\pi$ & $\Victim$'s \emph{pivotality} --- win-probability $\Attacker$ gains by removing $\Victim$ \\
+\addlinespace
+\multicolumn{2}{@{}l}{\textbf{Adversary, game, safety}}\\
+\midrule
+WDY & the Wrench--Dolev--Yao adversary, fixed by clauses \ref{d:kerckhoffs}--\ref{d:nodelegatecoerce} (Assumption~\ref{ass:power}) \\
+$p_A$ & probability $\Attacker$ reaches $K$ after the encounter; \emph{gray} iff $0<p_A<1$ \\
+$t$ & coercion-time budget (how long $\Attacker$ can sustain coercion) \\
+$G$ & protocol time-gate (enforced latency to complete the derivation) \\
+$\mathsf{Corr}$ & residual-window event: the points $\Victim$ has surrendered so far are correct (\S\ref{sec:residual-dr}) \\
+$\mathsf{Esc}$ & residual-window event: the ${\approx}1$--$2$ min shaved by brute-forcing the last points decides escape from the scene (\S\ref{sec:residual-dr}) \\
+\addlinespace
+\multicolumn{2}{@{}l}{\textbf{Construction (TGPO orbit \S\ref{sec:gw})}}\\
+\midrule
+$\sigma$ & public, precomputation-resistant timechain salt\codename{Namtso} \\
+$\Hcheap,\ \Hhard$ & unspecified cheap hash; unspecified memory- and depth-hard (Argon2-class) hash \\
+$o_i$ & orbit state at stage $i \in \{0,\dots,N\}$; $o_i = \Hhard(u_{i-1})$ (with $o_0 = \Hcheap(\sigma)$); $N{+}1$ stages total \\
+$N$ & number of \emph{deep} stages --- those requiring at least one memory- and depth-hard hash ($\Hhard$) to derive \\
+$\Sh_i$ & Shamir polynomial at stage $i$; $r_i$ of its points reconstruct it \\
+$u_i$ & $\Hcheap(o_{i}\|\Sh_{i})$: commitment of the wiped values $o_{i}$ and $\Sh_{i}$ \\
+$K_i$ & $\Hcheap(o_{i}\|\Sh_{i})$: master secret correspondent to stage $i$. \\
+$p_{i,j},\ \theta_{i,j}$ & point $j$ of stage $i$; parameters for fractal $j$ of stage $i$ \\
+$r_i$ & Shamir threshold at stage $i$ ($r_i \ge 2$) \\
+$\sftstar$ & $2^{64}$ memory- and depth-hard evaluations (infeasible) \\
+floor & \emph{prohibitive} cost: $\ge \sftstar$ hard \emph{or} $\ge 2^{96}$ cheap (Stipulation~\ref{ass:feas}) \\
+\bottomrule
+\end{tabularx}
+\endgroup
+
+\subsection{The two tacit-seizure clauses}
+\label{app:notation-tacit}
+
+\begin{remark}[The two non-seizure clauses coincide for design]\label{rem:tacit-coincide}
+For protocol-design purposes the tacitness of the entropy-carrying secrets
+(\ref{d:notacit}) and that of the perceptual-oracle parameters
+(\ref{d:noperceptual}) are logically equivalent. If the parameters were
+transmissible, a wrench attack would seize them --- and, available within that
+\emph{same} encounter, they would then serve to seize the entropy-carrying points
+themselves; so non-tacit parameters force non-tacit points. Conversely, if the
+points were somehow transmissible without the parameters ever being available,
+then the tacitness of the parameters is irrelevant, the points having already
+fallen. Either way the binary question ``does a single seizure reach $K$?'' turns
+on the two clauses together, and the model may treat them as one.
+\end{remark}
+
+\begin{remark}[Where the distinction still matters]\label{rem:tacit-quantitative}
+The distinction can nonetheless matter for a \emph{quantitative} refinement --- a
+statistical distribution of the wall-clock needed to coerce either (up to sufficient
+number of most-significant bits) given $\Attacker$'s coercion time budget $t$ 
+(Definition \ref{def:priced}). Still, a secret that is \emph{theoretically} transmissible, 
+but only with pen and paper, an adversarial fork of the application, and long hours 
+to days of focused mental effort under perfect $\Attacker$--$\Victim$ cooperation, 
+is essentially as good as ideal. Until empirical studies of TKBA (Assumption~\ref{ass:tkba}) 
+are done, the actual relevance of that nuance is purely speculative.
+\end{remark}
+
+\begin{remark}[TKBA restates the tacit-seizure clauses]\label{rem:tkba-restates}
+Assumption~\ref{ass:tkba} is not an independent hypothesis: it is
+clauses~\ref{d:notacit}--\ref{d:noperceptual} lifted out of the adversary model and
+stated as a premise on the secret. The clauses say $\Attacker$ cannot seize the
+tacit points or the perceptual parameters even under full cooperation
+(\ref{d:subjugation}); TKBA says the same thing about the secret itself ---
+recognizable but not transmissible --- with no adversary mentioned. They are two
+faces of one assumption (exactly as \ref{d:kerckhoffs} and
+Assumption~\ref{ass:kerckhoffs} are two faces of Kerckhoffs), and by
+Remark~\ref{rem:tacit-coincide} the two clauses are themselves one. We keep both
+forms because each is the natural one in its place --- the premise where the
+construction is motivated (\S\ref{sec:gw}), the adversary clause where seizure is
+reasoned about.
+\end{remark}
+

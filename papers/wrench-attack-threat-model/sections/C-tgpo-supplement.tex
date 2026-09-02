@@ -1,0 +1,376 @@
+% ════════════════════════════════════════════════════════════════════════════
+\section{Supplement to the TGPO construction}
+\label{app:tgpo}
+% ════════════════════════════════════════════════════════════════════════════
+
+\noindent This appendix carries the material \S\ref{sec:gw} summarizes: the orbit
+diagram, the proof of the floor theorem, the null result on shallow-stage oracle
+use and the adversary-education argument beside it, and the full
+residual-deadly-race analysis with the design measures that shrink the window.
+
+\subsection{The orbit}
+\label{app:tgpo-orbit}
+
+Let $\Hcheap$ be a cheap, entropy-preserving one-way hash, $\Hhard$ a memory-hard
+(Argon2-class) hash of tunable cost, and $\sigma$ a public,
+precomputation-resistant \emph{timechain salt} whose cross-user amortization is
+negligible~\cite{gw-timechain-salt}. An \textbf{orbit} of $N$ deep stages
+(Figure~\ref{fig:orbit}, Appendix~\ref{app:tgpo}) is
+\begin{align}
+  o_0 &= \Hcheap(\sigma),                && \\
+  u_i &= \Hcheap(o_{i} \,\|\, \Sh_{i}),  && 0 \le i \le N-1, \\
+  o_i &= \Hhard\!\big(\, u_{i-1} \,\big), && 1 \le i \le N, \\
+  K_i &= \Hcheap(o_i \,\|\, \Sh_i),      && 0 \le i \le N,
+  \label{eq:orbit}
+\end{align}
+with $\{o_{i-1}, \Sh_{i-1}\}$ \textbf{wiped} in the instant between the cheap
+inner hash and the long memory-hard step, so the raw prior orbit point
+($o_{i-1}$) and Shamir secret ($\Sh_{i-1}$) exist only momentarily rather than
+across the whole memory-hard window ---
+which is why the construction does not use $\Hhard(o_{i-1}\|\Sh_{i-1})$ directly.
+($u_i$ and $K_i$ share a formula but differ by \emph{role}, kept apart in
+deployment by domain separation.)
+
+Each stage carries not a point but a \emph{whole Shamir
+polynomial}~\cite{shamir1979}: $s_i$ points $p_{i,j}$, each a 32-bit leaf-area of
+a fractal $\theta_{i,j} = \Hcheap(o_i \| j)$, any $r_i$ of which reconstruct
+$\Sh_i$ of $r_i \cdot 32 \ge 64$ bits. The orbit absorbs the \emph{full}
+polynomial, so the smallest object any link commits is a whole stage and no
+individual point is ever checkable in isolation --- the \emph{block-orbit
+$r \ge 2$ condition}, which denies $\Attacker$ any sub-threshold oracle. The
+points instantiate Assumption~\ref{ass:tkba}: recognizable on their boards but not
+transmissible without $\theta_{i,j}$ (TKBA$_1$), and the deep $\theta_{i,j}$ are
+regenerated only by walking the memory-hard chain (TKBA$_2$).
+
+The coercion-resistant master secrets are
+\begin{equation}
+  K_i = \Hcheap(o_i \,\|\, \Sh_i), \qquad 1 \le i,
+  \label{eq:master}
+\end{equation}
+deliberately \emph{cheap}: the orbit yields a nested \emph{family} of master
+secrets, each a full instantiation of the abstract $K$ of \S\ref{sec:chain}, with
+$K_0$ set aside since stage~$0$'s board follows from the public salt alone. A
+memory-hard \emph{last} step would only \emph{prolong} the window in which $o_N$
+and the final points are live, worsening the very window \eqref{eq:orbit} shrinks;
+the resistance therefore lives in \emph{entropy}, standard deep stages carrying 96
+bits, so a cheap brute of $\Sh_N$ from a bare $o_N$ costs $2^{96}$ --- infeasible
+by~\ref{s:infeasiblec} --- while the terminal window stays instant.
+
+
+\begin{figure}[t]
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tikzpicture}[node distance=6mm and 10mm]
+  \node[gwevent] (sig) {$\sigma$};
+  \node[gwstate, right=of sig] (o0) {$o_0$};
+  \node[gwtask, right=of o0] (st0)
+     {$K_{0} := \Hcheap(o_{0} \,\|\, \Sh_{0})$;\\[2pt]
+      $u_0 := \Hcheap(o_0 \,\|\, \Sh_0)$;\\[2pt]
+      \textcolor{graytext}{\footnotesize wipe} $\{o_0, \Sh_0\}$;\\[2pt]
+      $o_1 := \Hhard(u_0)$;};
+  \node[gwstate, right=of st0] (o1) {$o_1$};
+  \node[right=8mm of o1] (dots) {$\cdots$};
+  \node[gwstate, right=8mm of dots] (oNm) {$o_{N-1}$};
+  \node[gwtask, right=of oNm] (stNm)
+     {$K_{N-1} := \Hcheap(o_{N-1} \,\|\, \Sh_{N-1})$;\\[2pt]
+      $u_{N-1} := \Hcheap(o_{N-1} \,\|\, \Sh_{N-1})$;\\[2pt]
+      \textcolor{graytext}{\footnotesize wipe} $\{o_{N-1}, \Sh_{N-1}\}$;\\[2pt]
+      $o_N := \Hhard(u_{N-1})$;};
+  \node[gwstate, right=8mm of stNm] (oN) {$o_{N}$};
+  \node[gwtask, right=of oN] (stN)
+     {$K_N := \Hcheap(o_{N} \,\|\, \Sh_{N})$};
+  \node[gwstate, below=of st0] (K0) {$K_0$};
+  \node[gwstate, below=of stNm] (KNm) {$K_{N-1}$};
+  \node[gwstate, below=of stN] (KN) {$K_N$};
+  \draw[gwflow] (sig) -- node[gwlabel, above]{$\Hcheap$} (o0);
+  \draw[gwflow] (o0)  -- (st0);
+  \draw[gwflow] (st0) -- node[gwlabel, above]{$\Hhard$} (o1);
+  \draw[gwflow] (o1)  -- (dots);
+  \draw[gwflow] (dots)-- node[gwlabel, above]{$\Hhard$} (oNm);
+  \draw[gwflow] (oNm) -- (stNm);
+  \draw[gwflow] (stNm)-- node[gwlabel, above]{$\Hhard$} (oN);
+  \draw[gwflow] (oN) -- (stN);
+  \draw[gwflow] (st0) -- node[gwlabel, right]{$\Hcheap$} (K0);
+  \draw[gwflow] (stNm) -- node[gwlabel, right]{$\Hcheap$} (KNm);
+  \draw[gwflow] (stN) -- node[gwlabel, right]{$\Hcheap$} (KN);
+  \node[gwtask, above=9mm of st0] (sh0)
+     {$\Sh_0$\\[1pt]\textcolor{graytext}{\footnotesize any $r_0$ of $p_{0,j}$}};
+  \node[gwtask, above=9mm of stNm] (shNm)
+     {$\Sh_{N-1}$\\[1pt]\textcolor{graytext}{\footnotesize any $r_{N-1}$ of $p_{N-1,j}$}};
+  \node[gwtask, above=9mm of stN] (shN)
+     {$\Sh_{N}$\\[1pt]\textcolor{graytext}{\footnotesize any $r_{N}$ of $p_{N,j}$}};
+  \draw[gwflow] (sh0) -- (st0);
+  \draw[gwflow] (shNm) -- (stNm);
+  \draw[gwflow] (shN) -- (stN);
+  \node[gwstate] (th0)  at (o0  |- sh0)  {$\{\theta_{0,j}\}$};
+  \node[gwstate] (thNm) at (oNm |- shNm) {$\{\theta_{N-1,j}\}$};
+  \node[gwstate] (thN)  at (oN  |- shN)  {$\{\theta_{N,j}\}$};
+  \draw[gwflow] (o0)  -- node[gwlabel, right]{$\Hcheap$} (th0);
+  \draw[gwflow] (oNm) -- node[gwlabel, right]{$\Hcheap$} (thNm);
+  \draw[gwflow] (oN)  -- node[gwlabel, right]{$\Hcheap$} (thN);
+  \draw[gwflow] (th0)  -- (sh0);
+  \draw[gwflow] (thNm) -- (shNm);
+  \draw[gwflow] (thN)  -- (shN);
+\end{tikzpicture}}
+\caption{\textbf{The TGPO orbit} (\S\ref{sec:gw}). A public,
+precomputation-resistant timechain salt $\sigma$\codename{the Namtso primitive} seeds a
+chain of $N$ memory-hard stages. At each stage the raw inputs
+$o_{i-1}\,\|\,\Sh_{i-1}$ are folded by the \emph{cheap} inner hash $\Hcheap$ and
+\emph{wiped} before the long memory-hard step $\Hhard$, so seizable material
+exists only for an instant --- shrinking the window in which $o_{i-1}, \Sh_{i-1}$ are
+reachable. Each board $o_i$ derives the fractal parameters
+$\theta_{i,j} = \Hcheap(o_i \| j)$ on which its points $p_{i,j}$ are recognized; any
+$r_i$ of those points reconstruct the whole Shamir polynomial $\Sh_i$, absorbed into
+the \emph{next} orbit link, so no single point is checkable in isolation. The terminal secrets $K_i =
+\Hcheap(o_i \,\|\, \Sh_i)$ deliberately use the cheap hash, keeping the final window
+instant. By construction, coercion resistance happens for $i \geq 1$.}
+\label{fig:orbit}
+\end{figure}
+
+\subsection{Proof of the floor theorem}
+\label{app:tgpo-floor}
+
+\noindent Theorem~\ref{thm:floor} is restated from \S\ref{sec:gw}: under
+Assumptions~\ref{ass:power}--\ref{ass:tkba} and the standard build of
+\eqref{eq:orbit}--\eqref{eq:master}, from every seizable state save the residual
+window of \S\ref{sec:residual-seizure}, a target master secret $K_N$ is
+prohibitive to reach.
+
+\begin{proof}[Proof by case analysis over seizable states]
+From a seized $o_i$ ($i < N$), reaching $K_N$ requires guessing
+$\Sh_i, \dots, \Sh_N$; each $\Sh_l$ guess is $2^{r_l \cdot 32}$ and is
+$\Hhard$-gated, since it is checked only by recomputing the memory-hard link
+\eqref{eq:orbit}. Preimage resistance of $\Hcheap, \Hhard$ makes the orbit
+forward-only: a seized $o_i$ cannot yield $o_{i-1}$. We enumerate:
+\begin{itemize}[nosep,leftmargin=1.4em]
+  \item \emph{Pure device seizure} (no coercion; only time-lock-gated~\cite{rsw1996}
+        blobs at rest). All tacit points are required; $K$ is unreachable.
+  \item \emph{Wrench of stage~0} ($p_{0,\cdot}$, always present since $\sigma$ is
+        public). $\Attacker$ computes $o_1$ with one $\Hhard$; from $o_1$, $K_N$
+        costs $2^{\sum_{j\ge 1} r_j\cdot 32}$, which is $2^{96}$ or more in the
+        recommended standard builds~\cite{gw-design}, each guess $\Hhard$-gated ---
+        prohibitive.
+  \item \emph{Mid-orbit seizure} at $o_i$ ($0 < i < N$). $K_N$ costs $\ge 2^{96}$
+        cheap and is $\Hhard$-gated per guess --- prohibitive.
+  \item \emph{Residual} $o_N$ present. Treated separately in
+        \S\ref{sec:residual-seizure}.
+\end{itemize}
+Every case except the residual leaves $K_N$ at the floor
+(Stipulation~\ref{ass:feas}).
+\end{proof}
+
+\begin{remark}[Shallow-stage oracle use adds nothing to the floor]
+\label{rem:shallow-null}
+The oracle may be exercised on stages sitting below the memory-hard chain ---
+stage~$0$ above all, whose board $o_0 = \Hcheap(\sigma)$ follows from the public
+salt at no derivation cost. \emph{By itself this buys no coercion resistance.}
+The case analysis already hands $\Attacker$ the shallow points for free (the
+\emph{wrench of stage~0} case above, and the setting-aside of $K_0$ in
+\S\ref{sec:gw}): a stage reachable without $\Hhard$ work contributes no
+$\Hhard$-gated guessing to any path toward $K_N$, so routing its bits through the
+perceptual oracle leaves Theorem~\ref{thm:floor} exactly where it stood. In the
+ideal model the resistance is carried by the deep stages and by them alone, and
+nothing below the chain should be counted toward it.
+\end{remark}
+
+\begin{remark}[Redundant oracle use as adversary education]
+\label{rem:adversary-education}
+The reference implementation nevertheless routes the shallow stages through the
+perceptual oracle, and the reason lies not in the ideal model but in the gap
+between it and a realistic $\Attacker$. Assumption~\ref{ass:tkba} is a claim
+about $\Victim$ that a protocol-ignorant $\Attacker$ has no reason to credit on
+$\Victim$'s word --- disbelief is the ordinary case, and it is what the
+2026 streamer incident records~\cite{ratirl}. Performing the oracle where it is
+not needed makes the ceremony \emph{observable}: $\Attacker$ watches $\Victim$
+recognize points on a board rather than recite anything, and is shown in band ---
+on bits whose exposure costs nothing (Remark~\ref{rem:shallow-null}) --- that the
+remainder of the derivation demands a faculty $\Victim$ has but cannot hand over.
+The intended effect is on $\Attacker$'s belief: a coercer who has seen the
+mechanism work is less prone to read non-transmissibility as refusal, and
+correspondingly likelier to judge the attempt futile and abandon it.
+
+The force of this is that it is a \emph{demonstration} rather than an assertion.
+Declarations about the protocol are claims $\Attacker$ may discount at no cost;
+observed behavior is evidence, and it is cheap to supply precisely because the
+shallow bits are worthless to protect. It does not, however, discharge NNPP
+(Assumption~\ref{lem:nnpl}): $\Attacker$ still cannot verify that no second copy
+of the secret exists, and no amount of demonstration reduces the kill incentive
+by proof. What it moves is the probability that $\Attacker$ correctly classifies
+the situation he is in --- a term in his decision, not in the impossibility.
+
+There is nonetheless a second-order effect on that same decision, and it runs in
+$\Victim$'s favor: it is the \emph{Obscurity Paradox}, stated and named in
+Remark~\ref{rem:obscurity-paradox}, where it most sharply separates the
+non-obscure designs from the obscure ones.
+\end{remark}
+
+\subsection{The residual deadly-race window in full}
+\label{app:tgpo-residual}
+
+\noindent \S\ref{sec:residual-dr} states the criterion $\Delta p_A\,W > c$ and
+summarizes why it fails. The five grounds, and the six conditions whose
+intersection the window occupies, are these.
+
+Two events govern the marginal value of killing $\Victim$ in this window:
+\begin{itemize}[nosep,leftmargin=1.4em]
+  \item $\mathsf{Corr}$ --- \emph{the points $\Victim$ has surrendered so far are
+        correct}; and
+  \item $\mathsf{Esc}$ --- \emph{the ${\approx}1$--$2$ minutes shaved by
+        brute-forcing the last one or two points, rather than waiting for a
+        cooperating coerced $\Victim$ to recollect them, make the difference
+        between a successful escape from the crime scene and not}.
+\end{itemize}
+Killing can raise $p_A$ only inside $\mathsf{Corr}\cap\mathsf{Esc}$: outside
+$\mathsf{Esc}$ the shaved minutes change no outcome, and outside $\mathsf{Corr}$
+(below) killing \emph{lowers} $p_A$. The five grounds below --- grouped by which
+term of $(1 - p_A)\,W > c$ they act on --- show the inequality fails.
+
+\smallskip
+\noindent\emph{Conditional on $\mathsf{Corr}$, the gain $(1 - p_A)\,W$ is minimal
+($p_A$ is already ${\approx}\,1$):}
+\begin{enumerate}[nosep,leftmargin=1.6em]
+  \item a well-trained fractal is recognized in ${\approx}1$ minute, so
+        brute-forcing the last point saves $\Attacker$ at most that
+        ${\approx}1$--$2$ minutes over coercing it --- bounding the entire
+        interval on which $\mathsf{Esc}$, and hence any gain from killing, can
+        act;
+  \item $\Attacker$'s plan already budgets time-lock or re-derivation, subdue, and
+        interface time, so $\Pr[\mathsf{Esc}]$ is small: the residual minute
+        rarely flips the escape, and killing pays off only inside $\mathsf{Esc}$;
+  \item the terminal $K$ is deliberately cheap (\eqref{eq:master} keeps
+        memory-hardness in the orbit, not the terminal step), so $\Attacker$ can
+        \emph{pre-stage} the $2^{32}$ brute as a ``victim-stalls'' contingency ---
+        recovering the shaved minutes \emph{without} killing, and draining the
+        gain to ${\approx}\,0$.
+\end{enumerate}
+
+\noindent\emph{Absent $\mathsf{Corr}$, killing makes $p_A$ \textbf{fall}, not
+rise:}
+\begin{enumerate}[nosep,leftmargin=1.6em,start=4]
+  \item if any surrendered point is wrong, $\Victim$ is $\Attacker$'s only route
+        to a corrected one; eliminating $\Victim$ burns the coercion retry and
+        collapses $p_A$ toward $0$. Since $\Attacker$ cannot verify
+        $\mathsf{Corr}$ before broadcasting, the \emph{expected} change in $p_A$
+        from killing is dragged below its $\mathsf{Corr}$-only value --- and can
+        turn negative.
+\end{enumerate}
+
+\noindent\emph{And the cost $c$ is large:}
+\begin{enumerate}[nosep,leftmargin=1.6em,start=5]
+  \item the killing sharply \emph{worsens judicial liability} --- murder
+        aggravated by frivolous motive \emph{and} by the victim's defenselessness,
+        atop armed robbery --- so $c$ sits well above the minute-scale
+        $(1 - p_A)\,W$ the first four grounds leave on the table.
+\end{enumerate}
+
+Whether the window opens after the $(r_N{-}1)$-th or $(r_N{-}2)$-th point rests
+on the softest number of Stipulation~\ref{ass:feas} --- inside the tolerated
+reasoning either way.
+
+\medskip
+\noindent\textbf{Net.} The relevant quantity is \emph{not} $(1 - p_A)\,W$, which
+is non-negative by definition ($p_A \in [0,1]$), but the \emph{utility increment}
+of the assassinate-then-brute strategy over keeping the victim cooperating.
+Writing $\Delta p_A$ for the change in $\Attacker$'s win probability that strategy
+induces, it is rational only if $\Delta p_A\,W > c$, and
+\[
+  \Delta p_A \;=\;
+  \underbrace{\Pr[\mathsf{Corr}\cap\mathsf{Esc}]}_{\text{gain (grounds 1--3): minimal}}
+  \;-\;
+  \underbrace{\Pr[\neg\mathsf{Corr}]\cdot q}_{\text{loss (ground 4): burned retry}},
+\]
+where $q \in [0,1]$ is the win probability a still-cooperating victim would
+restore --- via a corrected point --- and that killing forfeits. The gain term is
+small ($\mathsf{Esc}$ is unlikely, is realized only within $\mathsf{Corr}$, and
+even then is bounded to a minute the brute can be pre-staged around); the loss
+term is a strict subtraction growing with $\Pr[\neg\mathsf{Corr}]$; and $c$ is
+large (ground 5). Hence the criterion the strategy must satisfy,
+$\Delta p_A\,W - c > 0$, is false with overwhelming probability, so the kill
+strategy is --- much more likely than not --- \emph{not} rationally advantageous.
+
+\smallskip
+\noindent In plain English, the residual deadly-race window lives only in the
+intersection of a wrench attacker who:
+\begin{enumerate}[nosep,leftmargin=1.9em]
+  \item is \textbf{technically sophisticated} --- able to mount the $2^{32}$ brute
+        and drive the interface. \emph{(Extrinsic to TGPO: granted to $\Attacker$
+        by Kerckhoffs (Assumption~\ref{ass:kerckhoffs}), which already hands over
+        the full protocol.)}
+  \item \textbf{landed the attack inside the $o_N$-live window} --- timed
+        precisely enough to catch stage $N$ available, or resourced enough to
+        sustain coercion until $o_N$ was made available;
+  \item \textbf{subdued $\Victim$ before any reset} of the derivation or the TLP;
+  \item \textbf{judged, right after the second-to-last point, that ceasing the
+        attack immediately was critical to escape} ($\mathsf{Esc}$) --- despite
+        already having budgeted for a longer encounter (item~2);
+  \item \textbf{could rule out every already-coerced point being incorrect}
+        ($\mathsf{Corr}$); and
+  \item \textbf{accepted the liability of a doubly-aggravated murder} --- frivolous
+        motive \emph{and} victim defenselessness. \emph{(Once again extrinsic to
+        TGPO: it burdens the deadly-racer attacker of any coercion-resistance
+        protocol.)}
+\end{enumerate}
+
+\begin{remark}[Cloaking the window\codename{the Flying Turtle}]\label{rem:flying-turtle}
+The gain term carries a further hidden factor: the residual is reached only when
+the attack \emph{coincides} with the brief interval in which $o_N$ is live. That
+coincidence is itself suppressible. Anonymizing \emph{when} the vault-opening
+window occurs --- the role of the outsourced anonymous
+time-lock\codename{``Flying Turtle''}~\cite{gw-flyingturtle} --- drives
+$\Pr[\text{attack lands in the target } o_N\text{-live window}]$ down, and this factor
+multiplies the already-minimal $\Pr[\mathsf{Corr}\cap\mathsf{Esc}]$. Here anonymity
+of the \emph{timing} suppresses a residual that confidentiality of the \emph{secret}
+alone does not reach.
+\end{remark}
+
+\begin{remark}[Design decision --- canonical-island highlighting]\label{rem:canonical-island}
+Item~5 above (that $\Attacker$ cannot rule out $\neg\mathsf{Corr}$) can be
+strengthened at the UX layer, to make an \emph{intentionally} wrong prior point
+plausible. Whenever feasible the interface should keep the canonical-island
+highlight active: this lets a coerced $\Victim$ perform a random zoom and then
+feign a confident, plausible-looking selection of an \emph{incorrect} island.
+Without the highlight the victim could not reliably produce a plausible selection
+at all --- valid coordinates are a tiny fraction of the space, so an unaided pick
+would most likely be rejected as invalid --- so it is the highlight that makes a
+deliberately-wrong-yet-credible surrender available to the victim, and thus keeps
+$\neg\mathsf{Corr}$ live in $\Attacker$'s belief (inflating the loss term of
+$\Delta p_A$). A sophisticated $\Attacker$ could force a non-highlighting fork of
+the app, but that costs further sophistication and wrench-time. This layer sits
+\emph{on top of} a window of deadly-race vulnerability that is already
+vanishingly unlikely (the six-way intersection above).
+\end{remark}
+
+\begin{remark}[Feigning is not load-bearing]\label{rem:feigning}
+The $\neg\mathsf{Corr}$ loss term (ground~4) and its UX amplification (canonical-
+island highlighting, above) only \emph{deepen} the case; they are not what carries
+it. Grant $\Attacker$ the best of it --- $\Pr[\mathsf{Corr}] = 1$, an honest
+$\Victim$ in flawless cooperation (\ref{d:subjugation}), with no feigning to fear. Then the loss
+term vanishes and the kill increment collapses to its gain term alone,
+\[
+  \Delta p_A\,W - c \;=\; \Pr[\mathsf{Esc}]\,W - c,
+\]
+which grounds 1--3 already hold small ($\Pr[\mathsf{Esc}]$ tiny, the shaved
+interval minute-scale and pre-stageable) against a large $c$ (ground~5). So the
+residual is bounded on the \emph{gain} side by itself: feigning ($\neg\mathsf{Corr}$)
+subtracts further and is a welcome bonus, but the window is already small without
+it --- even against a perfectly honest, fully cooperating victim.
+\end{remark}
+
+\begin{remark}[Splitting a stash across several $K_i$]\label{rem:splitting}
+Nothing forces a holder to route an entire stash through a single master secret; it
+may be split across several $K_i$ --- distinct stages, or independent orbit setups
+--- with two risk-management benefits, each diluting one of the residual failure
+modes:
+\begin{enumerate}[nosep,leftmargin=1.6em]
+  \item \emph{Diluted seizure risk} --- the proverbial ``not all eggs in one
+        basket.'' Should the residual \emph{seizure} window
+        (\S\ref{sec:residual-seizure}), or any other failure mode of the
+        construction, expose one $K_i$, only the fraction of the stash it guards is
+        lost.
+  \item \emph{Diluted deadly-race payoff.} In the residual \emph{deadly-race}
+        window (\S\ref{sec:residual-dr}) the kill condition is $(1-p_A)\,W > c$;
+        with the stash split, the $W$ at stake in any single window is only a
+        fraction of the whole, lowering $\Attacker$'s assassination payoff and
+        making the inequality harder to meet.
+\end{enumerate}
+\end{remark}
