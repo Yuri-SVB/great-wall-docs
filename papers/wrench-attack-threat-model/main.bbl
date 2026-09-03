@@ -10,7 +10,10 @@ Dolev, D., Yao, A.C.: On the security of public key protocols. IEEE
 \bibitem{lopp-attacks}
 Lopp, J.: Known physical bitcoin attacks.
   \url{https://github.com/jlopp/physical-bitcoin-attacks} (2025), community
-  registry of documented ``\$5 wrench'' incidents
+  registry of documented ``\$5 wrench'' incidents. Coded at commit
+  \texttt{9a4a62a} (2026-08-13), the state snapshotted in
+  \texttt{registry-analysis/}; the registry is live and later revisions do not
+  reproduce these figures
 
 \bibitem{aft-wrench}
 Ordekian, M., Atondo-Siu, G., Hutchings, A., Vasek, M.: Investigating wrench
@@ -38,7 +41,8 @@ Lopp, J.: Home invasion and torture of streamer {RATIRL} (sweden, 13 january
   against \$10.5M; home invasions 20 of 52, up from 1; France 33 of 52;
   targeting driven by leaked databases, tax records and exchange data. Sources
   include French Interior Ministry statements and court documents, independent
-  of the physical-attack registry
+  of the physical-attack registry; archived at
+  \url{http://archive.today/2026.09.03-170208/https://www.certik.com/certik-report/intel3d/intel3d-wrench-h1-2026}
 
 \bibitem{gw-justification}
 author, A.: Justification and economics: The security cost of bitcoin
@@ -73,56 +77,62 @@ Shamir, A.: How to share a secret. Communications of the ACM  \textbf{22}(11),
 
 \bibitem{rewind-bitcoin}
 {Rewind Bitcoin}: Rewind bitcoin --- timelock vaults with rescue.
-  \url{https://rewindbitcoin.com/} (2025)
+  \url{https://rewindbitcoin.com/} (2025), archived at
+  \url{http://archive.today/2026.09.03-170016/https://rewindbitcoin.com/}
 
 \bibitem{bitvault}
 {BitVault}: Bitvault --- time-delayed bitcoin self-custody.
   \url{https://www.bitvault.sv/} (2026), accessed 1 September 2026; archived at
-  \url{https://archive.is/QDn6i}
+  \url{http://archive.today/2026.09.01-224759/https://www.bitvault.sv/\%23how-it-works}
 
 \bibitem{bssl}
 Madonna, F.: {B-SSL}: Bitcoin secure signing layer. Concept whitepaper
   (Apache-2.0), self-attributed to F.~Madonna of BitVault SA and published by a
   GitHub account identifying itself with the BitVault organization,
   \url{https://github.com/ilghan/bssl-whitepaper/blob/main/B-SSL_WP_Oct_11_2025.pdf},
-  repository archived at \url{https://archive.is/qB2di}. The cited PDF is
-  352{,}036 bytes, SHA-256 64a0c9c4b440ae8ff90a7ba8ecb62bacef3acf153753b9240
-  aee17c8723f5320 (2025), dated 11 October 2025; not linked from the vendor's
-  own site, and the attribution could not be authenticated further. Keys: A, A1
-  user primary and copy; B user secondary; B1 a copy of B held by custodian; C
-  a custodian co-signer; CS an optional off-chain gatekeeper holding no key.
-  Paths: (A or A1) + C behind a configurable 2\,h--15\,d relative CSV; A + B
-  behind a 1-year absolute CLTV; and (B or B1) + C behind a 3-year absolute
-  CLTV, the latter two ungatekept
+  repository archived at
+  \url{http://archive.today/2026.09.01-225748/https://github.com/ilghan/bssl-whitepaper/}.
+  The cited PDF is 352{,}036 bytes, SHA-256
+  64a0c9c4b440ae8ff90a7ba8ecb62bacef3acf153753b9240 aee17c8723f5320 (2025),
+  dated 11 October 2025; not linked from the vendor's own site, and the
+  attribution could not be authenticated further. Keys: A, A1 user primary and
+  copy; B user secondary; B1 a copy of B held by custodian; C a custodian
+  co-signer; CS an optional off-chain gatekeeper holding no key. Paths: (A or
+  A1) + C behind a configurable 2\,h--15\,d relative CSV; A + B behind a 1-year
+  absolute CLTV; and (B or B1) + C behind a 3-year absolute CLTV, the latter
+  two ungatekept
 
 \bibitem{jade-duress-pin}
 {Blockstream}: Enable a duress {PIN}. Blockstream Help Center,
-  \url{https://help.blockstream.com/hc/en-us/articles/20182481765657-Enable-a-duress-PIN}
+  \url{https://help.blockstream.com/blockstream-jade/add-more-security-functionality/enable-a-duress-pin}
   (2026), vendor documentation using ``duress PIN'' and ``wallet-erase PIN''
   for the same erase feature: ``an alternate PIN that you can enable to
   automatically delete the encrypted wallet information from Jade if entered.''
-  Accessed 2026-08-17
+  Accessed 2026-08-17; archived at
+  \url{http://archive.today/2026.09.03-164731/https://help.blockstream.com/blockstream-jade/add-more-security-functionality/enable-a-duress-pin}
 
 \bibitem{jade-erase-pin}
 {Blockstream}: How do {I} set up a wallet-erase {PIN}? Blockstream Help Center,
-  \url{https://help.blockstream.com/hc/en-us/articles/9446043439257-How-do-I-set-up-a-wallet-erase-PIN}
+  \url{https://help.blockstream.com/blockstream-jade/faqs/how-do-i-set-up-a-wallet-erase-pin}
   (2026), vendor documentation for the Jade wallet-erase PIN: an alternate PIN
   that deletes the recovery phrase from the device, described as ``especially
   useful in the event of a physical threat,'' displaying ``Internal Error'' on
   entry, and carrying the instruction to ``make sure you have a backup before
-  proceeding.'' Accessed 2026-08-17
+  proceeding.'' Accessed 2026-08-17; archived at
+  \url{http://archive.today/2026.09.03-164738/https://help.blockstream.com/blockstream-jade/faqs/how-do-i-set-up-a-wallet-erase-pin}
 
 \bibitem{coldcard-trick-pins}
 {Coinkite}: Settings menu --- trick {PINs}. COLDCARD Documentation,
   \url{https://coldcard.com/docs/settings/} (2026), vendor documentation for
-  the trick-PIN actions: \emph{Brick Self}, \emph{Wipe Seed}, \emph{Look
-  Blank}, and a \emph{Duress Wallet} described as ``a personal safety feature''
-  --- ``If you must reveal a PIN under duress, give the duress PIN instead of
-  your Main PIN.'' Accessed 2026-08-24
+  the trick-PIN actions: \emph{Brick Self; archived at
+  \url{http://archive.today/2026.09.03-164807/https://coldcard.com/docs/settings/}},
+  \emph{Wipe Seed}, \emph{Look Blank}, and a \emph{Duress Wallet} described as
+  ``a personal safety feature'' --- ``If you must reveal a PIN under duress,
+  give the duress PIN instead of your Main PIN.'' Accessed 2026-08-24
 
 \bibitem{coldcard-pin-entry}
 {Coinkite}: {PIN} entry --- {COLDCARD} firmware documentation.
-  \url{https://github.com/Coldcard/firmware/blob/master/docs/pin-entry.md}
+  \url{https://github.com/Coldcard/firmware/blob/7fc656a/docs/pin-entry.md}
   (2026), vendor firmware documentation. The duress wallet is derived from the
   real wallet by a one-way process; enabling the brick PIN warrants
   ``triple-check your backups are correct''; and on the case where the decoy is
@@ -133,20 +143,23 @@ Madonna, F.: {B-SSL}: Bitcoin secure signing layer. Concept whitepaper
 \bibitem{casa}
 {Casa}: Casa --- collaborative multisig bitcoin custody. \url{https://casa.io/}
   (2026), 2-of-3 / 3-of-5 multisig; client keys on separate devices plus a Casa
-  co-signing key
+  co-signing key; archived at
+  \url{http://archive.today/2026.09.03-165338/https://casa.io/}
 
 \bibitem{certik-skynet-2026}
 {CertiK}: Skynet wrench attacks report. CertiK Skynet report,
   \url{https://www.certik.com/skynet-report/skynet-wrench-attacks-report}
   (2026), 72 verified physical-coercion incidents globally in 2025 (+75\% year
   on year); \$40.9M confirmed losses, stated to be under-reported; Europe over
-  40\% of incidents, France the highest national count
+  40\% of incidents, France the highest national count; archived at
+  \url{http://archive.today/2026.09.03-171000/https://www.certik.com/skynet-report/skynet-wrench-attacks-report}
 
 \bibitem{balland}
 {DL News}: Ledger co-founder david balland and wife kidnapped in france. DL
   News,
   \url{https://www.dlnews.com/articles/regulation/ledger-cofounder-david-balland-and-wife-kidnapped-in-france/}
-  (2025)
+  (2025), archived at
+  \url{http://archive.today/2026.09.03-171044/https://www.dlnews.com/articles/regulation/ledger-cofounder-david-balland-and-wife-kidnapped-in-france/}
 
 \bibitem{juels-coercion}
 Juels, A., Catalano, D., Jakobsson, M.: Coercion-resistant electronic
@@ -224,10 +237,11 @@ author, A.: A spaced-repetition companion for setup recall. Technical
 
 \bibitem{coinkite-entropy}
 {Coinkite Inc.}: Entropy technical backgrounder. Coldcard vendor post-mortem
-  and advisory, \url{https://blog.coinkite.com/entropy-technical-backgrounder}
+  and advisory, \url{https://blog.coinkite.com/entropy-technical-backgrounder/}
   (2026), vendor's candid account of the defect; fixed firmware for all
   affected models by 2026-08-01; seeds created with 50+ fair, independent dice
-  rolls deemed not at risk
+  rolls deemed not at risk; archived at
+  \url{http://archive.today/2026.09.03-171027/https://blog.coinkite.com/entropy-technical-backgrounder/}
 
 \bibitem{grover1996}
 Grover, L.K.: A fast quantum mechanical algorithm for database search. In: 28th
@@ -245,14 +259,17 @@ Grassl, M., Langenberg, B., Roetteler, M., Steinwandt, R.: Applying {Grover's}
   \url{https://engineering.block.xyz/blog/predictable-rng-fallback-and-32-bit-reseed-in-coldcard-firmware}
   (2026), discovery write-up of the July 2026 seed-entropy incident: a
   preprocessor-guard defect, shipped in firmware v4.0.0 (2021-03-17), left a
-  fallback software PRNG as the silent production entropy path
+  fallback software PRNG as the silent production entropy path; archived at
+  \url{http://archive.today/2026.08.06-112407/https://engineering.block.xyz/blog/predictable-rng-fallback-and-32-bit-reseed-in-coldcard-firmware}
 
 \bibitem{coindesk-coldcard}
 {CoinDesk}: How bitcoin cold wallets lost \$70 million in an attack that never
   touched the devices. CoinDesk,
   \url{https://www.coindesk.com/tech/2026/08/01/how-bitcoin-cold-wallets-lost-usd70-million-in-an-attack-that-never-touched-the-devices}
   (2026), first-wave figures: 1,082.65 BTC (about \$70M) drained from 1,196
-  addresses in a 41-minute window on 2026-07-30, per Galaxy Research's mapping
+  addresses in a 41-minute window on 2026-07-30, per Galaxy Research's mapping;
+  archived at
+  \url{http://archive.today/2026.08.01-211808/https://www.coindesk.com/tech/2026/08/01/how-bitcoin-cold-wallets-lost-usd70-million-in-an-attack-that-never-touched-the-devices}
 
 \bibitem{gw-flyingturtle}
 author, A.: An outsourced anonymous timelock. Technical documentation, [URL
@@ -261,7 +278,9 @@ author, A.: An outsourced anonymous timelock. Technical documentation, [URL
 \bibitem{trezor-wipe-code}
 {SatoshiLabs}: Create wipe code to erase device. Trezor Knowledge Base,
   \url{https://trezor.io/learn/security-privacy/personal-security-standards/create-wipe-code-to-erase-device}
-  (2026), vendor documentation calling the feature a ``self-destruct'' {PIN}
+  (2026), vendor documentation calling the feature a ``self-destruct'' {PIN;
+  archived at
+  \url{http://archive.today/2026.09.03-164822/https://trezor.io/learn/security-privacy/personal-security-standards/create-wipe-code-to-erase-device}}
   code which ``erases all private data, including the wallet backup (recovery
   seed).'' The page makes no mention of duress, coercion or physical threat.
   Accessed 2026-08-24
@@ -271,31 +290,37 @@ author, A.: An outsourced anonymous timelock. Technical documentation, [URL
   \url{https://github.com/trezor/trezor-firmware/issues/2055} (2022), opened
   2022-01-10: requests a user-defined message on wipe-code entry so an erasure
   can be presented as a hardware fault under duress, rather than the device
-  reporting that the wipe code was entered. Closed as \emph{not planned}
+  reporting that the wipe code was entered. Closed as \emph{not planned;
+  archived at
+  \url{http://archive.today/2026.09.03-164059/https://github.com/trezor/trezor-firmware/issues/2055}}
 
 \bibitem{jade-passphrase}
 {Blockstream}: How does a passphrase work on {Jade}? Blockstream Help Center,
   \url{https://help.blockstream.com/blockstream-jade/faqs/how-does-a-passphrase-work-on-jade}
-  (2026), vendor documentation for {BIP-39} passphrases on Jade: the passphrase
-  ``is added to your Jade's recovery phrase or SeedQR and is used to create
-  your wallet,'' ``any number of passphrases can be entered to change the
-  wallet you will log into,'' and ``your Blockstream Jade will not store your
-  passphrase.'' Notably, the page makes no claim of deniability, decoy or
-  duress use --- unlike the wallet-erase PIN pages. Accessed 2026-08-17
+  (2026), vendor documentation for {BIP-39; archived at
+  \url{http://archive.today/2026.09.03-164822/https://help.blockstream.com/blockstream-jade/faqs/how-does-a-passphrase-work-on-jade}}
+  passphrases on Jade: the passphrase ``is added to your Jade's recovery phrase
+  or SeedQR and is used to create your wallet,'' ``any number of passphrases
+  can be entered to change the wallet you will log into,'' and ``your
+  Blockstream Jade will not store your passphrase.'' Notably, the page makes no
+  claim of deniability, decoy or duress use --- unlike the wallet-erase PIN
+  pages. Accessed 2026-08-17
 
 \bibitem{tlt-servicios}
 {Tus Llaves, Tus Bitcoin}: Servicios. Self-custody consultancy service listing,
   \url{https://tusllavestusbtc.com/\#servicios} (2026), paid tiers from \$100
   to \$600 USD; lists ``Passphrase (tu b\'oveda se\~nuelo) --- Billetera
   se\~nuelo + billetera real. Protecci\'on ante coacci\'on/coerci\'on''.
-  Accessed 2026-09-01
+  Accessed 2026-09-01; archived at
+  \url{http://archive.today/2026.09.03-170027/https://tusllavestusbtc.com/\%23servicios}
 
 \bibitem{bsg-passphrase}
 {Bitcoin Security Guide}: Passphrases.
   \url{https://bitcoinsecurity.org/guide/passphrase/} (2026), instructs the
   holder to keep a small decoy balance on the bare seed as ``what you'd hand
   over under physical coercion'', and that ``for this to work, the decoy
-  balance must be believable''. Accessed 2026-09-01
+  balance must be believable''. Accessed 2026-09-01; archived at
+  \url{http://archive.today/2026.09.03-170047/https://bitcoinsecurity.org/guide/passphrase/}
 
 \bibitem{fisc-leak-2026}
 {Journal du Coin}: France: une employ\'ee du fisc vendait des informations
@@ -305,6 +330,7 @@ author, A.: An outsourced anonymous timelock. Technical documentation, [URL
   placed under judicial investigation for illicit consultation of the internal
   ``Mira'' database and transmission of the results; investigators report
   queries targeting cryptocurrency investors. Allegations under investigation,
-  not a conviction
+  not a conviction; archived at
+  \url{http://archive.today/2026.01.09-094000/https://journalducoin.com/actualites/france-employee-fisc-vendait-informations-confidentielles/}
 
 \end{thebibliography}

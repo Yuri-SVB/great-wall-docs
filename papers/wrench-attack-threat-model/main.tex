@@ -18,7 +18,10 @@
 \usepackage{graphicx}
 \usepackage{tikz}
 \usetikzlibrary{positioning,arrows.meta,shapes.geometric,calc}
-\usepackage{xurl}
+\usepackage{xurl}  % break long URLs anywhere, so they cannot run into the margin
+%% let TeX stretch interword space rather than overflow a line; 2em clears
+%% all but two boxes -- 3em clears one more but costs a body page
+\setlength{\emergencystretch}{2em}
 \usepackage{hyperref}
 
 % ── Paper palette ──────────────────────────────────────────────────────────

@@ -144,7 +144,7 @@ The two stipulations leaning on the physical-attack registry~\cite{lopp-attacks}
 --- the coercion-time budget and the murder-cost weighing of
 \S\ref{sec:residual-dr} --- admit directional support. The registry records only
 \emph{date, victim, location, headline}, so we code its $352$ incident headlines
-(accessed 2026-08-14) by keyword; the coding is coarse and a reproducible script
+(at commit \texttt{9a4a62a}) by keyword; the coding is coarse and a reproducible script
 accompanies the paper.\footnote{\texttt{registry-analysis/} gives the keyword
 patterns, per-year counts and caveats; Appendix~\ref{app:classify} gives the
 method, the coding tables, the jurisdictional confounds and the case analyses.}
@@ -163,6 +163,11 @@ setting the model assumes.
 a \emph{killed} or \emph{murdered} victim. A homicide is usually reported as a
 homicide rather than as a ``Bitcoin attack,'' so this is a \emph{lower} bound ---
 yet even so the outcome Lemma~\ref{lem:drl} predicts is attested in practice.
+That censoring compounds with a second: obscurity does not advertise itself, so no
+victim's exposure to an obscurity-dependent design is on record either. The
+numerator is censored by how the terminal event is classified and the covariate by
+what vendors do not say, which is why the pattern cannot be read off the data and
+the bar has to be derived instead (Remark~\ref{rem:anosognosia}).
 
 \emph{The mix is not universal, and the Lemma's bite tracks it}: by the ratio of
 long-hold to short-hold codings, France and the United States --- the two largest
@@ -184,14 +189,10 @@ bounds \ref{r:remotewinner}: the delegate a holder is most likely to appoint is
 precisely the party being seized, and a reachable delegate is not a second racer
 but a second victim.
 
-Two fielded cases sharpen the classification, and both are analysed in
-Appendix~\ref{app:classify}. The 2025 abduction and mutilation of \textbf{David
-Balland}~\cite{balland} ended in rescue by an elite \emph{state} police unit and
-recovery via a \emph{centralized} stablecoin freeze, with an associate paying the
-ransom --- exactly what clause~\ref{d:nodelegatecoerce} assumes away. And the 2026
-\textbf{RATIRL} incident~\cite{ratirl}, in which a streamer was tortured for hours
-over cryptocurrency he denied holding, is Corollary~\ref{cor:disclosure} in the
-field: where the norm is ``deny that you own Bitcoin,'' a coerced denial is
-\emph{pre-discredited}, so the rational continuation of an interrogation opening
-with one is \emph{more} coercion. It fixes the \emph{sign} --- obscurity does not
-merely fail to protect, it can convert a robbery into a torture.
+Two fielded cases sharpen this, both analysed in Appendix~\ref{app:classify}: the
+Balland abduction~\cite{balland}, whose rescue and recovery ran through exactly
+the state and centralized channels clause~\ref{d:nodelegatecoerce} assumes away;
+and the RATIRL torture~\cite{ratirl}, where a denial was \emph{pre-discredited}
+because denial is the norm, so the rational continuation was \emph{more} coercion.
+The second fixes the \emph{sign}: obscurity does not merely fail to protect, it
+can convert a robbery into a torture.
