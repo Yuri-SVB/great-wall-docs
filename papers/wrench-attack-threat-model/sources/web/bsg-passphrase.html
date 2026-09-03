@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Passphrases - Bitcoin Security Guide</title>
+  <meta name="description" content="How Bitcoin passphrases work, how to pick a good one, XFP verification, and duress wallets.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://bitcoinsecurity.org/guide/passphrase/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Passphrases - Bitcoin Security Guide">
+  <meta property="og:description" content="How Bitcoin passphrases work, how to pick a good one, XFP verification, and duress wallets.">
+  <meta property="og:url" content="https://bitcoinsecurity.org/guide/passphrase/">
+  <meta property="og:image" content="https://bitcoinsecurity.org/bitcoinsecurity.org.jpg">
+  <meta property="og:site_name" content="Bitcoin Security Guide">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Passphrases - Bitcoin Security Guide">
+  <meta name="twitter:description" content="How Bitcoin passphrases work, how to pick a good one, XFP verification, and duress wallets.">
+  <meta name="twitter:image" content="https://bitcoinsecurity.org/bitcoinsecurity.org.jpg">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="describedby" href="/llms.txt" type="text/plain" title="LLMs guide">
+  <link rel="alternate" href="/llms-full.txt" type="text/plain" title="Full text for AI ingestion">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 4L6 16v20c0 14.4 10.3 27.5 26 30 15.7-2.5 26-15.6 26-30V16L32 4z' fill='%23f7931a'/%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 4L6 16v20c0 14.4 10.3 27.5 26 30 15.7-2.5 26-15.6 26-30V16L32 4z' fill='%23f7931a'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/glossary.css">
+  <script src="https://analytics.ahrefs.com/analytics.js" data-key="GH05DOpomsOrvMDQfkU3DA" async></script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RKM2FEVW23"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-RKM2FEVW23');
+  </script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[
+{"@type":"WebSite","@id":"https://bitcoinsecurity.org/#website","name":"Bitcoin Security Guide","url":"https://bitcoinsecurity.org/","description":"Educational guide for Bitcoin self-custody, hardware wallet setup, backups, privacy, and operational security.","inLanguage":"en","publisher":{"@id":"https://bitcoinsecurity.org/#publisher"}},
+{"@type":"Organization","@id":"https://bitcoinsecurity.org/#publisher","name":"Bitcoin Security Guide","url":"https://bitcoinsecurity.org/","publishingPrinciples":"https://bitcoinsecurity.org/about/"},
+{"@type":"TechArticle","headline":"Passphrases — Bitcoin Security Guide","description":"How Bitcoin passphrases work, how to pick a good one, XFP verification, and duress wallets.","url":"https://bitcoinsecurity.org/guide/passphrase/","mainEntityOfPage":{"@type":"WebPage","@id":"https://bitcoinsecurity.org/guide/passphrase/"},"publisher":{"@id":"https://bitcoinsecurity.org/#publisher"},"datePublished":"2025-01-31","dateModified":"2026-07-09","inLanguage":"en","proficiencyLevel":"Beginner","articleSection":"Bitcoin Security","speakable":{"@type":"SpeakableSpecification","cssSelector":[".guide-intro",".answer-summary"]}},
+{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Bitcoin Security Guide","item":"https://bitcoinsecurity.org"},{"@type":"ListItem","position":2,"name":"Guide","item":"https://bitcoinsecurity.org/guide/"},{"@type":"ListItem","position":3,"name":"Passphrases","item":"https://bitcoinsecurity.org/guide/passphrase/"}]}]}</script>
+  <style>
+    .guide-shell { width: min(calc(100% - 2rem), 1120px); margin: 0 auto; display: grid; grid-template-columns: 205px minmax(0, var(--reading-width)); gap: clamp(2.5rem, 5vw, 4.5rem); justify-content: center; padding: 2.75rem 0 4rem; }
+    .guide-sidebar { position: sticky; top: 6.25rem; align-self: start; display: grid; gap: 0.25rem; }
+    .guide-sidebar-title { color: var(--col-tx-2); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0 0.65rem 0.55rem; }
+    .guide-sidebar a { display: grid; grid-template-columns: 1.6rem 1fr; gap: 0.45rem; align-items: baseline; padding: 0.54rem 0.65rem; border: 0; border-radius: 8px; color: var(--col-tx-2); font-size: 0.82rem; line-height: 1.35; font-weight: 500; }
+    .guide-sidebar a span { color: #9a9a94; font-size: 0.68rem; }
+    .guide-sidebar a:hover { color: var(--col-tx); background: var(--col-card); }
+    .guide-sidebar a[aria-current="page"] { color: var(--col-tx); background: var(--col-card); box-shadow: var(--shadow-soft); font-weight: 700; }
+    .guide-page { width: 100%; max-width: var(--reading-width); min-width: 0; }
+    .guide-page h1 { font-size: clamp(2.15rem, 5vw, 3.4rem); line-height: 1.06; letter-spacing: -0.045em; margin-bottom: 0.65rem; color: var(--col-tx); }
+    .guide-intro { font-size: 1.16rem; line-height: 1.7; color: var(--col-tx-2); margin-bottom: 2.4rem; border-left: 3px solid var(--col-primary); padding-left: 1.25rem; }
+    .guide-content h2 { font-size: 1.55rem; line-height: 1.25; letter-spacing: -0.02em; margin: 2.6rem 0 0.8rem; color: var(--col-tx); }
+    .guide-content h3 { font-size: 1.15rem; margin: 1.5rem 0 0.5rem; color: var(--col-tx); }
+    .guide-content p { margin-bottom: 1rem; color: var(--col-tx-2); font-size: 1.05rem; }
+    .guide-content .answer-summary { background: var(--col-highlight); border: 1px solid #f0d6b8; border-left: 4px solid var(--col-primary); border-radius: 12px; padding: 1.1rem 1.25rem; color: var(--col-tx); }
+    .guide-content ul, .guide-content ol { margin: 0.5rem 0 1rem 1.5rem; color: var(--col-tx-2); }
+    .guide-content li { margin-bottom: 0.4rem; font-size: 1.02rem; }
+    .guide-content .markdown-table-wrap { overflow-x: auto; margin: 1rem 0 1.5rem; border: 1px solid var(--col-border); border-radius: 10px; }
+    .guide-content .markdown-table { width: 100%; border-collapse: collapse; background: var(--col-card); }
+    .guide-content .markdown-table th { text-align: left; background: #20201f; color: #f5f0eb; padding: 0.65rem 0.8rem; font-size: 0.9rem; }
+    .guide-content .markdown-table td { padding: 0.65rem 0.8rem; border-top: 1px solid var(--col-border); color: var(--col-tx-2); vertical-align: top; }
+    .guide-content .markdown-table tr:nth-child(odd) td { background: var(--col-primary-dim); }
+    .guide-content strong { color: var(--col-tx); }
+    .guide-content code { background: var(--col-highlight); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9em; }
+    .guide-content a { font-weight: 500; }
+    .guide-date { font-size: 0.82rem; color: var(--col-tx-2); margin-bottom: 1.5rem; opacity: 0.7; }
+    .guide-warning { background: #fff8ed; border-left: 3px solid #e8a817; border-radius: 6px; padding: 1rem 1.25rem; margin: 1rem 0; }
+    .guide-warning p { margin: 0; color: var(--col-tx); font-size: 0.95rem; }
+    .guide-nav { display: flex; justify-content: space-between; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid var(--col-border); margin-top: 2rem; }
+    .guide-nav a { font-size: 0.92rem; font-weight: 500; padding: 0.5rem 0; }
+    .guide-nav-next { margin-left: auto; }
+    .guide-breadcrumb { margin-bottom: 1.5rem; }
+    .guide-breadcrumb ol { display: flex; flex-wrap: wrap; gap: 0.4rem; list-style: none; font-size: 0.88rem; color: var(--col-tx-2); }
+    .guide-breadcrumb li + li::before { content: '\203A'; margin-right: 0.4rem; }
+    .guide-breadcrumb a { font-weight: 400; }
+    .guide-breadcrumb [aria-current] { color: var(--col-tx); font-weight: 500; }
+    @media (max-width: 880px) {
+      .guide-shell { grid-template-columns: 1fr; gap: 0; padding: 1.75rem 0 2.75rem; }
+      .guide-sidebar { display: none; }
+      .guide-page { justify-self: center; }
+      .guide-nav { flex-direction: column; gap: 0.5rem; }
+      .guide-nav-next { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+<nav class="main-nav" id="main-nav">
+  <div class="container">
+    <div class="nav-title"><a href="/" aria-label="Bitcoin Security Guide home"><span class="nav-brand-mark" aria-hidden="true">&#x20BF;</span><span class="nav-brand-copy"><span class="nav-wordmark">Bitcoin Security</span><span class="nav-wordmark-tag">Self-custody guide</span></span></a></div>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation" onclick="const n=this.closest('.main-nav');const o=n.classList.toggle('nav-open');this.setAttribute('aria-expanded',String(o))"><span class="nav-toggle-lines" aria-hidden="true"></span><span class="sr-only">Toggle navigation</span></button>
+    <ul id="primary-navigation">
+      <li><a href="/quick-start/" class="nav-cta">Start here</a></li>
+      <li><a href="/guide/">Guides</a></li>
+      <li><a href="/checklist/">Checklist</a></li>
+      <li><a href="/compare/">Compare</a></li>
+      <li><a href="/articles/" class="">Articles</a></li>
+      <li><a href="/learn/" class="">Glossary</a></li>
+      <li><a href="/about/">About</a></li>
+    </ul>
+  </div>
+</nav>
+<main class="guide-shell">
+  <aside class="guide-sidebar" aria-label="Guide chapters"><span class="guide-sidebar-title">Guide chapters</span><a href="/guide/hardware-wallet/"><span>01</span>Choosing a Hardware Wallet</a><a href="/guide/setup/"><span>02</span>Setting Up Your COLDCARD</a><a href="/guide/cybersecurity/"><span>03</span>Cybersecurity for Bitcoiners</a><a href="/guide/backups/"><span>04</span>Backing Up Your Wallet</a><a href="/guide/recovery-kit/"><span>05</span>Recovery Kit</a><a href="/guide/passphrase/" aria-current="page"><span>06</span>Passphrases</a><a href="/guide/sending/"><span>07</span>Sending Bitcoin</a><a href="/guide/multisig/"><span>08</span>Multisig</a><a href="/guide/inheritance/"><span>09</span>Inheritance Planning</a><a href="/guide/privacy/"><span>10</span>Privacy</a><a href="/guide/privacy-playbook/"><span>11</span>Privacy Playbook</a><a href="/guide/physical-security/"><span>12</span>Physical Security</a></aside>
+  <article class="guide-page">
+    <nav class="guide-breadcrumb" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="/">Bitcoin Security Guide</a></li>
+        <li><a href="/guide/">Guide</a></li>
+        <li aria-current="page">Passphrases</li>
+      </ol>
+    </nav>
+    <h1>Passphrases</h1>
+    <p class="guide-date">Last reviewed 2026-07-09</p>
+<p class="guide-intro">A <a href="/learn/passphrase/">passphrase</a> is an optional extra word or phrase added on top of your 24-word seed. A different passphrase creates a completely different wallet — different keys, different addresses, different funds. There is no "wrong" passphrase; every input produces a valid wallet.</p>
+    <div class="guide-content">
+<p>The trade-off is real: <strong>if you forget your passphrase, your bitcoin is gone forever.</strong> Get comfortable with the basics before adding this layer.</p>
+<h2>What does a Bitcoin passphrase do?</h2>
+<p>A Bitcoin passphrase creates a separate wallet from the same seed phrase. The bare seed opens one wallet; the seed plus passphrase opens another. It can protect against seed theft and enable duress wallets, but it also creates a new failure mode: forget the passphrase and the funds are unrecoverable.</p>
+<div class="markdown-table-wrap">
+<table class="markdown-table">
+<tbody>
+<tr><th>Setup</th><th>What an attacker needs</th><th>Best for</th></tr>
+<tr><td>Seed only</td><td>The seed words</td><td>Beginners learning basic self-custody</td></tr>
+<tr><td>Seed + passphrase</td><td>Seed words and exact passphrase</td><td>Larger holdings and seed-theft protection</td></tr>
+<tr><td>Seed + decoy wallet</td><td>Seed words reveal only a small balance</td><td>Physical coercion planning</td></tr>
+<tr><td>Multisig</td><td>Multiple keys plus wallet descriptor</td><td>Higher-value setups needing fault tolerance</td></tr>
+</tbody>
+</table>
+</div>
+<h2>How It Works</h2>
+<p>The COLDCARD combines the passphrase with your seed phrase during key derivation. The result is a completely separate wallet. Bare seed (no passphrase) is one wallet. Seed + passphrase is a different wallet. Seed + a different passphrase is yet another.</p>
+<p>There is no error message for a "wrong" passphrase. The device opens whatever wallet that passphrase produces. This is by design — an attacker can never know whether a passphrase exists or what it might be.</p>
+<h2>Picking a Good Passphrase</h2>
+<p>Strong enough it can't be guessed. Memorable enough you won't forget it.</p>
+<p><strong>Good approaches:</strong></p>
+<ul>
+<li><strong>Diceware</strong>: Roll dice to pick 4-6 random words from a wordlist. Example: "correct horse battery staple". This gives high <a href="/learn/entropy/">entropy</a> while being memorable.</li>
+<li><strong>A meaningful but unpredictable sentence</strong>: Something personal that no one else would guess, but that you won't forget.</li>
+</ul>
+<p><strong>Bad approaches:</strong></p>
+<ul>
+<li>Your dog's name, birthday, "password123", or anything guessable</li>
+<li>Something so complex you'll forget it in six months</li>
+<li>Anything you've used as a password elsewhere</li>
+</ul>
+<h2>XFP Verification</h2>
+<p>Every wallet has a unique <a href="/learn/extended-fingerprint-xfp/">Extended Fingerprint (XFP)</a> — an 8-character code derived from the master key. When you enter your passphrase, the COLDCARD displays the XFP for the resulting wallet.</p>
+<p><strong>The XFP is how you confirm you typed the passphrase correctly.</strong> Since there's no "wrong passphrase" error, it's your only verification. Different XFP than expected means you mistyped.</p>
+<h3>What to Do</h3>
+<ol>
+<li>Set up your passphrase for the first time</li>
+<li>Note the XFP displayed on your COLDCARD (e.g., <code>A1B2C3D4</code>)</li>
+<li><strong>Stamp the XFP on your metal seed backup</strong> next to the seed words</li>
+<li>Every time you enter the passphrase, check that the XFP matches</li>
+</ol>
+<p>This takes two seconds and prevents you from accidentally sending bitcoin to the wrong wallet.</p>
+<h2>Duress Wallets</h2>
+<p>The passphrase enables <a href="/learn/plausible-deniability/">plausible deniability</a>:</p>
+<ul>
+<li><strong>No passphrase (bare seed):</strong> Keep a small decoy balance here. This is what you'd hand over under physical coercion.</li>
+<li><strong>With passphrase:</strong> Your real holdings live here.</li>
+</ul>
+<p>If someone forces you to reveal your seed, they see the decoy wallet with a small balance. They have no way to know a passphrase wallet exists. This is your <a href="/learn/duress-wallet/">duress wallet</a> strategy.</p>
+<p>For this to work, the decoy balance must be believable. Enough to look like a real wallet, not enough to devastate you if lost.</p>
+<h2>Backing Up the Passphrase</h2>
+<p>Back up the passphrase <strong>separately from the seed phrase</strong>. If an attacker finds both together, the passphrase adds zero security.</p>
+<ul>
+<li>Different physical location from your seed</li>
+<li>Metal if possible (stamp it onto a separate SEEDPLATE)</li>
+<li>A password manager works, but it becomes a single point of failure</li>
+</ul>
+<h2>COLDCARD Trick PINs</h2>
+<p>COLDCARD Trick PINs go beyond the passphrase:</p>
+<ul>
+<li><strong>Duress PIN:</strong> Opens a specific duress wallet directly, no passphrase needed</li>
+<li><strong>Wipe PIN:</strong> Entering this PIN instantly wipes the seed from the device</li>
+<li><strong>Brick PIN:</strong> Permanently destroys the secure element. The device can never be used again.</li>
+<li><strong>Countdown PIN:</strong> Forces a time delay (hours/days) before the device unlocks</li>
+</ul>
+<p>Set these up in <strong>Settings > Login Settings > Trick PINs</strong>. Worth configuring if your threat model includes physical device seizure.</p>
+<h2>When to Use a Passphrase</h2>
+<p><strong>Use it when:</strong></p>
+<ul>
+<li>You have significant holdings</li>
+<li>You want plausible deniability</li>
+<li>You can reliably back up and remember the passphrase</li>
+<li>You've already tested the basic setup without a passphrase</li>
+</ul>
+<p><strong>Skip it when:</strong></p>
+<ul>
+<li>You're just getting started</li>
+<li>You don't fully understand how it works yet</li>
+<li>You're worried about forgetting it</li>
+<li>Your threat model doesn't include physical seed theft</li>
+</ul>
+    </div>
+    <nav class="guide-nav" aria-label="Guide navigation">
+<a href="/guide/recovery-kit/" class="guide-nav-prev">&larr; Recovery Kit</a>
+<a href="/guide/sending/" class="guide-nav-next">Sending Bitcoin &rarr;</a>
+    </nav>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand"><strong>Bitcoin Security Guide</strong><p>Practical, source-linked education for serious Bitcoin self-custody.</p></div>
+    <nav class="footer-links" aria-label="Footer"><a href="/quick-start/">Start here</a><a href="/guide/">Guides</a><a href="/articles/">Articles</a><a href="/learn/">Glossary</a><a href="/checklist/">Checklist</a><a href="/about/">About</a></nav>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2025&ndash;2026 Bitcoin Security Guide.</p>
+    <p class="footer-disclaimer">General educational information only, not individualized financial, investment, legal, tax, or estate-planning advice. Bitcoin transactions can be irreversible, and mistakes may cause permanent loss. Verify current instructions and consult qualified professionals where appropriate.</p>
+  </div>
+</footer>
+</body>
+</html>

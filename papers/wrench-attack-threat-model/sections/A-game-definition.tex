@@ -81,7 +81,10 @@ The \textbf{seizure experiment} $\SzExp_{\Pi}(\Attacker)$ runs the interaction
 $\mathcal{Y} = \Victim$, and outputs $1$ (``$\Attacker$ \emph{seizes}'') iff
 $\Attacker$ feasibly reaches $K$ --- equivalently $p_A > 0$
 (Definition~\ref{def:racers}). $\Pi$ is \textbf{seizure-resistant} if
-$\Pr\!\big[\SzExp_{\Pi}(\Attacker) = 1\big] = 0$ for every WDY adversary
+\[
+  \Pr\!\big[\SzExp_{\Pi}(\Attacker) = 1\big] = 0
+\]
+for every WDY adversary
 $\Attacker$.
 \end{definition}
 
@@ -111,7 +114,10 @@ $\pi > 0$; for the individual-custody case $R = \{\Victim'\}$ this is exactly a
 
 \begin{definition}[Coercion resistance]\label{def:crsecure}
 $\Pi$ is \textbf{coercion-resistant} if
-$\Pr\!\big[\DRExp_{\Pi}(\Attacker') = 1\big] = 0$ for every WDY adversary
+\[
+  \Pr\!\big[\DRExp_{\Pi}(\Attacker') = 1\big] = 0
+\]
+for every WDY adversary
 $\Attacker'$.
 \end{definition}
 

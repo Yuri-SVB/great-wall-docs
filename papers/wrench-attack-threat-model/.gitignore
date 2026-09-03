@@ -1,0 +1,8 @@
+# LaTeX build artifacts. main.pdf and main.bbl are deliberately tracked.
+main.aux
+main.blg
+main.log
+main.out
+main.toc
+main.synctex.gz
+registry-analysis/__pycache__/

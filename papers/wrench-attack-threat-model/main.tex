@@ -19,6 +19,11 @@
 \usepackage{fancyhdr}
 \usepackage{titlesec}
 \usepackage{hyperref}
+% break long URLs anywhere, so bibliography links do not run into the margin
+\usepackage{xurl}
+%% let TeX stretch interword space rather than overflow a line;
+%% 2em is the least that clears every box on this branch
+\setlength{\emergencystretch}{2em}
 \usepackage{graphicx}
 \usepackage{tikz}
 \usetikzlibrary{positioning,arrows.meta,shapes.geometric,calc}
@@ -93,6 +98,7 @@
 \newcommand{\Attacker}{\mathcal{A}}
 \newcommand{\cmark}{\textcolor{accent}{\checkmark}}
 \newcommand{\xmark}{\textcolor{attackcol}{\ensuremath{\times}}}
+\newcommand{\qmark}{\textcolor{graytext}{\textbf{?}}}
 
 \begin{document}
 
@@ -107,7 +113,7 @@
 {\normalsize\itshape\color{graytext}A formal threat model for physical-coercion
  (``wrench'') attacks,\\ and a construction that clears it}\\[12pt]
 {\color{accent}\rule{78mm}{0.5pt}}\\[9pt]
-{\small\color{graytext}Yuri da Silva Villas Boas \textperiodcentered{} Working paper, August 2026}
+{\small\color{graytext}Yuri da Silva Villas Boas \textperiodcentered{} Working paper, v2, September 2026}
 \end{center}
 
 \vspace{6pt}

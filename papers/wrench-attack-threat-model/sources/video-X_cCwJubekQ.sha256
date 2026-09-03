@@ -1,0 +1,17 @@
+# Lunes de Autocustodia --- Programa #2, the self-custody programme cited as
+# `ong-autocustodia`. Source: https://www.youtube.com/live/X_cCwJubekQ
+#
+# The video is ~94 MB even at 144p and is deliberately NOT committed. These are
+# the SHA-256 digests of two downloads held offline by the authors, recorded so
+# a copy can be matched against them later. Digests supplied by the author who
+# performed the download; the files themselves were never in the build
+# environment and are not vouched for here beyond that.
+#
+# Retrieved 2026-09-03 via a third-party download service, so each file is a
+# re-encode of the stream rather than anything YouTube serves byte-for-byte.
+# A digest therefore identifies THAT download, and carries no canonical
+# relationship to the original. Provenance for the cited page rests on the
+# archive.today capture recorded in ARCHIVE-RECORD.md, not on these hashes.
+
+d7afded28df923f4f2d0986935d8948575d6b34addab15e37afce7afceef9745  YTDown.com_YouTube_Lunes-de-Autocustodia-Programa-2_Media_X_cCwJubekQ_001_720p.mp4
+168005a57942b4bced39a3605a0039f81f584c37a318473a8aa9df19147777a4  YTDown.com_YouTube_Lunes-de-Autocustodia-Programa-2_Media_X_cCwJubekQ_003_144p.mp4

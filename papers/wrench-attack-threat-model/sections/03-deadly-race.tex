@@ -116,8 +116,7 @@ lattice $\{32, 64, 96, \dots\}$ and its hard counterparts
 $\{32^{*}, 64^{*}, 96^{*}, \dots\}$: a threshold at that granularity loses
 nothing, whereas pricing a single brute attempt would be finer than any
 distinction the construction can express. Conservatively $b = \sftstar$ --- work
-below $\sftstar$ feasible (the softest number handed to $\Attacker$), $\sftstar$
-itself infeasible. A fourth optional parameter $t$ budgets the \textbf{coercion
+below $\sftstar$ feasible, $\sftstar$ itself infeasible. A fourth optional parameter $t$ budgets the \textbf{coercion
 time} (\ref{d:subjugation}'s window): $\mathrm{WDY}[W,c,b,t]$ fixes the maximum wall-clock time for which the
 adversary can sustain coercion. Like $b$, $t$ is a capability bound pinned at its
 real, registry-calibrated value $t_{\mathrm{reg}}$, not sent to $\infty$ ---
@@ -162,8 +161,7 @@ state --- so NNPP \emph{qualifies} Kerckhoffs, and we resolve the gap
 conservatively: \textbf{$\Attacker$ always assumes an undisclosed backup exists}.
 Notice that something as small as an SD card, as inconspicuous as steganographic 
 notes in a book, or as interior as the memorized login and password of an email account suffices
-to store a short-cutting state. Again, for the purposes of the \emph{a fortiori} argument, we do not 
-consider the attacker reading truthfulness off $\Victim$'s terrorized demeanor or tone.
+to store a short-cutting state.
 
 Both halves point the \emph{same} way --- toward killing. Knowing the protocol
 (Kerckhoffs) and always presuming $\Victim$ a live racer (NNPP) each \emph{raise}
@@ -177,6 +175,19 @@ killing still buys it nothing, the method is \upshape(a fortiori)\itshape\
 deadly-race-safe.
 \end{quote}
 \end{assumption}
+
+\noindent To avoid a nightmarishly complex bluffing game between $\Attacker$ and
+$\Victim$, and to avoid encouraging real users to bet their stashes --- and their
+lives --- on it (see Remark~\ref{rem:decoy-market}), we also do not consider $\Attacker$ reading truthfulness off
+$\Victim$'s terrorized demeanor or tone. The simplification this forces is that
+$\Attacker$ is \emph{uniformly distrusting}: it always defaults to assuming that
+whatever NNPP posits \emph{might} exist does in fact exist. The one alternative
+simplification --- a \emph{gullible} $\Attacker$ that always believes $\Victim$
+--- is trivially sub-NNPP and sub-Kerckhoffs, hence useless as a threat model.
+Erring toward distrust is therefore the only valid choice, and it is what makes
+the model \emph{a fortiori}: a protocol that delivers seizure resistance or
+deadly-race resistance against a uniformly distrusting attacker delivers them
+against a real one too.
 
 \noindent In practice NNPP reduces to a plain observation: \textbf{exhaustive search
 is so ineffective that $\Attacker$ always assumes another backup exists, whatever the
@@ -355,8 +366,9 @@ the Criterion without removing the race. It is contingent: if $D$ is co-located
 (hence reachable --- $\Attacker$ removes it too) or merely \emph{slower} than
 $\Victim$ (so $\Victim$ is sometimes the unique blocker), then $\pi > 0$ and the
 assassination incentive returns --- exactly the ``escape closes'' failure and the
-BitVault case (\S\ref{sec:classify}), where the ``delegate'' is $\Victim$'s own
-alert wallet and $\Victim$ is maximally pivotal.
+BitVault configuration (\S\ref{sec:classify}), where every participant able to
+reject a pending authorisation is either $\Victim$ or otherwise coercible, so
+$\Victim$ is maximally pivotal.
 
 Criterion~\ref{prin:nga} is thus a \emph{theorem}, and pivotality unifies it with
 the reachability corollary: coercion-safety is \emph{$\Victim$-never-pivotal}, of
@@ -570,6 +582,10 @@ combination:
   \item \textbf{burgle the sites without $\Victim$}, taking the tokens directly ---
         possibly after enacting a deadly race, since removing $\Victim$
         (Lemma~\ref{lem:drl}) buys uncontested time to travel and break in;
+  \item \textbf{burgle one gating site and keep what he takes}: a token $K$ needs
+        but $\Attacker$ cannot use alone is leverage rather than a route --- a
+        \emph{hostage token} (\S\ref{sub:hostage}) held against $\Victim$ for the
+        rest;
   \item \textbf{abduct $\Victim$ and move them from site to site}, seizing each in
         turn --- a chain of single-site encounters, bounded only by travel time and
         the coercion-time budget $t$ (\ref{d:subjugation});
@@ -633,41 +649,39 @@ Properties \ref{p:know} \emph{and} \ref{p:indiv}. In TGPO the gate is \emph{temp
 chain with $G > t$ (\S\ref{sec:gw}).
 \end{definition}
 
-\begin{remark}[Geography-gated perceptual oracle]\label{rem:geo-perceptual}
-The perceptual gate need not be \emph{temporal}. One could equally conceive a
-\emph{geography-gated} perceptual oracle: instead of the deep stages being gated by
-a long hashing chain or a TLP, they sit at a physically protected custody site. A
-wrench attack then succeeds only if it is mounted \emph{at that protected site,
-while $\Victim$ is present}. This is not what TKBA was conceived for --- it trades
-Property~\ref{p:know} (non-geography) for a spatial gate --- but it is a genuinely valid
-alternative that some users may prefer, and the trichotomy
-(Theorem~\ref{thm:trichotomy}) already covers it as the \emph{geographic} leg
-carrying a perceptual oracle.
-\end{remark}
+\begin{remark}[The perceptual oracle is worth its price only on the tacit route]\label{rem:po-variants}
+The perceptual gate need not be \emph{temporal}. It could sit at a physically
+protected custody site (a \emph{geography-gated} oracle), complete only with a
+remote delegate (a \emph{delegate-gated} one), or be gated on knowledge of the
+protocol alone (an \emph{obscure} one). None of the three is worth building, and
+the reason is the same in each case.
 
-\begin{remark}[Remote-delegate-gated perceptual oracle]\label{rem:delegate-perceptual}
-Analogously, the perceptual gate can be held by a \emph{remote delegate}: the deep
-stages complete only with a party beyond $\Attacker$'s reach, sacrificing
-\emph{individual custody} (Property~\ref{p:indiv}) rather than non-geography (Property~\ref{p:know}). As
-with the geographic variant, this is not what TKBA was conceived for, but it may
-still be valid. One qualification is essential: its efficacy is contingent on
-clause~\ref{d:nodelegatecoerce} --- $\Attacker$ cannot use $\Victim$ to
-remotely coerce the delegate into cooperating. That requires either trusting a
-remote agent, or keeping physical distance from an agent one already trusts, lest
-$\Attacker$ reach both at once (see Remark~\ref{rem:escape-closes}).
-\end{remark}
+The oracle is expensive: it costs the holder the standing memorization burden
+\S\ref{sec:limits} concedes, and that price buys exactly one thing --- the
+\emph{conjunction} of the Four Properties (Corollary~\ref{cor:fourprops}). A
+variant that already relaxes one of the four has spent the price on the benefit it
+has just given up. A holder who can relax Property~\ref{p:know} should take a
+plain geographic protocol (Definition~\ref{def:geographic}), which yields the
+other three at no oracle cost; one who can relax Property~\ref{p:indiv} should
+take a plain access-dominating delegate (Definition~\ref{def:dominating}), on the
+same terms. In both cases the oracle is \emph{dominated}, not merely
+unattractive.
 
-\begin{remark}[Obscure perceptual oracle --- the invalid alternative]\label{rem:obscure-perceptual}
-The same move fails for \emph{obscurity}. Gating the perceptual oracle on knowledge
-of the protocol alone --- merely hoping $\Attacker$ lacks it --- makes no sense, by
-a dilemma. If $\Attacker$'s ignorance could be taken for granted, then simpler
-obscure schemes (denial, decoy, or a self-destruct) would already suffice, and the
-perceptual oracle buys nothing. If it cannot --- i.e.\ under Kerckhoffs
-(\ref{d:kerckhoffs}) --- and the only thing gating the perceptual parameters is
-knowledge of their existence, then by definition they are \emph{available} at the
-attack state; hence by \ref{d:notacit} and \ref{d:noperceptual} they, and their
-respective points, are seized --- utterly ineffective. Unlike the geographic and
-remote-delegate variants, there is no regime in which this one clears the bar.
+Obscurity fails twice over. By the argument above, an $\Attacker$ whose ignorance
+may be assumed makes the oracle redundant --- simpler obscure schemes (denial,
+decoy, a self-destruct) already suffice. And if that ignorance may \emph{not} be
+assumed --- i.e.\ under Kerckhoffs (\ref{d:kerckhoffs}) --- then the only thing
+gating the perceptual parameters is knowledge of their existence, so they are
+\emph{available} at the attack state; by \ref{d:notacit}--\ref{d:noperceptual}
+they and their points are seized. That variant is not merely dominated but
+ineffective.
+
+What survives is the temporal instantiation. The tacit route is the one place
+where the oracle's price buys something no cheaper design delivers, which is why
+\S\ref{sec:gw} gates it on a memory-hard chain and nothing else. The geographic
+and delegated \emph{routes} remain legitimate clearances
+(Theorem~\ref{thm:trichotomy}); it is only a perceptual oracle riding on them that
+is pointless.
 \end{remark}
 
 \noindent\textbf{Bottom line.} The whole premise of TKBA is to trade
@@ -677,8 +691,9 @@ legitimate user --- while still not yielding a deadly race. Kerckhoffs throws
 obscurity out of the window, so the only ways to restrict that availability are
 \emph{geographically}, through \emph{remote delegates}, or through
 \emph{cryptographic time-gating} (TGPO). These are exactly the three DRL-safe
-routes of Theorem~\ref{thm:trichotomy}; the perceptual oracle can ride either of
-the first two but is native to the third.
+routes of Theorem~\ref{thm:trichotomy}, and the perceptual oracle is native to the
+third alone: on the other two it is dominated by the plain design
+(Remark~\ref{rem:po-variants}).
 
 \begin{theorem}[DRL-safety trichotomy]\label{thm:trichotomy}
 A time-gating custody protocol (Definition~\ref{def:timegate}) is DRL-safe
@@ -743,7 +758,8 @@ that step.
 \label{sub:hostage}
 
 Devicelessness (Property~\ref{p:know}) yields a fifth security property the Four have
-so far left implicit: immunity to \emph{indirect} coercion. Wherever a
+so far left implicit: immunity to indirect coercion \emph{through a seizable
+token}. Wherever a
 \emph{necessary} token is stored outside the holder's head --- on a carried device or
 at a site of custody --- that token is a \emph{hostage}. Even where seizing $K$ itself
 is judged infeasible (or not worth the risk), $\Attacker$ can seize the token, or
@@ -752,6 +768,9 @@ irrevocable} transfer of another good or service. The property is orthogonal to 
 remote-delegate route (\ref{r:remotewinner}) but, by construction, \emph{denied} to
 any geographic protocol (Definition~\ref{def:geographic}), which needs precisely such
 external tokens; only the deviceless, in-head secret has nothing to take hostage.
+The qualifier is load-bearing: leverage over a \emph{person} is a different
+mechanism, and no custody design makes a relative unseizable
+(\S\ref{sub:empirical}).
 
 \begin{remark}[Indirect wrench via a hostage token]\label{rem:hostage}
 Even a device-dependent setup whose $K$ is deemed unwrenchable can present a surface

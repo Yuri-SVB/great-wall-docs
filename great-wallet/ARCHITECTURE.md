@@ -12,10 +12,11 @@ see [README.md](./README.md).
 
 ## Overview
 
-The ecosystem consists of seven repositories. Six are **libraries**
+The ecosystem consists of eight repositories. Seven are **libraries**
 (no submodules, no dependencies on each other at the git level) and
 one is the **app** that integrates everything. The naming blends
-Chinese cultural motifs with a phoenix sub-theme for inheritance.
+Chinese and Tibetan cultural motifs, with a dynastic sub-theme for
+inheritance.
 
 | # | Repo                        | Motif                      | Role                                      | Status          |
 |---|-----------------------------|----------------------------|-------------------------------------------|-----------------|
@@ -23,9 +24,10 @@ Chinese cultural motifs with a phoenix sub-theme for inheritance.
 | 2 | **tlp-core**                | (utility)                  | RSW time-lock puzzle library              | In development  |
 | 3 | **great-wall-ux**           | The Wall's appearance      | Rendering, palettes, interaction, effects | In development  |
 | 4 | **celestial-peace-nf-core** | Gate of Celestial Peace    | Spaced-repetition training logic (Anki)   | In development  |
-| 5 | **jade-clock**              | Imperial timekeeping       | LN marketplace client for TLP solving     | In development  |
-| 6 | **phoenix-scroll**          | Phoenix rebirth            | Inheritance protocol (LN + taproot)       | In development  |
-| 7 | **great-wallet**            | Wall + wallet (pun)        | Unified end-user app                      | In development  |
+| 5 | **flying-turtle**           | Turtle longevity + flight  | LN marketplace client for TLP solving     | In development  |
+| 6 | **mountain-dynasty**        | Dynastic succession        | Inheritance protocol (LN + taproot)       | In development  |
+| 7 | **namtso-core**             | Namtso, the sacred lake    | Timechain salt from block headers         | In development  |
+| 8 | **great-wallet**            | Wall + wallet (pun)        | Unified end-user app                      | In development  |
 
 Only `great-wall-core` is currently public. Everything marked
 *In development* is non-public work-in-progress and may change
@@ -40,17 +42,25 @@ substantially before first release.
 - **Celestial Peace: Never Forget (CPNF)** — the training companion.
   Named after the Gate of Celestial Peace (Tiananmen). The "NF" suffix
   ("Never Forget") avoids the cursed acronym "CP".
-- **Jade Clock** — the Lightning Network marketplace for anonymous
-  TLP-solving. Named after the jade clepsydra (ancient Chinese water
-  clock). Chosen for brevity (2 syllables) so it combines cleanly with
-  qualifiers: "Jade Clock client", "Jade Clock server",
-  "Jade Clock market".
-- **Phoenix Scroll** — the inheritance protocol. The phoenix's
-  death-and-rebirth cycle mirrors the rotation mechanism (each
-  rotation is a small rebirth; cessation triggers true succession).
-  The scroll is the testament the phoenix carries across generations.
-  Combines cleanly: "Phoenix Scroll channel", "Phoenix Scroll
-  protocol", "Phoenix Scroll watchtower".
+- **Flying Turtle** — the Lightning Network marketplace for anonymous
+  TLP-solving. The turtle is the Chinese emblem of longevity and
+  patient endurance, which is exactly what an RSW time-lock puzzle
+  asks of whoever grinds it. Flight is what the marketplace buys: the
+  slow thing arrives fast because somebody else did the walking.
+  Combines cleanly: "Flying Turtle client", "Flying Turtle server",
+  "Flying Turtle market".
+- **Mountain Dynasty** — the inheritance protocol. A dynasty is
+  precisely a mechanism for the orderly transfer of authority across
+  generations, which is what the protocol implements: each rotation
+  renews the reign, and the cessation of rotation is the succession.
+  The mountain supplies the permanence that the succession is measured
+  against. Combines cleanly: "Mountain Dynasty channel", "Mountain
+  Dynasty protocol", "Mountain Dynasty watchtower".
+- **Namtso** — the timechain salt primitive. Named after Namtso
+  ("Heavenly Lake"), the sacred Tibetan lake: a public landmark anyone
+  can find and nobody can move or counterfeit. The salt is public in
+  the same way — reconstructed from Bitcoin block headers at a
+  user-memorable date rather than stored or carried.
 - **Great Wallet** — the unified app. A pun on Great Wall + wallet.
 
 ---
@@ -62,17 +72,19 @@ great-wall-core          (no submodules)
 tlp-core                 (no submodules)
 great-wall-ux            (no submodules)
 celestial-peace-nf-core  (no submodules)
-jade-clock               (no submodules)
-phoenix-scroll           (no submodules)
+flying-turtle            (no submodules)
+mountain-dynasty         (no submodules)
+namtso-core              (no submodules)
 
-great-wallet             (six submodules, flat, plus its own app/ source tree —
+great-wallet             (seven submodules, flat, plus its own app/ source tree —
                           the only repo with submodules)
   great-wall-core/          <- submodule
   tlp-core/                 <- submodule
   great-wall-ux/            <- submodule
   celestial-peace-nf-core/  <- submodule
-  jade-clock/               <- submodule
-  phoenix-scroll/           <- submodule
+  flying-turtle/            <- submodule
+  mountain-dynasty/         <- submodule
+  namtso-core/              <- submodule
   app/                      (not a submodule: great-wallet's own UI / orchestration)
 ```
 
@@ -85,7 +97,7 @@ great-wallet             (six submodules, flat, plus its own app/ source tree �
 3. **Version pinning is the app's responsibility.** great-wallet pins
    each library to a specific commit hash. Libraries declare
    dependencies on each other at the import/build level, but
-   great-wallet ensures all six are at compatible versions.
+   great-wallet ensures all seven are at compatible versions.
 4. **Libraries may depend on each other at the API level** (e.g.,
    great-wall-ux imports from great-wall-core, celestial-peace-nf-core
    imports from tlp-core) but never via submodules — the consuming app
@@ -101,8 +113,9 @@ Which libraries does each library import from?
 | tlp-core                 | (none)                                |
 | great-wall-ux            | great-wall-core                       |
 | celestial-peace-nf-core  | great-wall-core, tlp-core             |
-| jade-clock               | tlp-core                              |
-| phoenix-scroll           | tlp-core                              |
+| flying-turtle            | tlp-core                              |
+| mountain-dynasty         | tlp-core                              |
+| namtso-core              | (none)                                |
 
 ---
 
@@ -187,7 +200,7 @@ other primitive:
    maximum security SM-2 allows for.
 
 3. **Paid time-barrier resolution without loss of self-custody.**
-   RSW TLP solving is outsourceable: the `jade-clock` marketplace
+   RSW TLP solving is outsourceable: the `flying-turtle` marketplace
    can solve the puzzle on the user's behalf for a Lightning
    payment. The TLP-gated ciphertext — the vault itself — never
    leaves the user's device. What the marketplace receives is only
@@ -284,7 +297,7 @@ device while `N` itself stays the durable, reproducible parameter — see the
   whether the target is one inter-stage derivation or the whole chain.
 - **KISS + safety margin.** A **default ×2 safety margin** bakes in the
   conservative-overshoot guidance (pick the duration conservatively, then
-  rely on the TLP / `jade-clock` layer for per-session flexibility);
+  rely on the TLP / `flying-turtle` layer for per-session flexibility);
   everything else (pass count, margin, scope internals) hides behind an
   **Advanced** expander captioned *"if you don't know what these mean, leave
   them unchanged."*
@@ -344,7 +357,7 @@ flowchart TD
     M --> HA["hash(master_secret || salt_A)"]
     M --> HN["hash(master_secret || salt_N)"]
     X --> SP["spending keys"]
-    X --> CH["channel keys<br/>(phoenix-scroll, per epoch)"]
+    X --> CH["channel keys<br/>(mountain-dynasty, per epoch)"]
     X --> FB["fallback keys<br/>(opaque taproot leaves)"]
     HA --> APA["app-specific secret A<br/>(e.g. password-manager<br/>master password)"]
     HN --> APN["app-specific secret N<br/>(any other coercion-<br/>resistant credential)"]
@@ -591,7 +604,7 @@ the buildable first slice (pure SM-2 scheduler + injected clock + card
 model + review session) is specified in
 [`next-steps/cpnf-step1-scheduler.md`](../next-steps/cpnf-step1-scheduler.md).
 
-### 5. jade-clock
+### 5. flying-turtle
 
 **Status:** In development.
 
@@ -610,7 +623,7 @@ Imports from tlp-core (TLP format, serialization, verification). Does
 NOT depend on great-wall-core — it only needs to understand TLP
 puzzles as opaque payloads, not fractal encoding.
 
-Economics (sketch). Jade Clock runs as an anonymous marketplace in
+Economics (sketch). Flying Turtle runs as an anonymous marketplace in
 which the marketplace operator also functions as reputation
 authority (scoring pseudonymous solvers) and dispute arbiter (see
 *How the two stages lock together*, milestone-based dispute
@@ -620,12 +633,12 @@ uptime — while advanced modes let the user hand-pick. Full fee
 structure, dispute protocol, and reputation-decay details are
 deferred.
 
-Note: jade-clock's LN usage is transactional (submit job, pay, get
+Note: flying-turtle's LN usage is transactional (submit job, pay, get
 solution). The inheritance protocol's very different LN usage pattern
 (decades-long dedicated channels with custom lockscripts) lives in
-phoenix-scroll.
+mountain-dynasty.
 
-### 6. phoenix-scroll
+### 6. mountain-dynasty
 
 **Status:** In development.
 
@@ -646,17 +659,40 @@ Responsibilities:
 - Fee management at claim time (CPFP via anchor outputs,
   SIGHASH_ANYONECANPAY)
 
-Imports from tlp-core. Does NOT depend on jade-clock — though both are
-LN-adjacent "jade-*/phoenix-*" libraries wrapping tlp-core, they serve
-fundamentally different interaction patterns with LN. Does NOT depend
+Imports from tlp-core. Does NOT depend on flying-turtle — though both
+are LN-adjacent libraries wrapping tlp-core, they serve fundamentally
+different interaction patterns with LN. Does NOT depend
 on great-wall-core — inheritance only needs keys and TLP primitives,
 which are derived/provided at the app layer.
 
-### 7. great-wallet
+### 7. namtso-core
 
 **Status:** In development.
 
-**The unified end-user application.** Integrates all six libraries
+**Timechain-derived salt primitive.** Derives a public,
+precomputation-resistant salt from Bitcoin block headers at a
+user-memorable date. The user memorizes only the date; the salt is
+reconstructed from the timechain, so no salt material has to be stored
+or carried. Being public is the point — the salt defends against
+precomputation, not against disclosure.
+
+Responsibilities:
+- Date-to-height resolution and block-header retrieval
+- Deterministic salt derivation from the header at that height
+- Per-user date keying (making precomputed tables non-amortizable)
+- Verification helpers (recompute-and-compare)
+
+No library dependencies. Does NOT depend on great-wall-core — the salt
+is an *input* to a key-derivation pipeline, not a part of one, and the
+app layer supplies it. The design rationale and the unpredictability
+argument are written up in
+[`papers/timechain-salt.md`](../papers/timechain-salt.md).
+
+### 8. great-wallet
+
+**Status:** In development.
+
+**The unified end-user application.** Integrates all seven libraries
 into a single app with four modes that flow naturally:
 
 1. **Setup** — encode seed on fractal
@@ -664,14 +700,14 @@ into a single app with four modes that flow naturally:
 2. **Train** — spaced repetition with TLP-gated practice
    (celestial-peace-nf-core + tlp-core + great-wall-ux)
 3. **Accelerate** — outsource TLP solving via Lightning Network
-   (jade-clock + tlp-core)
+   (flying-turtle + tlp-core)
 4. **Inherit** — configure and maintain inheritance channels as
    testator *or* act as heir (receive rotation payloads, solve
    TLPs once rotation ceases, maintain the opaque taproot
    fallback for cascading inheritance)
-   (phoenix-scroll + tlp-core + jade-clock)
+   (mountain-dynasty + tlp-core + flying-turtle)
 
-This is the only repo with submodules (all six libraries, flat).
+This is the only repo with submodules (all seven libraries, flat).
 
 ```
 great-wallet/
@@ -679,8 +715,9 @@ great-wallet/
   tlp-core/                   <- submodule
   great-wall-ux/              <- submodule
   celestial-peace-nf-core/    <- submodule
-  jade-clock/                 <- submodule
-  phoenix-scroll/             <- submodule
+  flying-turtle/              <- submodule
+  mountain-dynasty/           <- submodule
+  namtso-core/                <- submodule
   app/                        Unified UI and orchestration (not a submodule)
 ```
 
@@ -791,7 +828,7 @@ is not secured until consolidation is measured and confirmed — see
 [celestial-peace-nf-core](#4-celestial-peace-nf-core)), the provisional-key
 bootstrapping window (see
 [`next-steps/provisional-key-bootstrapping.md`](../next-steps/provisional-key-bootstrapping.md)),
-and the inheritance protocol (phoenix-scroll). The romance earns the right
+and the inheritance protocol (mountain-dynasty). The romance earns the right
 to be made only because the rigour stands behind it.
 
 **Tone.** Frame this as re-activation and confidence ("you still have this;
@@ -1025,17 +1062,18 @@ too-many / `2` budget) → `count` → per-leaf `rect` + `path` → `free`.
 
 ---
 
-## Inheritance Protocol (phoenix-scroll)
+## Inheritance Protocol (mountain-dynasty)
 
-The inheritance protocol, implemented in **phoenix-scroll**, allows a
+The inheritance protocol, implemented in **mountain-dynasty**, allows a
 testator to bequeath Bitcoin to heirs using a dead-man's switch: the
 testator periodically rotates TLP-gated inheritance channels. When
 rotation stops (death or incapacitation), the most recent TLP
 eventually unlocks and the heir claims the funds.
 
-The phoenix metaphor: each rotation is a small death-and-rebirth of
-the channel commitment. When rotation ceases for the last time, the
-true succession occurs — the heir rises from the ashes.
+The dynastic metaphor: each rotation renews the reign, re-founding the
+channel commitment for another epoch. When rotation ceases for the last
+time, the reign ends and the true succession occurs — the heir
+inherits.
 
 ### Statefulness Boundary
 
@@ -1069,7 +1107,7 @@ alternate attack path through the heir's own coercion barrier.
 
 **Without inheritance set up, total tacit-recall loss is
 terminal.** A user who loses their GW recall (memory failure,
-death) *and* has not configured a phoenix-scroll channel has no
+death) *and* has not configured a mountain-dynasty channel has no
 recovery path: the funds on that seed are unreachable by anyone,
 for the same reasons coercion is ineffective. This is a direct
 consequence of the self-custody / no-backup design — setting up
@@ -1086,11 +1124,11 @@ an app that provides four features:
 2. **Local TLP solver** — the RSW squaring engine, run when
    rotation ceases.
 3. **TLP client** — optional outsourcing of the squaring to
-   `jade-clock` to shorten the claim delay.
+   `flying-turtle` to shorten the claim delay.
 4. **Opaque-fallback construction** — each epoch the heir hands
    the testator a fresh taproot fallback address encoding the
    heir's own estate plan, which requires running
-   `phoenix-scroll`'s fallback-tree constructor on the heir side
+   `mountain-dynasty`'s fallback-tree constructor on the heir side
    as well.
 
 All four pieces live inside `great-wallet`'s **Inherit** mode, in
@@ -1135,7 +1173,7 @@ custody-duration barrier on the kill-then-rob-heir path. An
 atypically protected heir (a heavily defended individual in a
 low-risk environment, or a case where the testator explicitly
 accepts the residual risk) can instead derive `h` from a trivial
-setup and still plug into `phoenix-scroll` unchanged —
+setup and still plug into `mountain-dynasty` unchanged —
 statelessness, per-epoch derivations, and MuSig2 aggregation all
 still hold; what changes is only how hard it is for an attacker
 to coerce `h` out of the heir directly.
@@ -1216,7 +1254,7 @@ scalar (for instance by reducing `y_i` modulo the secp256k1 group
 order) would be conceivable but is neither necessary nor
 preferable. Encrypting a deterministically-derived `s_i` under
 `H(y_i)` lets the heir *outsource* the sequential squaring to the
-`jade-clock` marketplace without giving up custody: a paid solver
+`flying-turtle` marketplace without giving up custody: a paid solver
 only ever receives `(N_i, x_i, t_i)` and returns the raw `y_i`;
 the ciphertext `C_i` stays on the heir's device, and even a solver
 who decrypted `C_i` would still lack `h` and could not sign. This
@@ -1279,7 +1317,7 @@ The heir **can** start solving the current TLP at any time, but has
 no incentive to while the testator is alive: any in-progress solve
 is invalidated by the next rotation. Starting only after observed
 silence costs one TLP duration of computation — or the price of
-outsourcing that duration to `jade-clock`.
+outsourcing that duration to `flying-turtle`.
 
 **Transport is an app concern, not a protocol one.** Both parties
 commit to opening the app at least once per epoch — the testator
@@ -1287,7 +1325,7 @@ to confirm the rotation and release the hand-off, the heir to
 receive and store it. The specific delivery channel (LN custom
 TLVs in channel messages, BOLT-12-style onion messages, an
 out-of-band mirror, or a hybrid) is an implementation choice made
-by `phoenix-scroll`; the architecture only requires that each
+by `mountain-dynasty`; the architecture only requires that each
 epoch's `(N_i, x_i, t_i, C_i)` plus the heir's opaque fallback
 address reaches the other side before the current epoch closes,
 signed by the sender's long-lived channel identity key.

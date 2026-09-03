@@ -1,0 +1,85 @@
+# Vendor, report and news pages cited by the manuscript, as retrieved.
+# One record per source: bib key, URL, fetch time (UTC), HTTP status, bytes, SHA-256.
+# Pages with no record below could not be retrieved from this environment; see README.md.
+
+casa                       https://casa.io/
+  fetched 2026-09-03T16:28:47Z  HTTP 200  70179 bytes
+  sha256 78bbaa057580b672ecf99b2c49d38fc1b1a335af1fbba337b7f36d1ee33aa6aa
+  file   casa.html
+
+rewind-bitcoin             https://rewindbitcoin.com/
+  fetched 2026-09-03T16:28:47Z  HTTP 200  45347 bytes
+  sha256 e423b5f2be8b49c6637a6301d22fcc4d355e7a1e797e2463215c437df8ace2a7
+  file   rewind-bitcoin.html
+
+certik-skynet-2026         https://www.certik.com/skynet-report/skynet-wrench-attacks-report
+  fetched 2026-09-03T16:28:47Z  HTTP 200  74430 bytes
+  sha256 462a8c1d7a785b92727d5f15e2054fbe015f93b16364557933c24b13dac541c8
+  file   certik-skynet-2026.html
+
+certik-intel3d-h1-2026     https://www.certik.com/certik-report/intel3d/intel3d-wrench-h1-2026
+  fetched 2026-09-03T16:28:47Z  HTTP 200  220708 bytes
+  sha256 093af1378572cd318bb3cfb415246089079dcbaecdcaf39dc4a47a09b16b85c9
+  file   certik-intel3d-h1-2026.html
+
+jade-erase-pin             https://help.blockstream.com/hc/en-us/articles/9446043439257-How-do-I-set-up-a-wallet-erase-PIN
+  fetched 2026-09-03T16:28:47Z  HTTP 200  768125 bytes
+  sha256 426909de747f0e3b6c5c9e936ec4108426c66c064d01a1681d49d6cb3262f8b8
+  file   jade-erase-pin.html
+
+jade-duress-pin            https://help.blockstream.com/hc/en-us/articles/20182481765657-Enable-a-duress-PIN
+  fetched 2026-09-03T16:28:47Z  HTTP 200  763557 bytes
+  sha256 742a3e198160b225354c510b7ef83720b81ae5623a957e497f6d1e045ead3d83
+  file   jade-duress-pin.html
+
+jade-passphrase            https://help.blockstream.com/blockstream-jade/faqs/how-does-a-passphrase-work-on-jade
+  fetched 2026-09-03T16:28:47Z  HTTP 200  780241 bytes
+  sha256 5f6454a42b7a7a409540aa4dc8df8d7607520e8de22950635a94ca26d7303477
+  file   jade-passphrase.html
+
+coldcard-trick-pins        https://coldcard.com/docs/settings/
+  fetched 2026-09-03T16:28:47Z  HTTP 200  149177 bytes
+  sha256 06d651fbcf9343552d704809783c81b5060dd578862e027d6f6ab535c0d044e5
+  file   coldcard-trick-pins.html
+
+trezor-wipe-deniability    https://github.com/trezor/trezor-firmware/issues/2055
+  NOT RETRIEVED (see README.md)
+
+trezor-wipe-code           https://trezor.io/learn/security-privacy/personal-security-standards/create-wipe-code-to-erase-device
+  fetched 2026-09-03T16:28:47Z  HTTP 200  648096 bytes
+  sha256 e9958c340f856c2c3987182793f85ed5946ac80705aa381b92765bc84411eb8a
+  file   trezor-wipe-code.html
+
+tlt-servicios              https://tusllavestusbtc.com/#servicios
+  fetched 2026-09-03T16:28:47Z  HTTP 200  63502 bytes
+  sha256 b308f20b60d988ce034f646ac1890f09024602fc6d64c2b317aac9f9d930ba96
+  file   tlt-servicios.html
+
+bsg-passphrase             https://bitcoinsecurity.org/guide/passphrase/
+  fetched 2026-09-03T16:28:47Z  HTTP 200  18241 bytes
+  sha256 863e060ef3eea39fbf7c379e5694abd42f666911584e406772660356b9c1fea0
+  file   bsg-passphrase.html
+
+balland                    https://www.dlnews.com/articles/regulation/ledger-cofounder-david-balland-and-wife-kidnapped-in-france/
+  fetched 2026-09-03T16:28:47Z  HTTP 200  628828 bytes
+  sha256 29dc4713ae9d48874b4859baf36abaa67b07f719c278b7160dcdbcfe8ec0d3d2
+  file   balland.html
+
+fisc-leak-2026             https://journalducoin.com/actualites/france-employee-fisc-vendait-informations-confidentielles/
+  fetched 2026-09-03T16:28:47Z  HTTP 200  210851 bytes
+  sha256 e9934f47f54c42247e66a957cc5b92c9c51973f87a93bb2479c1d05f83dfe7d1
+  file   fisc-leak-2026.html
+
+block-coldcard-postmortem  https://engineering.block.xyz/blog/predictable-rng-fallback-and-32-bit-reseed-in-coldcard-firmware
+  fetched 2026-09-03T16:28:47Z  HTTP 200  110618 bytes
+  sha256 399eb251b9fffc38aa0df95c42f7f8052eeb182a10a08ce3deedcf34acf9b4b9
+  file   block-coldcard-postmortem.html
+
+coinkite-entropy           https://blog.coinkite.com/entropy-technical-backgrounder
+  fetched 2026-09-03T16:28:47Z  HTTP 200  34694 bytes
+  sha256 a244eea9649a19823d3b3f193228160231bebf508f5ed30c56a9d31bb50a5b5b
+  file   coinkite-entropy.html
+
+coindesk-coldcard          https://www.coindesk.com/tech/2026/08/01/how-bitcoin-cold-wallets-lost-usd70-million-in-an-attack-that-never-touched-the-devices
+  NOT RETRIEVED (see README.md)
+

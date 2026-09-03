@@ -34,58 +34,105 @@ apply at once --- custody was already non-individual, and the racer is now
 co-located and reachable --- so the design becomes deadly-race-susceptible
 again. The user is thus forced into an awkward corner: trust someone they can
 rarely be near, and accept a perverse incentive to avoid physical proximity to a
-trusted friend. The same closure afflicts the remote-delegate route to a
-perceptual oracle (Remark~\ref{rem:delegate-perceptual}).
+trusted friend.
 \end{remark}
 
 \subsection{A second time-lock design --- BitVault}
 
-\textbf{BitVault}~\cite{bitvault} is the same species with a different rescue
-verb. Funds sit in a multisig with \emph{time-delayed transactions} (a
-configurable $2\,\mathrm{h}$--$15\,\mathrm{day}$ window); a spend enters the
-delay, an alert reaches the owner's chosen ``owl wallet,'' and the owner may
-\emph{cancel} before settlement. It is marketed as coercion-resistant
-self-custody --- it ``protects your Bitcoin even if you're physically forced to
-hand over your keys.''
+\textbf{BitVault}~\cite{bitvault} is the same species. No authoritative
+specification is published: the vendor describes the product as ``100\% Open
+Source,'' but its code link resolves to an organization with no public
+repositories (archived at \url{http://archive.today/2026.09.01-225418/https://github.com/BitVaulty}), and its documentation
+and audit are served through a gated document-sharing service. What we have is the
+vendor's pages, a concept whitepaper~\cite{bssl} that is self-attributed and hosted
+outside the vendor's own links, and correspondence of 26--27 August 2026 (all
+accessed 1 September 2026); they do not agree in every particular. This bounds what
+can be claimed and is \emph{not} an allegation: we have no evidence that any
+material was withdrawn, and observed none at any earlier time.\footnote{The
+architectural description is the company's; the classification is the present
+author's, and is relative to this paper's threat model. In correspondence the
+company confirmed that the current configuration employs no autonomous,
+un-coercible watchtower and no pre-signed rescue sweep; that rejection of a pending
+authorisation requires intervention by the user, a separately positioned
+user-controlled device or signer, or a designated party; and that once the required
+signatures and timelocks are satisfied the resulting transaction cannot be
+reversed. It further agreed that the ``publicly verifiable, making kidnapping
+attempts pointless'' formulation was too categorical, and describes the decoy layer
+as plausible deniability rather than a guarantee.}
 
-The structure is Rewind's, with cancel-during-delay standing in for Rescue: so
-against remote theft it is equally sound, and against a wrench attack it is
-equally a race (Lemma~\ref{lem:drl}) --- the spend sits behind only a delay, keys
-on the seized device. The difference is \emph{who the racer is}. Rewind names a
-\emph{remote delegate}; BitVault routes cancellation to the \emph{owner's own}
-alert wallet. Under coercion the owner is captive and, by \ref{d:subjugation}--\ref{d:seizure}
-(Assumption~\ref{ass:power}), that wallet is seized or coerced with everything
-else --- so by default the racer is \emph{co-located and reachable}, and the
-design is deadly-race-susceptible. It clears Criterion~\ref{prin:nga} only if the
-owl wallet is a genuinely remote, autonomous rescuer (the honest \ref{r:remotewinner}, shared
-custody); yet it advertises \textbf{individual} self-custody (``zero counterparty
-risk,'' ``non-custodial''). That is the one combination the reachability corollary
-forbids --- a recall floor (\ref{r:removerace}, individual) \emph{or} a remote racer (\ref{r:remotewinner}, shared),
-never individual custody with a reachable racer.
+Taking that whitepaper as valid, the spending paths carry timelocks: a primary
+needing a custodian co-signature behind a configurable
+$2\,\mathrm{h}$--$15\,\mathrm{d}$ relative CSV, a one-year fallback on the user's
+own two keys, and a three-year custodian path, the last two with no gatekeeper.
+The policy gates the primary on \texttt{older()} and both fallbacks on
+\texttt{after()}, so the primary delay is a maturation from funding rather than a
+window on a request, and the multi-year locks do not re-arm. Both cases fail.
+Before the one-year date $\Attacker$ coerces $A$ and $B$ and kills, the only party
+who would tell the gatekeeper to withhold being $\Victim$: removal is what buys
+settlement, which is Lemma~\ref{lem:drl} exactly, and the pivotality is the
+victim's as \emph{witness} rather than as racer, since the primary path needs the
+custodian's signature and $\Victim$ cannot use it alone either. After the date he
+coerces $A$ and $B$ and spends at once, ungatekept --- no delay, no notification,
+nothing to cancel.
 
-Two auxiliary claims do not close the gap. First, that time-delayed transactions
-are ``publicly verifiable, making kidnapping attempts pointless'' is a
-\emph{deterrence} claim --- about whether the attack occurs --- not a structural
-one about the game once it does; under Kerckhoffs a $\mathrm{WDY}$ attacker who
-\emph{knows} the delay plans around it: coerce the cancel key up front, outwait a
-$2\,\mathrm{h}$ window, or --- since the canceler is the competing racer ---
-eliminate them to stop the cancellation, the very incentive of
-Lemma~\ref{lem:drl}. ``Cannot be moved \emph{instantly}'' is not ``cannot be
-moved,'' and advertising pointlessness is the false comfort the Lemma's remarks
-name: danger peaks where the marketing promises safety. Second, the ``decoy
-wallet'' is a plausible-deniability layer, which fails Kerckhoffs
-(Assumption~\ref{ass:kerckhoffs}) against an educated attacker who persists past
-the decoy. \emph{(This reading is drawn from BitVault's public description; if its
-cancel path is in fact a pre-signed sweep triggered by a genuinely remote,
-un-coercible watchtower, it is simply the honest \ref{r:remotewinner} case at shared-custody cost,
-and the critique narrows to the individual-custody configuration it markets.)}
+Property~\ref{p:know} we leave open: the documentation assumes hardware and offers
+an optional ``copy of $A$ kept in a separate location,'' but nothing in the
+construction forbids running it from memorized seeds and re-deriving on demand,
+which would be deviceless. Property~\ref{p:indiv} fails in both directions --- the
+optional off-chain gatekeeper can deny a user the quick path by declining to
+release the custodian's co-signature, and past the three-year lock a custodian and
+that gatekeeper can spend together.
 
-A further caveat sharpens \ref{r:remotewinner} itself: it needs the winning racer to
-be not merely remote but genuinely \emph{un-coercible} --- an autonomous watchtower,
-not a human friend. Where the delegate is a person, coercion simply routes through
-the victim to them, and a humane delegate pays; the Balland case
-(\S\ref{sub:empirical}) is exactly this failure, and it is the reality
-clause~\ref{d:nodelegatecoerce} idealizes away.
+Property~\ref{p:nonob} we also leave open, for a reason worth stating generally:
+\textbf{obscurity does not advertise itself}, so classifying a design as
+obscurity-dependent is always an inference from what it would have to assume in
+order to make sense. Here the deadly-race exposure is plain on the published
+policy, plain enough that a Kerckhoffs-aware design would not ship it; the design
+therefore \emph{suggests} an $\Attacker$ assumed ignorant of it --- a reading the
+scarcity of public-facing documentation would fit. The only other
+reading we can construct is an $\Attacker$ assumed willing to coerce but not to
+kill --- not a milder premise but a wager on his $c$
+(Definition~\ref{def:priced}), staked on the holder's life. Undetermined is the
+honest entry between the two, and it costs nothing: the coercion result stands on
+structure either way.
+
+A further caveat sharpens \ref{r:remotewinner} itself, and a distinction sharpens
+the caveat. What matters is not only whether the delegate is remote, but what
+$\Attacker$ needs from them. Where the delegate's required contribution is an
+\emph{act} --- a payment, a signature --- coercion routes through $\Victim$ to
+them and a humane delegate performs it. The act is self-verifying: $\Attacker$
+knows when he has succeeded. The Balland case (\S\ref{sub:empirical}) is exactly
+this failure, and it is the reality clause~\ref{d:nodelegatecoerce} idealizes
+away.
+
+Where the required contribution is an \emph{omission}, the analysis does not
+transfer. To win, $\Attacker$ needs the delegate to abstain for the length of the
+window, and abstention has no verifiable permanence: the delegate may comply
+visibly while retaining the means invisibly, and by NNPP
+(Assumption~\ref{lem:nnpl}) cannot be made to demonstrate that no retained means
+exists --- an undisclosed duplicate of a cancellation credential being, among the
+available evasions, close to the cheapest. The same negative existential that
+convicts $\Victim$ in the individual case, that one cannot prove one has nothing
+left to give, acquits the delegate here, because it is now $\Attacker$ who needs
+the proof and cannot obtain it.
+
+The incentive inverts with it. In the individual configuration, removing $\Victim$
+\emph{wins} the race: the only party who could cancel is gone. Where the pivotal
+racer is unreached and may hold an undisclosed means of cancelling, removing
+$\Victim$ \emph{loses} it --- the threat that keeps the delegate passive expires
+with the hostage, and the delegate then acts. $\Attacker$'s dominant strategy
+turns from removal to preservation, and he comes to need $\Victim$ not merely
+alive but demonstrably so. This is the mechanical content of
+\ref{r:remotewinner}: not simply that the pivotal racer is out of reach, but that
+putting them out of reach makes $\Victim$'s survival instrumental to $\Attacker$
+rather than an obstacle to him.
+
+The exchange should be recorded as an exchange. NNPP protects the funds by
+denying $\Attacker$ satisfaction, and it does so by relocating the pressure: an
+$\Attacker$ who cannot verify the delegate's incapacity has reason to press the
+delegate. Shared custody does not dissolve the problem so much as move it to a
+party who is harder to reach and less exposed. That is a defensible trade, and it
+is why \ref{r:remotewinner} is an honest route rather than a solved one.
 
 \subsection{The industry recommendation set}
 \label{sub:industry}
@@ -225,6 +272,41 @@ independently and published as guidance. The same document instructs the holder
 to ``triple-check your backups are correct'' before enabling that PIN, so the
 backup presupposition of \S\ref{sub:selfdestruct} is not peculiar to one vendor
 either.
+
+The same page goes further, in two admissions worth quoting because a vendor
+rarely makes them. The first concedes that the decoy is distinguishable to the
+$\Attacker$ who bothers: ``if you are somehow facing an attacker who is willing
+to verify he has the real main PIN, it's possible that careful analysis of system
+responses will imply he's working with the duress PIN.'' The remedy offered is
+not a repair but a request --- ``if you discover any sequences that reveal this
+easily, please tell us and we'll see if we can cover them up
+better''~\cite{coldcard-pin-entry}. That is obscurity stated as a maintenance
+programme, and it is the clearest statement we have found of what
+Property~\ref{p:nonob} rules out. What is being defended is not that the decoy is
+indistinguishable, but that no one has yet published how to distinguish it; the
+defence is administered by patching the disclosures as they arrive. A scheme
+whose security is the current state of the disclosure backlog is exactly the
+scheme whose guarantee $\Victim$ cannot invoke in the room, because $\Victim$
+cannot know which sequences $\Attacker$ has read.
+
+The second admission is the denial move itself, offered where bricking is
+unpalatable: ``alternatively, you can say you set the duress PIN once, but have
+since forgotten it.'' The escalation to destruction and this are the document's
+two exits, and both are the naive tier. The claim \emph{I have forgotten it} is a
+proposition about $\Victim$'s own knowledge, and NNPP
+(Assumption~\ref{lem:nnpl}) is precisely the observation that $\Victim$ cannot
+close it: there is no move that converts a true \emph{I cannot} into an
+$\Attacker$-verifiable one, and by Definition~\ref{def:naive-cr} the scheme's
+fate on that branch is decided by whether he believes it. The vendor has
+enumerated the branches and found, on each, a bluff.
+
+That the line is published guidance sharpens rather than softens it, in the way
+Remark~\ref{rem:decoy-market} describes for the coached decoy. A script printed
+in a manufacturer's manual is a script $\Attacker$ can read as easily as
+$\Victim$; the sentence that teaches the excuse also teaches that the excuse is
+taught. Its credibility declines in proportion to its circulation, and the
+holder who most needs it inherits the discount without ever having been told it
+exists.
 \end{remark}
 
 \begin{remark}[The class, and what each vendor actually claims for it]
@@ -288,7 +370,7 @@ worth keeping the self-destruct distinct from the \emph{cancel} key named
 alongside it there. A cancel reverses a pending action and thereby names a second
 racer; a self-destruct destroys a path and names none. Only the former is subject
 to Lemma~\ref{lem:drl}, which is why the two fail differently despite sharing a
-tier. Remark~\ref{rem:obscure-perceptual} has already disposed of the tier as a
+tier. Remark~\ref{rem:po-variants} has already disposed of the tier as a
 whole, by the dilemma that an $\Attacker$ whose ignorance can be assumed makes
 the elaborate mechanism unnecessary, and one whose ignorance cannot makes it
 ineffective; the present subsection is that dilemma instantiated in a shipping
@@ -323,6 +405,42 @@ single product ships both, marketing only the weaker one for physical threat, is
 the clearest illustration in this section of how little the design space has been
 mapped against the Criterion.
 
+\begin{remark}[The decoy is sold, and coached for credibility]\label{rem:decoy-market}
+The decoy is not merely a practice the community tolerates; it is a product and a
+curriculum. A Spanish-language self-custody consultancy lists, among paid service
+tiers, ``\emph{Passphrase (tu b\'oveda se\~nuelo)} --- Billetera se\~nuelo +
+billetera real. Protecci\'on ante coacci\'on/coerci\'on'' --- a decoy wallet
+marketed, in as many words, as protection against coercion~\cite{tlt-servicios}.
+Published guidance goes further and coaches the performance: one guide has the
+holder keep a small balance on the bare seed as ``what you'd hand over under
+physical coercion'', and adds that ``for this to work, the decoy balance must be
+\emph{believable} --- enough to look like a real wallet, not enough to devastate
+you if lost''~\cite{bsg-passphrase}. The counsel is also delivered live: one of us
+appeared as guest on a self-custody programme~\cite{ong-autocustodia} in which the
+host worked through a decoy-construction walkthrough over the guest's contrary
+advice.
+
+That last instruction is the naive tier stated as a training objective. A decoy
+need be believable only to an $\Attacker$ who might disbelieve it, and the
+counsel is silent on what happens when he does --- which, by
+Definition~\ref{def:naive-cr}, is the whole question. A better-rehearsed lie
+raises the chance $\Attacker$ takes the bait at the margin; it does not create a
+branch on which the scheme wins against an $\Attacker$ who knows decoys exist,
+and NNPP (Assumption~\ref{lem:nnpl}) guarantees $\Victim$ cannot close that
+question however well the performance goes. What is sold as a mechanism is a
+wager on the attacker's ignorance, priced and taught as though it were a control.
+
+The counsel is also self-defeating in aggregate. Publicised training raises the
+\emph{prior} that a fluent denial was rehearsed: once $\Attacker$ knows credibility
+is taught and sold, fluency stops being evidence of truth and becomes evidence of
+coaching. The remedy degrades the thing it sells --- and not only for its
+customers. A holder who never trained now denies into an $\Attacker$ who discounts
+fluent denial generally, so the cost falls on people who bought nothing. This is
+the Obscurity Paradox (Remark~\ref{rem:obscurity-paradox}) run backwards: there, a
+public non-obscure design makes $\Victim$'s claims \emph{more} plausible; here, a
+public obscure training makes them \emph{less}.
+\end{remark}
+
 \begin{remark}[The Obscurity Paradox --- non-obscure designs strengthen obscure ones]
 \label{rem:obscurity-paradox}
 TGPO enters neither bluff. There is nothing to erase, the deep secret having
@@ -347,10 +465,42 @@ unnecessary.} Obscurity remains unsound as a primary defense, for the reasons
 \S\ref{sub:fourprops} gives. It is not, however, indifferent which design it
 accompanies --- a denial made from within a mechanism that removes the need to
 lie is a stronger denial than the same words spoken from within one that
-requires it.
+requires it. The same asymmetry has an epistemic cost, taken up next
+(Remark~\ref{rem:anosognosia}).
+\end{remark}
+
+\begin{remark}[Obscurity anosognosia --- why the crisis resists diagnosis]
+\label{rem:anosognosia}
+Two censoring mechanisms compound, and between them they remove the evidence that
+would settle whether the Lemma's prediction is being enacted in the field.
+
+The first is the one this section has already named: obscurity does not advertise
+itself. No vendor documents a scheme as depending on $\Attacker$'s ignorance, so
+for any given victim the question \emph{was this holder running an
+obscurity-dependent design?} has no recorded answer. The exposure variable is not
+merely unmeasured but unmeasurable from public sources, which forecloses the
+obvious epidemiological question --- what do the victims of prolonged coercion, or
+of the terminal move, have in common?
+
+The second is recorded in \S\ref{sub:empirical}: a homicide is reported as a
+homicide, not as a robbery whose victim was then killed, so the enactments most
+diagnostic of the Lemma are the least likely to enter the registry at all. The
+numerator is censored by how the terminal event is classified; the covariate is
+censored by what vendors do not say.
+
+The structure is that of \emph{anosognosia} --- the dementia patient whose disease
+erodes memory and, with it, the capacity to notice that memory is eroding. One
+cause, two effects, and the second conceals the first. Obscurity is simultaneously
+what makes a design fail under Kerckhoffs and what erases the record by which the
+failure would be recognised. We draw no empirical claim from this: we cannot,
+which is the point. What it establishes is that the diagnosis is not available
+from the data by waiting, and that a field which waits for it will keep not
+finding what it is not positioned to see. That is an argument for the formal
+route --- the bar has to be derived, because it will not be measured.
 \end{remark}
 
 \subsection{TGPO, and the honest comparison}
+\label{sub:tgpo-comparison}
 
 TGPO clears by the \emph{other} route: the secret is tacit and never on
 the device (Assumption~\ref{ass:tkba}, Theorem~\ref{thm:floor}), so a seizure
@@ -368,8 +518,9 @@ property and \emph{still} fails. TGPO is the only design holding all four.
 \midrule
 \textbf{TGPO} (this work) & \cmark & \cmark & \cmark & \cmark & holds all four (tacit; \ref{r:removerace}) \\
 Rewind Bitcoin               & \xmark & \xmark & \cmark & \cmark & individual custody: a remote delegate (\ref{r:remotewinner}) \\
-BitVault                     & \xmark & \cmark & \xmark & \xmark & non-obscurity: assumes attacker ignorance ($\pm$ geography) --- gray, can backfire \\
+BitVault                     & \qmark & \xmark & \qmark & \xmark & individual custody both ways --- denial blocks the user, collusion spends past three years \\
 Casa                         & \cmark & \xmark & \cmark & \cmark & custody shared with remote co-signer\\
+Self-destruct PIN            & \xmark & \cmark & \xmark & \xmark & non-obscurity: the erasure must read as malfunction (Coldcard, Jade) \\
 \bottomrule
 \end{tabularx}
 \end{center}
@@ -380,10 +531,11 @@ trades individual custody for a remote delegate (\ref{r:remotewinner}). \textbf{
 multisig --- the client's keys on separate hardware plus a Casa co-signing key ---
 trades individual custody: the co-signer is a remote party, and a coercion-resistant
 delegate is remote \emph{by definition}, so the cost is individual custody, not
-non-geography (Casa asks the user to visit no site of its own)~\cite{casa}. \textbf{BitVault} trades non-obscurity (its cancel
-and decoy assume attacker ignorance, failing Kerckhoffs) and, per \S\ref{sec:classify}
-above, still lands in the gray zone --- the red $\times$ in column~(\ref{p:coerc}) is
-\emph{negative} coercion resistance (it can backfire), not mere absence. The axis
+non-geography (Casa asks the user to visit no site of its own)~\cite{casa}. \textbf{BitVault} trades individual custody
+for the same reason Casa does --- a required co-signature on its primary path --- but
+without obtaining what the surrender is meant to buy: it is the one row that pays a
+property and, per \S\ref{sec:classify} above, still lands in the gray zone. Its
+remaining two columns are left undetermined, for the reasons given there. The axis
 tilts further to \ref{r:removerace} for a blunter reason (Remark~\ref{rem:r2-cost}):
 the delegated rows are not self-custody at all --- their clearance assumes a
 delegate that refuses even the legitimate owner --- and, the rescue capability being
@@ -397,7 +549,7 @@ The two stipulations that lean on the physical-attack registry~\cite{lopp-attack
 --- the coercion-time budget $t$ (\S\ref{sec:limits}) and the murder-cost weighing of the
 residual-window analysis (\S\ref{sec:residual-dr}) --- admit directional empirical support. The registry records each
 incident only as \emph{date, victim, location, headline}; it carries no duration or
-outcome field, so we code the $352$ incident headlines (accessed 2026-08-14) by
+outcome field, so we code the $352$ incident headlines (at commit \texttt{9a4a62a}) by
 keyword. The coding is coarse and the categories overlap; a reproducible script
 accompanies the paper.\footnote{\texttt{registry-analysis/} in the source tree gives
 the exact keyword patterns, per-year counts, and caveats.} Several things stand out.
@@ -412,6 +564,12 @@ not as a ``Bitcoin attack'', so this is a \emph{lower} bound --- yet even so it 
 the assassination outcome the Deadly-Race Lemma (Lemma~\ref{lem:drl}) predicts is
 attested in practice, and that the cost $c$ is weighed against an action attackers
 demonstrably take.
+
+That censoring compounds with a second: obscurity does not advertise itself, so no
+victim's exposure to an obscurity-dependent design is on record either. The
+numerator is censored by how the terminal event is classified and the covariate by
+what vendors do not say, which is why the pattern cannot be read off the data and
+the bar has to be derived instead (Remark~\ref{rem:anosognosia}).
 
 \emph{A separately sourced count agrees on the trend.} The registry is a
 media-sourced convenience sample, so an independent base matters. Industry
@@ -461,6 +619,8 @@ sum to $100\%$; shares are of all $352$ incidents, and the modality labels are a
 headline proxy, not a measured duration. The sample is media-reported and
 survivorship-biased --- deterred, unreported, and silently-fatal cases are absent ---
 so every figure is directional and the fatality share in particular is a floor.
+Remark~\ref{rem:anosognosia} gives the two mechanisms that censor it, and why they
+leave the diagnosis unavailable rather than merely imprecise.
 
 \medskip\noindent\textbf{The mix is not universal, and the Lemma's bite tracks it.} The
 global shares above average over jurisdictions whose compositions differ by an order of magnitude.
@@ -520,8 +680,11 @@ occur in a single jurisdiction (France) whose recorded incidents rose from about
 2024 to $22$ in 2025 and $34$ by August 2026. Whatever share of that rise is genuine incidence
 rather than reporting intensity, the tactic is not a historical scatter; it is being adopted.
 
-And it is the hostage token of \S\ref{sub:hostage} observed in the field. Such an attacker needs no
-cryptographic access and no cooperation that a protocol could withhold --- only leverage, and a
+It is \emph{not} the hostage token of \S\ref{sub:hostage}, and the difference matters. There the
+leverage is a \emph{seizable object} the protocol requires, which devicelessness removes by leaving
+no such object; here it is a \emph{person}, whom no custody design renders unseizable. What this
+subset shows in the field is clause~\ref{d:nodelegatecoerce} failing: such an attacker needs no
+cryptographic access and no cooperation a protocol could withhold --- only leverage, and a
 relative supplies it. This bears directly on the delegated route~(\ref{r:remotewinner}), whose
 clearance rests on the deciding party lying beyond $\Attacker$'s coercive reach. The delegate a
 holder is most likely to actually appoint --- a spouse, a parent, an adult child --- is precisely
@@ -566,8 +729,7 @@ denial-script --- so a Kerckhoffs-educated $\Attacker$ gets no exculpatory updat
 the rational continuation of an interrogation that opens with a denial is \emph{more}
 coercion, not less. The case fixes the
 \emph{sign}: obscurity does not merely fail to protect --- it can convert a robbery
-into a torture, the \emph{negative} coercion resistance the red $\times$ of
-column~(\ref{p:coerc}) marks, not a mere absence. And it does so on \emph{every}
+into a torture --- \emph{negative} coercion resistance, not a mere absence. And it does so on \emph{every}
 reading of the denial, which forks three ways --- each indicting obscurity.
 \textbf{(i)}~If the denial was a defensive lie (there was a stash), secrecy still did
 not avert the assault --- a textbook Kerckhoffs failure --- and his only residual

@@ -6,17 +6,26 @@
   author       = {Lopp, Jameson},
   title        = {Known Physical Bitcoin Attacks},
   howpublished = {\url{https://github.com/jlopp/physical-bitcoin-attacks}},
-  note         = {Community registry of documented ``\$5 wrench'' incidents},
+  note         = {Community registry of documented ``\$5 wrench'' incidents.
+                  Coded at commit \texttt{9a4a62a} (2026-08-13), the state
+                  snapshotted in \texttt{registry-analysis/}; the registry is
+                  live and later revisions do not reproduce these figures},
   year         = {2025}
 }
 
 @inproceedings{aft-wrench,
-  author    = {Anonymous},
-  title     = {Investigating Wrench Attacks: Physical Attacks Targeting Cryptocurrency Users},
-  booktitle = {Advances in Financial Technologies (AFT)},
+  author    = {Ordekian, Marilyne and Atondo-Siu, Gilberto and
+               Hutchings, Alice and Vasek, Marie},
+  title     = {Investigating Wrench Attacks: Physical Attacks Targeting
+               Cryptocurrency Users},
+  booktitle = {6th Conference on Advances in Financial Technologies (AFT 2024)},
+  editor    = {B{\"o}hme, Rainer and Kiffer, Lucianna},
   series    = {LIPIcs},
-  publisher = {Schloss Dagstuhl},
-  year      = {2024}
+  volume    = {316},
+  pages     = {24:1--24:24},
+  publisher = {Schloss Dagstuhl --- Leibniz-Zentrum f{\"u}r Informatik},
+  year      = {2024},
+  doi       = {10.4230/LIPIcs.AFT.2024.24}
 }
 
 @article{kerckhoffs1883,
@@ -162,7 +171,9 @@
   title        = {Casa --- Collaborative Multisig Bitcoin Custody},
   howpublished = {\url{https://casa.io/}},
   note         = {2-of-3 / 3-of-5 multisig; client keys on separate devices plus a
-                  Casa co-signing key},
+                  Casa co-signing key;
+                  archived at
+                  \url{http://archive.today/2026.09.03-165338/https://casa.io/}},
   year         = {2026}
 }
 
@@ -170,13 +181,40 @@
   author       = {{BitVault}},
   title        = {BitVault --- Time-Delayed Bitcoin Self-Custody},
   howpublished = {\url{https://www.bitvault.sv/}},
+  note         = {Vendor site. Product claims verified against the live site
+                  2026-08-24; the ``publicly verifiable, making kidnapping attempts
+                  pointless'' formulation is no longer carried there and is treated
+                  in the text as a former formulation the vendor has acknowledged.
+                  Re-checked and archived 1 September 2026:
+                  \url{http://archive.today/2026.09.01-224759/https://www.bitvault.sv/\%23how-it-works}},
   year         = {2026}
+}
+
+@misc{bssl,
+  author       = {Madonna, Francesco},
+  title        = {{B-SSL}: Bitcoin Secure Signing Layer},
+  howpublished = {Concept whitepaper (Apache-2.0), self-attributed to
+                  F.~Madonna of BitVault SA and published by a GitHub account
+                  identifying itself with the BitVault organization,
+                  \url{https://github.com/ilghan/bssl-whitepaper/blob/main/B-SSL_WP_Oct_11_2025.pdf},
+                  repository archived at \url{http://archive.today/2026.09.01-225748/https://github.com/ilghan/bssl-whitepaper/}.
+                  The cited PDF is 352{,}036 bytes,
+                  SHA-256 64a0c9c4b440ae8ff90a7ba8ecb62bacef3acf153753b9240
+                  aee17c8723f5320},
+  note         = {Dated 11 October 2025; not linked from the vendor's own site,
+                  and the attribution could not be authenticated further.
+                  Specifies a 2-of-3 whose paths carry timelocks: a
+                  configurable 2\,h--15\,d relative CSV primary and two
+                  multi-year absolute-CLTV fallbacks},
+  year         = {2025}
 }
 
 @misc{rewind-bitcoin,
   author       = {{Rewind Bitcoin}},
   title        = {Rewind Bitcoin --- Timelock Vaults with Rescue},
   howpublished = {\url{https://rewindbitcoin.com/}},
+  note         = {archived at
+                  \url{http://archive.today/2026.09.03-170016/https://rewindbitcoin.com/}},
   year         = {2025}
 }
 
@@ -185,6 +223,8 @@
   title        = {Ledger Co-founder David Balland and Wife Kidnapped in France},
   howpublished = {DL News,
                   \url{https://www.dlnews.com/articles/regulation/ledger-cofounder-david-balland-and-wife-kidnapped-in-france/}},
+  note         = {archived at
+                  \url{http://archive.today/2026.09.03-171044/https://www.dlnews.com/articles/regulation/ledger-cofounder-david-balland-and-wife-kidnapped-in-france/}},
   year         = {2025}
 }
 
@@ -209,7 +249,9 @@
                   illicit consultation of the internal ``Mira'' database and
                   transmission of the results; investigators report queries
                   targeting cryptocurrency investors. Allegations under
-                  investigation, not a conviction},
+                  investigation, not a conviction;
+                  archived at
+                  \url{http://archive.today/2026.01.09-094000/https://journalducoin.com/actualites/france-employee-fisc-vendait-informations-confidentielles/}},
   year         = {2026}
 }
 
@@ -221,7 +263,9 @@
   note         = {72 verified physical-coercion incidents globally in 2025
                   (+75\% year on year); \$40.9M confirmed losses, stated to be
                   under-reported; Europe over 40\% of incidents, France the
-                  highest national count},
+                  highest national count;
+                  archived at
+                  \url{http://archive.today/2026.09.03-171000/https://www.certik.com/skynet-report/skynet-wrench-attacks-report}},
   year         = {2026}
 }
 
@@ -235,7 +279,9 @@
                   France 33 of 52; targeting driven by leaked databases, tax
                   records and exchange data. Sources include French Interior
                   Ministry statements and court documents, independent of the
-                  physical-attack registry},
+                  physical-attack registry;
+                  archived at
+                  \url{http://archive.today/2026.09.03-170208/https://www.certik.com/certik-report/intel3d/intel3d-wrench-h1-2026}},
   year         = {2026}
 }
 
@@ -243,13 +289,15 @@
   author       = {{Blockstream}},
   title        = {How do {I} set up a wallet-erase {PIN}?},
   howpublished = {Blockstream Help Center,
-                  \url{https://help.blockstream.com/hc/en-us/articles/9446043439257-How-do-I-set-up-a-wallet-erase-PIN}},
+                  \url{https://help.blockstream.com/blockstream-jade/faqs/how-do-i-set-up-a-wallet-erase-pin}},
   note         = {Vendor documentation for the Jade wallet-erase PIN: an
                   alternate PIN that deletes the recovery phrase from the
                   device, described as ``especially useful in the event of a
                   physical threat,'' displaying ``Internal Error'' on entry, and
                   carrying the instruction to ``make sure you have a backup
-                  before proceeding.'' Accessed 2026-08-17},
+                  before proceeding.'' Accessed 2026-08-17;
+                  archived at
+                  \url{http://archive.today/2026.09.03-164738/https://help.blockstream.com/blockstream-jade/faqs/how-do-i-set-up-a-wallet-erase-pin}},
   year         = {2026}
 }
 
@@ -257,11 +305,13 @@
   author       = {{Blockstream}},
   title        = {Enable a duress {PIN}},
   howpublished = {Blockstream Help Center,
-                  \url{https://help.blockstream.com/hc/en-us/articles/20182481765657-Enable-a-duress-PIN}},
+                  \url{https://help.blockstream.com/blockstream-jade/add-more-security-functionality/enable-a-duress-pin}},
   note         = {Vendor documentation using ``duress PIN'' and ``wallet-erase
                   PIN'' for the same erase feature: ``an alternate PIN that you
                   can enable to automatically delete the encrypted wallet
-                  information from Jade if entered.'' Accessed 2026-08-17},
+                  information from Jade if entered.'' Accessed 2026-08-17;
+                  archived at
+                  \url{http://archive.today/2026.09.03-164731/https://help.blockstream.com/blockstream-jade/add-more-security-functionality/enable-a-duress-pin}},
   year         = {2026}
 }
 
@@ -270,7 +320,9 @@
   title        = {How does a passphrase work on {Jade}?},
   howpublished = {Blockstream Help Center,
                   \url{https://help.blockstream.com/blockstream-jade/faqs/how-does-a-passphrase-work-on-jade}},
-  note         = {Vendor documentation for {BIP-39} passphrases on Jade: the
+  note         = {Vendor documentation for {BIP-39;
+                  archived at
+                  \url{http://archive.today/2026.09.03-164822/https://help.blockstream.com/blockstream-jade/faqs/how-does-a-passphrase-work-on-jade}} passphrases on Jade: the
                   passphrase ``is added to your Jade's recovery phrase or SeedQR
                   and is used to create your wallet,'' ``any number of
                   passphrases can be entered to change the wallet you will log
@@ -360,7 +412,9 @@
   howpublished = {COLDCARD Documentation,
                   \url{https://coldcard.com/docs/settings/}},
   note         = {Vendor documentation for the trick-PIN actions: \emph{Brick
-                  Self}, \emph{Wipe Seed}, \emph{Look Blank}, and a
+                  Self;
+                  archived at
+                  \url{http://archive.today/2026.09.03-164807/https://coldcard.com/docs/settings/}}, \emph{Wipe Seed}, \emph{Look Blank}, and a
                   \emph{Duress Wallet} described as ``a personal safety
                   feature'' --- ``If you must reveal a PIN under duress, give
                   the duress PIN instead of your Main PIN.'' Accessed 2026-08-24},
@@ -370,7 +424,7 @@
 @misc{coldcard-pin-entry,
   author       = {{Coinkite}},
   title        = {{PIN} Entry --- {COLDCARD} Firmware Documentation},
-  howpublished = {\url{https://github.com/Coldcard/firmware/blob/master/docs/pin-entry.md}},
+  howpublished = {\url{https://github.com/Coldcard/firmware/blob/7fc656a/docs/pin-entry.md}},
   note         = {Vendor firmware documentation. The duress wallet is derived
                   from the real wallet by a one-way process; enabling the brick
                   PIN warrants ``triple-check your backups are correct''; and on
@@ -386,7 +440,9 @@
   howpublished = {Issue \#2055, \url{https://github.com/trezor/trezor-firmware/issues/2055}},
   note         = {Opened 2022-01-10: requests a user-defined message on wipe-code entry so an
                   erasure can be presented as a hardware fault under duress, rather than the
-                  device reporting that the wipe code was entered. Closed as \emph{not planned}},
+                  device reporting that the wipe code was entered. Closed as \emph{not planned;
+                  archived at
+                  \url{http://archive.today/2026.09.03-164059/https://github.com/trezor/trezor-firmware/issues/2055}}},
   year         = {2022}
 }
 
@@ -396,7 +452,9 @@
   howpublished = {Trezor Knowledge Base,
                   \url{https://trezor.io/learn/security-privacy/personal-security-standards/create-wipe-code-to-erase-device}},
   note         = {Vendor documentation calling the feature a ``self-destruct''
-                  {PIN} code which ``erases all private data, including the
+                  {PIN;
+                  archived at
+                  \url{http://archive.today/2026.09.03-164822/https://trezor.io/learn/security-privacy/personal-security-standards/create-wipe-code-to-erase-device}} code which ``erases all private data, including the
                   wallet backup (recovery seed).'' The page makes no mention of
                   duress, coercion or physical threat. Accessed 2026-08-24},
   year         = {2026}
@@ -410,7 +468,9 @@
   note         = {Discovery write-up of the July 2026 seed-entropy incident:
                   a preprocessor-guard defect, shipped in firmware v4.0.0
                   (2021-03-17), left a fallback software PRNG as the silent
-                  production entropy path},
+                  production entropy path;
+                  archived at
+                  \url{http://archive.today/2026.08.06-112407/https://engineering.block.xyz/blog/predictable-rng-fallback-and-32-bit-reseed-in-coldcard-firmware}},
   year         = {2026}
 }
 
@@ -418,10 +478,12 @@
   author       = {{Coinkite Inc.}},
   title        = {Entropy Technical Backgrounder},
   howpublished = {Coldcard vendor post-mortem and advisory,
-                  \url{https://blog.coinkite.com/entropy-technical-backgrounder}},
+                  \url{https://blog.coinkite.com/entropy-technical-backgrounder/}},
   note         = {Vendor's candid account of the defect; fixed firmware for
                   all affected models by 2026-08-01; seeds created with 50+
-                  fair, independent dice rolls deemed not at risk},
+                  fair, independent dice rolls deemed not at risk;
+                  archived at
+                  \url{http://archive.today/2026.09.03-171027/https://blog.coinkite.com/entropy-technical-backgrounder/}},
   year         = {2026}
 }
 
@@ -433,7 +495,9 @@
                   \url{https://www.coindesk.com/tech/2026/08/01/how-bitcoin-cold-wallets-lost-usd70-million-in-an-attack-that-never-touched-the-devices}},
   note         = {First-wave figures: 1,082.65 BTC (about \$70M) drained from
                   1,196 addresses in a 41-minute window on 2026-07-30, per
-                  Galaxy Research's mapping},
+                  Galaxy Research's mapping;
+                  archived at
+                  \url{http://archive.today/2026.08.01-211808/https://www.coindesk.com/tech/2026/08/01/how-bitcoin-cold-wallets-lost-usd70-million-in-an-attack-that-never-touched-the-devices}},
   year         = {2026}
 }
 
@@ -465,12 +529,12 @@
   year         = {2026}
 }
 
-@misc{gw-jadeclock,
+@misc{gw-flyingturtle,
   author       = {da Silva Villas Boas, Yuri},
-  title        = {Jade Clock --- Outsourced Anonymous Timelock},
+  title        = {Flying Turtle --- Outsourced Anonymous Timelock},
   howpublished = {Technical documentation,
                   \url{https://github.com/Yuri-SVB/great-wall-docs/blob/main/great-wallet/ARCHITECTURE.md}
-                  (Jade Clock module)},
+                  (Flying Turtle module)},
   year         = {2026}
 }
 
@@ -497,5 +561,42 @@
                   Bitcoin Timechain},
   howpublished = {Companion paper (Namtso),
                   \url{https://github.com/Yuri-SVB/namtso-the-sacred-salt}},
+  year         = {2026}
+}
+
+@misc{tlt-servicios,
+  author       = {{Tus Llaves, Tus Bitcoin}},
+  title        = {Servicios},
+  howpublished = {Self-custody consultancy service listing,
+                  \url{https://tusllavestusbtc.com/\#servicios}},
+  note         = {paid tiers from \$100 to \$600 USD; lists ``Passphrase
+                  (tu b\'oveda se\~nuelo) --- Billetera se\~nuelo + billetera
+                  real. Protecci\'on ante coacci\'on/coerci\'on''.
+                  Accessed 2026-09-01;
+                  archived at
+                  \url{http://archive.today/2026.09.03-170027/https://tusllavestusbtc.com/\%23servicios}},
+  year         = {2026}
+}
+
+@misc{bsg-passphrase,
+  author       = {{Bitcoin Security Guide}},
+  title        = {Passphrases},
+  howpublished = {\url{https://bitcoinsecurity.org/guide/passphrase/}},
+  note         = {instructs the holder to keep a small decoy balance on the bare
+                  seed as ``what you'd hand over under physical coercion'', and
+                  that ``for this to work, the decoy balance must be believable''.
+                  Accessed 2026-09-01;
+                  archived at
+                  \url{http://archive.today/2026.09.03-170047/https://bitcoinsecurity.org/guide/passphrase/}},
+  year         = {2026}
+}
+
+@misc{ong-autocustodia,
+  author       = {{Ong Bitcoin Argentina}},
+  title        = {Lunes de Autocustodia --- Programa \#2},
+  howpublished = {Live self-custody programme,
+                  \url{https://www.youtube.com/live/X_cCwJubekQ}},
+  note         = {archived at
+                  \url{http://archive.today/2026.09.03-171910/https://www.youtube.com/live/X_cCwJubekQ}},
   year         = {2026}
 }

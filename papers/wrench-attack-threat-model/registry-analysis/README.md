@@ -6,15 +6,32 @@ registry, used for the *Empirical grounding* subsection of the manuscript.
 
 ## Reproduce
 
+The registry is a living document: it gained three incidents between the snapshot
+used here and 2026-09-03, so fetching `master` does **not** reproduce the paper's
+figures. Use the pinned snapshot, which is committed alongside this README:
+
 ```sh
-curl -sSL https://raw.githubusercontent.com/jlopp/physical-bitcoin-attacks/master/README.md -o registry.md
-python3 analyze.py registry.md
+python3 analyze.py registry-snapshot-9a4a62a.md
+```
+
+To rebuild that snapshot from the source repository rather than trusting the copy:
+
+```sh
+git clone --filter=blob:none https://github.com/jlopp/physical-bitcoin-attacks.git
+git -C physical-bitcoin-attacks show 9a4a62a:README.md > registry-snapshot-9a4a62a.md
 ```
 
 ## Snapshot used in the paper
 
-- **Source:** `jlopp/physical-bitcoin-attacks`, `README.md` (branch `master`).
+- **Source:** `jlopp/physical-bitcoin-attacks`, `README.md`, commit
+  `9a4a62a85ee11dfd5dac4bdb569c45f01738dc91` (2026-08-13), the last change before
+  the access date. Released to the public domain by its author.
 - **Accessed:** 2026-08-14.
+- **SHA-256:** `02782ba8f9e190b431ee673a9411ca8a5dca66d1cedc284b15cd39de5957f2b8`
+- **Timestamp:** `registry-snapshot-9a4a62a.md.ots`, an OpenTimestamps attestation
+  over that file, anchored in **Bitcoin block 965345**. Verify with
+  `ots verify registry-snapshot-9a4a62a.md.ots` (needs a Bitcoin node);
+  `ots info` shows the attestation without one.
 - **Incidents:** 352.
 
 | Signal (headline keyword coding) | Incidents | Share |

@@ -1,0 +1,4371 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+  
+  
+
+  
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://coldcard.com/docs/settings/">
+      
+      
+        <link rel="prev" href="../upgrade/">
+      
+      
+        <link rel="next" href="../address-explorer/">
+      
+      
+      <link rel="icon" href="/static/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.2.7">
+    
+
+  
+  <meta name="description" content="Settings Menu — official COLDCARD documentation.">
+  
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="COLDCARD Documentation">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:description" content="Settings Menu — official COLDCARD documentation.">
+  <meta name="twitter:description" content="Settings Menu — official COLDCARD documentation.">
+
+  
+    <meta property="og:title" content="Settings Menu">
+    <meta name="twitter:title" content="Settings Menu">
+  
+
+  <meta property="og:url" content="https://coldcard.com/docs/settings/">
+  <meta property="og:image" content="https://coldcard.com/static/images/og-main.jpg">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@COLDCARDwallet">
+  <meta name="twitter:image" content="https://coldcard.com/static/images/og-main.jpg">
+
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "@id": "https://coldcard.com/docs/settings/#article",
+    "headline": "Settings Menu",
+    "description": "Settings Menu \u2014 official COLDCARD documentation.",
+    "url": "https://coldcard.com/docs/settings/",
+    "mainEntityOfPage": "https://coldcard.com/docs/settings/",
+    "author": {
+      "@type": "Organization",
+      "@id": "https://coldcard.com/about#editorial-team",
+      "name": "Coinkite Team"
+    },
+    "publisher": { "@id": "https://coinkite.com/#organization" },
+    "about": { "@id": "https://coldcard.com/#brand" },
+    "isPartOf": { "@id": "https://coldcard.com/#website" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://coldcard.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Docs",
+        "item": "https://coldcard.com/docs/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "Settings Menu",
+        "item": "https://coldcard.com/docs/settings/"
+      }
+    ]
+  }
+  </script>
+  
+
+    
+      
+        <title>Settings Menu - COLDCARD Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.046329b4.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.85d0ee34.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../css/style.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BRE7PZNMMR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-BRE7PZNMMR');
+  </script>
+  <script src="https://analytics.ahrefs.com/analytics.js" data-key="YgjBISsLD6EqRO33bGvH3Q" async></script>
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="custom">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#login-settings" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+  <a id="docs-security-advisory" class="docs-security-advisory" href="/security/status">
+    <strong>COLDCARD Security Update</strong>
+    <span class="docs-security-advisory__detail">Fixed firmware is available. Check if you need to migrate your seed.</span>
+    <span>Learn more <span aria-hidden="true">&rarr;</span></span>
+  </a>
+  
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="/" title="COLDCARD Documentation" class="md-header__button md-logo" aria-label="COLDCARD Documentation" data-md-component="logo">
+      
+  <img src="/static/images/logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            COLDCARD Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Settings Menu
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+
+    <div class="md-container" data-md-component="container">
+      <script>
+    (function () {
+      const headerEl = document.querySelector('.md-header');
+      const securityEl = document.querySelector('#docs-security-advisory');
+      headerEl.insertBefore(securityEl, headerEl.firstChild);
+    })();
+  </script>
+
+  
+
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+    
+  
+  Documentation
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="/" class="md-tabs__link">
+        
+  
+    
+  
+  COLDCARD Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="https://store.coinkite.com" class="md-tabs__link">
+        
+  
+    
+  
+  Buy Now!
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="/" title="COLDCARD Documentation" class="md-nav__button md-logo" aria-label="COLDCARD Documentation" data-md-component="logo">
+      
+  <img src="/static/images/logo.svg" alt="logo">
+
+    </a>
+    COLDCARD Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Documentation
+  </span>
+  
+
+            </a>
+            
+              <label class="md-nav__link " for="__nav_1">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            Documentation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2" checked>
+        
+          <label class="md-nav__link" for="__nav_1_2" id="__nav_1_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Guides
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2_1" >
+        
+          <label class="md-nav__link" for="__nav_1_2_1" id="__nav_1_2_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quick/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quickstart! Start Here!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../q-quick/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Q Quickstart Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../beginner/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Guide For Bitcoin Beginners
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pins/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PINs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../master-seed/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Master Seed
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ready-to-sign/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ready To Sign?
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../send-receive-btc/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Sending and Receiving Bitcoin for Beginners
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ultra-quick/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    COLDCARD Ultra Quick Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../middle-ground/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    COLDCARD Middle Ground Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paranoid/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    COLDCARD Paranoid Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2_2" checked>
+        
+          <label class="md-nav__link" for="__nav_1_2_2" id="__nav_1_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    General
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            General
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../upgrade/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Upgrade Firmware
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Settings Menu
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Settings Menu
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#login-settings" class="md-nav__link">
+    Login Settings
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hardware-onoff" class="md-nav__link">
+    Hardware On/Off
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multisig-wallets" class="md-nav__link">
+    Multisig Wallets
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nfc-push-tx" class="md-nav__link">
+    NFC Push TX
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#display-units" class="md-nav__link">
+    Display Units
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#max-network-fee" class="md-nav__link">
+    Max Network Fee
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#idle-timeout" class="md-nav__link">
+    Idle Timeout
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#idle-timeout-on-battery" class="md-nav__link">
+    Idle Timeout (on battery)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lcd-brightness-on-battery" class="md-nav__link">
+    LCD Brightness (on battery)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#delete-psbts" class="md-nav__link">
+    Delete PSBTs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keyboard-emu" class="md-nav__link">
+    Keyboard EMU
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#buried-settings" class="md-nav__link">
+    Buried Settings
+  </a>
+  
+    <nav class="md-nav" aria-label="Buried Settings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#home-menu-xfp" class="md-nav__link">
+    Home Menu XFP
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#menu-wrapping" class="md-nav__link">
+    Menu Wrapping
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#obsolete-settings" class="md-nav__link">
+    Obsolete Settings
+  </a>
+  
+    <nav class="md-nav" aria-label="Obsolete Settings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#touch-settings-mk1-only" class="md-nav__link">
+    Touch Settings (Mk1 only)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#secondary-wallets-mk1-mk2-only" class="md-nav__link">
+    Secondary Wallets (Mk1, Mk2 only)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../address-explorer/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Address Explorer
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../verify-address-ownership/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Verify Address Ownership
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../qr-scanner/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    QR Scanner
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../backups/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Encrypted Backups
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../nfc-tools/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    NFC Tools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../secure_notes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Secure Notes & Passwords
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multisig/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multisig Features
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../airgap-multisig/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Airgap Multisig
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2_3" >
+        
+          <label class="md-nav__link" for="__nav_1_2_3" id="__nav_1_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Seed Management
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Seed Management
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2_3_1" >
+        
+          <label class="md-nav__link" for="__nav_1_2_3_1" id="__nav_1_2_3_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Generate Seed
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_1_2_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_2_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            Generate Seed
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ultra-quick/#generating-seed-words" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Generate Seed: Quick
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../middle-ground/#generating-seed-words" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Generate Seed: Middle Ground
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paranoid/#generating-seed-words-with-256-bits-of-entropy-by-dice-rolls" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Generate Seed: Paranoid
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../passphrase/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    BIP-39 Passphrase
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../temporary-seeds/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Temporary Seed
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../temporary-seeds/#seed-vault" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Seed Vault
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../seedxor/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Seed XOR
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../qr-scanner/#scan-seeds" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Scan Seed
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../passphrase/#lock-down-seed" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lock Down Seed
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bip85/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Derive Seed BIP-85
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/#danger-zone" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Seed Functions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2_4" >
+        
+          <label class="md-nav__link" for="__nav_1_2_4" id="__nav_1_2_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Advanced
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Advanced/Tools Menu
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paths/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Derivation Paths and Accounts
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../clone-coldcard/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Clone or Migrate a COLDCARD
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../migrate-wallet/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Migrate from Ledger or Trezor to COLDCARD
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../message-signing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Message Signing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bip322/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    BIP-322 Signing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bip85-passwords/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    BIP-85 Passwords
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pins/#trick-pins" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Trick PINs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../descriptor_export/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Descriptor Export
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bitcoin-core-2of2desc/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Descriptors & Multisig
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../verifying-dice-roll-math/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Verifying Dice Roll Math
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paper-wallets/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Paper Wallets
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wif-store/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    WIF Store
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bip85/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Export Deterministic Entropy (BIP-85)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../microsd-2fa/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MicroSD 2FA
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../key-teleport/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Key Teleport
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2_4_17" >
+        
+          <label class="md-nav__link" for="__nav_1_2_4_17" id="__nav_1_2_4_17_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Spending Policies
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_1_2_4_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_2_4_17">
+            <span class="md-nav__icon md-icon"></span>
+            Spending Policies
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sssp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Single Signer Spending Policy (SSSP)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../coldcard-cosigning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    COLDCARD Co-Signing (CCC)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2_4_17_3" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../hsm/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    HSM Mode and CKBunker
+  </span>
+  
+
+            </a>
+            
+              <label class="md-nav__link " for="__nav_1_2_4_17_3">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="5" aria-labelledby="__nav_1_2_4_17_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_2_4_17_3">
+            <span class="md-nav__icon md-icon"></span>
+            HSM Mode and CKBunker
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hsm/users/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    User Management
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hsm/rules/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Spending Rules
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hsm/local-codes/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Local Confirmation Codes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hsm/security/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    HSM Security Notes
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hsm/protocol/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    USB Protocol for HSM Mode
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hsm/cli/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLI Commands for HSM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_2_5" >
+        
+          <label class="md-nav__link" for="__nav_1_2_5" id="__nav_1_2_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Developer
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_1_2_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            Developer
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bsms/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    BSMS (BIP-129)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../community-guides/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Community Guides
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../how-to-videos/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How To Videos
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_3" >
+        
+          <label class="md-nav__link" for="__nav_1_3" id="__nav_1_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    References
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            References
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../specs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Specifications
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hardware/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hardware Features
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../menu-tree/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Menu Tree
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compatible-wallets/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Compatible Software Wallets and Tools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../microsd/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MicroSD Card Related
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Command Line Tools
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../downloads/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Downloads
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../recovery-cards/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Recovery Cards Downloads
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../version-history/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Version History
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../trouble/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Trouble Shooting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../glossary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Technical Terms Glossary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_4" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../advanced-topics/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    Advanced Topics
+  </span>
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_4">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced Topics
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    COLDCARD FAQ
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../compare-other-wallets/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Comparing A Few Hardware Wallets
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../coldcard-mk5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    COLDCARD Mk5 vs. Mk4
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../coldcard-q/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    COLDCARD Q Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    COLDCARD Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://store.coinkite.com" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Buy Now!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#login-settings" class="md-nav__link">
+    Login Settings
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hardware-onoff" class="md-nav__link">
+    Hardware On/Off
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multisig-wallets" class="md-nav__link">
+    Multisig Wallets
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nfc-push-tx" class="md-nav__link">
+    NFC Push TX
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#display-units" class="md-nav__link">
+    Display Units
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#max-network-fee" class="md-nav__link">
+    Max Network Fee
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#idle-timeout" class="md-nav__link">
+    Idle Timeout
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#idle-timeout-on-battery" class="md-nav__link">
+    Idle Timeout (on battery)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lcd-brightness-on-battery" class="md-nav__link">
+    LCD Brightness (on battery)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#delete-psbts" class="md-nav__link">
+    Delete PSBTs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keyboard-emu" class="md-nav__link">
+    Keyboard EMU
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#buried-settings" class="md-nav__link">
+    Buried Settings
+  </a>
+  
+    <nav class="md-nav" aria-label="Buried Settings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#home-menu-xfp" class="md-nav__link">
+    Home Menu XFP
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#menu-wrapping" class="md-nav__link">
+    Menu Wrapping
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#obsolete-settings" class="md-nav__link">
+    Obsolete Settings
+  </a>
+  
+    <nav class="md-nav" aria-label="Obsolete Settings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#touch-settings-mk1-only" class="md-nav__link">
+    Touch Settings (Mk1 only)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#secondary-wallets-mk1-mk2-only" class="md-nav__link">
+    Secondary Wallets (Mk1, Mk2 only)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+  
+    <nav class="md-breadcrumbs" aria-label="Breadcrumb">
+      <ol class="md-breadcrumbs__list">
+        <li class="md-breadcrumbs__item">
+          <a href="/" class="md-breadcrumbs__link">Home</a>
+        </li>
+        <li class="md-breadcrumbs__item">
+          
+            <a href="../" class="md-breadcrumbs__link">Docs</a>
+          
+        </li>
+        
+        
+          <li class="md-breadcrumbs__item md-breadcrumbs__item--active">
+            <span class="md-breadcrumbs__text">Settings Menu</span>
+          </li>
+        
+      </ol>
+    </nav>
+  
+  
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>Settings Menu</h1>
+
+<p><a class="vidlink" href="https://www.youtube.com/watch?v=FAYmE5-40PQ&t=6395s" target="_blank" rel="noopener noreferrer"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 15 5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73Z"/></svg></span><span>Video: Settings Overview</span></a></p>
+<p>The <strong>COLDCARD<sup>&reg;</sup></strong> <code>Settings</code> Menu provides comprehensive controls for customizing your device’s functionality and security. It allows you to manage login preferences, hardware settings, wallet configurations, and more, ensuring you can tailor the device to your specific needs.</p>
+<p>The menu options shown are current as of firmware <a href="../upgrade/">v5.4.1 for Mk4</a> and <a href="../upgrade/">v1.3.1Q for Q</a>.</p>
+<p><img alt="Mk4 settings menu" class="snap" src="../img/settings-menu/mk4-settings-menu.gif" /> <img alt="Q settings menu" class="snap indented" src="../img/settings-menu/q-settings-menu.gif" /></p>
+<h2 id="login-settings">Login Settings<a class="headerlink" href="#login-settings" title="Permanent link">#</a></h2>
+<p>The <code>Login Settings</code> Menu allows you to customize and secure your device's access features. It contains settings that affect the PIN code, startup behavior, and trick/duress options.</p>
+<details class="custom-background">
+  <summary>
+    Login Settings Menu
+  </summary>
+  <p><img src="/docs/img/settings-menu/mk4-login-settings-menu.gif" class="snap indented" alt="mk4-login-settings-menu"> <img src="/docs/img/settings-menu/q-login-settings-menu.gif" class="snap" alt="q-login-settings-menu"></p>
+  <p><h3><a href="https://www.youtube.com/watch?v=FAYmE5-40PQ&t=6395s">Video: Login Settings Overview</a></h3></p>
+  <ul>
+    <li>
+      <details class="custom-background">
+        <summary>
+          <h4 id="change-main-pin">Change Main PIN<a class="headerlink" href="#change-main-pin">#</a></h4>
+        </summary>
+        <p><img src="/docs/img/settings-menu/mk4-change-main-pin.gif" class="snap indented" alt="mk4-change-main-pin"> <img src="/docs/img/settings-menu/q-change-main-pin.gif" class="snap" alt="q-change-main-pin"></p>
+        <p>This option changes the PIN you use to unlock your COLDCARD, both prefix and suffix. Since the Main PIN affects your anti-phishing words, changing your PIN also changes your anti-phishing words.</p>
+        <div class="admonition warning">
+          <p class="admonition-title">
+            Backup Your PIN
+          </p>
+          <p>If you've forgotten your PIN, we can't help you! Even if you gave us your COLDCARD and we put all our resources into it, we couldn't crack or break the COLDCARD to get the seed out without the PIN.</p>
+          <p><a href="/docs/faq/#what-happens-when-i-cant-remember-my-pin">What happens when I can't remember my PIN?</a></p>
+        </div>
+        <p><h3><a href="https://www.youtube.com/watch?v=FAYmE5-40PQ&t=3104s">Video: Mk4 Change Main PIN</a></h3></p>
+        <p><h3><a href="https://www.youtube.com/watch?v=FiNCG-7EN4A&t=3109s">Video: Q Change Main PIN</a></h3></p>
+        <details class="custom-background">
+          <summary>
+            Steps to Change the Main PIN
+          </summary>
+          <p>1. Select <code>Change Main PIN</code> from the Login Settings Menu.</p>
+          <p>2. Press <kbd>✔</kbd>/<kbd>ENTER</kbd> after reading the warning screen.</p>
+          <p>3. Use your current Main PIN to complete the typical login process.</p>
+          <p>4. Enter your new Main PIN prefix and write down your new anti-phishing words.</p>
+          <p>5. Enter your new Main PIN suffix.</p>
+          <p>6. Confirm your new Main PIN by repeating the login process.</p>
+          <p>7. Your COLDCARD will save and verify the change and return to the Login Settings Menu.</p>
+        </details>
+      </details>
+    </li>
+    <li>
+      <details class="custom-background">
+        <summary>
+          <h4 id="trick-pins">Trick PINs<a class="headerlink" href="#trick-pins">#</a></h4>
+        </summary>
+        <p><img src="/docs/img/settings-menu/mk4-trick-pins-menu.gif" class="snap indented" alt="mk4-trick-pins-menu"> <img src="/docs/img/settings-menu/q-trick-pins-menu.gif" class="snap" alt="q-trick-pins-menu"></p>
+        <p>Trick PINs are a security feature that allow you to enter a PIN other than your Main PIN, and are configured to trigger specific actions including: bricking the device, wiping the seed, or opening a duress wallet.</p>
+        <p>You can have many Trick PINs on the COLDCARD, with each one performing unique actions.</p>
+        <p><h3><a href="/docs/pins/#trick-pins">COLDCARD Guide: Trick PINs</a></h3></p>
+        <p><h3><a href="https://www.youtube.com/watch?v=FAYmE5-40PQ&t=3239s">Video: Trick PINs Overview</a></h3></p>
+        <ul>
+          <li>
+            <details class="custom-background">
+              <summary>
+                <h4 id="add-new-trick">Add New Trick<a class="headerlink" href="#add-new-trick">#</a></h4>
+              </summary>
+              <p>This will create a new Trick PIN and configure what the COLDCARD does when it is entered.</p>
+              <p>1. Select <code>Add New Trick</code> from the Trick PINs Menu.</p>
+              <p>2. Enter the Trick PIN prefix and take note of the anti-phishing words.</p>
+              <p>3. Enter the Trick PIN suffix.</p>
+              <p>4. Choose the action(s) performed when entering this Trick PIN in place of your Main PIN:</p>
+              <details class="custom-background">
+                <summary>
+                  <h4 id="new-trick-pin-menu">New Trick PIN Menu<a class="headerlink" href="#new-trick-pin-menu">#</a></h4>
+                </summary>
+                <p><img src="/docs/img/settings-menu/mk4-new-trick-menu.gif" class="snap" alt="mk4-new-trick-menu"> <img src="/docs/img/settings-menu/q-new-trick-menu.png" class="snap indented" alt="q-new-trick-menu"></p>
+                <ul>
+                  <li>
+                    <details class="custom-background">
+                      <summary>
+                        <h4 id="brick-self">Brick Self<a class="headerlink" href="#brick-self">#</a></h4>
+                      </summary>
+                      <p><h3><a href="https://www.youtube.com/watch?v=SkH8ZP1S4Dw">Video: Proper COLDCARD Disposal</a></h3></p>
+                      <p>The COLDCARD becomes completely useless, and will only display the word <code>Bricked</code> forever.</p>
+                      <div class="admonition warning">
+                        <p class="admonition-title">
+                          Be careful with bricking the COLDCARD!
+                        </p>
+                        <p>The destruction process is quick and irreversible. You cannot reuse a bricked COLDCARD; discard it as e-waste.</p>
+                      </div>
+                    </details>
+                  </li>
+                  <li>
+                    <details class="custom-background">
+                      <summary>
+                        <h4 id="wipe-seed">Wipe Seed<a class="headerlink" href="#wipe-seed">#</a></h4>
+                      </summary>
+                      <p>Wipe the seed and maybe do more. These are the options:</p>
+                      <div class="admonition warning">
+                        <p class="admonition-title">
+                          Consequences of Wiping Seed Words
+                        </p>
+                        <p>Wiping your seed words will result in the loss of access to the Bitcoin, passwords, notes, and settings stored on your device. You can regain access to them by restoring your seed words from backup.</p>
+                      </div>
+                      <ul>
+                        <li>
+                          <details class="custom-background">
+                            <summary>
+                              <h4 id="wipe-and-reboot">Wipe & Reboot<a class="headerlink" href="#wipe-and-reboot">#</a></h4>
+                            </summary>
+                            <p>The seed is wiped, and the COLDCARD reboots without any notice.</p>
+                          </details>
+                        </li>
+                        <li>
+                          <details class="custom-background">
+                            <summary>
+                              <h4 id="silent-wipe">Silent Wipe<a class="headerlink" href="#silent-wipe">#</a></h4>
+                            </summary>
+                            <p>The seed is silently wiped, and the COLDCARD acts as if the PIN was just entered incorrectly.</p>
+                          </details>
+                        </li>
+                        <li>
+                          <details class="custom-background">
+                            <summary>
+                              <h4 id="wipe-to-wallet">Wipe -> Wallet<a class="headerlink" href="#wipe-to-wallet">#</a></h4>
+                            </summary>
+                            <p>The seed is silently wiped, and the COLDCARD logs into one of the following duress wallets:</p>
+                            <ul>
+                              <li>BIP-85 Wallet #1</li>
+                              <li>BIP-85 Wallet #2</li>
+                              <li>BIP-85 Wallet #3</li>
+                              <li>Legacy Wallet</li>
+                            </ul>
+                            <p><b>Most users should use one of the three BIP-85 wallets. The legacy wallet should only be used for compatibility reasons.</b></p>
+                          </details>
+                        </li>
+                        <li>
+                          <details class="custom-background">
+                            <summary>
+                              <h4 id="say-wiped-stop">Say Wiped, Stop<a class="headerlink" href="#say-wiped-stop">#</a></h4>
+                            </summary>
+                            <p>The seed is wiped and the COLDCARD will display a message saying: <code>Seed is wiped, Stop</code>.</p>
+                          </details>
+                        </li>
+                      </ul>
+                    </details>
+                  </li>
+                  <li>
+                    <details class="custom-background">
+                      <summary>
+                        <h4 id="duress-wallet">Duress Wallet<a class="headerlink" href="#duress-wallet">#</a></h4>
+                      </summary>
+                      <p>Goes directly to a specific <a href="https://github.com/Coldcard/firmware/blob/master/docs/pin-entry.md#duress-wallet">duress wallet</a>. No side effects.</p>
+                      <p>The duress wallet is a personal safety feature. Create a duress wallet and add funds you are willing to lose. If you must reveal a PIN under duress, give the duress PIN instead of your Main PIN. To avoid alerting attackers, the COLDCARD will function as usual. Be aware that an attacker with enough technical expertise could detect the difference.</p>
+                      <p>These are the wallet options:</p>
+                      <ul>
+                        <li>BIP-85 Wallet #1</li>
+                        <li>BIP-85 Wallet #2</li>
+                        <li>BIP-85 Wallet #3</li>
+                        <li>Legacy Wallet</li>
+                      </ul>
+                      <p><b>Most users should use one of the three BIP-85 wallets. The legacy wallet should only be used for compatibility reasons.</b></p>
+                      <p><h3><a href="https://www.youtube.com/watch?v=FAYmE5-40PQ&t=3485s">Video: Duress Wallet Setup</a></h3></p>
+                    </details>
+                  </li>
+                  <li>
+                    <details class="custom-background">
+                      <summary>
+                        <h4 id="login-countdown-2">Login Countdown<a class="headerlink" href="#login-countdown-2">#</a></h4>
+                      </summary>
+                      <p>Pretends a login countdown timer (1 hour) is in effect. These are the choices:</p>
+                      <ul>
+                        <li>
+                          <details class="custom-background">
+                            <summary>
+                              <h4 id="wipe-and-countdown">Wipe & Countdown<a class="headerlink" href="#wipe-and-countdown">#</a></h4>
+                            </summary>
+                            <p>The seed is wiped before the countdown begins.</p>
+                            <div class="admonition warning">
+                              <p class="admonition-title">
+                                Consequences of Wiping Seed Words
+                              </p>
+                              <p>Wiping your seed words will result in the loss of access to the Bitcoin, passwords, notes, and settings stored on your device. You can regain access to them by restoring your seed words from backup.</p>
+                            </div>
+                          </details>
+                        </li>
+                        <li>
+                          <details class="custom-background">
+                            <summary>
+                              <h4 id="countdown-and-brick">Countdown & Brick<a class="headerlink" href="#countdown-and-brick">#</a></h4>
+                            </summary>
+                            <p><h3><a href="https://www.youtube.com/watch?v=SkH8ZP1S4Dw">Video: Proper COLDCARD Disposal</a></h3></p>
+                            <p>Does the countdown and then the system is bricked.</p>
+                            <div class="admonition warning">
+                              <p class="admonition-title">
+                                Be careful with bricking the COLDCARD!
+                              </p>
+                              <p>The destruction process is quick and irreversible. You cannot reuse a bricked COLDCARD; discard it as e-waste.</p>
+                            </div>
+                          </details>
+                        </li>
+                        <li>
+                          <details class="custom-background">
+                            <summary>
+                              <h4 id="just-countdown">Just Countdown<a class="headerlink" href="#just-countdown">#</a></h4>
+                            </summary>
+                            <p>Just shows the countdown timer. No effect on the seed.</p>
+                          </details>
+                        </li>
+                      </ul>
+                    </details>
+                  </li>
+                  <li>
+                    <details class="custom-background">
+                      <summary>
+                        <h4 id="look-blank">Look Blank<a class="headerlink" href="#look-blank">#</a></h4>
+                      </summary>
+                      <p>Look and act like a freshly wiped COLDCARD, but does not affect the actual seed.</p>
+                    </details>
+                  </li>
+                  <li>
+                    <details class="custom-background">
+                      <summary>
+                        <h4 id="just-reboot-after-wrong-pin">Just Reboot<a class="headerlink" href="#just-reboot-after-wrong-pin">#</a></h4>
+                      </summary>
+                      <p>Reboot when this PIN is entered. Doesn't do anything else.</p>
+                    </details>
+                  </li>
+                  <li>
+                    <details class="custom-background">
+                      <summary>
+                        <h4 id="delta-mode">Delta Mode<a class="headerlink" href="#delta-mode">#</a></h4>
+                      </summary>
+                      <p><b>ADVANCED!</b></p>
+                      <p>Logs into the real seed and allows an attacker to do most things, but produces invalid transaction and seed-derived message signatures. Certain actions that might reveal secret or seed-derived details wipe the seed. Seed Vault entries are blocked from Seed XOR restore in this mode. This remains an advanced, higher-risk mode and is not a normal wallet session.</p>
+                      <p>For this mode only, Trick PIN must be the same length as the true Main PIN and differ only in the final 4 positions (ignoring dash).</p>
+                    </details>
+                  </li>
+                  <li>
+                    <details class="custom-background">
+                      <summary>
+                        <h4 id="policy-unlock">Policy Unlock<a class="headerlink" href="#policy-unlock">#</a></h4>
+                      </summary>
+                      <p>Adds another Spending Policy unlock PIN.</p>
+                    </details>
+                  </li>
+                  <li>
+                    <details class="custom-background">
+                      <summary>
+                        <h4 id="policy-unlock-wipe">Policy Unlock & Wipe<a class="headerlink" href="#policy-unlock-wipe">#</a></h4>
+                      </summary>
+                      <p>Labelled <code>P.U. & Wipe</code> on Mk4. Pretends a correct Spending Policy unlock PIN was entered, but silently wipes the seed before asking for the Main PIN.</p>
+                    </details>
+                  </li>
+                </ul>
+              </details>
+            </details>
+          </li>
+          <li>
+            <details class="custom-background">
+              <summary>
+                <h4 id="add-if-wrong">Add If Wrong<a class="headerlink" href="#add-if-wrong">#</a></h4>
+              </summary>
+              <p>After <i>N</i> incorrect PIN attempts, this feature will be triggered. It can wipe the seed phrase, and/or brick the COLDCARD.</p>
+              <p><b>Regardless of this (or any other setting) the COLDCARD will always brick after 13 failed PIN attempts.</b></p>
+              <p><h3><a href="https://youtu.be/FAYmE5-40PQ?feature=shared&t=3603">Video: Add If Wrong Setup</a></h3></p>
+              <p>1. Select <code>Add If Wrong</code> from the Trick PINs Menu.</p>
+              <p>2. Read the information, press <kbd>✔</kbd>/<kbd>ENTER</kbd>.</p>
+              <p>3. Select the number of incorrect PIN attempts to activate this feature. If left blank, this will activate on any incorrect PINs.</p>
+              <p>4. Choose what the COLDCARD will do on the selected number of incorrect PINs:</p>
+              <details class="custom-background">
+                <summary>
+                  <h4 id="add-if-wrong-pin-menu">Add If Wrong PIN Menu<a class="headerlink" href="#add-if-wrong-pin-menu">#</a></h4>
+                </summary>
+                <p><img src="/docs/img/settings-menu/mk4-add-wrong-pin-menu.gif" class="snap indented" alt="mk4-add-wrong-pin-menu"> <img src="/docs/img/settings-menu/q-add-wrong-pin-menu.png" class="snap" alt="q-add-wrong-pin-menu"></p>
+                <ul>
+                  <li>
+                    <details class="custom-background">
+                      <summary>
+                        <h4 id="wipe-stop">Wipe, Stop<a class="headerlink" href="#wipe-stop">#</a></h4>
+                      </summary>
+                      <p>The seed is wiped and the COLDCARD will display a message saying: <code>Seed is wiped, Stop</code>.</p>
+                      <div class="admonition warning">
+                        <p class="admonition-title">
+                          Consequences of Wiping Seed Words
+                        </p>
+                        <p>Wiping your seed words will result in the loss of access to the Bitcoin, passwords, notes, and settings stored on your device. You can regain access to them by restoring your seed words from backup.</p>
+                      </div>
+                    </details>
+                  </li>
+                  <li>
+                    <details class="custom-background">
+                      <summary>
+                        <h4 id="wipe-and-reboot-2">Wipe & Reboot<a class="headerlink" href="#wipe-and-reboot-2">#</a></h4>
+                      </summary>
+                      <p>The seed is wiped and the COLDCARD reboots without notice.</p>
+                      <div class="admonition warning">
+                        <p class="admonition-title">
+                          Consequences of Wiping Seed Words
+                        </p>
+                        <p>Wiping your seed words will result in the loss of access to the Bitcoin, passwords, notes, and settings stored on your device. You can regain access to them by restoring your seed words from backup.</p>
+                      </div>
+                    </details>
+                  </li>
+                  <li>
+                    <details class="custom-background">
+                      <summary>
+                        <h4 id="silent-wipe-2">Silent Wipe<a class="headerlink" href="#silent-wipe-2">#</a></h4>
+                      </summary>
+                      <p>The seed is silently wiped and the COLDCARD acts as if the PIN code was just wrong.</p>
+                      <div class="admonition warning">
+                        <p class="admonition-title">
+                          Consequences of Wiping Seed Words
+                        </p>
+                        <p>Wiping your seed words will result in the loss of access to the Bitcoin, passwords, notes, and settings stored on your device. You can regain access to them by restoring your seed words from backup.</p>
+                      </div>
+                    </details>
+                  </li>
+                  <li>
+                    <details class="custom-background">
+                      <summary>
+                        <h4 id="brick-self-2">Brick Self<a class="headerlink" href="#brick-self-2">#</a></h4>
+                      </summary>
+                      <p><h3><a href="https://www.youtube.com/watch?v=SkH8ZP1S4Dw">Video: Proper COLDCARD Disposal</a></h3></p>
+                      <p>The COLDCARD becomes completely useless, and will only display the word <code>Bricked</code> forever.</p>
+                      <div class="admonition warning">
+                        <p class="admonition-title">
+                          Be careful with bricking the COLDCARD!
+                        </p>
+                        <p>The destruction process is quick and irreversible. You cannot reuse a bricked COLDCARD; discard it as e-waste.</p>
+                      </div>
+                    </details>
+                  </li>
+                  <li>
+                    <details class="custom-background">
+                      <summary>
+                        <h4 id="last-chance">Last Chance<a class="headerlink" href="#last-chance">#</a></h4>
+                      </summary>
+                      <p>Wipe the seed, then give one more try and then brick if one more wrong PIN is entered.</p>
+                      <div class="admonition warning">
+                        <p class="admonition-title">
+                          Consequences of Wiping Seed Words
+                        </p>
+                        <p>Wiping your seed words will result in the loss of access to the Bitcoin, passwords, notes, and settings stored on your device. You can regain access to them by restoring your seed words from backup.</p>
+                      </div>
+                    </details>
+                  </li>
+                  <li>
+                    <details class="custom-background">
+                      <summary>
+                        <h4 id="just-reboot">Just Reboot<a class="headerlink" href="#just-reboot">#</a></h4>
+                      </summary>
+                      <p>Reboot when this happens. Doesn't do anything else.</p>
+                    </details>
+                  </li>
+                </ul>
+              </details>
+            </details>
+          </li>
+          <li>
+            <details class="custom-background">
+              <summary>
+                <h4 id="delete-all">Delete All<a class="headerlink" href="#delete-all">#</a></h4>
+              </summary>
+              <p>Remove all Trick PIN codes and special wrong-PIN handling.</p>
+            </details>
+          </li>
+          <li>
+            <details class="custom-background">
+              <summary>
+                <h4 id="edit-trick-pins-or-wrong-pin-handling">Edit Trick PINs or Wrong PIN Handling<a class="headerlink" href="#edit-trick-pins-or-wrong-pin-handling">#</a></h4>
+              </summary>
+              <p><img src="/docs/img/settings-menu/mk4-existing-trick-pin-menu.gif" class="snap indented" alt="mk4-existing-trick-pin-menu"> <img src="/docs/img/settings-menu/q-existing-trick-pin-menu.gif" class="snap" alt="q-existing-trick-pin-menu"></p>
+              <p>Any existing Trick PINs, or a special wrong-PIN handling, will be at the top of the Trick PINs Menu.</p>
+              <p>Select an existing Trick PIN, or <code>WRONG PIN</code>, from the Trick PINs Menu to begin editing it.</p>
+              <ul>
+                <li>
+                  <details class="custom-background">
+                    <summary>
+                      <h4 id="edit-trick-pins-or-wrong-pin-handling-menus">Edit Trick PINs or Wrong PIN Handling Menus<a class="headerlink" href="#edit-trick-pins-or-wrong-pin-handling-menus">#</a></h4>
+                    </summary>
+                    <ul>
+                      <li>
+                        <details class="custom-background">
+                          <summary>
+                            <h4 id="edit-trick-pin-menu">Edit Trick PIN Menu<a class="headerlink" href="#edit-trick-pin-menu">#</a></h4>
+                          </summary>
+                          <p><img src="/docs/img/settings-menu/mk4-edit-trick-menu.gif" class="snap indented" alt="mk4-edit-trick-menu"> <img src="/docs/img/settings-menu/q-edit-trick-menu.gif" class="snap" alt="q-edit-trick-menu"></p>
+                          <ul>
+                            <li>
+                              <details class="custom-background">
+                                <summary>
+                                  <h4 id="activate-wallet">Activate Wallet (Duress Wallet Only)<a class="headerlink" href="#activate-wallet">#</a></h4>
+                                </summary>
+                                <p><b>This option is only available if the Trick PIN is set to open a duress wallet.</b></p>
+                                <p>This will temporarily load the secrets associated with this trick wallet so you can perform transactions with it.</p>
+                                <p>To restore normal operation, reboot the COLDCARD, or select <code>Restore Master</code> from the Main Menu.</p>
+                              </details>
+                            </li>
+                            <li>
+                              <details class="custom-background">
+                                <summary>
+                                  <h4 id="hide-trick">Hide Trick<a class="headerlink" href="#hide-trick">#</a></h4>
+                                </summary>
+                                <p>This will hide the Trick PIN from the menus, but it will still be in effect.</p>
+                                <p>You can restore it by trying to re-add the same PIN again.</p>
+                              </details>
+                            </li>
+                            <li>
+                              <details class="custom-background">
+                                <summary>
+                                  <h4 id="delete-trick">Delete Trick<a class="headerlink" href="#delete-trick">#</a></h4>
+                                </summary>
+                                <p>Delete the Trick PIN.</p>
+                              </details>
+                            </li>
+                            <li>
+                              <details class="custom-background">
+                                <summary>
+                                  <h4 id="change-pin">Change PIN<a class="headerlink" href="#change-pin">#</a></h4>
+                                </summary>
+                                <p>Change the PIN for this trick.</p>
+                              </details>
+                            </li>
+                          </ul>
+                        </details>
+                      </li>
+                      <li>
+                        <details class="custom-background">
+                          <summary>
+                            <h4 id="edit-wrong-pin-handling-menu">Edit Wrong-PIN Handling Menu<a class="headerlink" href="#edit-wrong-pin-handling-menu">#</a></h4>
+                          </summary>
+                          <p><img src="/docs/img/settings-menu/mk4-wrong-pin-menu.gif" class="snap indented" alt="mk4-wrong-pin-menu"> <img src="/docs/img/settings-menu/q-wrong-pin-menu.gif" class="snap" alt="q-wrong-pin-menu"></p>
+                          <ul>
+                            <li>
+                              <details class="custom-background">
+                                <summary>
+                                  <h4 id="hide-trick-2">Hide Trick<a class="headerlink" href="#hide-trick-2">#</a></h4>
+                                </summary>
+                                <p>This will hide what happens with wrong PINs from the menus, but it will still be in effect.</p>
+                              </details>
+                            </li>
+                            <li>
+                              <details class="custom-background">
+                                <summary>
+                                  <h4 id="delete-trick-2">Delete Trick<a class="headerlink" href="#delete-trick-2">#</a></h4>
+                                </summary>
+                                <p>Remove special handling of wrong PINs.</p>
+                              </details>
+                            </li>
+                          </ul>
+                        </details>
+                      </li>
+                    </ul>
+                  </details>
+                </li>
+              </ul>
+            </details>
+          </li>
+        </ul>
+      </details>
+    <li>
+      <details class="custom-background">
+        <summary>
+          <h4 id="set-nickname">Set Nickname<a class="headerlink" href="#set-nickname">#</a></h4>
+        </summary>
+        <p><img src="/docs/img/settings-menu/mk4-nickname-login.gif" class="snap indented" alt="mk4-nickname-login"> <img src="/docs/img/settings-menu/q-nickname-login.gif" class="snap" alt="q-nickname-login"></p>
+        <p>You can give your COLDCARD a personalized name. Once set, it will show this name immediately after turning on your COLDCARD. After viewing your nickname, press any key to proceed to the normal login process.</p>
+        <p><h3><a href="https://www.youtube.com/watch?v=FAYmE5-40PQ&t=6395s">Video: Mk4: How to Set a Nickname</a></h3></p>
+        <p><h3><a href="https://www.youtube.com/watch?v=Awe0ZlQEFS8">Video: Q: How to Set a Nickname</a></h3></p>
+      </details>
+    </li>
+    <li>
+      <details class="custom-background">
+        <summary>
+          <h4 id="scramble-keys">Scramble Keys<a class="headerlink" href="#scramble-keys">#</a></h4>
+        </summary>
+        <p><img src="/docs/img/settings-menu/mk4-scrambled-keys.png" class="snap indented" alt="mk4-scrambled-keys"> <img src="/docs/img/settings-menu/q-scrambled-keys.png" class="snap" alt="q-scrambled-keys"></p>
+        <p><h3><a href="https://www.youtube.com/watch?v=WfbNCfsj1_g">Video: How to Use Scramble Keys</a></h3></p>
+        <p>Enabling this feature randomizes the numbers associated with the buttons on the keypad. Cameras and shoulder-surfers watching won't figure out your PIN based on the keys you press.</p>
+        <p>The scrambled keypad changes for each part of your PIN on the MK4.</p>
+        <p><b>Q only:</b> The lower row of numbers represent the keys on your COLDCARD, and the top row shows where those keys are now mapped. For instance, if the prefix of your PIN was <code>12</code>, you would press <code>79</code> in this example. Scrambled Keys is ignored if <a href="/docs/settings/#calculator-login">Calculator Login</a> is enabled.</p>
+      </details>
+    </li>
+    <li>
+      <details class="custom-background">
+        <summary>
+          <h4 id="kill-key">Kill Key<a class="headerlink" href="#kill-key">#</a></h4>
+        </summary>
+        <p><img src="/docs/img/settings-menu/mk4-kill-key.gif" class="snap indented" alt="mk4-kill-key"> <img src="/docs/img/settings-menu/q-kill-key.gif" class="snap" alt="q-kill-key"></p>
+        <p>The Kill Key feature allows you to quickly wipe your seed during login by pressing a specific key. Each COLDCARD model handles the Kill Key slightly differently.</p>
+        <p><b>Mk4:</b> If you press the Kill Key <b>while viewing the anti-phishing words</b> during login, your seed phrase will be immediately wiped. <b>To avoid accidentally pressing your Kill Key, you must avoid making it the first number of the second half (suffix) of your PIN.</b></p>
+        <p><b>Q:</b> If you press the Kill Key <b>at any point</b> during login, your seed phrase will be immediately wiped. The Kill Key is ignored if <a href="/docs/settings/#calculator-login">Calculator Login</a> is enabled.</p>
+          <div class="admonition warning">
+            <p class="admonition-title">
+              Consequences of Wiping Seed Words
+            </p>
+            <p>Wiping your seed words will result in the loss of access to the Bitcoin, passwords, notes, and settings stored on your device. You can regain access to them by restoring your seed words from backup.</p>
+          </div>
+      </details>
+    </li>
+    <li>
+      <details class="custom-background">
+        <summary>
+          <h4 id="login-countdown">Login Countdown<a class="headerlink" href="#login-countdown">#</a></h4>
+        </summary>
+        <p><img src="/docs/img/settings-menu/mk4-login-countdown.gif" class="snap indented" alt="mk4-login-countdown"> <img src="/docs/img/settings-menu/q-login-countdown.gif" class="snap" alt="q-login-countdown"></p>
+        <p>Login Countdown lets you force a time delay when logging in to a COLDCARD.  Once enabled, entering your PIN will bring up the <code>Wait . . .</code> screen before displaying <code>Login countdown in effect. Must wait:</code> with the selected delay period counting down.</p>
+        <p>Your delay choices are:</p>
+          <ul>
+            <li>Disabled</li>
+            <li>5, 15, or 30 minutes</li>
+            <li>1, 2, 4, 8, 12, 24, or 48 hours</li>
+            <li>3 days</li>
+            <li>1 week</li>
+            <li>28 days later</li>
+          </ul>
+        <p>When the delay period has elapsed, enter your PIN to unlock your COLDCARD.</p>
+        <p>Plan ahead when selecting long delays. The COLDCARD requires continuous power for the entire delay period. Consider using an AC power source, charging a battery pack, or connecting to an uninterruptible power supply (UPS).</p>
+        <p>
+          <div class="admonition info">
+            <p class="admonition-title">
+              Countdown Limitations
+            </p>
+            <p>Unlike most of our security features, the secure element does not impose the delay. Bypassing the delay by opening the plastic case and interacting directly with the hardware may be possible.</p>
+            <p>We still consider it a good defence against $5 wrench attacks, as physical attackers are not necessarily technical people.</p>
+          </div>
+        </p>
+        <p><h3><a href="https://www.youtube.com/watch?v=hhnC2l1g7eA&list=PLZKkuPrgFw0axLoDDzxAIYzpZeC_T1i7W&index=2">Video: Setup COLDCARD Login Countdown</a></h3></p>
+      </details>
+    </li>
+    <li>
+      <details class="custom-background">
+        <summary>
+          <h4 id="microsd-2fa">MicroSD 2FA<a class="headerlink" href="#microsd-2fa">#</a></h4>
+        </summary>
+        <p><img src="/docs/img/settings-menu/mk4-microsd-2fa.gif" class="snap indented" alt="mk4-microsd-2fa"> <img src="/docs/img/settings-menu/q-microsd-2fa.gif" class="snap" alt="q-microsd-2fa"></p>
+        <p>This advanced security feature mandates the presence of a specially prepared MicroSD card during the login process. Upon entering your correct PIN, the device will verify the presence of the MicroSD card. <b>If the card slot is either empty or contains an unrecognized card, the device will automatically wipe the seed.</b></p>
+        <p><b>Q Only:</b> If multiple MicroSD cards are inserted during the login attempt, ensure that the authorized card is placed in the top slot (Slot A).</p>
+          <div class="admonition warning">
+            <p class="admonition-title">
+              Consequences of Wiping Seed Words
+            </p>
+            <p>Wiping your seed words will result in the loss of access to the Bitcoin, passwords, notes, and settings stored on your device. You can regain access to them by restoring your seed words from backup.</p>
+          </div>
+            <p><h3><a href="/docs/microsd-2fa/">COLDCARD Guide: MicroSD 2FA</a></h3></p>
+          <details class="custom-background">
+            <summary>
+              Steps to Setup MicroSD 2FA
+            </summary>
+            <p>1. Insert the MicroSD card into the COLDCARD. Be sure to use the top slot (Slot A) on the Q.</p>
+            <p>2. Select <code>MicroSD 2FA</code> from the Login Settings Menu.</p>
+            <p>3. Read the information, press <kbd>✔</kbd>/<kbd>ENTER</kbd>.</p>
+            <p>4. Make a selection from these choices (if you have never setup MicroSD 2FA, then <code>Add Card</code> will be your only option):</p>
+            <ul>
+              <li>
+                <details class="custom-background">
+                  <summary>
+                    <h4 id="add-card">Add Card<a class="headerlink" href="#add-card">#</a></h4>
+                  </summary>
+                  <p><img src="/docs/img/settings-menu/mk4-microsd-2fa-add.gif" class="snap indented" alt="mk4-microsd-2fa-add"> <img src="/docs/img/settings-menu/q-microsd-2fa-add.gif" class="snap" alt="q-microsd-2fa-add"></p>
+                  <p>If no MicroSD 2FA is setup, then this options adds the inserted card as the 2FA device. <b>Going forward this card must be present during login process or the seed will be wiped!</b></p>
+                  <p>If you already have a different MicroSD setup as a 2FA device, then this option allows you to add a new MicroSD card as an additional 2FA device. <b>Going forward this card, or one of the others, must be present during login process or the seed will be wiped.</b></p>
+                </details>
+              </li>
+              <li>
+                <details class="custom-background">
+                  <summary>
+                    <h4 id="check-card">Check Card<a class="headerlink" href="#check-card">#</a></h4>
+                  </summary>
+                  <p><img src="/docs/img/settings-menu/mk4-microsd-2fa-check.gif" class="snap indented" alt="mk4-microsd-2fa-check"> <img src="/docs/img/settings-menu/q-microsd-2fa-check.gif" class="snap" alt="q-microsd-2fa-check"></p>
+                    <p>Validates the inserted card and indicates if it would be accepted or not.</p>
+                </details>
+              </li>
+              <li>
+                <details class="custom-background">
+                  <summary>
+                    <h4 id="remove-card-n">Remove Card #<i>N</i><a class="headerlink" href="#remove-card-n">#</a></h4>
+                  </summary>
+                  <p><img src="/docs/img/settings-menu/mk4-microsd-2fa-rm.gif" class="snap indented" alt="mk4-microsd-2fa-rm"> <img src="/docs/img/settings-menu/q-microsd-2fa-rm.gif" class="snap" alt="q-microsd-2fa-rm"></p>
+                    <p>Remove card <i>N</i> from the approved list. When the last card is removed, the feature is disabled and no card will be required for login. Access to the card in question is not required to remove it.</p>
+                </details>
+              </li>
+            </ul>
+          </details>
+      </details>
+    </li>
+    <li>
+      <details class="custom-background">
+        <summary>
+          <h4 id="calculator-login">Calculator Login (Q only)<a class="headerlink" href="#calculator-login">#</a></h4>
+        </summary>
+        <p><img src="/docs/img/settings-menu/q-calc-login.gif" class="snap indented" alt="q-calc-login"></p>
+        <p><h3><a href="https://www.youtube.com/watch?v=Df6ENzUpY-Q">Video: How to Enable Calculator Mode</a></h3></p>
+        <p>When enabled, the usual PIN entry screen is replaced with a functional calculator.</p>
+        <p>Enter your PIN as <code>12-12</code> or <code>12 12</code> to unlock the COLDCARD. To verify anti-phishing words, enter your PIN prefix and a dash: <code>12-</code>.</p>
+          <li>
+          <details class="custom-background">
+            <summary>
+              <h4 id="default-off-calculator">Default Off<a class="headerlink" href="#default-off-calculator">#</a></h4>
+            </summary>
+            <p>Disable calculator login.</p>
+          </details>
+          </li>
+          <li>
+          <details class="custom-background">
+            <summary>
+              <h4 id="enable-calculator-login">Calculator Login<a class="headerlink" href="#enable-calculator-login">#</a></h4>
+            </summary>
+            <p>Enable calculator login.</p>
+          </details>
+          </li>
+      </details>
+    </li>
+    <li>
+      <details class="custom-background">
+        <summary>
+          <h4 id="test-login-now">Test Login Now<a class="headerlink" href="#test-login-now">#</a></h4>
+        </summary>
+        <p>Immediately reboots your COLDCARD and starts the normal login process.</p>
+      </details>
+    </li>
+</details>
+</details>
+<h2 id="hardware-onoff">Hardware On/Off<a class="headerlink" href="#hardware-onoff" title="Permanent link">#</a></h2>
+<p>Allows you to manage and control the various hardware interfaces of the COLDCARD, including USB connectivity, Virtual Disk functionality, and <a href="../glossary/#nfc">NFC</a> communication.
+      <details class="custom-background">
+        <summary>
+          Hardware On/Off Menu
+        </summary>
+        <p><img src="/docs/img/settings-menu/mk4-hardware-menu.gif" class="snap indented" alt="mk4-hardware-menu"> <img src="/docs/img/settings-menu/q-hardware-menu.gif" class="snap" alt="q-hardware-menu"></p>
+        <p><h3><a href="https://www.youtube.com/watch?v=J_FuVO-4IPU">Video: Tutorial: Disable NFC and USB</a></h3></p>
+        <ul>
+          <li>
+            <details class="custom-background">
+              <summary>
+                <h4 id="usb-port">USB Port<a class="headerlink" href="#usb-port">#</a></h4>
+              </summary>
+              <p><img src="/docs/img/settings-menu/mk4-hardware-usb.gif" class="snap indented" alt="mk4-hardware-usb"> <img src="/docs/img/settings-menu/q-hardware-usb.gif" class="snap" alt="q-hardware-usb"></p>
+                  <p>Disabling blocks the general COLDCARD USB data protocol and Virtual Disk. An explicitly approved <code>Send Password</code> action can still use the emulated USB keyboard.</p>
+                <li>
+                <details class="custom-background">
+                  <summary>
+                    <h4 id="default-on-usb">Default On<a class="headerlink" href="#default-on-usb">#</a></h4>
+                  </summary>
+                  <p>Enable data over USB port.</p>
+                </details>
+                </li>
+                <li>
+                <details class="custom-background">
+                  <summary>
+                    <h4 id="disable-usb">Disable USB<a class="headerlink" href="#disable-usb">#</a></h4>
+                  </summary>
+                  <p>Disable the general COLDCARD USB data protocol and Virtual Disk. The separately approved <code>Send Password</code> action remains available through the emulated USB keyboard.</p>
+                </details>
+                </li>
+            </details>
+          </li>
+          <li>
+            <details class="custom-background">
+              <summary>
+                <h4 id="virtual-disk">Virtual Disk<a class="headerlink" href="#virtual-disk">#</a></h4>
+              </summary>
+              <p><img src="/docs/img/settings-menu/mk4-hardware-virtdisk.gif" class="snap indented" alt="mk4-hardware-virtdisk"> <img src="/docs/img/settings-menu/q-hardware-virtdisk.gif" class="snap" alt="q-hardware-virtdisk"></p>
+              <p>The COLDCARD can emulate a 4MB virtual disk drive where new, and signed, <a href="/docs/glossary/#psbt">PSBT</a> files can be saved.</p>
+              <p>In Auto Mode, the COLDCARD will begin the signing process on PSBT files as soon as they are written to the Virtual Disk.</p>
+              <p>If you have ever disabled the <a href="#usb-port">USB port</a>, you must turn it back on to use the Virtual Disk. Go to: <code>Settings &gt; Hardware On/Off &gt; USB Port &gt; Default On</code>.</p>
+              <p><h3><a href="https://www.youtube.com/watch?v=FAYmE5-40PQ&t=6395s">Video: COLDCARD Virtual Disk Mode</a></h3></p>
+                <li>
+                <details class="custom-background">
+                  <summary>
+                    <h4 id="default-off-virtdisk">Default Off<a class="headerlink" href="#default-off-virtdisk">#</a></h4>
+                  </summary>
+                  <p>Disable Virtual Disk.</p>
+                </details>
+                </li>
+                <li>
+                <details class="custom-background">
+                  <summary>
+                    <h4 id="enable-virtdisk">Enable<a class="headerlink" href="#enable-virtdisk">#</a></h4>
+                  </summary>
+                  <p>Enable Virtual Disk.</p>
+                </details>
+                </li>
+                <li>
+                <details class="custom-background">
+                  <summary>
+                    <h4 id="enable-auto">Enable &amp; Auto<a class="headerlink" href="#enable-auto">#</a></h4>
+                  </summary>
+                  <p>Enable Virtual Disk in Auto Mode.</p>
+                  <p><a href="/docs/glossary/#psbt">PSBT</a> files written to the Virtual Disk in Auto Mode will be automatically selected for signing by the COLDCARD.</p>
+                </details>
+                </li>
+            </details>
+          </li>
+          <li>
+            <details class="custom-background">
+              <summary>
+                <h4 id="nfc-sharing">NFC Sharing<a class="headerlink" href="#nfc-sharing">#</a></h4>
+              </summary>
+              <p><img src="/docs/img/settings-menu/mk4-hardware-nfc.gif" class="snap indented" alt="mk4-hardware-nfc"> <img src="/docs/img/settings-menu/q-hardware-nfc.gif" class="snap" alt="q-hardware-nfc"></p>
+              <p>NFC (Near Field Communication) provides a seamless and convenient method for interacting with your COLDCARD device. This technology allows a phone or other NFC-enabled device to effortlessly "tap" the COLDCARD to send or receive data, all while preserving an air gap for enhanced security. The process is swift and user-friendly, making it an excellent choice for those who value efficiency and ease of use in managing their Bitcoin.</p>
+              <p>However, for users who prioritize the utmost level of security and prefer to eliminate any potential risk, even the minimal exposure associated with NFC, this feature can be disabled. While NFC offers a high degree of convenience, those with heightened security concerns may choose to turn it off to ensure an even stricter adherence to air-gapped security protocols.</p>
+              <p><h3><a href="https://www.youtube.com/watch?v=eLG8Atcd-l4&t=493s">Video: Mk4 Enable NFC</a></h3></p>
+              <p><h3><a href="https://www.youtube.com/watch?v=qNjJ0AuxgHs&t=754s">Video: Q Enable NFC</a></h3></p>
+              <p><h3><a href="/docs/nfc-tools/">COLDCARD Guide: NFC Tools</a></h3></p>
+                <li>
+                <details class="custom-background">
+                  <summary>
+                    <h4 id="default-off-nfc">Default Off<a class="headerlink" href="#default-off-nfc">#</a></h4>
+                  </summary>
+                  <p>Disable NFC hardware.</p>
+                </details>
+                </li>
+                <li>
+                <details class="custom-background">
+                  <summary>
+                    <h4 id="enable-nfc">Enable NFC<a class="headerlink" href="#enable-nfc">#</a></h4>
+                  </summary>
+                  <p>Enable NFC hardware.</p>
+                </details>
+                </li>
+            </details>
+          </li>
+        </ul>
+      </details></p>
+<h2 id="multisig-wallets">Multisig Wallets<a class="headerlink" href="#multisig-wallets" title="Permanent link">#</a></h2>
+<p>The <code>Multisig Wallets</code> Menu is designed for importing, exporting, and managing <a href="../multisig/">multisig</a> wallet configurations.</p>
+<p>This includes creating <a href="../airgap-multisig/#create-airgapped-multisig-wallet-on-coldcard">Airgap Multisig</a> wallets directly on the COLDCARD, and interacting with existing wallets through detailed management options.
+      <details class="custom-background">
+        <summary>
+          Multisig Wallets Menu
+        </summary>
+        <p><img src="/docs/img/settings-menu/mk4-multisig-menu.gif" class="snap indented" alt="mk4-multisig-menu"> <img src="/docs/img/settings-menu/q-multisig-menu.gif" class="snap" alt="q-multisig-menu"></p>
+        <p><h3><a href="/docs/multisig/">COLDCARD Guide: Multisig</a></h3></p>
+        <p><h3><a href="/docs/airgap-multisig/">COLDCARD Guide: Airgap Multisig</a></h3></p>
+        <ul>
+          <li>
+            <details class="custom-background">
+              <summary>
+                <h4 id="existing-multisig-wallets">Existing Multisig Wallets<a class="headerlink" href="#existing-multisig-wallets">#</a></h4>
+              </summary>
+              <p><img src="/docs/img/settings-menu/mk4-ms-existing-ms.png" class="snap indented" alt="mk4-ms-existing-ms"> <img src="/docs/img/settings-menu/q-ms-existing-ms.png" class="snap" alt="q-ms-existing-ms"></p>
+              <p>If the COLDCARD knows about any multisig wallets, they will be listed at the top of the Multisig Wallets Menu in place of <code>(none setup yet)</code>.</p>
+              <p>Selecting one of the existing wallets will open a menu for interacting with it.</p>
+                <li>
+                <details class="custom-background">
+                  <summary>
+                    <h4 id="existing-multisig-wallet-menu">Existing Multisig Wallet Menu<a class="headerlink" href="#existing-multisig-wallet-menu">#</a></h4>
+                  </summary>
+                  <p><img src="/docs/img/settings-menu/mk4-ms-existing-menu.gif" class="snap indented" alt="mk4-ms-existing-menu"> <img src="/docs/img/settings-menu/q-ms-existing-menu.gif" class="snap" alt="q-ms-existing-menu"></p>
+                  <p>On the Multisig Wallets Menu, select the multisig wallet you would like to interact with.</p>
+                  <p>These are the available options:</p>
+                  <li>
+                    <details class="custom-background">
+                      <summary>
+                        <h4 id="multisig-view-details">View Details<a class="headerlink" href="#multisig-view-details">#</a></h4>
+                      </summary>
+                      <p><img src="/docs/img/settings-menu/mk4-ms-view-details.gif" class="snap indented" alt="mk4-ms-view-details"> <img src="/docs/img/settings-menu/q-ms-view-details.gif" class="snap" alt="q-ms-view-details"></p>
+                      <p>View detailed information about the multisig wallet.</p>
+                    </details>
+                  </li>
+                  <li>
+                    <details class="custom-background">
+                      <summary>
+                        <h4 id="multisig-delete">Delete<a class="headerlink" href="#multisig-delete">#</a></h4>
+                      </summary>
+                      <p><img src="/docs/img/settings-menu/mk4-ms-delete.gif" class="snap indented" alt="mk4-ms-delete"> <img src="/docs/img/settings-menu/q-ms-delete.gif" class="snap" alt="q-ms-delete"></p>
+                      <p>Completely remove the multisig wallet from the COLDCARD.</p>
+                       <div class="admonition warning">
+                         <p class="admonition-title">
+                           Make Sure You Have Backups
+                         </p>
+                         <p> There is no way to reverse the deletion process. Before you delete a multisig wallet, be sure to have backups.</p>
+                       </div>
+                    </details>
+                  </li>
+                  <li>
+                    <details class="custom-background">
+                      <summary>
+                        <h4 id="coldcard-export">Coldcard Export<a class="headerlink" href="#coldcard-export">#</a></h4>
+                      </summary>
+                      <p><img src="/docs/img/settings-menu/mk4-ms-cc-export.gif" class="snap indented" alt="mk4-ms-cc-export"> <img src="/docs/img/settings-menu/q-ms-cc-export.gif" class="snap" alt="q-ms-cc-export"></p>
+                      <p>Export the multisig wallet in the COLDCARD export format.</p>
+                      <p>Choose how to export:</p>
+                      <li>Press <kbd>1</kbd> to export to the MicroSD card (Slot A on the Q).</li>
+                      <li>On the Q only: press <kbd>B</kbd> to export to the MicroSD card in slot B.</li>
+                      <li>Press <kbd>2</kbd> to export to the Virtual Disk (if <a href="#virtual-disk">enabled</a>).</li>
+                      <li>Press <kbd>3</kbd> on the Mk4, or the <kbd>NFC</kbd> key on the Q, to export via NFC.</li>
+                      <li>On the Q only: press the <kbd>QR</kbd> key to export via QR code.</li>
+                    </details>
+                  <li>
+                    <details class="custom-background">
+                      <summary>
+                        <h4 id="multisig-descriptors">Descriptors<a class="headerlink" href="#multisig-descriptors">#</a></h4>
+                      </summary>
+                      <p><img src="/docs/img/settings-menu/mk4-ms-descriptors.gif" class="snap indented" alt="mk4-ms-descriptors"> <img src="/docs/img/settings-menu/q-ms-descriptors.gif" class="snap" alt="q-ms-descriptors"></p>
+                      <p>This will open a menu that allows you to view or export the multisig wallet descriptors.</p>
+                      <p><h3><a href="/docs/descriptor_export/#exporting-multi-signature-descriptors">COLDCARD Guide: Export Multisig Descriptors</a></h3></p>
+                      <p><h3><a href="/docs/bitcoin-core-2of2desc/">COLDCARD Guide: Descriptors &amp; Multisig</a></h3></p>
+                        <li>
+                          <details class="custom-background">
+                            <summary>
+                              <h4 id="view-descriptor">View Descriptor<a class="headerlink" href="#view-descriptor">#</a></h4>
+                            </summary>
+                            <p>View the <a href="https://github.com/bitcoin/bips/blob/master/bip-0380.mediawiki">BIP-380</a> descriptor of the multisig wallet. Press <kbd>1</kbd> to export a human readable version.</p>
+                            <p>Choose how to export:</p>
+                            <li>Press <kbd>1</kbd> to export to the MicroSD card (Slot A on the Q).</li>
+                            <li>On the Q only: press <kbd>B</kbd> to export to the MicroSD card in slot B.</li>
+                            <li>Press <kbd>2</kbd> to export to the Virtual Disk (if <a href="#virtual-disk">enabled</a>).</li>
+                            <li>Press <kbd>3</kbd> on the Mk4, or the <kbd>NFC</kbd> key on the Q, to export via NFC.</li>
+                            <li>On the Q only: press the <kbd>QR</kbd> key to export via QR code.</li>
+                          </details>
+                        </li>
+                        <li>
+                          <details class="custom-background">
+                            <summary>
+                              <h4 id="export-descriptor">Export<a class="headerlink" href="#export-descriptor">#</a></h4>
+                            </summary>
+                            <p>Export the multisig wallets <a href="https://github.com/bitcoin/bips/blob/master/bip-0380.mediawiki">BIP-380</a> descriptor.</p>
+                            <p>Choose how to export:</p>
+                            <li>Press <kbd>1</kbd> to export to the MicroSD card (Slot A on the Q).</li>
+                            <li>On the Q only: press <kbd>B</kbd> to export to the MicroSD card in slot B.</li>
+                            <li>Press <kbd>2</kbd> to export to the Virtual Disk (if <a href="#virtual-disk">enabled</a>).</li>
+                            <li>Press <kbd>3</kbd> on the Mk4, or the <kbd>NFC</kbd> key on the Q, to export via NFC.</li>
+                            <li>On the Q only: press the <kbd>QR</kbd> key to export via QR code.</li>
+                          </details>
+                        </li>
+                        <li>
+                          <details class="custom-background">
+                            <summary>
+                              <h4 id="core-descriptor">Bitcoin Core<a class="headerlink" href="#core-descriptor">#</a></h4>
+                            </summary>
+                            <p>Export the multisig wallets descriptor in Bitcoin Core format.</p>
+                            <p>Choose how to export:</p>
+                            <li>Press <kbd>1</kbd> to export to the MicroSD card (Slot A on the Q).</li>
+                            <li>On the Q only: press <kbd>B</kbd> to export to the MicroSD card in slot B.</li>
+                            <li>Press <kbd>2</kbd> to export to the Virtual Disk (if <a href="#virtual-disk">enabled</a>).</li>
+                            <li>Press <kbd>3</kbd> on the Mk4, or the <kbd>NFC</kbd> key on the Q, to export via NFC.</li>
+                            <li>On the Q only: press the <kbd>QR</kbd> key to export via QR code.</li>
+                          </details>
+                        </li>
+                    </details>
+                  </li>
+                  <li>
+                    <details class="custom-background">
+                      <summary>
+                        <h4 id="multisig-electrum-wallet">Electrum Wallet<a class="headerlink" href="#multisig-electrum-wallet">#</a></h4>
+                      </summary>
+                      <p><img src="/docs/img/settings-menu/mk4-ms-electrum.gif" class="snap indented" alt="mk4-ms-electrum"> <img src="/docs/img/settings-menu/q-ms-electrum.gif" class="snap" alt="q-ms-electrum"></p>
+                      <p>Exports a skeleton Electrum wallet file. You can open that file with an Electrum wallet to have a watch-only copy of the multisig wallet.</p>
+                      <p>Choose how to export:</p>
+                      <li>Press <kbd>1</kbd> to export to the MicroSD card (Slot A on the Q).</li>
+                      <li>On the Q only: press <kbd>B</kbd> to export to the MicroSD card in slot B.</li>
+                      <li>Press <kbd>2</kbd> to export to the Virtual Disk (if <a href="#virtual-disk">enabled</a>).</li>
+                      <li>Press <kbd>3</kbd> on the Mk4, or the <kbd>NFC</kbd> key on the Q, to export via NFC.</li>
+                      <li>On the Q only: press the <kbd>QR</kbd> key to export via QR code.</li>
+                      <div class="admonition info">
+                        <p class="admonition-title">
+                          Privacy Sensitive File
+                        </p>
+                        <p>The file created is privacy sensitive since it includes the XPUBs of all the wallets involved in the multisig.</p>
+                      </div>
+                    </details>
+                  </details>
+                </details>
+              </li>
+          <li>
+            <details class="custom-background">
+              <summary>
+                <h4 id="import">Import<a class="headerlink" href="#import">#</a></h4>
+              </summary>
+              <p><img src="/docs/img/settings-menu/mk4-ms-import-file.gif" class="snap indented" alt="mk4-ms-import-file"> <img src="/docs/img/settings-menu/q-ms-import-file.gif" class="snap" alt="q-ms-import-file"></p>
+              <p>Import a multisig wallet. The COLDCARD will prompt you to choose the source: MicroSD card file, Virtual Disk file if enabled, QR code on Q, or NFC.</p>
+                <div class="admonition info">
+                  <p class="admonition-title">
+                    Accepted Formats
+                  </p>
+                  <p>The multisig wallet to be imported must be one of the following formats:</p>
+                    <li><a href="/docs/multisig/#configuration-text-file-for-multisig">COLDCARD Export</a></li>
+                    <li><a href="https://github.com/bitcoin/bips/blob/master/bip-0380.mediawiki">BIP-380 Descriptor</a></li>
+                </div>
+              <p><h3><a href="https://youtube.com/watch?v=5n14AlwpiEI&t=124">Video: Import Multisig From File</a></h3></p>
+              <p><h3><a href="https://youtube.com/watch?v=5n14AlwpiEI&t=187">Video: Import Multisig From QR Code</a></h3></p>
+                <details class="custom-background">
+                  <summary>
+                    Steps to Import a Multisig Wallet
+                  </summary>
+                    <p>1. Export the multisig wallet file from your coordinator by file, QR code, or NFC.</p>
+                    <p>2. Select <code>Import</code> on the Multisig Wallets Menu.</p>
+                    <p>3. Choose the source when prompted.</p>
+                    <p>4. Provide the multisig wallet file, scan the QR code, or tap the NFC device.</p>
+                    <p>5. Review the details.</p>
+                    <p>6. Press <kbd>✔</kbd>/<kbd>ENTER</kbd> to import.</p>
+                    <p>7. Your multisig wallet has been imported, and can now be found at the top of the Multisig Wallets Menu.</p>
+                </details>
+            </details>
+          </li>
+          <li>
+            <details class="custom-background">
+              <summary>
+                <h4 id="export-xpub">Export XPUB<a class="headerlink" href="#export-xpub">#</a></h4>
+              </summary>
+              <p><img src="/docs/img/settings-menu/mk4-ms-export-xpub.gif" class="snap indented" alt="mk4-ms-export-xpub"> <img src="/docs/img/settings-menu/q-ms-export-xpub.gif" class="snap" alt="q-ms-export-xpub"></p>
+              <p>This creates a small file containing the extended public keys (XPUB) you would need to join a multisig wallet.</p>
+              <p>Public keys for BIP-48 conformant paths are used:</p>
+              <ul>
+                <li>
+                  <p>P2SH-P2WSH: <code>m/48h/0h/{acct}h/1h</code></p>
+                </li>
+                <li>
+                  <p>P2WSH: <code>m/48h/0h/{acct}h/2h</code></p>
+                </li>
+              </ul>
+              <p><h3><a href="https://www.youtube.com/watch?v=FAYmE5-40PQ&t=6513s">Video: Mk4 Export XPUB</a></h3></p>
+              <p><h3><a href="https://www.youtube.com/watch?v=5n14AlwpiEI">Video: Q Export XPUB</a></h3></p>
+              <details class="custom-background">
+                <summary>
+                  Steps to Export XPUB
+                </summary>
+                  <p>1. Select <code>Export XPUB</code> from the Multisig Wallets Menu.</p>
+                  <p>2. Read the information, press <kbd>✔</kbd>/<kbd>ENTER</kbd>.</p>
+                  <p>3. Enter an <a href="/docs/paths/">account number</a>, or leave blank for the default account. Press <kbd>✔</kbd>/<kbd>ENTER</kbd>.</p>
+                  <p>4. Choose how to export:</p>
+                  <p>&nbsp;&nbsp;&nbsp;&nbsp;a. Press <kbd>1</kbd> to export to the MicroSD card (Slot A on the Q).</p>
+                  <p>&nbsp;&nbsp;&nbsp;&nbsp;b. On the Q only: press <kbd>B</kbd> to export to the MicroSD card in slot B.</p>
+                  <p>&nbsp;&nbsp;&nbsp;&nbsp;c. Press <kbd>2</kbd> to export to the Virtual Disk (if <a href="#virtual-disk">enabled</a>).</p>
+                  <p>&nbsp;&nbsp;&nbsp;&nbsp;d. Press <kbd>3</kbd> on the Mk4, or the <kbd>NFC</kbd> key on the Q, to export via NFC.</p>
+                  <p>&nbsp;&nbsp;&nbsp;&nbsp;e. On the Q only: press the <kbd>QR</kbd> key to export via QR code.</p>
+              </details>
+            </details>
+          </li>
+          <li>
+            <details class="custom-background">
+              <summary>
+                <h4 id="create-airgapped">Create Airgapped<a class="headerlink" href="#create-airgapped">#</a></h4>
+              </summary>
+              <p><img src="/docs/img/settings-menu/mk4-ms-create-airgapped-1.gif" class="snap indented" alt="mk4-ms-create-airgapped-1"> <img src="/docs/img/settings-menu/q-ms-create-airgapped-1.gif" class="snap" alt="q-ms-create-airgapped-1"></p>
+              <p>This feature allows the COLDCARD to be used as a multisig coordinator. This enables the creation of airgapped multisig wallets from XPUBS exported from other COLDCARDs.</p>
+              <p>The number of XPUBs found on the MicroSD card or Virtual Disk will determine the <i>N</i> value (total signers) for the multisig, and can be up to 15.</p>
+              <p>The user is free to choose any <i>M</i> value (signers needed to spend).</p>
+                    <p><h3><a href="/docs/airgap-multisig/">COLDCARD Guide: Airgap Multisig</a></h3></p>
+                    <p><h3><a href="https://www.youtube.com/watch?v=5n14AlwpiEI">Video: Create Airgap Multisig</a></h3></p>
+                <details class="custom-background">
+                  <summary>
+                    Steps to Create an Airgapped Multisig Wallet
+                  </summary>
+                    <p><img src="/docs/img/settings-menu/mk4-ms-create-airgapped-2.gif" class="snap indented" alt="mk4-ms-create-airgapped-2"> <img src="/docs/img/settings-menu/q-ms-create-airgapped-2.gif" class="snap" alt="q-ms-create-airgapped-2"></p>
+                    <p>1. <a href="/docs/airgap-multisig/#export-xpubs">Export all the XPUBs</a> you would like to include in the multisig wallet to the MicroSD card or Virtual Disk.</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;a. If you are using a MicroSD card, insert it into the COLDCARD.</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;b. If you intend to use the Virtual Disk, make sure there are no MicroSD cards in the COLDCARD.</p>
+                    <p>2. Select <code>Create Airgapped</code> from the Multisig Wallets Menu.</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;a. <b>Q Only:</b> Press the <kbd>QR</kbd> key to use QR codes (BBQr), or press <kbd>ENTER</kbd> to use MicroSD card(s).</p>
+                    <p>3. Press <kbd>✔</kbd>/<kbd>ENTER</kbd> to use the default P2WSH address type, or press <kbd>1</kbd> to use P2SH-P2WSH.</p>
+                    <p>4. Use keys <kbd>7</kbd> or <kbd>9</kbd> to change the <i>M</i> value (signers needed to spend) of the multisig.</p>
+                    <p>5. Press <kbd>✔</kbd>/<kbd>ENTER</kbd> when the details are correct.</p>
+                    <p>6. Review the details of the multisig wallet.</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;a. At this point you can press <kbd>1</kbd> to see the extended public keys of the wallet.</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;b. If something is not correct with the multisig details you can press <kbd>CANCEL</kbd> at this time.</p>
+                    <p>7. When the multisig details are correct, press <kbd>✔</kbd>/<kbd>ENTER</kbd> to create the wallet.</p>
+                    <p>8. Next you will choose how to export the COLDCARD multisig setup file:</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;a. Press <kbd>1</kbd> to export to the MicroSD card (Slot A on the Q).</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;b. On the Q only: press <kbd>B</kbd> to export to the MicroSD card in slot B.</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;c. Press <kbd>2</kbd> to export to the Virtual Disk (if <a href="#virtual-disk">enabled</a>).</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;d. Press <kbd>3</kbd> on the Mk4, or the <kbd>NFC</kbd> key on the Q, to export via NFC.</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;e. On the Q only: press the <kbd>QR</kbd> key to export via QR code.</p>
+                    <p>9. Finally, you need to select how to export the Electrum multisig wallet file:</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;a. Press <kbd>1</kbd> to export to the MicroSD card (Slot A on the Q).</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;b. On the Q only: press <kbd>B</kbd> to export to the MicroSD card in slot B.</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;c. Press <kbd>2</kbd> to export to the Virtual Disk (if <a href="#virtual-disk">enabled</a>).</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;d. Press <kbd>3</kbd> on the Mk4, or the <kbd>NFC</kbd> key on the Q, to export via NFC.</p>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;e. On the Q only: press the <kbd>QR</kbd> key to export via QR code.</p>
+                    <p>10. Your multisig wallet has been created, and can now be found at the top of the Multisig Wallets Menu.
+                </details>
+            </details>
+          </li>
+          <li>
+            <details class="custom-background">
+              <summary>
+                <h4 id="trust-psbt">Trust PSBT?<a class="headerlink" href="#trust-psbt">#</a></h4>
+              </summary>
+              <p><img src="/docs/img/settings-menu/mk4-ms-trust-psbt.gif" class="snap indented" alt="mk4-ms-trust-psbt"> <img src="/docs/img/settings-menu/q-ms-trust-psbt.webp" class="snap" alt="q-ms-trust-psbt"></p>
+              <p>This setting controls what the COLDCARD does with the co-signer public keys (XPUB) that may be provided inside a <a href="/docs/glossary/#psbt">PSBT</a> file. There are three choices:</p>
+                <li>
+                  <details class="custom-background">
+                    <summary>
+                      <h4 id="verify-only">Verify Only<a class="headerlink" href="#verify-only">#</a></h4>
+                    </summary>
+                    <p>Do not import the XPUBs found, but do verify the correct wallet already exists on the COLDCARD.</p>
+                  </details>
+                </li>
+                <li>
+                  <details class="custom-background">
+                    <summary>
+                      <h4 id="offer-import">Offer Import<a class="headerlink" href="#offer-import">#</a></h4>
+                    </summary>
+                    <p>If it's a new multisig wallet, offer to import the details and store them as a new wallet in the COLDCARD.</p>
+                  </details>
+                </li>
+                <li>
+                  <details class="custom-background">
+                    <summary>
+                      <h4 id="trust-psbt-2">Trust PSBT<a class="headerlink" href="#trust-psbt-2">#</a></h4>
+                    </summary>
+                    <p>Use the wallet data in the PSBT as a temporary multisig wallet, and do not import it. This permits some deniability and additional privacy.</p>
+                  </details>
+                  <div class="admonition info">
+                    <p class="admonition-title">
+                      Multisig PSBT Defaults
+                    </p>
+                    <p>When the XPUB data is not provided in the PSBT, regardless of the above, we require the appropriate multisig wallet to already exist on the COLDCARD. The default is to <code>Offer Import</code> unless at least one multisig wallet already exists, in which case the default becomes <code>Verify Only</code>.</p>
+                  </div>
+                </li>
+              </details>
+          </li>
+          <li>
+            <details class="custom-background">
+              <summary>
+                <h4 id="skip-checks">Skip Checks?<a class="headerlink" href="#skip-checks">#</a></h4>
+              </summary>
+              <p><img src="/docs/img/settings-menu/mk4-ms-skip-checks.gif" class="snap indented" alt="mk4-ms-skip-checks"> <img src="/docs/img/settings-menu/q-ms-skip-checks.gif" class="snap" alt="q-ms-skip-checks"></p>
+              <p>You may disable some of the checks involved in multisig PSBT processing. This permits <a href="/docs/glossary/#psbt">PSBTs</a> to be signed that may be generated with less-than-perfect software, but which you know are not security hazards.</p>
+              <p>After reading the warning, press <kbd>4</kbd> to access the Skip Checks Menu. These are your choices:</p>
+                <details class="custom-background">
+                  <summary>
+                    <h4 id="normal-checks">Normal<a class="headerlink" href="#normal-checks">#</a></h4>
+                  </summary>
+                  <p>All the normal verification checks are done on multisig PSBTs.</p>
+                </details>
+                <details class="custom-background">
+                  <summary>
+                    <h4 id="skip-checks-2">Skip Checks?<a class="headerlink" href="#skip-checks-2">#</a></h4>
+                  </summary>
+                  <p>Some of the verification checks the COLDCARD typically does on multisig PSBTs are disabled. This can help you to sign PSBTs created by other wallets.</p>
+                    <div class="admonition warning">
+                      <p class="admonition-title">
+                        Use at Your Own Risk
+                      </p>
+                      <p>These checks exist for good reason! The signed transaction may not be accepted by the network.</p>
+                      <p>This setting only will last until you power down the COLDCARD.</p>
+                    </div>
+                </details>
+                <div class="admonition info">
+                  <p class="admonition-title">
+                    <code>Skip Checks?</code> Information
+                  </p>
+                  <p>This setting is not preserved, and will be reset to <code>Normal</code> after each shutdown.</p>
+                </div>
+            </details>
+          </li>
+          <li>
+            <details class="custom-background">
+              <summary>
+                <h4 id="full-address-view">Full Address View?<a class="headerlink" href="#full-address-view">#</a></h4>
+              </summary>
+              <p><img src="/docs/img/settings-menu/mk4-ms-full-addr-view.gif" class="snap indented" alt="mk4-ms-full-addr-view"> <img src="/docs/img/settings-menu/q-ms-full-addr-view.gif" class="snap" alt="q-ms-full-addr-view"></p>
+              <p>With this setting enabled, full multisig addresses will be shown in the <a href="/docs/address-explorer/">Address Explorer</a>. The default setting is to show only partial addresses.</p>
+              <p><b>You should always cross-verify multisig addresses with your coordinator software.</b></p>
+                <li>
+                  <details class="custom-background">
+                    <summary>
+                      <h4 id="hide-chars">Partly Censor<a class="headerlink" href="#partly-censor">#</a></h4>
+                    </summary>
+                    <p>Do not show the full multisig address in Address Explorer. This is the default setting.</p>
+                  </details>
+                </li>
+                <li>
+                  <details class="custom-background">
+                    <summary>
+                      <h4 id="show-full">Show Full<a class="headerlink" href="#show-full">#</a></h4>
+                    </summary>
+                    <p>Show full addresses for multisig wallets in Address Explorer.</p>
+                  </details>
+                </li>
+            </details>
+          </li>
+          <li>
+            <details class="custom-background">
+              <summary>
+                <h4 id="unsorted-ms">Unsorted Multisig?<a class="headerlink" href="#unsorted-ms">#</a></h4>
+              </summary>
+              <p><img src="/docs/img/settings-menu/mk4-unsorted-ms.gif" class="snap indented" alt="mk4-ms-unsorted-ms"> <img src="/docs/img/settings-menu/q-unsorted-ms.gif" class="snap" alt="q-ms-unsorted-ms"></p>
+              <p>This setting will allow you to import and operate "multi(...)" unsorted multisig wallets that do not follow <a href="https://github.com/bitcoin/bips/blob/master/bip-0067.mediawiki">BIP-67</a>.</p>
+              <p>Press <kbd>4</kbd> to access the Unsorted Multisig Menu. These are your options:</p>
+                <details class="custom-background">
+                  <summary>
+                    <h4 id="no-unsorted-ms">Do Not Allow<a class="headerlink" href="#no-unsorted-ms">#</a></h4>
+                  </summary>
+                  <p>Do not allow "multi(...)" unsorted multisig. This is the default setting.</p>
+                </details>
+                <details class="custom-background">
+                  <summary>
+                    <h4 id="allow-unsorted-ms">Allow<a class="headerlink" href="#allow-unsorted-ms">#</a></h4>
+                  </summary>
+                  <p>Allow "multi(...)" unsorted multisig wallets that do not follow <a href="https://github.com/bitcoin/bips/blob/master/bip-0067.mediawiki">BIP-67</a>.</p>
+                    <div class="admonition warning">
+                      <p class="admonition-title">
+                        Use at Your Own Risk
+                      </p>
+                      <p>Disabling BIP-67 is discouraged!</p>
+                      <p>It is of CRUCIAL importance for unsorted wallets to backup multisig descriptors, and preserve order of the keys in it.</p>
+                    </div>
+                </details>
+            </details>
+          </li>
+              </details>
+            </details>
+            </li>
+          </li>
+        </ul>
+      </details></p>
+<h2 id="nfc-push-tx">NFC Push TX<a class="headerlink" href="#nfc-push-tx" title="Permanent link">#</a></h2>
+<p>When <a href="https://pushtx.org/">NFC Push TX</a> is enabled, immediately after transaction signing, you can tap any NFC-enabled phone on the COLDCARD and your newly-signed transaction will be immediately broadcasted on the public network. This provides users with a simple and convenient way to finish sending a transaction while maintaining an airgap.</p>
+<p>You must choose from the default providers, or give your own URL.
+      <details class="custom-background">
+        <summary>
+          NFC Push TX Menu
+        </summary>
+        <p><img src="/docs/img/settings-menu/mk4-nfcpushtx-menu.gif" class="snap indented" alt="mk4-nfcpushtx-menu"> <img src="/docs/img/settings-menu/q-nfcpushtx-menu.gif" class="snap" alt="q-nfcpushtx-menu"></p>
+        <p><h3><a href="https://www.youtube.com/watch?v=Tte7nddBUCI">Video: NFC Push TX</a></h3></p>
+        <ul>
+          <li>
+            <details class="custom-background">
+              <summary>
+                <h4 id="pushtx-coldcard">coldcard.com<a class="headerlink" href="#pushtx-coldcard">#</a></h4>
+              </summary>
+              <p>This will use the Push TX service hosted by <a href="https://coldcard.com/pushtx">Coldcard.com</a>. The source code for the service can be found <a href="https://github.com/Coldcard/push-tx">here</a>.</p>
+            </details>
+          </li>
+          <li>
+            <details class="custom-background">
+              <summary>
+                <h4 id="pushtx-mempool">mempool.space<a class="headerlink" href="#pushtx-mempool">#</a></h4>
+              </summary>
+              <p>Use the Push TX service hosted by <a href="https://mempool.space/pushtx">Mempool.space</a>. The source code can be found <a href="https://github.com/mempool/mempool/pull/5132">here.</a></p>
+            </details>
+          </li>
+          <li>
+            <details class="custom-background">
+              <summary>
+                <h4 id="pushtx-custom">Custom URL...<a class="headerlink" href="#pushtx-custom">#</a></h4>
+              </summary>
+              <p><img src="/docs/img/settings-menu/mk4-nfcpushtx-custom.gif" class="snap indented" alt="mk4-nfcpushtx-custom"> <img src="/docs/img/settings-menu/q-nfcpushtx-custom.gif" class="snap" alt="q-nfcpushtx-custom"></p>
+              <p>This option will let you enter your own URL that is setup to push transactions.</p>
+              <p><h3><a href="https://pushtx.org/#roll-your-own">How To: Host a Push TX Service</a></h3></p>
+            </details>
+          </li>
+          <li>
+            <details class="custom-background">
+              <summary>
+                <h4 id="pushtx-disable">Disable<a class="headerlink" href="#pushtx-disable">#</a></h4>
+              </summary>
+              <p>Disable NFC Push TX.</p>
+            </details>
+          </li>
+        </ul>
+      </details></p>
+<h2 id="display-units">Display Units<a class="headerlink" href="#display-units" title="Permanent link">#</a></h2>
+<p>View your funds as <code>BTC</code> (default), <code>mBTC</code>, <code>bits</code>, or <code>sats</code>.
+      <details class="custom-background">
+        <summary>
+          Display Units Menu
+        </summary>
+        <p><img src="/docs/img/settings-menu/mk4-display-units.gif" class="snap indented" alt="mk4-display-units"> <img src="/docs/img/settings-menu/q-display-units.gif" class="snap" alt="q-display-units"></p>
+      </details></p>
+<h2 id="max-network-fee">Max Network Fee<a class="headerlink" href="#max-network-fee" title="Permanent link">#</a></h2>
+<p>Transactions signed by a COLDCARD usually include a small network fee. The network fee goes to the miner validating your transaction. Your COLDCARD will refuse to sign transactions with a fee higher than the percentage you set.</p>
+<p>Typically, network fees are minimal compared to the transaction values. Your COLDCARD will always warn you if the transaction fee is at least 5% of the total output value.</p>
+<p>The default hard limit is 10%. You also have the options of 25%, 50%, or no limit. Changing or removing network fee limits does not remove the 5% warning. If the warning appears, you can approve the transaction as usual.
+      <details class="custom-background">
+        <summary>
+          Max Network Fee Menu
+        </summary>
+        <p><img src="/docs/img/settings-menu/mk4-max-network-fee.gif" class="snap indented" alt="mk4-max-network-fee"> <img src="/docs/img/settings-menu/q-max-network-fee.gif" class="snap" alt="q-max-network-fee"></p>
+      </details></p>
+<h2 id="idle-timeout">Idle Timeout<a class="headerlink" href="#idle-timeout" title="Permanent link">#</a></h2>
+<p>Most people use their COLDCARD to authorize a transaction and then put it away. Typical usage times are brief. Setting the Idle Timeout to match your expected usage time helps prevent "evil maid attacks" where a device left unattended can be compromised.</p>
+<p>The default setting for Idle Timeout is four hours. There are preset time limits to select from. You can turn off Idle Timeout by selecting <code>Never</code>.</p>
+<p>When the chosen time limit has passed, the screen will display <code>Cleanup . . .</code> as it logs out.
+      <details class="custom-background">
+        <summary>
+          Idle Timeout Menu
+        </summary>
+        <p><img src="/docs/img/settings-menu/mk4-idle-timeout.gif" class="snap indented" alt="mk4-idle-timeout"> <img src="/docs/img/settings-menu/q-idle-timeout.gif" class="snap" alt="q-idle-timeout"></p>
+      </details></p>
+<h2 id="idle-timeout-on-battery">Idle Timeout (on battery)<a class="headerlink" href="#idle-timeout-on-battery" title="Permanent link">#</a></h2>
+<p><strong>Q Only:</strong> Same as <a href="#idle-timeout">Idle Timeout</a>, but only when using the Q with battery power. The default setting is 10 minutes.
+      <details class="custom-background">
+        <summary>
+          Idle Timeout (on battery) Menu
+        </summary>
+        <p><img src="/docs/img/settings-menu/q-idle-timeout-batt.gif" class="snap indented" alt="q-idle-timeout-batt"></p>
+      </details></p>
+<h2 id="lcd-brightness-on-battery">LCD Brightness (on battery)<a class="headerlink" href="#lcd-brightness-on-battery" title="Permanent link">#</a></h2>
+<p><strong>Q Only:</strong> This controls the brightness of the LCD display while using the batteries. Choose from preset percentages. The default is 95%.
+      <details class="custom-background">
+        <summary>
+          LCD Brightness (on battery) Menu
+        </summary>
+        <p><img src="/docs/img/settings-menu/q-lcd-brightness.gif" class="snap indented" alt="q-lcd-brightness"></p>
+      </details></p>
+<h2 id="delete-psbts">Delete PSBTs<a class="headerlink" href="#delete-psbts" title="Permanent link">#</a></h2>
+<p><a href="../glossary/#psbt">PSBT</a> files (on MicroSD card or Virtual Disk) will be blanked and deleted after they are used. The signed transaction will be named <code>&lt;TXID&gt;.txn</code>, so the file name does not leak information.</p>
+<p>MS-DOS tools should not be able to find the PSBT data (ie. undelete), but forensic tools which take apart the flash chips of the MicroSD card may still be able to find the data or filename.
+      <details class="custom-background">
+        <summary>
+          Delete PSBTs Menu
+        </summary>
+        <p><img src="/docs/img/settings-menu/mk4-delete-psbts.gif" class="snap indented" alt="mk4-delete-psbts"> <img src="/docs/img/settings-menu/q-delete-psbts.gif" class="snap" alt="q-delete-psbts"></p>
+          <ul>
+            <li>
+              <details class="custom-background">
+                <summary>
+                  <h4 id="default-keep">Default Keep<a class="headerlink" href="#default-keep">#</a></h4>
+                </summary>
+                <p>Keep PSBTs after they are signed.</p>
+              </details>
+            </li>
+            <li>
+              <details class="custom-background">
+                <summary>
+                  <h4 id="delete-signed-psbts">Delete PSBTs<a class="headerlink" href="#delete-signed-psbts">#</a></h4>
+                </summary>
+                <p>Delete PSBTs after signing, and change the signed transaction file name to: <code>&lt;TXID&gt;.txn</code>.</p>
+              </details>
+            </li>
+          </ul>
+      </details></p>
+<h2 id="keyboard-emu">Keyboard EMU<a class="headerlink" href="#keyboard-emu" title="Permanent link">#</a></h2>
+<p>Adds the <code>Type Passwords</code> option to the Main Menu. When selected, the COLDCARD allows you to type deterministically-generated passwords directly to a computer connected via USB by emulating a keyboard.</p>
+<p>The passwords are generated using <a href="https://github.com/bitcoin/bips/blob/master/bip-0085.mediawiki">BIP-85</a>, so the user only needs to enter an account number to get the desired password.
+      <details class="custom-background">
+        <summary>
+          Keyboard EMU Menu
+        </summary>
+        <p><img src="/docs/img/settings-menu/mk4-keyboard-emu.gif" class="snap indented" alt="mk4-keyboard-emu"> <img src="/docs/img/settings-menu/q-keyboard-emu.gif" class="snap" alt="q-keyboard-emu"></p>
+        <p><h3><a href="/docs/bip85-passwords/">COLDCARD Guide: BIP-85 Passwords</a></h3></p>
+          <ul>
+            <li>
+              <details class="custom-background">
+                <summary>
+                  <h4 id="default-off-keyboard-emu">Default Off<a class="headerlink" href="#default-off-keyboard-emu">#</a></h4>
+                </summary>
+                <p>The <code>Type Passwords</code> option is not available on the Main Menu. This is the default setting.</p>
+              </details>
+            </li>
+            <li>
+              <details class="custom-background">
+                <summary>
+                  <h4 id="enable-keyboard-emu">Enable<a class="headerlink" href="#enable-keyboard-emu">#</a></h4>
+                </summary>
+                <p><code>Type Passwords</code> is an option on the Main Menu. Select it to begin keyboard emulation and type passwords over USB.</p>
+                  <details class="custom-background">
+                    <summary>
+                      Steps to Type Passwords
+                    </summary>
+                    <p><img src="/docs/img/settings-menu/mk4-type-passwords.gif" class="snap indented" alt="mk4-type-passwords"> <img src="/docs/img/settings-menu/q-type-passwords.gif" class="snap" alt="q-home-type-passwords"></p>
+                    <p>1. Enable <code>Keyboard EMU</code>.</p>
+                    <p>2. Connect the COLDCARD via USB to the computer you would like to type the password on.</p>
+                    <p>3. Select <code>Type Passwords</code> from the Main Menu.</p>
+                    <p>4. Enter the account number for the correct passphrase.</p>
+                    <p>5. Review the details.</p>
+                    <p>6. On the computer, use the mouse to select the prompt where the password should be typed.</p>
+                    <p>7. On the COLDCARD, press <kbd>✔</kbd>/<kbd>ENTER</kbd> to type the password.</p>
+                  </details>
+              </details>
+            </li>
+          </ul>
+      </details></p>
+<h2 id="buried-settings">Buried Settings<a class="headerlink" href="#buried-settings" title="Permanent link">#</a></h2>
+<p><em>(Mk4 v5.5.0 / Q v1.4.0Q and later.)</em></p>
+<p>A submenu inside <code>Settings</code> that collects settings which are personal preferences rather than security knobs &mdash; items most users will set once and forget. The two toggles below were previously available at the top level of the Settings menu; in v5.5.0 / v1.4.0Q they were grouped here to keep the parent menu shorter.</p>
+<h3 id="home-menu-xfp">Home Menu XFP<a class="headerlink" href="#home-menu-xfp" title="Permanent link">#</a></h3>
+<p>Forces display of XFP (seed fingerprint) at the top of the Main Menu. Normally, XFP is shown only when a Temporary Seed is active.</p>
+<p>Master Seed is displayed as <code>&lt;XFP&gt;</code>, Temporary Seeds as <code>[XFP]</code>.
+      <details class="custom-background">
+        <summary>
+          Home Menu XFP Menu
+        </summary>
+        <p><img src="/docs/img/settings-menu/mk4-home-menu-xfp.gif" class="snap indented" alt="mk4-home-menu-xfp"> <img src="/docs/img/settings-menu/q-home-menu-xfp.gif" class="snap" alt="q-home-menu-xfp"></p>
+          <ul>
+            <li>
+              <details class="custom-background">
+                <summary>
+                  <h4 id="only-tmp-xfp">Only Tmp<a class="headerlink" href="#only-tmp-xfp">#</a></h4>
+                </summary>
+                <p>Only show the XFP on the Main Menu if a Temporary Seed is active. This is the default setting.</p>
+              </details>
+            </li>
+            <li>
+              <details class="custom-background">
+                <summary>
+                  <h4 id="always-show-xfp">Always Show<a class="headerlink" href="#always-show-xfp">#</a></h4>
+                </summary>
+                <p><img src="/docs/img/settings-menu/mk4-home-menu-xfp-on.gif" class="snap indented" alt="mk4-home-menu-xfp-on"> <img src="/docs/img/settings-menu/q-home-menu-xfp-on.gif" class="snap" alt="q-home-menu-xfp-on"></p>
+                <p>Always show the XFP of the current wallet on the Main Menu.</p>
+              </details>
+            </li>
+          </ul>
+      </details></p>
+<h3 id="menu-wrapping">Menu Wrapping<a class="headerlink" href="#menu-wrapping" title="Permanent link">#</a></h3>
+<p>When enabled, allows scrolling past the top or bottom of a menu. By default this only happens in very large menus.
+      <details class="custom-background">
+        <summary>
+          Menu Wrapping Menu
+        </summary>
+        <p><img src="/docs/img/settings-menu/mk4-menu-wrapping.gif" class="snap indented" alt="mk4-menu-wrapping"> <img src="/docs/img/settings-menu/q-menu-wrapping.gif" class="snap" alt="q-menu-wrapping"></p>
+          <ul>
+            <li>
+              <details class="custom-background">
+                <summary>
+                  <h4 id="default-off-wrapping">Default Off<a class="headerlink" href="#default-off-wrapping">#</a></h4>
+                </summary>
+                <p>The default setting, Menu Wrapping is not enabled.</p>
+              </details>
+            </li>
+            <li>
+              <details class="custom-background">
+                <summary>
+                  <h4 id="enable-menu-wrapping">Enable<a class="headerlink" href="#enable-menu-wrapping">#</a></h4>
+                </summary>
+                <p>Enable Menu Wrapping. You will be able to scroll past the top or bottom of any menu.</p>
+              </details>
+            </li>
+          </ul>
+      </details>
+  </ul>
+</details></p>
+<hr />
+<h2 id="obsolete-settings">Obsolete Settings<a class="headerlink" href="#obsolete-settings" title="Permanent link">#</a></h2>
+<h3 id="touch-settings-mk1-only">Touch Settings (Mk1 only)<a class="headerlink" href="#touch-settings-mk1-only" title="Permanent link">#</a></h3>
+<p>The number pad uses capacitive touch technology.  Adjust the touch sensitivity with this menu. In warm or humid environments, or in cases where you see phantom keypresses, choose <code>-2 Sensitive</code> (least sensitive). There is <code>+2 Sensitive</code> for the impatient, which feels quicker and more responsive.</p>
+<p><img alt="pin-menu" class="snap" src="../img/snap-touch-choices.png" /></p>
+<p>The latest version of the firmware includes five different levels of sensitivity. Please note that less-sensitive modes are a little slower to respond to your touch.</p>
+<p><em>(Removed on Mk2 hardware)</em></p>
+<h3 id="secondary-wallets-mk1-mk2-only">Secondary Wallets (Mk1, Mk2 only)<a class="headerlink" href="#secondary-wallets-mk1-mk2-only" title="Permanent link">#</a></h3>
+<p>In earlier makes of the COLDCARD, there was a concept of a secondary
+wallet that had most of the features of the main wallet but a separate PIN code and seed words. Due to hardware limitations and security-related changes, we removed this from the Mk3 COLDCARD.</p>
+<p><em>(Removed after Mk2)</em></p>
+
+  <hr>
+<div class="md-source-file">
+  <small>
+    
+      Last update:
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 3, 2026</span>
+      
+    
+  </small>
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            Back to top
+          </button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright © Coinkite Inc. All rights reserved.
+    </div>
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/COLDCARDwallet" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/Coldcard" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tabs", "navigation.indexes", "navigation.top"], "search": "../assets/javascripts/workers/search.dfff1995.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.dff1b7c8.min.js"></script>
+      
+        <script src="../js/custom.js"></script>
+      
+    
+  </body>
+</html>

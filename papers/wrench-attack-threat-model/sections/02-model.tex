@@ -12,7 +12,7 @@ introduced, and all are gathered here for reference.
 
 \begingroup\small
 \renewcommand{\arraystretch}{1.2}
-\begin{tabularx}{\linewidth}{@{}l X@{}}
+\noindent\begin{tabularx}{\linewidth}{@{}l X@{}}
 \toprule
 \multicolumn{2}{@{}l}{\textbf{Principals, assets, economics}}\\
 \midrule
@@ -201,7 +201,10 @@ cannot amortize it~\cite{argon2}.
 \end{enumerate}
 The star denotes this memory- and depth-hardness and attaches to \emph{any}
 bit-count --- $32^{*}, 64^{*}, 96^{*}, \dots$ --- each meaning that many $\Hhard$
-evaluations, not just $64^{*}$.
+evaluations, not just $64^{*}$. Neither \ref{s:feasible} nor \ref{s:infeasible}
+settles the star at $32$ bits, so we state it: \textbf{$32^{*}$ is feasible} ---
+memory-hardness alone does not lift a single $32$-bit stage over the floor, which
+is why no orbit link commits fewer than $64$ bits (\S\ref{sec:gw}).
 \end{stipulation}
 
 \noindent\textbf{The floor.} We call a work cost \emph{prohibitive} --- equivalently,
