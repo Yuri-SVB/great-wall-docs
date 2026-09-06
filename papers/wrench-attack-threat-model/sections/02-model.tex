@@ -17,7 +17,7 @@ introduced, and all are gathered here for reference.
 \multicolumn{2}{@{}l}{\textbf{Principals, assets, economics}}\\
 \midrule
 $\Victim,\ \Attacker$ & holder (victim) and coercer (attacker) \\
-$K$ & master secret gating the asset \\
+$\Kset$ & \emph{spend authority}: the set of states from which the stash can be spent --- a single key, a $k$-of-$n$ multisig quorum, or any richer script condition (\S\ref{sub:setup}) \\
 $W$ & value of the asset to $\Victim$ \\
 $c$ & expected disutility to $\Attacker$ of killing $\Victim$ \\
 $\pi$ & $\Victim$'s \emph{pivotality} --- win-probability $\Attacker$ gains by removing $\Victim$ \\
@@ -25,7 +25,7 @@ $\pi$ & $\Victim$'s \emph{pivotality} --- win-probability $\Attacker$ gains by r
 \multicolumn{2}{@{}l}{\textbf{Adversary, game, safety}}\\
 \midrule
 WDY & the Wrench--Dolev--Yao adversary, fixed by clauses \ref{d:kerckhoffs}--\ref{d:nodelegatecoerce} (Assumption~\ref{ass:power}) \\
-$p_A$ & probability $\Attacker$ reaches $K$ after the encounter; \emph{gray} iff $0<p_A<1$ \\
+$p_A$ & probability $\Attacker$ reaches $\Kset$ after the encounter; \emph{gray} iff $0<p_A<1$ \\
 $t$ & coercion-time budget (how long $\Attacker$ can sustain coercion) \\
 $G$ & protocol time-gate (enforced latency to complete the derivation) \\
 $\mathsf{Corr}$ & residual-window event: the points $\Victim$ has surrendered so far are correct (\S\ref{sec:residual-dr}) \\
@@ -52,8 +52,9 @@ floor & \emph{prohibitive} cost: $\ge \sftstar$ hard \emph{or} $\ge 2^{96}$ chea
 
 \begin{definition}[Principals]
 The \textbf{holder} $\Victim$ possesses (in memory and on devices) whatever is
-needed to reach a master secret $K$ that gates an asset. The \textbf{coercer}
-$\Attacker$ seeks $K$. Optional \textbf{heirs} or \textbf{delegates} may hold
+needed to reach the spend authority $\Kset$ gating an asset --- the set of states
+from which it can be spent (\S\ref{sub:setup}), of which a single master secret is
+only the simplest case. The \textbf{coercer} $\Attacker$ seeks $\Kset$. Optional \textbf{heirs} or \textbf{delegates} may hold
 partial capability on $\Victim$'s behalf.
 \end{definition}
 
@@ -155,7 +156,7 @@ transmissible, a wrench attack would seize them --- and, available within that
 themselves; so non-tacit parameters force non-tacit points. Conversely, if the
 points were somehow transmissible without the parameters ever being available,
 then the tacitness of the parameters is irrelevant, the points having already
-fallen. Either way the binary question ``does a single seizure reach $K$?'' turns
+fallen. Either way the binary question ``does a single seizure reach $\Kset$?'' turns
 on the two clauses together, and the model may treat them as one.
 \end{remark}
 

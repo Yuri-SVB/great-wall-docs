@@ -14,17 +14,17 @@ from the cryptographic tradition will expect the complementary
 axes the residual splits into (\S\ref{sec:residual-seizure} for funds,
 \S\ref{sec:residual-dr} for the deadly race), we give \emph{two} experiments over
 one shared WDY interaction: a \textbf{seizure game}, whose winning event is the
-familiar ``the adversary reaches $K$,'' and a \textbf{deadly-race game}, whose
+familiar ``the adversary reaches $\Kset$,'' and a \textbf{deadly-race game}, whose
 winning event is the novel ``the adversary reaches a \emph{gray} state'' --- the one
 that manufactures the kill incentive (Lemma~\ref{lem:drl}), and which an adversary
-can trigger even when it provably cannot learn $K$.
+can trigger even when it provably cannot reach $\Kset$.
 
 \paragraph{Two adversaries, and why the primed one is the worst case.}
 The seizure game keeps the body's adversary $\Attacker$ (holder $\Victim$): it wants
-the \emph{money}, seeks $K$, and would kill only \emph{instrumentally}, where the
+the \emph{money}, seeks $\Kset$, and would kill only \emph{instrumentally}, where the
 priced calculus $(1-p_A)\,W>c$ makes a kill raise its take
 (Definition~\ref{def:priced}). Its question is fund-safety --- \emph{does $\Attacker$
-reach $K$?} The deadly-race game instead posits a \emph{hypothetical} adversary
+reach $\Kset$?} The deadly-race game instead posits a \emph{hypothetical} adversary
 $\Attacker'$ (holder $\Victim'$, primed to keep the two games apart) that wants the
 deadly race \emph{for its own sake}: it plays to reach a gray state. This is
 deliberately the worst case for the kill question. Reaching a gray state is
@@ -45,7 +45,7 @@ Fix a custody protocol $\Pi$, a WDY adversary $\mathcal{X}$
 (Assumption~\ref{ass:power}), and the honest holder $\mathcal{Y}$.
 \begin{enumerate}[nosep,leftmargin=1.7em]
   \item \textbf{Setup.} The challenger runs $\Pi$'s honest setup for $\mathcal{Y}$,
-  producing the master secret $K$, the co-located device and explicit-secret state
+  producing the spend authority $\Kset$ (\S\ref{sub:setup}), the co-located device and explicit-secret state
   $D$ (vault and time-lock blobs, commitment scripts, review schedules), and the
   tacit state $T$ (the holder's recognition capability). Public parameters
   $\mathrm{pp}$, including the salt $\sigma$, are given to $\mathcal{X}$
@@ -67,7 +67,7 @@ Fix a custody protocol $\Pi$, a WDY adversary $\mathcal{X}$
   Any remote delegate is not coercible through $\mathcal{Y}$
   (clause~\ref{d:nodelegatecoerce}).
   \item \textbf{Resulting position.} Let $R$ be the resulting set of racers,
-  $p_A = p_A(R)$ the probability $\mathcal{X}$ then reaches $K$
+  $p_A = p_A(R)$ the probability $\mathcal{X}$ then reaches $\Kset$
   (Definition~\ref{def:game}), and $\pi = p_A(R\setminus\{\mathcal{Y}\}) - p_A(R)$
   the holder's pivotality. Each game below is a predicate on this $(p_A,\pi)$.
 \end{enumerate}
@@ -79,7 +79,7 @@ Fix a custody protocol $\Pi$, a WDY adversary $\mathcal{X}$
 The \textbf{seizure experiment} $\SzExp_{\Pi}(\Attacker)$ runs the interaction
 (Definition~\ref{def:wdy-int}) with adversary $\mathcal{X} = \Attacker$ and holder
 $\mathcal{Y} = \Victim$, and outputs $1$ (``$\Attacker$ \emph{seizes}'') iff
-$\Attacker$ feasibly reaches $K$ --- equivalently $p_A > 0$
+$\Attacker$ feasibly reaches $\Kset$ --- equivalently $p_A > 0$
 (Definition~\ref{def:racers}). $\Pi$ is \textbf{seizure-resistant} if
 \[
   \Pr\!\big[\SzExp_{\Pi}(\Attacker) = 1\big] = 0
@@ -96,9 +96,9 @@ residual \emph{seizure} window (\S\ref{sec:residual-seizure}).
 \end{corollary}
 \begin{proof}
 By Theorem~\ref{thm:floor}, from every seizable state save that window $K_N$ meets
-the floor, so no feasible path to $K$ exists and $p_A = 0$; hence
+the floor, so no feasible path to $\Kset$ exists and $p_A = 0$; hence
 $\SzExp$ outputs $0$. On the residual seizure window $\SzExp$ may output $1$ --- the
-$o_N$-live coincidence where $\Attacker$ does reach $K$; the loss there is of
+$o_N$-live coincidence where $\Attacker$ does reach $\Kset$; the loss there is of
 \emph{funds}, bounded as argued in \S\ref{sec:residual-seizure}.
 \end{proof}
 
@@ -126,14 +126,14 @@ The two experiments read the same position $(p_A,\pi)$ but score it differently,
 they diverge at exactly one point. At $p_A = 0$ both output $0$ (no feasible path:
 the defender clears both). On the \emph{gray} interval $0 < p_A < 1$ both output $1$
 ($\Attacker$ holds a path and $\Victim'$ is pivotal: the defender fails both). They
-part only at \emph{full compromise} $p_A = 1$: the seizure game outputs $1$ ($K$ is
+part only at \emph{full compromise} $p_A = 1$: the seizure game outputs $1$ (the stash is
 gone) while the deadly-race game outputs $0$ ($\pi = 0$ --- with the adversary
 already certain to win, removing the holder changes nothing, so no kill incentive
 arises). That single disagreement is the whole content of \emph{``a clean loss is
 deadly-race-safe''} (Remark~\ref{rem:r2-cost}): losing the funds outright is a
 seizure-game defeat but a deadly-race-game \emph{non}-event. Conversely --- the
 paper's negative result restated --- an adversary that provably \emph{cannot} win the
-seizure game (cannot reach $K$; e.g.\ one facing a graceful-recovery vault it cannot
+seizure game (cannot reach $\Kset$; e.g.\ one facing a graceful-recovery vault it cannot
 open within the custody window) can still win the \emph{deadly-race} game by reaching
 a gray state. The deadly-race axis is therefore \emph{not} implied by fund-safety; it
 is a separate axis, exactly as \S\ref{sec:residual-seizure} and
@@ -183,9 +183,9 @@ The Time-Gated Perceptual Oracle (\S\ref{sec:gw}) is coercion-resistant.
 The experiment outputs $1$ only on a \emph{gray} state ($\pi > 0$); both clear
 endpoints $p_A \in \{0,1\}$ give $\pi = 0$ and hence output $0$. By
 Theorem~\ref{thm:floor} every state reachable by $\mathsf{Seize}$,
-$\mathsf{Coerce}$, and $\mathsf{Compute}$ leaves $K$ at the floor, so
+$\mathsf{Coerce}$, and $\mathsf{Compute}$ leaves $\Kset$ at the floor, so
 the reachable endpoint is the \emph{clear failure} $p_A = 0$ --- the opposite
-endpoint $p_A = 1$ would require feasibly reaching $K$, which the same theorem
+endpoint $p_A = 1$ would require feasibly reaching $\Kset$, which the same theorem
 bars. Either way $\pi = 0$, so the experiment never outputs $1$ and
 $\Pr[\text{win}] = 0$. The only place $p_A$ rises above $0$ (to $1$ in the worst
 instant) is the residual window (\S\ref{sec:residual-seizure}), where the tacit premise

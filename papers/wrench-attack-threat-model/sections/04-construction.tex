@@ -151,9 +151,10 @@ The coercion-resistant master secrets are all
 \end{equation}
 deliberately using the \emph{cheap} $K_i = \Hcheap(o_i \,\|\, \Sh_i)$.
 
-Each $K_i$ ($i \ge 1$) is a full instantiation of the abstract master secret $K$
-that \S\ref{sec:chain} reasons about: the orbit yields not one secret but a nested
-\emph{family} of master secrets, and every $K$-result --- the floor
+Each $K_i$ ($i \ge 1$) is a full instantiation of the abstract spend authority
+$\Kset$ that \S\ref{sec:chain} reasons about --- the single-secret case, in which
+$\Kset$ is the set of states from which $K_i$ is derivable: the orbit yields not one
+secret but a nested \emph{family} of master secrets, and every $\Kset$-result --- the floor
 (Theorem~\ref{thm:floor}), the deadly-race analysis --- holds of each. $K_0$ is set
 aside: stage~$0$'s board $o_0$ derives from the public salt alone
 (\eqref{eq:orbit}), so it sits below the memory-hard chain that gives the deeper
@@ -187,7 +188,7 @@ $\Hhard$-gated, since it is checked only by recomputing the memory-hard link
 forward-only: a seized $o_i$ cannot yield $o_{i-1}$. We enumerate:
 \begin{itemize}[nosep,leftmargin=1.4em]
   \item \emph{Pure device seizure} (no coercion; only time-lock-gated~\cite{rsw1996}
-        blobs at rest). All tacit points are required; $K$ is unreachable.
+        blobs at rest). All tacit points are required; no element of $\Kset$ is reachable.
   \item \emph{Wrench of stage~0} ($p_{0,\cdot}$, always present since $\sigma$ is
         public). $\Attacker$ computes $o_1$ with one $\Hhard$; from $o_1$, $K_N$
         costs $2^{\sum_{j\ge 1} r_j\cdot 32}$, which is $2^{96}$ or more in the
@@ -254,7 +255,7 @@ One sliver escapes the floor, and it is first a \emph{seizability} gap --- not y
 deadly race. It is the lone exception of Theorem~\ref{thm:floor}: a wrench that lands
 with the final board $o_N$ imminently or currently live, and subdues $\Victim$ before
 the wipe (\eqref{eq:orbit}), catches the derivation essentially complete and $\Victim$
-under control. In that coincidence $\Attacker$ \emph{does} reach $K$ and the stash is
+under control. In that coincidence $\Attacker$ \emph{does} reach $\Kset$ and the stash is
 lost --- we concede it plainly. The floor is a claim about \emph{seizability}, and
 precisely here it fails; what keeps the failure a mere \emph{residual} is how narrow
 the coincidence is --- a precise landing on the brief live-$o_N$ interval, and a
@@ -268,7 +269,7 @@ the latter this section turns on: does the same window also manufacture an incen
 to \emph{kill} $\Victim$? That does \emph{not} follow from the seizure. Killing buys
 $\Attacker$ only a \emph{shaving} of the final step --- after the
 \emph{second-to-last} point of stage $N$ is surrendered, a cheap
-$2^{32}\cdot\Hcheap$ brute (\eqref{eq:master} is cheap) reaches $K$ in
+$2^{32}\cdot\Hcheap$ brute (\eqref{eq:master} is cheap) reaches $\Kset$ in
 ${\approx}1$~minute, versus waiting for a cooperating coerced $\Victim$ to recollect
 it. Whether that shaved minute pays an assassination takes \emph{further} conditions,
 which we test against the priced adversary $\mathrm{WDY}[W,c]$
@@ -302,7 +303,7 @@ term of $(1 - p_A)\,W > c$ they act on --- show the inequality fails.
   \item $\Attacker$'s plan already budgets time-lock or re-derivation, subdue, and
         interface time, so $\Pr[\mathsf{Esc}]$ is small: the residual minute
         rarely flips the escape, and killing pays off only inside $\mathsf{Esc}$;
-  \item the terminal $K$ is deliberately cheap (\eqref{eq:master} keeps
+  \item the terminal $K_N$ is deliberately cheap (\eqref{eq:master} keeps
         memory-hardness in the orbit, not the terminal step), so $\Attacker$ can
         \emph{pre-stage} the $2^{32}$ brute as a ``victim-stalls'' contingency ---
         recovering the shaved minutes \emph{without} killing, and draining the
