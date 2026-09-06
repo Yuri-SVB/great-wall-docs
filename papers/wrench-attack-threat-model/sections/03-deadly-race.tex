@@ -593,10 +593,12 @@ combination:
   \item \textbf{burgle the sites without $\Victim$}, taking the tokens directly ---
         possibly after enacting a deadly race, since removing $\Victim$
         (Lemma~\ref{lem:drl}) buys uncontested time to travel and break in;
-  \item \textbf{burgle one gating site and keep what he takes}: a token $\Kset$ needs
-        but $\Attacker$ cannot use alone is leverage rather than a route --- a
-        \emph{hostage token} (\S\ref{sub:hostage}) held against $\Victim$ for the
-        rest;
+  \item \textbf{burgle some of the gating sites and keep what he takes}: tokens
+        $\Kset$ needs but $\Attacker$ cannot use alone are leverage rather than a
+        route --- a \emph{hostage} (\S\ref{sub:hostage}) held against $\Victim$ for
+        the rest. Neither a single token nor a single site need be necessary on its
+        own: it is enough that the seized \emph{subset} leaves $\Victim$'s remainder
+        short of $\Kset$;
   \item \textbf{abduct $\Victim$ and move them from site to site}, seizing each in
         turn --- a chain of single-site encounters, bounded only by travel time and
         the coercion-time budget $t$ (\ref{d:subjugation});
@@ -770,10 +772,17 @@ that step.
 
 Devicelessness (Property~\ref{p:know}) yields a fifth security property the Four have
 so far left implicit: immunity to indirect coercion \emph{through a seizable
-token}. Wherever a
-\emph{necessary} token is stored outside the holder's head --- on a carried device or
-at a site of custody --- that token is a \emph{hostage}. Even where seizing $\Kset$ itself
-is judged infeasible (or not worth the risk), $\Attacker$ can seize the token, or
+token}. Wherever tokens are stored outside the holder's head --- on a carried device
+or at a site of custody --- some seizable \emph{subset} of them is a \emph{hostage}:
+a set $T$ of tokens qualifies whenever, with $T$ removed, $\Victim$'s remaining state
+no longer reaches $\Kset$. Individual necessity is only the easy case. In an elaborate
+setup no single token need be necessary --- under a $k$-of-$n$ quorum each is
+dispensable on its own --- yet some subset always is, since the whole of the
+externally stored material is one (otherwise the setup would already be deviceless).
+$\Attacker$ therefore needs not \emph{the} necessary token but \emph{any} necessary
+subset, and takes the cheapest such subset to reach; geographic distribution raises
+that price without driving it to infinity. Even where seizing $\Kset$ itself
+is judged infeasible (or not worth the risk), $\Attacker$ can seize such a subset, or
 threaten its destruction, and trade it for something else entirely: the \emph{formal,
 irrevocable} transfer of another good or service. The property is orthogonal to the
 remote-delegate route (\ref{r:remotewinner}) but, by construction, \emph{denied} to
@@ -785,8 +794,8 @@ mechanism, and no custody design makes a relative unseizable
 
 \begin{remark}[Indirect wrench via a hostage token]\label{rem:hostage}
 Even a device-dependent setup whose $\Kset$ is deemed unwrenchable can present a surface
-for an \emph{indirect} wrench attack through its most wrench-vulnerable device-stored
-token. $\Attacker$ seizes that token and holds it hostage, to be traded for the
+for an \emph{indirect} wrench attack through the cheapest hostage subset it leaves
+exposed. $\Attacker$ seizes those tokens and holds them hostage, to be traded for the
 formal transfer of another of $\Victim$'s assets --- possibly one \emph{less} liquid
 and \emph{more} traceable, and so otherwise easier to rescue: a car, jewellery, real
 estate. For instance, take a setup in which $\Victim$ carries one necessary token at
