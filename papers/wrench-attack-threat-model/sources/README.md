@@ -70,14 +70,11 @@ us, not by a third party. The timestamp proves that this set of bytes existed in
 this form by the date it anchors — enough to detect a later silent revision, and
 enough to let a reader see what we read. It does *not* attest that the vendor
 served those bytes at that URL: for that, an independent witness is needed. Every
-cited page but two now has one — an archive.today capture, indexed in
+cited page now has one — an archive.today capture, indexed in
 `ARCHIVE-RECORD.md` and carried in the bibliography entry itself. The two layers are kept because they
 fail differently: an archive service can go dark, while a local snapshot plus a
 Bitcoin-anchored hash depends on no service at all, and holds the page body as
-text so a later revision can be diffed rather than merely detected. The exceptions
-are the two Sparrow pages, added 2026-09-06, which have the local layer but not yet
-the witness: archive.today could not be reached when they were fetched. `ARCHIVE-RECORD.md` records
-the gap rather than leaving it to be discovered.
+text so a later revision can be diffed rather than merely detected.
 
 Two further limits, stated so they are not mistaken for tampering:
 
