@@ -822,6 +822,23 @@ whole tangle: with the secret in the head alone, there is nothing to seize, rans
 or read a backup off.
 \end{remark}
 
+\begin{corollary}[The fifth property is not a fifth axis]\label{cor:hostage-equiv}
+No hostage $\Leftrightarrow$ devicelessness (Property~\ref{p:know}). Left to right is
+immediate: a hostage is by definition stored outside the head. Right to left is the
+subset argument above --- if any token outside the head is part of $\Kset$'s gating,
+then the \emph{whole} external set is jointly necessary, since removing it leaves
+head-only state, which by hypothesis does not reach $\Kset$; so a hostage set exists.
+The $k$-of-$n$ objection --- that where no single token is necessary there is nothing
+to take hostage --- is exactly what the subset formulation closes.
+
+The property is therefore worth naming and not worth tabulating: it discriminates
+between designs precisely as Property~\ref{p:know} does, and adds no column to the
+comparison of \S\ref{sub:tgpo-comparison}. What it adds is a \emph{reason} ---
+devicelessness is where the secret lives, no-hostage is what leverage exists over the
+holder, and the equivalence says the second is not an independent thing a design
+might buy separately.
+\end{corollary}
+
 \begin{remark}[Denial is inherently plausible]\label{rem:plausible-denial}
 NNPP (Assumption~\ref{lem:nnpl}) leaves $\Attacker$ unable to disprove an undisclosed
 shortcut backup --- but for the deviceless holder that cuts the other way. Under

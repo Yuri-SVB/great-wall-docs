@@ -560,9 +560,11 @@ Self-destruct PIN            & \xmark & \cmark & \xmark & \xmark & non-obscurity
 \bottomrule
 \end{tabularx}
 \end{center}
-\noindent Row~(\ref{p:know}) is the covering point: TGPO is the \emph{only} knowledge-based
+\noindent Column~(\ref{p:know}) is the covering point: TGPO is the \emph{only} knowledge-based
 (deviceless --- the secret is knowledge, never a device or a location) row, because
-every competitor keeps a \emph{transmissible} secret on a device. \textbf{Rewind}
+every competitor keeps a \emph{transmissible} secret on a device. The fifth property
+of \S\ref{sub:hostage} adds no column: by Corollary~\ref{cor:hostage-equiv} it is
+\emph{equivalent} to that one, so it would reproduce it cell for cell. \textbf{Rewind}
 trades individual custody for a remote delegate (\ref{r:remotewinner}). \textbf{Casa}'s collaborative
 multisig --- the client's keys on separate hardware plus a Casa co-signing key ---
 trades individual custody: the co-signer is a remote party, and a coercion-resistant
