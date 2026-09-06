@@ -67,6 +67,18 @@ feasible path ($p_A > 0$) yet $\Victim$, alive and free, can still win the race
 ($p_A < 1$). The \textbf{clear} outcomes are the endpoints --- $p_A = 1$
 ($\Attacker$ certainly wins) and $p_A = 0$ ($\Attacker$ has no feasible path at
 all). Figure~\ref{fig:deadly-race} traces the decision this induces.
+
+Stated on the encounter rather than on the racers: gray is where the encounter
+leaves $\Attacker$ a state \emph{sufficient} for $\Kset$ but does not complete the
+spend --- the derivation or time-lock outstanding at release exceeds what remains
+of the coercion budget $t$ (\ref{d:subjugation}). We therefore call such a path
+\textbf{feasible-but-unfinished}, not feasible-but-\emph{slower}: ``slower'' names a
+comparison with $\Victim$ that $\Attacker$ can never settle, since by NNPP
+(Assumption~\ref{lem:nnpl}) an undisclosed shortcut may exist, so $p_A$ does not
+reach $1$ while $\Victim$ is alive and free. Pivotality then follows from the
+encounter alone --- absent an access-dominating delegate
+(Definition~\ref{def:dominating}), whose presence leaves the outcome gray but
+\emph{safe}, the pivotal racer being out of $\Attacker$'s reach.
 \end{definition}
 
 \begin{figure}[t]
@@ -416,7 +428,7 @@ $\mathrm{WDY}[W,c,b,t]$-resistant}) if a single encounter with the full WDY
 adversary (\textbf{\ref{d:kerckhoffs}--\ref{d:nodelegatecoerce}}) does not, \emph{by itself alone}, reach any
 element of $\Kset$, but \emph{may} leave a \emph{deadly-race} state: a reachable state of
 positive pivotality $\pi > 0$ (Theorem~\ref{thm:safety}) in which $\Attacker$
-holds a feasible-but-slower path and $\Victim$ remains a reachable racer. The
+holds a feasible-but-unfinished path and $\Victim$ remains a reachable racer. The
 secret is withheld \emph{during coercion}; the holder is not safe: \emph{after coercion 
 finishes} $\Attacker$ may enact deadly race and ultimately reach $\Kset$ nevertheless.
 \end{definition}
@@ -441,7 +453,7 @@ a given time-gated protocol instantiates one of the three levels above according
 to the outcome it forces --- \textbf{naive} if it relies on an obscure
 \emph{self-destruct} (the holder destroying the device's own copy) or a cancel
 key (safe only against a sub-Kerckhoffs attacker); \textbf{weak} if the gate
-leaves a feasible-but-slower path, keeping $\pi > 0$; \textbf{strong} if every
+leaves a feasible-but-unfinished path, keeping $\pi > 0$; \textbf{strong} if every
 reachable state has $\pi = 0$ (Theorem~\ref{thm:safety}), no matter the mechanism.
 It is the running example of the taxonomy.
 \end{definition}
@@ -479,7 +491,7 @@ copy extractable, $\Attacker$ would take it \emph{during} the encounter --- a cl
 success ($p_A = 1$, no post-release race), the survivable endpoint; were it not,
 $D$ still dominates and killing $\Victim$ is pointless. Neither branch is a deadly
 race. NNPP bites only in the \emph{original} race (Lemma~\ref{lem:drl}), where
-$\Attacker$ \emph{holds} a feasible-but-slower path from the seized device and
+$\Attacker$ \emph{holds} a feasible-but-unfinished path from the seized device and
 cannot be reassured that $\Victim$ will not race; it does not reach the delegated
 case.
 
