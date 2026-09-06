@@ -56,8 +56,8 @@ way of the hashes it contains, over the whole set at once.
 `MANIFEST.txt.ots.2026-09-03` is the attestation over the fifteen-source manifest as
 it stood on that date, anchored in **Bitcoin block 965345**; it is retained because
 it still attests those fifteen. `MANIFEST.txt.ots` re-stamps the manifest as
-extended on 2026-09-06 with the two Sparrow pages, and is a pending calendar commitment
-until `ots upgrade MANIFEST.txt.ots` anchors it in a block.
+extended on 2026-09-06 with the two Sparrow pages, and is anchored in **Bitcoin
+block 965788**.
 
 To verify the set:
 
