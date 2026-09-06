@@ -1,7 +1,8 @@
 # Third-party captures of the cited web pages
 
 Every web page cited by the manuscript has an independent archive.today capture,
-made 2026-09-03 except where noted. Each permalink is recorded in the `note` field
+made 2026-09-03 except where noted --- with two outstanding exceptions,
+the Sparrow pages, recorded below. Each permalink is recorded in the `note` field
 of its bibliography entry, so a reader of the paper reaches it without consulting
 this file; the list is kept here as an index and to record what the captures do
 and do not cover.
@@ -31,9 +32,23 @@ at this URL, which is the claim a citation to a live vendor page actually needs.
 | `balland` | `http://archive.today/2026.09.03-171044/` |
 | `fisc-leak-2026` | `http://archive.today/2026.01.09-094000/` (pre-existing, 2026-01-09) |
 | `ong-autocustodia` | `http://archive.today/2026.09.03-171910/` |
+| `sparrow-faq` | **not yet captured** --- see below |
+| `sparrow-best-practices` | **not yet captured** --- see below |
 
 Each permalink continues with the captured URL, which is the cited URL except in
 the three cases below. The full strings are in `references.bib`.
+
+## The outstanding capture
+
+`sparrow-faq` and `sparrow-best-practices` were added on 2026-09-06, when
+archive.today was unreachable from the environment the fetches were made in (the connection was reset before any request
+completed). The local snapshot, its SHA-256 and the manifest attestation are in
+place; the independent-witness layer is not. Until a capture is made, each citation
+rests on our own snapshot alone --- which attests that these bytes existed by this
+date, but not that Sparrow served them at that URL. Each carries a single documented sentence, quoted in full in the bibliography entry
+and in S5, so a reader can check it against the live page for as long as it stands
+unrevised; that is weaker than the other rows here and is flagged rather than
+smoothed over.
 
 ## Where the captured URL is not the cited URL
 

@@ -39,7 +39,7 @@ requires a Bitcoin node; `ots info` shows the attestation without one.
 
 The classification of §5 and Appendix D rests in several places on what a vendor
 *says* about its own product: Blockstream's duress- and wallet-erase-PIN articles,
-Coldcard's settings documentation, Trezor's wipe-code guide, the service pages of
+Coldcard's settings documentation, Trezor's wipe-code guide, Sparrow's FAQ and best-practices page, the service pages of
 Casa, RewindBitcoin, Tus Llaves Tus BTC and the Bitcoin Security Guide, two
 CertiK wrench-attack reports, and the vendor and press accounts of the Coldcard
 entropy failure. None of those is version-controlled upstream. A page
@@ -48,11 +48,16 @@ then no longer supports the sentence resting on it — the ordinary fate of a cl
 about a live web page, and a sharper risk here, since §5 classifies some of these
 products in ways their vendors would not choose.
 
-`web/` holds each of the fifteen retrievable pages as fetched on 2026-09-03. `MANIFEST.txt` records, per
+`web/` holds each of the fifteen retrievable pages as fetched on 2026-09-03, and
+Sparrow's FAQ and best-practices page as fetched on 2026-09-06. `MANIFEST.txt` records, per
 source, the bib key, URL, fetch time, HTTP status, byte count and SHA-256;
 `MANIFEST.txt.ots` is an OpenTimestamps attestation over the manifest, and so, by
-way of the hashes it contains, over the whole set at once; it is anchored in
-**Bitcoin block 965345**.
+way of the hashes it contains, over the whole set at once.
+`MANIFEST.txt.ots.2026-09-03` is the attestation over the fifteen-source manifest as
+it stood on that date, anchored in **Bitcoin block 965345**; it is retained because
+it still attests those fifteen. `MANIFEST.txt.ots` re-stamps the manifest as
+extended on 2026-09-06 with the two Sparrow pages, and is a pending calendar commitment
+until `ots upgrade MANIFEST.txt.ots` anchors it in a block.
 
 To verify the set:
 
@@ -65,11 +70,14 @@ us, not by a third party. The timestamp proves that this set of bytes existed in
 this form by the date it anchors — enough to detect a later silent revision, and
 enough to let a reader see what we read. It does *not* attest that the vendor
 served those bytes at that URL: for that, an independent witness is needed. Every
-cited page now has one — an archive.today capture, indexed in `ARCHIVE-RECORD.md`
-and carried in the bibliography entry itself. The two layers are kept because they
+cited page but two now has one — an archive.today capture, indexed in
+`ARCHIVE-RECORD.md` and carried in the bibliography entry itself. The two layers are kept because they
 fail differently: an archive service can go dark, while a local snapshot plus a
 Bitcoin-anchored hash depends on no service at all, and holds the page body as
-text so a later revision can be diffed rather than merely detected.
+text so a later revision can be diffed rather than merely detected. The exceptions
+are the two Sparrow pages, added 2026-09-06, which have the local layer but not yet
+the witness: archive.today could not be reached when they were fetched. `ARCHIVE-RECORD.md` records
+the gap rather than leaving it to be discovered.
 
 Two further limits, stated so they are not mistaken for tampering:
 
@@ -77,7 +85,7 @@ Two further limits, stated so they are not mistaken for tampering:
   dozen bytes in embedded tokens and build identifiers. The hash pins *this
   retrieval*, not a canonical state of the page; a mismatch on refetch is
   expected and is not by itself evidence of revision. Compare the prose.
-- Two of the seventeen cited pages are recorded in the manifest as not
+- Two of the nineteen cited pages are recorded in the manifest as not
   retrieved. `trezor-wipe-deniability`
   (github.com/trezor/trezor-firmware/issues/2055) returned HTTP 403, as GitHub
   blob and issue URLs do from this environment; GitHub retains an edit history

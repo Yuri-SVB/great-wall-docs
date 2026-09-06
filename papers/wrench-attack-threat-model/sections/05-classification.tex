@@ -405,6 +405,31 @@ single product ships both, marketing only the weaker one for physical threat, is
 the clearest illustration in this section of how little the design space has been
 mapped against the Criterion.
 
+\begin{remark}[A vendor-documented instance of the naive tier]\label{rem:hidden-medium}
+The decoy's duress framing was the community's, not the manufacturer's. One vendor
+does make the claim in its own documentation. Sparrow's FAQ, answering ``How can I
+choose where my wallet is saved?'', documents a data-directory flag and adds that
+``[t]his feature allows you to store all Sparrow data on removable media making for
+more plausible deniability''~\cite{sparrow-faq}.
+
+The feature does not guard the asset. Sparrow's own best-practice page has the seed
+words backed up separately from the device, ``ideally in a different
+location''~\cite{sparrow-best-practices} --- so the concealed directory is neither
+necessary nor sufficient for $\Kset$. A Kerckhoffs $\Attacker$ coerces the seed
+backup, loads it into a wallet of his own, and never touches the concealed medium at
+all. What is left for the medium to do is carry the holder's belief that, having
+surrendered what was found, they may now say there is nothing more. The decoy at
+least stands between $\Attacker$ and the coins; this stands nowhere near them.
+
+That is Definition~\ref{def:naive-cr} exactly --- a guarantee contingent on
+$\Attacker$'s ignorance, here of a \emph{documented} feature --- and the continuation
+is the one the registry records. A denial offered into the prevailing norm is
+pre-discredited (Corollary~\ref{cor:disclosure}), so the rational continuation of an
+interrogation that opens with one is more coercion, and the truthful denier is
+brutalized alongside the lying one (\S\ref{sub:empirical}). The feature adds nothing
+but the confidence to make the denial.
+\end{remark}
+
 \begin{remark}[The decoy is sold, and coached for credibility]\label{rem:decoy-market}
 The decoy is not merely a practice the community tolerates; it is a product and a
 curriculum. A Spanish-language self-custody consultancy lists, among paid service
