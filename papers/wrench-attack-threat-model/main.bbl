@@ -258,6 +258,31 @@ Francesco Madonna.
   claim of deniability, decoy or duress use --- unlike the wallet-erase PIN
   pages. Accessed 2026-08-17.
 
+\bibitem{sparrow-faq}
+{Sparrow Wallet}.
+\newblock Frequently asked questions.
+\newblock Sparrow Wallet documentation,
+  \url{https://www.sparrowwallet.com/docs/faq.html}, 2026.
+\newblock Vendor documentation. Under ``How can I choose where my wallet is
+  saved?'', the \texttt{-d} data-directory flag is documented with the claim
+  that ``[t]his feature allows you to store all Sparrow data on removable media
+  making for more plausible deniability.'' Retrieved 2026-09-06, sha256
+  \texttt{0e0273dd\dots{}4a839e}; archived in
+  \texttt{sources/web/sparrow-faq.html} and at
+  \url{http://archive.today/2026.09.06-151741/https://www.sparrowwallet.com/docs/faq.html}.
+
+\bibitem{sparrow-best-practices}
+{Sparrow Wallet}.
+\newblock Best practices.
+\newblock Sparrow Wallet documentation,
+  \url{https://sparrowwallet.com/docs/best-practices.html}, 2026.
+\newblock Vendor guidance, tiered by holding size. At the first hardware-wallet
+  tier: ``The hardware wallet should be stored securely along with a backup of
+  the seed words (the latter ideally in a different location).'' Retrieved
+  2026-09-06; sha256 \texttt{eb4acdf0\dots{}1e667af}; archived in
+  \texttt{sources/web/sparrow-best-practices.html} and at
+  \url{http://archive.today/2026.09.06-152816/https://sparrowwallet.com/docs/best-practices.html}.
+
 \bibitem{tlt-servicios}
 {Tus Llaves, Tus Bitcoin}.
 \newblock Servicios.

@@ -80,6 +80,16 @@ coinkite-entropy           https://blog.coinkite.com/entropy-technical-backgroun
   sha256 a244eea9649a19823d3b3f193228160231bebf508f5ed30c56a9d31bb50a5b5b
   file   coinkite-entropy.html
 
+sparrow-faq                https://www.sparrowwallet.com/docs/faq.html
+  fetched 2026-09-06T13:07:51Z  HTTP 200  40935 bytes
+  sha256 0e0273dde49639b696f8452256a3b457a588f9e1c26d6e862293a1b4034a839e
+  file   sparrow-faq.html
+
+sparrow-best-practices     https://sparrowwallet.com/docs/best-practices.html
+  fetched 2026-09-06T14:42:13Z  HTTP 200  24011 bytes
+  sha256 eb4acdf0bb1e182d5a02d46d03e62b364496bf092f1bfd69cc910c6431e667af
+  file   sparrow-best-practices.html
+
 coindesk-coldcard          https://www.coindesk.com/tech/2026/08/01/how-bitcoin-cold-wallets-lost-usd70-million-in-an-attack-that-never-touched-the-devices
   NOT RETRIEVED (see README.md)
 

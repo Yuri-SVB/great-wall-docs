@@ -22,12 +22,23 @@ hardness statement, and reading it as one would be exactly the overclaim
 \subsection{Setup and definitions}
 \label{sub:setup}
 
-Fix the model of \S\ref{sec:model}. Write $K$ for the spend authority (the
-Bitcoin key) protecting an asset worth $W$ to the holder $\Victim$, and $c$ for
+Fix the model of \S\ref{sec:model}. Write $\Kset$ for the \emph{spend authority}
+protecting an asset worth $W$ to the holder $\Victim$, and $c$ for
 the expected cost to $\Attacker$ of killing $\Victim$ --- the legal, moral, and
 operational disutility of a homicide. Bitcoin makes the prize \emph{rivalrous}
 and \emph{bearer}: the \emph{first} party to broadcast a valid spend takes $W$;
 there is exactly one prize and no appeal.
+
+$\Kset$ is a \emph{set of states} --- states in the same sense as the seizable
+state $\Sigma$ of Definition~\ref{def:racers} --- namely those from which the
+stash can be spent; \emph{reaching $\Kset$} abbreviates \emph{reaching some
+element of $\Kset$}. Nothing in what follows requires $\Kset$ to be the singleton
+``knows one private key''. A single-key address is the special case; a $k$-of-$n$
+multisig makes $\Kset$ the states holding any $k$ of the $n$ shares, and script or
+covenant conditions extend it further. The distinction is load-bearing exactly
+where the analysis turns on \emph{which} pieces a party must hold
+(\S\ref{sub:fourprops}, \S\ref{sub:hostage}); everywhere else the reader may
+safely picture a key.
 
 \begin{definition}[Seizable state, feasible path, racers]\label{def:racers}
 \leavevmode
@@ -36,11 +47,11 @@ there is exactly one prize and no appeal.
         encounter --- all seized device state, plus whatever $\Attacker$ extracts
         from $\Victim$ during the bounded coercion window.
   \item \textbf{Feasible path.} A \emph{recovery path} from a state is an
-        algorithm that outputs $K$ within the feasibility line
-        (Stipulation~\ref{ass:feas}). A state \emph{feasibly reaches} $K$ if such a
-        path exists; otherwise reaching $K$ from it is \emph{infeasible}.
+        algorithm that outputs an element of $\Kset$ within the feasibility line
+        (Stipulation~\ref{ass:feas}). A state \emph{feasibly reaches} $\Kset$ if such a
+        path exists; otherwise reaching $\Kset$ from it is \emph{infeasible}.
   \item \textbf{Post-release racers.} If $\Attacker$ releases $\Victim$, two
-        parties may pursue $K$: $\Attacker$ from $\Sigma$, and $\Victim$ from
+        parties may pursue $\Kset$: $\Attacker$ from $\Sigma$, and $\Victim$ from
         memory / tacit recall. Let $p_A \in [0,1]$ be the probability that
         $\Attacker$ broadcasts a valid spend \emph{before} $\Victim$ does, given
         the states each holds after release. Because the prize is rivalrous,
@@ -56,6 +67,18 @@ feasible path ($p_A > 0$) yet $\Victim$, alive and free, can still win the race
 ($p_A < 1$). The \textbf{clear} outcomes are the endpoints --- $p_A = 1$
 ($\Attacker$ certainly wins) and $p_A = 0$ ($\Attacker$ has no feasible path at
 all). Figure~\ref{fig:deadly-race} traces the decision this induces.
+
+Stated on the encounter rather than on the racers: gray is where the encounter
+leaves $\Attacker$ a state \emph{sufficient} for $\Kset$ but does not complete the
+spend --- the derivation or time-lock outstanding at release exceeds what remains
+of the coercion budget $t$ (\ref{d:subjugation}). We therefore call such a path
+\textbf{feasible-but-unfinished}, not feasible-but-\emph{slower}: ``slower'' names a
+comparison with $\Victim$ that $\Attacker$ can never settle, since by NNPP
+(Assumption~\ref{lem:nnpl}) an undisclosed shortcut may exist, so $p_A$ does not
+reach $1$ while $\Victim$ is alive and free. Pivotality then follows from the
+encounter alone --- absent an access-dominating delegate
+(Definition~\ref{def:dominating}), whose presence leaves the outcome gray but
+\emph{safe}, the pivotal racer being out of $\Attacker$'s reach.
 \end{definition}
 
 \begin{figure}[t]
@@ -63,7 +86,7 @@ all). Figure~\ref{fig:deadly-race} traces the decision this induces.
 \resizebox{\linewidth}{!}{%
 \begin{tikzpicture}[node distance=7mm and 13mm]
   \node[gwevent] (seiz) {seize};
-  \node[gwgate, right=of seiz] (g1) {feasible\\ path to $K$?};
+  \node[gwgate, right=of seiz] (g1) {feasible\\ path to $\Kset$?};
   \node[gwend, above right=5mm and 13mm of g1] (fail) {clear\\ fail};
   \node[gwend, below right=5mm and 13mm of g1] (win)  {already\\ won};
   \node[gwtask, right=17mm of g1] (piv) {gray: $\Victim$\\ pivotal, $\pi>0$};
@@ -80,7 +103,7 @@ all). Figure~\ref{fig:deadly-race} traces the decision this induces.
 \end{tikzpicture}}
 \caption{\textbf{The Deadly Race decision.} After a WDY seizure
 (Assumption~\ref{ass:power}), the outcome is fixed by $p_A$, the probability
-$\Attacker$ reaches $K$. At the \emph{clear} endpoints ($p_A\in\{0,1\}$) no race
+$\Attacker$ reaches $\Kset$. At the \emph{clear} endpoints ($p_A\in\{0,1\}$) no race
 exists. In the \emph{gray} interval $0<p_A<1$ the holder $\Victim$ is
 \emph{pivotal} ($\pi>0$, Theorem~\ref{thm:safety}): removing $\Victim$ raises
 $\Attacker$'s win-probability, so once the asset clears $W>c/\pi$ a rational
@@ -153,7 +176,7 @@ window is settled with \emph{finite} $(W,c)$ and the $\Delta p_A$ increment
 \begin{assumption}[Non-Negative-Proof Principle, NNPP --- \emph{a fortiori} on Kerckhoffs]\label{lem:nnpl}
 Kerckhoffs (Assumption~\ref{ass:kerckhoffs}) grants $\Attacker$ the
 \emph{protocol} --- and that $\Victim$ \emph{may} hold brain-memory or an
-undisclosed backup short-cutting $K$ --- but \emph{not} how many such backups
+undisclosed backup short-cutting $\Kset$ --- but \emph{not} how many such backups
 $\Victim$ keeps, or where. NNPP covers exactly that gap: what $\Attacker$
 \emph{cannot} know is whether any undisclosed backup \emph{actually} exists. The
 two do not conflict --- one is the public mechanism, the other $\Victim$'s private
@@ -193,14 +216,14 @@ against a real one too.
 is so ineffective that $\Attacker$ always assumes another backup exists, whatever the
 terrorized $\Victim$ pleads.} It is rational, not paranoid --- non-possession is a
 \emph{negative existential} (``nothing anywhere in $\Victim$'s reach reproduces
-$K$'') that cannot be certified on either reading of ``prove.''
+$\Kset$'') that cannot be certified on either reading of ``prove.''
 
 \begin{remark}[Why even total search fails --- the self-defeat]\label{rem:selfdefeat}
 The search reading fails not merely because the covering is large but because the
 capability that would complete it is \emph{off the domain of the problem}. To
 certify $\neg\exists$ witness, $\Attacker$ must reach the last, irreducible site
 --- the ``few cubic centimetres'' of the epigraph: whether $\Victim$ has
-\emph{forgotten}, or never committed, $K$ to memory. An $\Attacker$ that can read
+\emph{forgotten}, or never committed, $\Kset$ to memory. An $\Attacker$ that can read
 that space, and cover all physical hiding-space besides, is
 \emph{supra-totalitarian} --- it exceeds the literary supremum of surveillance
 power, which expressly conceded the skull --- and it is a \emph{degenerate fixed
@@ -233,7 +256,7 @@ the victim's elimination.
 
 \begin{lemma}[Deadly-Race Lemma]\label{lem:drl}
 Let a custody scheme admit a \emph{gray} coercion outcome
-(Definition~\ref{def:gray}): on release, $\Attacker$ holds a feasible path to $K$
+(Definition~\ref{def:gray}): on release, $\Attacker$ holds a feasible path to $\Kset$
 ($p_A > 0$) while $\Victim$ retains one too ($p_A < 1$). Then the priced adversary
 $\mathrm{WDY}[W,c]$ (Definition~\ref{def:priced}) has a \textbf{strictly positive
 incentive to eliminate} $\Victim$ (and any co-racing heirs) whenever
@@ -288,7 +311,7 @@ Under a fixed threat model, a coercion-\emph{safe} scheme must admit \textbf{no
 gray outcome}: every encounter must resolve to a \emph{clear} endpoint ---
 $p_A = 0$ (the attack plainly \emph{fails}: $\Sigma$ feasibly reaches nothing and
 $\Victim$ holds nothing transmissible left to surrender) or $p_A = 1$ (it plainly
-\emph{succeeds}: $\Attacker$ obtains $K$ within the encounter, so no post-release
+\emph{succeeds}: $\Attacker$ obtains $\Kset$ within the encounter, so no post-release
 race exists). The forbidden interval $0 < p_A < 1$ is exactly where
 Lemma~\ref{lem:drl}'s incentive lives.
 \end{criterion}
@@ -307,11 +330,11 @@ and ``coercion-safe'' as a predicate on it, and no-gray becomes exactly the
 safety condition.
 
 \begin{definition}[Coercion game and coercion-safety]\label{def:game}
-Fix a scheme $\Sigma$ and a priced adversary $\mathrm{WDY}[W,c]$
-(Definition~\ref{def:priced}). The game $\mathbf{Coerce}_{\Sigma}$ is:
+Fix a scheme $\Pi$ and a priced adversary $\mathrm{WDY}[W,c]$
+(Definition~\ref{def:priced}). The game $\mathbf{Coerce}_{\Pi}$ is:
 (1)~$\Attacker$ mounts an encounter --- device seizure (\ref{d:subjugation}--\ref{d:noperceptual}) and the bounded
 coercion oracle (\ref{d:subjugation}) --- reaching a post-encounter state with a set $R$ of
-\emph{racers}: the parties that can still reach $K$ within feasibility and act on
+\emph{racers}: the parties that can still reach $\Kset$ within feasibility and act on
 it (spend, or rescue/cancel to defeat $\Attacker$'s spend) --- the released
 $\Victim$, and any remote delegate. Write $p_A(S)$ for $\Attacker$'s probability
 of prevailing against racer set $S$ (monotone: fewer racers, weakly higher
@@ -324,14 +347,14 @@ eliminate only racers it can \emph{reach}, never a remote delegate.
   U_\Attacker(a) \;=\; p_A(S_a)\cdot W \;-\; c\cdot\mathbf 1[a=\textsf{kill}],
   \qquad S_{\textsf{spare}} = R,\quad S_{\textsf{kill}} = R\setminus\{\Victim\}.
 \]
-$\Sigma$ is \textbf{coercion-safe} if no $\mathrm{WDY}[W,c]$, at any reachable
+$\Pi$ is \textbf{coercion-safe} if no $\mathrm{WDY}[W,c]$, at any reachable
 state, strictly prefers $\textsf{kill}$.
 \end{definition}
 
 \begin{theorem}[No-Gray-Area, as a theorem]\label{thm:safety}
 Write $\pi := p_A(R\setminus\{\Victim\}) - p_A(R) \ge 0$ for $\Victim$'s
 \emph{pivotality} --- the win-probability $\Attacker$ gains by removing $\Victim$
-as a racer. $\Sigma$ is coercion-safe (Definition~\ref{def:game}) against every
+as a racer. $\Pi$ is coercion-safe (Definition~\ref{def:game}) against every
 $\mathrm{WDY}[W,c]$ \emph{if and only if} $\pi = 0$ at every reachable state:
 $\Victim$ is never pivotal.
 \end{theorem}
@@ -340,10 +363,10 @@ $\Victim$ is never pivotal.
 The kill increment is
 $\Delta U := U_\Attacker(\textsf{kill}) - U_\Attacker(\textsf{spare}) = \pi\,W - c$.
 ($\Leftarrow$) If $\pi = 0$ at every reachable state then $\Delta U = -c < 0$: no
-$\mathrm{WDY}[W,c]$ ever prefers $\textsf{kill}$, so $\Sigma$ is safe.
+$\mathrm{WDY}[W,c]$ ever prefers $\textsf{kill}$, so $\Pi$ is safe.
 ($\Rightarrow$, contrapositive) If $\pi > 0$ at some reachable state then
 $\Delta U = \pi\,W - c > 0$ for any $(W,c)$ with $W > c/\pi$; that priced adversary
-exists and strictly prefers $\textsf{kill}$, so $\Sigma$ is unsafe.
+exists and strictly prefers $\textsf{kill}$, so $\Pi$ is unsafe.
 \end{proof}
 
 \noindent A game-based (experiment-and-advantage) restatement of this
@@ -402,18 +425,18 @@ moment \ref{d:kerckhoffs} is granted.
 \begin{definition}[Weakly coercion-resistant / weakly {$\mathrm{WDY}[W,c,b,t]$}-resistant]\label{def:weak-cr}
 A protocol is \textbf{weakly coercion-resistant} (equivalently, \textbf{weakly
 $\mathrm{WDY}[W,c,b,t]$-resistant}) if a single encounter with the full WDY
-adversary (\textbf{\ref{d:kerckhoffs}--\ref{d:nodelegatecoerce}}) does not, \emph{by itself alone}, yield the master
-secret $K$, but \emph{may} leave a \emph{deadly-race} state: a reachable state of
+adversary (\textbf{\ref{d:kerckhoffs}--\ref{d:nodelegatecoerce}}) does not, \emph{by itself alone}, reach any
+element of $\Kset$, but \emph{may} leave a \emph{deadly-race} state: a reachable state of
 positive pivotality $\pi > 0$ (Theorem~\ref{thm:safety}) in which $\Attacker$
-holds a feasible-but-slower path and $\Victim$ remains a reachable racer. The
+holds a feasible-but-unfinished path and $\Victim$ remains a reachable racer. The
 secret is withheld \emph{during coercion}; the holder is not safe: \emph{after coercion 
-finishes} $\Attacker$ may enact deadly race and ultimately seize $K$ nevertheless.
+finishes} $\Attacker$ may enact deadly race and ultimately reach $\Kset$ nevertheless.
 \end{definition}
 
 \begin{definition}[Strongly coercion-resistant / strongly {$\mathrm{WDY}[W,c,b,t]$}-resistant]\label{def:strong-cr}
 A protocol is \textbf{strongly coercion-resistant} (equivalently, \textbf{strongly
 $\mathrm{WDY}[W,c,b,t]$-resistant}) if a single encounter with the full WDY
-adversary (\textbf{\ref{d:kerckhoffs}--\ref{d:nodelegatecoerce}}) yields \emph{neither} $K$ \emph{nor} a deadly-race
+adversary (\textbf{\ref{d:kerckhoffs}--\ref{d:nodelegatecoerce}}) yields \emph{neither} $\Kset$ \emph{nor} a deadly-race
 state --- every reachable state has $\pi = 0$. This is exactly coercion-safety
 (Definition~\ref{def:game}, Theorem~\ref{thm:safety}): the bar
 Criterion~\ref{prin:nga} sets, and the target the construction of \S\ref{sec:gw}
@@ -421,16 +444,16 @@ meets.
 \end{definition}
 
 \begin{definition}[Time-gating custody protocol]\label{def:timegate}
-A custody protocol is \textbf{time-gating} if reaching its master secret $K$
+A custody protocol is \textbf{time-gating} if reaching $\Kset$
 requires completing a \emph{time-gate} --- a computation or delay of wall-clock
-cost $G$ (a memory-hard derivation, or a time-lock) --- so that $K$ is unavailable
+cost $G$ (a memory-hard derivation, or a time-lock) --- so that $\Kset$ is unavailable
 before $G$ elapses; $G$ is the design parameter, set against the adversary's
 coercion-time budget $t$ (\ref{d:subjugation}). Time-gating is a \emph{mechanism}, not a strength:
 a given time-gated protocol instantiates one of the three levels above according
 to the outcome it forces --- \textbf{naive} if it relies on an obscure
 \emph{self-destruct} (the holder destroying the device's own copy) or a cancel
 key (safe only against a sub-Kerckhoffs attacker); \textbf{weak} if the gate
-leaves a feasible-but-slower path, keeping $\pi > 0$; \textbf{strong} if every
+leaves a feasible-but-unfinished path, keeping $\pi > 0$; \textbf{strong} if every
 reachable state has $\pi = 0$ (Theorem~\ref{thm:safety}), no matter the mechanism.
 It is the running example of the taxonomy.
 \end{definition}
@@ -468,7 +491,7 @@ copy extractable, $\Attacker$ would take it \emph{during} the encounter --- a cl
 success ($p_A = 1$, no post-release race), the survivable endpoint; were it not,
 $D$ still dominates and killing $\Victim$ is pointless. Neither branch is a deadly
 race. NNPP bites only in the \emph{original} race (Lemma~\ref{lem:drl}), where
-$\Attacker$ \emph{holds} a feasible-but-slower path from the seized device and
+$\Attacker$ \emph{holds} a feasible-but-unfinished path from the seized device and
 cannot be reassured that $\Victim$ will not race; it does not reach the delegated
 case.
 
@@ -485,7 +508,7 @@ delegate \emph{is not self-custody}. Its entire clearance rests on assuming $D$
 will \textbf{refuse a legitimate owner pleading for their life}
 (\ref{d:nodelegatecoerce}) --- the very refusal that defeats
 $\Attacker$'s coerced plea also defeats $\Victim$'s genuine one. Whether $D$'s
-state is \emph{sufficient} for $K$ or merely \emph{necessary}, shared custody
+state is \emph{sufficient} for $\Kset$ or merely \emph{necessary}, shared custody
 reinstates exactly the trusted counterparty the design set out to remove.
 \emph{Not your keys, not your coins}: that, more than any impossibility, is the
 standing case for the individual-custody route (\ref{r:removerace}).
@@ -533,10 +556,10 @@ Properties}~\cite{gw-fourprops}:
 \end{enumerate}
 
 \begin{definition}[Access-dominating delegate]\label{def:dominating}
-For a party $P$ let $\ell_P(\tau)$ be its latency to reach and act on $K$ (spend,
+For a party $P$ let $\ell_P(\tau)$ be its latency to reach and act on $\Kset$ (spend,
 or rescue/cancel) from the state at time $\tau$. A delegate $D$ is
 \textbf{access-dominating} if $\ell_D(\tau) \le \ell_V(\tau)$ at every $\tau$ ---
-$K$ is, at all times, at least as available to $D$ as to the owner. Then $D$ is
+$\Kset$ is, at all times, at least as available to $D$ as to the owner. Then $D$ is
 never slower than $\Victim$, so removing $\Victim$ leaves the race unchanged,
 $p_A(R\setminus\{\Victim\}) = p_A(R)$, giving $\pi = 0$ (route \ref{r:remotewinner}). Operationally
 the owner \emph{periodically syncs} $D$'s state, holding $\ell_D \le \ell_V$.
@@ -546,25 +569,25 @@ the owner \emph{periodically syncs} $D$'s state, holding $\ell_D \le \ell_V$.
 The sync is best run during \emph{peacetime} (the quiescent interval between
 encounters), and it can be made \emph{verifiable}: two time-separated digests of
 $D$'s state reveal not only that $D$ leads but its \emph{rate} $v_D$. Knowing its
-own rate $v_A$ and the two remaining distances to $K$ --- $\Delta_{S_A}$ for
+own rate $v_A$ and the two remaining distances to $\Kset$ --- $\Delta_{S_A}$ for
 $\Attacker$, $\Delta_{S_D}$ for $D$ --- $\Attacker$ can settle the race in advance:
 it can win only if $\Delta_{S_A}/v_A < \Delta_{S_D}/v_D$. A delegate running near the frequency
 ceiling (\ref{d:frequency}) against a slower $\Attacker$ makes racing plainly
 futile --- turning $D$'s dominance from $\Attacker$'s \emph{credence} into something
-$\Attacker$ can \emph{check}. Whether $D$'s held state is \emph{sufficient} for $K$
+$\Attacker$ can \emph{check}. Whether $D$'s held state is \emph{sufficient} for $\Kset$
 or merely \emph{necessary} (so that defeating $\Attacker$ needs only that $D$ can
 \emph{block}, not spend) does not change the argument.
 \end{remark}
 
 \begin{definition}[Geographic protocol]\label{def:geographic}
-A protocol is \textbf{geographic} if $K$'s gating is partitioned across $\ge 1$
-\emph{sites}, so that reaching $K$ requires the co-located seizure and coercion of
+A protocol is \textbf{geographic} if $\Kset$'s gating is partitioned across $\ge 1$
+\emph{sites}, so that reaching $\Kset$ requires the co-located seizure and coercion of
 co-located principals (\ref{d:subjugation}--\ref{d:noperceptual}) to be deployed at
 \emph{every} such site. A single WDY encounter is confined to one site
-(\ref{d:seizure}); the moment $K$'s gating requires a site the encounter does not
+(\ref{d:seizure}); the moment $\Kset$'s gating requires a site the encounter does not
 occupy, it has no feasible path, $p_A(\varnothing) = 0$, so $\pi = 0$ (route
 \ref{r:removerace}). Custody may stay individual (the other sites are the owner's own devices),
-but $K$ now \emph{requires geographic locations} --- which is exactly the
+but $\Kset$ now \emph{requires geographic locations} --- which is exactly the
 negation of Property~\ref{p:know} (knowledge-based $\equiv$ non-geographic).
 \end{definition}
 
@@ -572,7 +595,7 @@ negation of Property~\ref{p:know} (knowledge-based $\equiv$ non-geographic).
 Definition~\ref{def:geographic} clears the bar honestly; but it does so by moving
 the burden onto \emph{physical} distance and guarding, and an honest account should
 name the avenues it leaves $\Attacker$ rather than gloss over them. Against a
-protocol whose $K$ needs $\ge 1$ site of custody, $\Attacker$ may --- singly or in
+protocol whose $\Kset$ needs $\ge 1$ site of custody, $\Attacker$ may --- singly or in
 combination:
 \begin{enumerate}[nosep,leftmargin=1.9em]
   \item \textbf{catch $\Victim$ \emph{at} a site}: then the encounter's single site
@@ -582,10 +605,12 @@ combination:
   \item \textbf{burgle the sites without $\Victim$}, taking the tokens directly ---
         possibly after enacting a deadly race, since removing $\Victim$
         (Lemma~\ref{lem:drl}) buys uncontested time to travel and break in;
-  \item \textbf{burgle one gating site and keep what he takes}: a token $K$ needs
-        but $\Attacker$ cannot use alone is leverage rather than a route --- a
-        \emph{hostage token} (\S\ref{sub:hostage}) held against $\Victim$ for the
-        rest;
+  \item \textbf{burgle some of the gating sites and keep what he takes}: tokens
+        $\Kset$ needs but $\Attacker$ cannot use alone are leverage rather than a
+        route --- a \emph{hostage} (\S\ref{sub:hostage}) held against $\Victim$ for
+        the rest. Neither a single token nor a single site need be necessary on its
+        own: it is enough that the seized \emph{subset} leaves $\Victim$'s remainder
+        short of $\Kset$;
   \item \textbf{abduct $\Victim$ and move them from site to site}, seizing each in
         turn --- a chain of single-site encounters, bounded only by travel time and
         the coercion-time budget $t$ (\ref{d:subjugation});
@@ -626,7 +651,7 @@ self-custody available at the cost of running a piece of free open source softwa
 \end{remark}
 
 \begin{remark}[Cyber-physical race]\label{rem:cyberphysical}
-A protocol that admits \emph{two or more} feasible paths to $K$ --- one running
+A protocol that admits \emph{two or more} feasible paths to $\Kset$ --- one running
 through the collection of physically distributed tokens and another that does not
 (say an undisclosed, locally hidden shortcut, or a state seized \emph{during} the
 wrench attack) --- yields a \emph{cyber-physical} race: one racer works to complete
@@ -639,7 +664,7 @@ of.
 
 \begin{definition}[Tacit gating (TKBA)]\label{def:tacit}
 A protocol is \textbf{tacitly gated} if it attains coercion resistance by gating
-$K$ behind a \emph{non-transmissible} in-head input (Assumption~\ref{ass:tkba}):
+$\Kset$ behind a \emph{non-transmissible} in-head input (Assumption~\ref{ass:tkba}):
 the deep perceptual stages are recognizable but not dictatable. A single encounter
 can then neither extract the input (non-transmissible, and the coercion-time budget
 $t$ of \ref{d:subjugation} is too short to walk the derivation) nor reconstruct it offline (the
@@ -685,8 +710,8 @@ is pointless.
 \end{remark}
 
 \noindent\textbf{Bottom line.} The whole premise of TKBA is to trade
-\emph{availability} for coercion resistance: it lowers the likelihood that $K$ is
-seizable at any given moment, at the cost of making $K$ less available to the
+\emph{availability} for coercion resistance: it lowers the likelihood that $\Kset$ is
+seizable at any given moment, at the cost of making $\Kset$ less available to the
 legitimate user --- while still not yielding a deadly race. Kerckhoffs throws
 obscurity out of the window, so the only ways to restrict that availability are
 \emph{geographically}, through \emph{remote delegates}, or through
@@ -710,7 +735,7 @@ $p_A(R\setminus\{\Victim\}) = p_A(R)$. Either $R\setminus\{\Victim\}$ retains a
 racer at least as fast as $\Victim$ --- an access-dominating delegate
 (Definition~\ref{def:dominating}) --- or it does not, whence (dropping the
 degenerate clear-success $p_A(R)=1$) $p_A(\varnothing)=0$: a single encounter has
-\emph{no} feasible path, so a piece of $K$'s gating is withheld from an adversary
+\emph{no} feasible path, so a piece of $\Kset$'s gating is withheld from an adversary
 that seizes every co-located device and coerces the present owner. A co-located
 WDY has only two blind spots --- \emph{elsewhere} (another site: geographic) and
 \emph{the unextractable mind} (non-transmissible, behind a time-gate exceeding the
@@ -759,10 +784,17 @@ that step.
 
 Devicelessness (Property~\ref{p:know}) yields a fifth security property the Four have
 so far left implicit: immunity to indirect coercion \emph{through a seizable
-token}. Wherever a
-\emph{necessary} token is stored outside the holder's head --- on a carried device or
-at a site of custody --- that token is a \emph{hostage}. Even where seizing $K$ itself
-is judged infeasible (or not worth the risk), $\Attacker$ can seize the token, or
+token}. Wherever tokens are stored outside the holder's head --- on a carried device
+or at a site of custody --- some seizable \emph{subset} of them is a \emph{hostage}:
+a set $T$ of tokens qualifies whenever, with $T$ removed, $\Victim$'s remaining state
+no longer reaches $\Kset$. Individual necessity is only the easy case. In an elaborate
+setup no single token need be necessary --- under a $k$-of-$n$ quorum each is
+dispensable on its own --- yet some subset always is, since the whole of the
+externally stored material is one (otherwise the setup would already be deviceless).
+$\Attacker$ does not need \emph{the} necessary token, then, only \emph{some} necessary
+subset --- and takes the cheapest one to reach; geographic distribution raises that
+price without driving it to infinity. Even where seizing $\Kset$ itself
+is judged infeasible (or not worth the risk), $\Attacker$ can seize such a subset, or
 threaten its destruction, and trade it for something else entirely: the \emph{formal,
 irrevocable} transfer of another good or service. The property is orthogonal to the
 remote-delegate route (\ref{r:remotewinner}) but, by construction, \emph{denied} to
@@ -773,9 +805,9 @@ mechanism, and no custody design makes a relative unseizable
 (\S\ref{sub:empirical}).
 
 \begin{remark}[Indirect wrench via a hostage token]\label{rem:hostage}
-Even a device-dependent setup whose $K$ is deemed unwrenchable can present a surface
-for an \emph{indirect} wrench attack through its most wrench-vulnerable device-stored
-token. $\Attacker$ seizes that token and holds it hostage, to be traded for the
+Even a device-dependent setup whose $\Kset$ is deemed unwrenchable can present a surface
+for an \emph{indirect} wrench attack through the cheapest hostage subset it leaves
+exposed. $\Attacker$ seizes those tokens and holds them hostage, to be traded for the
 formal transfer of another of $\Victim$'s assets --- possibly one \emph{less} liquid
 and \emph{more} traceable, and so otherwise easier to rescue: a car, jewellery, real
 estate. For instance, take a setup in which $\Victim$ carries one necessary token at
@@ -802,10 +834,27 @@ whole tangle: with the secret in the head alone, there is nothing to seize, rans
 or read a backup off.
 \end{remark}
 
+\begin{corollary}[The fifth property is not a fifth axis]\label{cor:hostage-equiv}
+No hostage $\Leftrightarrow$ devicelessness (Property~\ref{p:know}). Left to right is
+immediate: a hostage is by definition stored outside the head. Right to left is the
+subset argument above --- if any token outside the head is part of $\Kset$'s gating,
+then the \emph{whole} external set is jointly necessary, since removing it leaves
+head-only state, which by hypothesis does not reach $\Kset$; so a hostage set exists.
+The $k$-of-$n$ objection --- that where no single token is necessary there is nothing
+to take hostage --- is exactly what the subset formulation closes.
+
+The property is therefore worth naming and not worth tabulating: it discriminates
+between designs precisely as Property~\ref{p:know} does, and adds no column to the
+comparison of \S\ref{sub:tgpo-comparison}. What it adds is a \emph{reason} ---
+devicelessness is where the secret lives, no-hostage is what leverage exists over the
+holder, and the equivalence says the second is not an independent thing a design
+might buy separately.
+\end{corollary}
+
 \begin{remark}[Denial is inherently plausible]\label{rem:plausible-denial}
 NNPP (Assumption~\ref{lem:nnpl}) leaves $\Attacker$ unable to disprove an undisclosed
 shortcut backup --- but for the deviceless holder that cuts the other way. Under
-Kerckhoffs $\Attacker$ knows the protocol, and so knows a TGPO setup reaches $K$ from
+Kerckhoffs $\Attacker$ knows the protocol, and so knows a TGPO setup reaches $\Kset$ from
 the head alone: $\Victim$ has no \emph{need} of a shortcut device. A denial ---
 ``there is no backup'' --- is therefore \emph{consistent with a perfectly ordinary
 setup}, not a suspicious claim to be tortured out of. Where a device-dependent holder

@@ -158,7 +158,7 @@ release:
         longer individual.
   \item Where the delay is one the \emph{holder} can release, or the freeze
         authority is a device or a person on the scene, the control leaves
-        $\Attacker$ a feasible-but-slower path and is therefore a race --- the
+        $\Attacker$ a feasible-but-unfinished path and is therefore a race --- the
         gray outcome the Criterion forbids, and the configuration in which the
         control is worse than its absence.
 \end{itemize}
@@ -405,6 +405,31 @@ single product ships both, marketing only the weaker one for physical threat, is
 the clearest illustration in this section of how little the design space has been
 mapped against the Criterion.
 
+\begin{remark}[A vendor-documented instance of the naive tier]\label{rem:hidden-medium}
+The decoy's duress framing was the community's, not the manufacturer's. One vendor
+does make the claim in its own documentation. Sparrow's FAQ, answering ``How can I
+choose where my wallet is saved?'', documents a data-directory flag and adds that
+``[t]his feature allows you to store all Sparrow data on removable media making for
+more plausible deniability''~\cite{sparrow-faq}.
+
+The feature does not guard the asset. Sparrow's own best-practice page has the seed
+words backed up separately from the device, ``ideally in a different
+location''~\cite{sparrow-best-practices} --- so the concealed directory is neither
+necessary nor sufficient for $\Kset$. A Kerckhoffs $\Attacker$ coerces the seed
+backup, loads it into a wallet of his own, and never touches the concealed medium at
+all. What is left for the medium to do is carry the holder's belief that, having
+surrendered what was found, they may now say there is nothing more. The decoy at
+least stands between $\Attacker$ and the coins; this stands nowhere near them.
+
+That is Definition~\ref{def:naive-cr} exactly --- a guarantee contingent on
+$\Attacker$'s ignorance, here of a \emph{documented} feature --- and the continuation
+is the one the registry records. A denial offered into the prevailing norm is
+pre-discredited (Corollary~\ref{cor:disclosure}), so the rational continuation of an
+interrogation that opens with one is more coercion, and the truthful denier is
+brutalized alongside the lying one (\S\ref{sub:empirical}). The feature adds nothing
+but the confidence to make the denial.
+\end{remark}
+
 \begin{remark}[The decoy is sold, and coached for credibility]\label{rem:decoy-market}
 The decoy is not merely a practice the community tolerates; it is a product and a
 curriculum. A Spanish-language self-custody consultancy lists, among paid service
@@ -471,8 +496,8 @@ requires it. The same asymmetry has an epistemic cost, taken up next
 
 \begin{remark}[Obscurity anosognosia --- why the crisis resists diagnosis]
 \label{rem:anosognosia}
-Two censoring mechanisms compound, and between them they remove the evidence that
-would settle whether the Lemma's prediction is being enacted in the field.
+Three censoring mechanisms compound, and between them they remove the evidence
+that would settle whether the Lemma's prediction is being enacted in the field.
 
 The first is the one this section has already named: obscurity does not advertise
 itself. No vendor documents a scheme as depending on $\Attacker$'s ignorance, so
@@ -484,11 +509,22 @@ of the terminal move, have in common?
 
 The second is recorded in \S\ref{sub:empirical}: a homicide is reported as a
 homicide, not as a robbery whose victim was then killed, so the enactments most
-diagnostic of the Lemma are the least likely to enter the registry at all. The
-numerator is censored by how the terminal event is classified; the covariate is
-censored by what vendors do not say.
+diagnostic of the Lemma are the least likely to enter the registry at all.
 
-The structure is that of \emph{anosognosia} --- the dementia patient whose disease
+The third forecloses the one route by which the first two might have been worked
+around. Where $\Victim$ is killed, the people who survive them are the only
+remaining source for what that holder was running --- and they are, by
+construction, the party least able to supply it. A scheme that depended on
+$\Attacker$'s ignorance depended on $\Victim$'s discretion, and discretion is not
+selective: the family was not told either. Where they do know, disclosure carries
+no benefit to them and an evident cost --- it advertises that a household which
+held bitcoin may hold it still --- so it is withheld unless it might help resolve
+the case. The one person who could have answered the question is the one
+Lemma~\ref{lem:drl} predicts will not survive to be asked.
+
+So the covariate is censored by what vendors do not say, the numerator by how the
+terminal event is classified, and what remains by what the bereaved do not know or
+will not repeat. The structure is that of \emph{anosognosia} --- the dementia patient whose disease
 erodes memory and, with it, the capacity to notice that memory is eroding. One
 cause, two effects, and the second conceals the first. Obscurity is simultaneously
 what makes a design fail under Kerckhoffs and what erases the record by which the
@@ -524,9 +560,11 @@ Self-destruct PIN            & \xmark & \cmark & \xmark & \xmark & non-obscurity
 \bottomrule
 \end{tabularx}
 \end{center}
-\noindent Row~(\ref{p:know}) is the covering point: TGPO is the \emph{only} knowledge-based
+\noindent Column~(\ref{p:know}) is the covering point: TGPO is the \emph{only} knowledge-based
 (deviceless --- the secret is knowledge, never a device or a location) row, because
-every competitor keeps a \emph{transmissible} secret on a device. \textbf{Rewind}
+every competitor keeps a \emph{transmissible} secret on a device. The fifth property
+of \S\ref{sub:hostage} adds no column: by Corollary~\ref{cor:hostage-equiv} it is
+\emph{equivalent} to that one, so it would reproduce it cell for cell. \textbf{Rewind}
 trades individual custody for a remote delegate (\ref{r:remotewinner}). \textbf{Casa}'s collaborative
 multisig --- the client's keys on separate hardware plus a Casa co-signing key ---
 trades individual custody: the co-signer is a remote party, and a coercion-resistant
