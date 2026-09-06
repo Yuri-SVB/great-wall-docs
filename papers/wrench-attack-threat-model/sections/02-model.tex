@@ -17,7 +17,7 @@ introduced, and all are gathered here for reference.
 \multicolumn{2}{@{}l}{\textbf{Principals, assets, economics}}\\
 \midrule
 $\Victim,\ \Attacker$ & holder (victim) and coercer (attacker) \\
-$\Kset$ & \emph{spend authority}: the set of states from which the stash can be spent --- a single key, a $k$-of-$n$ multisig quorum, or any richer script condition (\S\ref{sub:setup}) \\
+$\Kset$ & \emph{spend authority}: the set of states from which the stash can be spent; the gating condition may be a single key, a $k$-of-$n$ multisig quorum, or a richer script (\S\ref{sub:setup}) \\
 $W$ & value of the asset to $\Victim$ \\
 $c$ & expected disutility to $\Attacker$ of killing $\Victim$ \\
 $\pi$ & $\Victim$'s \emph{pivotality} --- win-probability $\Attacker$ gains by removing $\Victim$ \\
@@ -53,8 +53,8 @@ floor & \emph{prohibitive} cost: $\ge \sftstar$ hard \emph{or} $\ge 2^{96}$ chea
 \begin{definition}[Principals]
 The \textbf{holder} $\Victim$ possesses (in memory and on devices) whatever is
 needed to reach the spend authority $\Kset$ gating an asset --- the set of states
-from which it can be spent (\S\ref{sub:setup}), of which a single master secret is
-only the simplest case. The \textbf{coercer} $\Attacker$ seeks $\Kset$. Optional \textbf{heirs} or \textbf{delegates} may hold
+from which it can be spent (\S\ref{sub:setup}); a single master secret is only the
+simplest case. The \textbf{coercer} $\Attacker$ seeks $\Kset$. Optional \textbf{heirs} or \textbf{delegates} may hold
 partial capability on $\Victim$'s behalf.
 \end{definition}
 

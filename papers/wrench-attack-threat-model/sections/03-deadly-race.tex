@@ -318,8 +318,8 @@ and ``coercion-safe'' as a predicate on it, and no-gray becomes exactly the
 safety condition.
 
 \begin{definition}[Coercion game and coercion-safety]\label{def:game}
-Fix a scheme $\Sigma$ and a priced adversary $\mathrm{WDY}[W,c]$
-(Definition~\ref{def:priced}). The game $\mathbf{Coerce}_{\Sigma}$ is:
+Fix a scheme $\Pi$ and a priced adversary $\mathrm{WDY}[W,c]$
+(Definition~\ref{def:priced}). The game $\mathbf{Coerce}_{\Pi}$ is:
 (1)~$\Attacker$ mounts an encounter --- device seizure (\ref{d:subjugation}--\ref{d:noperceptual}) and the bounded
 coercion oracle (\ref{d:subjugation}) --- reaching a post-encounter state with a set $R$ of
 \emph{racers}: the parties that can still reach $\Kset$ within feasibility and act on
@@ -335,14 +335,14 @@ eliminate only racers it can \emph{reach}, never a remote delegate.
   U_\Attacker(a) \;=\; p_A(S_a)\cdot W \;-\; c\cdot\mathbf 1[a=\textsf{kill}],
   \qquad S_{\textsf{spare}} = R,\quad S_{\textsf{kill}} = R\setminus\{\Victim\}.
 \]
-$\Sigma$ is \textbf{coercion-safe} if no $\mathrm{WDY}[W,c]$, at any reachable
+$\Pi$ is \textbf{coercion-safe} if no $\mathrm{WDY}[W,c]$, at any reachable
 state, strictly prefers $\textsf{kill}$.
 \end{definition}
 
 \begin{theorem}[No-Gray-Area, as a theorem]\label{thm:safety}
 Write $\pi := p_A(R\setminus\{\Victim\}) - p_A(R) \ge 0$ for $\Victim$'s
 \emph{pivotality} --- the win-probability $\Attacker$ gains by removing $\Victim$
-as a racer. $\Sigma$ is coercion-safe (Definition~\ref{def:game}) against every
+as a racer. $\Pi$ is coercion-safe (Definition~\ref{def:game}) against every
 $\mathrm{WDY}[W,c]$ \emph{if and only if} $\pi = 0$ at every reachable state:
 $\Victim$ is never pivotal.
 \end{theorem}
@@ -351,10 +351,10 @@ $\Victim$ is never pivotal.
 The kill increment is
 $\Delta U := U_\Attacker(\textsf{kill}) - U_\Attacker(\textsf{spare}) = \pi\,W - c$.
 ($\Leftarrow$) If $\pi = 0$ at every reachable state then $\Delta U = -c < 0$: no
-$\mathrm{WDY}[W,c]$ ever prefers $\textsf{kill}$, so $\Sigma$ is safe.
+$\mathrm{WDY}[W,c]$ ever prefers $\textsf{kill}$, so $\Pi$ is safe.
 ($\Rightarrow$, contrapositive) If $\pi > 0$ at some reachable state then
 $\Delta U = \pi\,W - c > 0$ for any $(W,c)$ with $W > c/\pi$; that priced adversary
-exists and strictly prefers $\textsf{kill}$, so $\Sigma$ is unsafe.
+exists and strictly prefers $\textsf{kill}$, so $\Pi$ is unsafe.
 \end{proof}
 
 \noindent A game-based (experiment-and-advantage) restatement of this
@@ -413,12 +413,12 @@ moment \ref{d:kerckhoffs} is granted.
 \begin{definition}[Weakly coercion-resistant / weakly {$\mathrm{WDY}[W,c,b,t]$}-resistant]\label{def:weak-cr}
 A protocol is \textbf{weakly coercion-resistant} (equivalently, \textbf{weakly
 $\mathrm{WDY}[W,c,b,t]$-resistant}) if a single encounter with the full WDY
-adversary (\textbf{\ref{d:kerckhoffs}--\ref{d:nodelegatecoerce}}) does not, \emph{by itself alone}, yield the master
-secret $\Kset$, but \emph{may} leave a \emph{deadly-race} state: a reachable state of
+adversary (\textbf{\ref{d:kerckhoffs}--\ref{d:nodelegatecoerce}}) does not, \emph{by itself alone}, reach any
+element of $\Kset$, but \emph{may} leave a \emph{deadly-race} state: a reachable state of
 positive pivotality $\pi > 0$ (Theorem~\ref{thm:safety}) in which $\Attacker$
 holds a feasible-but-slower path and $\Victim$ remains a reachable racer. The
 secret is withheld \emph{during coercion}; the holder is not safe: \emph{after coercion 
-finishes} $\Attacker$ may enact deadly race and ultimately seize $\Kset$ nevertheless.
+finishes} $\Attacker$ may enact deadly race and ultimately reach $\Kset$ nevertheless.
 \end{definition}
 
 \begin{definition}[Strongly coercion-resistant / strongly {$\mathrm{WDY}[W,c,b,t]$}-resistant]\label{def:strong-cr}
@@ -432,7 +432,7 @@ meets.
 \end{definition}
 
 \begin{definition}[Time-gating custody protocol]\label{def:timegate}
-A custody protocol is \textbf{time-gating} if reaching its master secret $\Kset$
+A custody protocol is \textbf{time-gating} if reaching $\Kset$
 requires completing a \emph{time-gate} --- a computation or delay of wall-clock
 cost $G$ (a memory-hard derivation, or a time-lock) --- so that $\Kset$ is unavailable
 before $G$ elapses; $G$ is the design parameter, set against the adversary's
@@ -779,9 +779,9 @@ no longer reaches $\Kset$. Individual necessity is only the easy case. In an ela
 setup no single token need be necessary --- under a $k$-of-$n$ quorum each is
 dispensable on its own --- yet some subset always is, since the whole of the
 externally stored material is one (otherwise the setup would already be deviceless).
-$\Attacker$ therefore needs not \emph{the} necessary token but \emph{any} necessary
-subset, and takes the cheapest such subset to reach; geographic distribution raises
-that price without driving it to infinity. Even where seizing $\Kset$ itself
+$\Attacker$ does not need \emph{the} necessary token, then, only \emph{some} necessary
+subset --- and takes the cheapest one to reach; geographic distribution raises that
+price without driving it to infinity. Even where seizing $\Kset$ itself
 is judged infeasible (or not worth the risk), $\Attacker$ can seize such a subset, or
 threaten its destruction, and trade it for something else entirely: the \emph{formal,
 irrevocable} transfer of another good or service. The property is orthogonal to the
