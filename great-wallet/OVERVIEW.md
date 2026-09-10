@@ -1,0 +1,89 @@
+<!-- Moved here from the Great-Wallet repository README, where design
+     documentation should not live. Build and run commands stay in that README. -->
+
+# Great Wallet
+
+> ⚠️ **PROOF OF CONCEPT — NOT SAFE FOR USE.** The current Great Wall
+> implementation is a **substandard proof of concept**: it does not yet match the
+> finalized protocol specification and has not undergone independent security
+> review. **Do not use it to protect real Bitcoin, funds, or any secret of
+> value.** This notice will be removed once the implementation is brought up to
+> the specified protocol.
+
+**Remember your Bitcoin — carry nothing.**
+
+Great Wallet is a self-custody Bitcoin wallet whose seed lives only in
+your memory, protected by a fractal that is easy for *you* to recall
+and prohibitively expensive for anyone else to search. Nothing to
+steal, nothing to seize, nothing to lose in a fire.
+
+> It's all in your head, in nobody else's, the attacker is aware of
+> that, and is nevertheless unable to rob it.
+
+---
+
+## Documentation and Dependencies
+
+The authoritative specification, invariants, and development guide live in
+the vendored `great-wall-docs` submodule (repo:
+[`yuri-svb/great-wall-docs`](https://github.com/yuri-svb/great-wall-docs)):
+
+- [`great-wall-docs/great-wallet/ARCHITECTURE.md`](great-wall-docs/great-wallet/ARCHITECTURE.md)
+  — ecosystem-wide context
+- [`great-wall-docs/great-wallet/THREAT_MODEL.md`](great-wall-docs/great-wallet/THREAT_MODEL.md)
+  — technical description of the threat model the protocol aims at defending against
+- [`great-wall-docs/justification-and-economics/JUSTIFICATION.{tex/pdf}`](great-wall-docs/justification-and-economics/JUSTIFICATION.pdf)
+  — in-depth, quantitative analysis on the economics of problem and proposed solution
+
+Clone with submodules:
+
+```
+git clone --recursive <url>
+# or, to avoid redundant recursion of great-wall-docs:
+git submodule update --init # without the flag --recursive
+```
+
+## The four properties
+
+Great Wallet gives you four guarantees at the same time:
+
+1. **Knowledge-Based Authentication.** Your secret lives entirely in
+   your memory. No device, physical vault, or geographic location is
+   required to access your funds.
+2. **Individual Custody.** You depend on no one else. The core
+   premise of Bitcoin — full self-custody — is kept intact.
+3. **Non-Obscurity.** The method is public. It does not rely on
+   hiding how it works, and it does not rely on convincing an
+   attacker that your stash doesn't exist or is smaller than it is.
+4. **Coercion-Resistance.** Threats and violence cannot extract the
+   secret, because the knowledge that unlocks it is *tacit* (cannot
+   be verbalized on demand) and the mechanism that deploys it is
+   gated by an inescapably lengthy computation.
+
+This combination — a tacit secret plus a computationally-gated
+interface for deploying it — is called **Tacit Knowledge-Based
+Authentication (TKBA)**. It is the only class of authentication that
+can provide all four properties at once, and it is the theoretical
+basis of Great Wallet.
+
+---
+
+## How you use it
+
+Great Wallet has four modes that flow naturally into one another:
+
+1. **Setup** — encode a fresh Bitcoin seed onto a fractal you will
+   learn to remember.
+2. **Train** — spaced-repetition practice that turns the encoding
+   into reliable tacit recall.
+3. **Accelerate** *(optional)* — outsource the waiting-time part of
+   the computation over Lightning Network, anonymously, whenever you
+   need faster access.
+4. **Inherit** *(optional)* — configure a dead-man's-switch channel
+   so your heirs can receive your funds if you can no longer unlock
+   them yourself.
+
+Setup and Train are the core flow. Accelerate and Inherit are opt-in
+and can be added later.
+
+---

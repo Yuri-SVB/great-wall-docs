@@ -8,6 +8,7 @@ Status: beta, public. Depends on nothing else in the ecosystem.
 
 | Document | Covers |
 |---|---|
+| [`REFERENCE_IMPLEMENTATION.md`](./REFERENCE_IMPLEMENTATION.md) | Why Great Wall, how the two stages lock together, the Burning Ship seed encoder |
 | [`DESIGN.md`](./DESIGN.md) | Encoder design, fixed-point arithmetic, discovery and island selection |
 
 Implementation: [github.com/Yuri-SVB/great-wall-core](https://github.com/Yuri-SVB/great-wall-core)

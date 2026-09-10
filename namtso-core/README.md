@@ -9,6 +9,7 @@ Its specification lives with the architecture rather than here:
 
 | Document | Covers |
 |---|---|
+| [`SALT_HARVEST.md`](./SALT_HARVEST.md) | Why a block-header salt, the pinned pipeline, the CLI and its trust modes |
 | [`../great-wallet/ARCHITECTURE.md`](../great-wallet/ARCHITECTURE.md) §7 | Responsibilities and the derivation |
 
 > [!NOTE]
