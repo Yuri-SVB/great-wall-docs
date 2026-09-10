@@ -38,7 +38,7 @@ The attacker:
 | Bitcoin consensus, PoW, secp256k1 signatures         | All on-chain settlement and key pairs    |
 | RSA-2048 factoring hardness                          | RSW TLP (training vault, inheritance)    |
 | Argon2 at the configured parameters                  | Stage-2 fractal derivation gating        |
-| AES / HMAC-SHA512 at textbook strength               | Vault and TLP ciphertext                 |
+| AES-256-GCM; HMAC-SHA512 key derivation              | Vault and TLP ciphertext                 |
 | Bit-exact `great-wall-core` implementation (Rust, I4F60) | Stage-1 / stage-2 bijection          |
 | Standard LN commitment-update + revocation semantics | Dead-man's-switch inheritance channel    |
 | Tacit knowledge is non-transmissible (TKBA premise)  | Coercion-resistance (property 4)         |
