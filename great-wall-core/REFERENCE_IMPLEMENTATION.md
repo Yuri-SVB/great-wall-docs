@@ -161,7 +161,7 @@ device. `N` is the **user's responsibility to memorize** (for hard recovery if
 the device is lost); the protocol gracefully stores the sequence of intermediate
 results so an approximate memory of `N` suffices (recognize the correct one).
 Users are encouraged to set the time **conservatively (≈2×)** and then use the
-TLP / jade-clock layer (see the `great-wallet` family) to tune the effective
+TLP / flying-turtle layer (see the `great-wallet` family) to tune the effective
 per-session delay. Official policy; may be revisited.
 
 **A note on the 32-bit (3-word, single-point) mode.** With stage 0 plus a single
