@@ -21,7 +21,7 @@ inheritance.
 | # | Repo                        | Motif                      | Role                                      | Status          |
 |---|-----------------------------|----------------------------|-------------------------------------------|-----------------|
 | 1 | **great-wall-core**         | The Wall                   | Fractal encoder engine (Rust + Python)    | Beta (public)   |
-| 2 | **tlp-core**                | (utility)                  | RSW time-lock puzzle library              | In development  |
+| 2 | **star-clock**              | (utility)                  | RSW time-lock puzzle library              | In development  |
 | 3 | **great-wall-ux**           | The Wall's appearance      | Rendering, palettes, interaction, effects | In development  |
 | 4 | **celestial-peace-nf-core** | Gate of Celestial Peace    | Spaced-repetition training logic (Anki)   | In development  |
 | 5 | **flying-turtle**           | Turtle longevity + flight  | LN marketplace client for TLP solving     | In development  |
@@ -69,7 +69,7 @@ substantially before first release.
 
 ```
 great-wall-core          (no submodules)
-tlp-core                 (no submodules)
+star-clock               (no submodules)
 great-wall-ux            (no submodules)
 celestial-peace-nf-core  (no submodules)
 flying-turtle            (no submodules)
@@ -78,13 +78,13 @@ namtso-core              (no submodules)
 
 great-wallet             (seven submodules, flat, plus its own app/ source tree —
                           the only repo with submodules)
-  great-wall-core/          <- submodule
-  tlp-core/                 <- submodule
-  great-wall-ux/            <- submodule
-  celestial-peace-nf-core/  <- submodule
-  flying-turtle/            <- submodule
-  mountain-dynasty/         <- submodule
-  namtso-core/              <- submodule
+  great-wall-core/            <- submodule
+  star-clock/                 <- submodule
+  great-wall-ux/              <- submodule
+  celestial-peace-nf-core/    <- submodule
+  flying-turtle/              <- submodule
+  mountain-dynasty/           <- submodule
+  namtso-core/                <- submodule
   app/                      (not a submodule: great-wallet's own UI / orchestration)
 ```
 
@@ -100,7 +100,7 @@ great-wallet             (seven submodules, flat, plus its own app/ source tree 
    great-wallet ensures all seven are at compatible versions.
 4. **Libraries may depend on each other at the API level** (e.g.,
    great-wall-ux imports from great-wall-core, celestial-peace-nf-core
-   imports from tlp-core) but never via submodules — the consuming app
+   imports from star-clock) but never via submodules — the consuming app
    provides all libraries.
 
 ### Dependency Matrix
@@ -110,11 +110,11 @@ Which libraries does each library import from?
 | Library                  | Imports from                          |
 |--------------------------|---------------------------------------|
 | great-wall-core          | (none)                                |
-| tlp-core                 | (none)                                |
+| star-clock               | (none)                                |
 | great-wall-ux            | great-wall-core                       |
-| celestial-peace-nf-core  | great-wall-core, tlp-core             |
-| flying-turtle            | tlp-core                              |
-| mountain-dynasty         | tlp-core                              |
+| celestial-peace-nf-core  | great-wall-core, star-clock           |
+| flying-turtle            | star-clock                            |
+| mountain-dynasty         | star-clock                            |
 | namtso-core              | (none)                                |
 
 ---
@@ -438,7 +438,7 @@ bisection algorithm, PRNG, contraction arithmetic, or BFS neighbor
 order breaks the deterministic bijection and invalidates all existing
 encodings.
 
-### 2. tlp-core
+### 2. star-clock
 
 **Status:** In development.
 
@@ -502,7 +502,7 @@ Responsibilities:
 - Practice session orchestration and grading
 - Vault format (serialization of stage-2 parameters, encoded points,
   scheduler state)
-- Vault encryption/decryption (via tlp-core)
+- Vault encryption/decryption (via star-clock)
 - Background TLP solver management with checkpointing
 - **Explicit-recall training of the derivation parameters `N` (Argon2
   iteration count) and `m` (memory profile)**, so a *hard recovery* (device /
@@ -593,7 +593,7 @@ Begin background TLP computation
 | Easy     | Identified points immediately              | Interval x ease_factor x 1.3 |
 
 Imports from great-wall-core (encode/decode for validation) and
-tlp-core (TLP encrypt/decrypt/solve).
+star-clock (TLP encrypt/decrypt/solve).
 
 Design detail for the deck contents and the pre-/post-graduation
 lifecycle ("setup standing on its own legs" — the `CPNF-NNNN` own-legs
@@ -619,7 +619,7 @@ Responsibilities:
 - Order matching / bid logic
 - Anonymity guarantees (onion routing, payment unlinkability)
 
-Imports from tlp-core (TLP format, serialization, verification). Does
+Imports from star-clock (TLP format, serialization, verification). Does
 NOT depend on great-wall-core — it only needs to understand TLP
 puzzles as opaque payloads, not fractal encoding.
 
@@ -659,8 +659,8 @@ Responsibilities:
 - Fee management at claim time (CPFP via anchor outputs,
   SIGHASH_ANYONECANPAY)
 
-Imports from tlp-core. Does NOT depend on flying-turtle — though both
-are LN-adjacent libraries wrapping tlp-core, they serve fundamentally
+Imports from star-clock. Does NOT depend on flying-turtle — though both
+are LN-adjacent libraries wrapping star-clock, they serve fundamentally
 different interaction patterns with LN. Does NOT depend
 on great-wall-core — inheritance only needs keys and TLP primitives,
 which are derived/provided at the app layer.
@@ -698,21 +698,21 @@ into a single app with four modes that flow naturally:
 1. **Setup** — encode seed on fractal
    (great-wall-core + great-wall-ux)
 2. **Train** — spaced repetition with TLP-gated practice
-   (celestial-peace-nf-core + tlp-core + great-wall-ux)
+   (celestial-peace-nf-core + star-clock + great-wall-ux)
 3. **Accelerate** — outsource TLP solving via Lightning Network
-   (flying-turtle + tlp-core)
+   (flying-turtle + star-clock)
 4. **Inherit** — configure and maintain inheritance channels as
    testator *or* act as heir (receive rotation payloads, solve
    TLPs once rotation ceases, maintain the opaque taproot
    fallback for cascading inheritance)
-   (mountain-dynasty + tlp-core + flying-turtle)
+   (mountain-dynasty + star-clock + flying-turtle)
 
 This is the only repo with submodules (all seven libraries, flat).
 
 ```
 great-wallet/
   great-wall-core/            <- submodule
-  tlp-core/                   <- submodule
+  star-clock/                 <- submodule
   great-wall-ux/              <- submodule
   celestial-peace-nf-core/    <- submodule
   flying-turtle/              <- submodule

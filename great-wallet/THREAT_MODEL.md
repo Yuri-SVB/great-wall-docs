@@ -24,7 +24,7 @@ The attacker:
 - has unbounded compute within their effective wall-clock custody
   window (see [*Calibrating Argon2
   duration*](./ARCHITECTURE.md#calibrating-argon2-duration)),
-  including the ability to hire `jade-clock` solvers;
+  including the ability to hire `flying-turtle` solvers;
 - runs full Bitcoin and Lightning Network nodes, monitors the chain,
   and can participate in routing;
 - may coerce users or heirs physically, for durations bounded by the
@@ -72,7 +72,7 @@ framework is intended material for PhD application / publication).
    information) and the released victim (presumed to hold complete information):
    whoever reaches the master secret first seizes whatever it gates. The existence
    of that race introduces a **material incentive for the perpetrator to
-   assassinate the victim — and possibly the heirs** (`phoenix-scroll`) — upon
+   assassinate the victim — and possibly the heirs** (`mountain-dynasty`) — upon
    seizing sufficient information, to eliminate the competing racer.
 
 3. **No-Gray-Area Principle** (from 2) — *also* **Deadly-Race Principle** /
