@@ -718,7 +718,7 @@ watch their exact words come back.
     not the tacit secret*. Note `m` must be recalled exactly (a wrong profile
     breaks every derived fractal); `N` only approximately.
   - UX should induce users to set the derivation time **conservatively (e.g.
-    2×)**, then use a **TLP / `jade-clock`** layer to freely adjust the *effective
+    2×)**, then use a **TLP / `flying-turtle`** layer to freely adjust the *effective
     per-session* delay (the RSW time-lock puzzle re-imposes a tunable, possibly
     outsourced, delay on top of the fixed `N`). See `great-wallet`.
   - This per-setup-calibration policy is **official**; per-stage iteration

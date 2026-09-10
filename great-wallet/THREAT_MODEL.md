@@ -24,7 +24,7 @@ The attacker:
 - has unbounded compute within their effective wall-clock custody
   window (see [*Calibrating Argon2
   duration*](./ARCHITECTURE.md#calibrating-argon2-duration)),
-  including the ability to hire `jade-clock` solvers;
+  including the ability to hire `flying-turtle` solvers;
 - runs full Bitcoin and Lightning Network nodes, monitors the chain,
   and can participate in routing;
 - may coerce users or heirs physically, for durations bounded by the
@@ -38,7 +38,7 @@ The attacker:
 | Bitcoin consensus, PoW, secp256k1 signatures         | All on-chain settlement and key pairs    |
 | RSA-2048 factoring hardness                          | RSW TLP (training vault, inheritance)    |
 | Argon2 at the configured parameters                  | Stage-2 fractal derivation gating        |
-| AES / HMAC-SHA512 at textbook strength               | Vault and TLP ciphertext                 |
+| AES-256-GCM; HMAC-SHA512 key derivation              | Vault and TLP ciphertext                 |
 | Bit-exact `great-wall-core` implementation (Rust, I4F60) | Stage-1 / stage-2 bijection          |
 | Standard LN commitment-update + revocation semantics | Dead-man's-switch inheritance channel    |
 | Tacit knowledge is non-transmissible (TKBA premise)  | Coercion-resistance (property 4)         |
@@ -72,7 +72,7 @@ framework is intended material for PhD application / publication).
    information) and the released victim (presumed to hold complete information):
    whoever reaches the master secret first seizes whatever it gates. The existence
    of that race introduces a **material incentive for the perpetrator to
-   assassinate the victim — and possibly the heirs** (`phoenix-scroll`) — upon
+   assassinate the victim — and possibly the heirs** (`mountain-dynasty`) — upon
    seizing sufficient information, to eliminate the competing racer.
 
 3. **No-Gray-Area Principle** (from 2) — *also* **Deadly-Race Principle** /

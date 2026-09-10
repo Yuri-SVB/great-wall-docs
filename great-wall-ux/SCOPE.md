@@ -187,7 +187,7 @@ These belong to sibling repos and must not be re-implemented here.
   the training flow composes; the scheduler state and vault format are
   not its concern.
 - **Time-lock puzzles, Lightning Network, inheritance flows.** Anything
-  TLP-, LN-, or `phoenix-scroll`-shaped is invisible to this library.
+  TLP-, LN-, or `mountain-dynasty`-shaped is invisible to this library.
 - **Key derivation, BIP39, BIP32.** Never handled in the UX layer.
 - **Persistence of user secrets.** The library is stateless with
   respect to anything coercion-resistant. It may cache view-state
