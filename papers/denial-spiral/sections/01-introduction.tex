@@ -1,0 +1,56 @@
+% ══════════════════════════════════════════════════════════════════════════
+\section{Introduction}
+\label{sec:intro}
+% ══════════════════════════════════════════════════════════════════════════
+
+The standing counsel to the Bitcoin holder who fears physical coercion has three
+parts: hold quietly, deny ownership if asked, and keep something to surrender if
+denial fails. Each is advice about what an attacker will \emph{believe}. None of
+it has been assessed as what it is --- a security mechanism whose strength
+depends entirely on the adversary's ignorance, which is the weakness
+\emph{Reliance on Security Through Obscurity} catalogues~\cite{cwe656}.
+
+This paper assesses it, and reaches a conclusion stronger than ineffectiveness.
+The counsel is \emph{self-defeating in aggregate}, by a mechanism with the
+structure of a commons. Denial credibility is supplied by the population of
+holders and consumed by each holder who denies. Where denial becomes the expected
+script, a denial stops carrying information; an interrogation that opens with one
+yields the attacker no exculpatory update; and its rational continuation is
+further coercion rather than release. Each holder's individually rational
+response to that environment --- conceal harder, rehearse better --- depletes the
+resource further, for everyone. We call this the \textbf{Denial Spiral}
+(\S\ref{sec:spiral}), and its cost is an externality: it falls on whoever must be
+believed, including the holder of a design that depletes nothing, and including
+the person who holds no bitcoin at all.
+
+\paragraph{Relation to the companion paper.} \cite{deadly-race} derives a bar for
+coercion-resistant custody --- the \emph{No-Gray-Area Criterion} --- from the
+observation that a seizure leaving the attacker a \emph{feasible-but-unfinished}
+path to the funds makes the holder a live competing racer, and so prices his
+removal. That is the \emph{Deadly Race}: it governs the \emph{terminal} move. The
+Spiral governs the \emph{duration}. The two are companions rather than one being
+a case of the other: a design can be safe under one and guilty under the other,
+and the wallet-erase PIN of \S\ref{sec:obscurity} is exactly such a design. This
+paper is self-contained --- \S\ref{sec:model} restates what it borrows --- but
+the formal development of the adversary, the criterion and the construction that
+clears it are in the companion and are not repeated.
+
+\paragraph{Contributions.}
+\begin{enumerate}[nosep,leftmargin=1.9em]
+  \item The \textbf{Denial Spiral}: obscurity counsel as a depleting commons,
+        with its cost falling outside the population that depletes it
+        (\S\ref{sec:spiral}).
+  \item A \textbf{classification of the shipped obscurity class} --- wallet-erase
+        and duress PINs, decoy passphrase wallets, and concealment marketed as
+        deniability --- against the Kerckhoffs premise, on vendors' own
+        documentation (\S\ref{sec:obscurity}).
+  \item An account of \textbf{what kind of claim this is}: derived from purposive
+        action rather than induced from observation, with an argument that no
+        observation could settle it, because every witness to an enacted case has
+        an interest in the answer (\S\ref{sec:method}).
+  \item \textbf{Four censoring mechanisms} that keep the crisis undiagnosable,
+        the fourth of which removes the response to the evidence and so survives
+        the evidence being published (\S\ref{sec:anosognosia}).
+  \item \textbf{Registry coding} of $352$ incidents that grounds the stipulations
+        and bounds what the argument may claim (\S\ref{sec:registry}).
+\end{enumerate}

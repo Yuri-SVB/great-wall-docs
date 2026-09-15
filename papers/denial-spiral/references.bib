@@ -1,0 +1,686 @@
+% ============================================================================
+%  Bibliography — The Deadly Race: a formal wrench-attack threat model
+% ============================================================================
+
+@misc{deadly-race,
+  author       = {da Silva Villas Boas, Yuri},
+  title        = {The Deadly Race: When Graceful Recovery Makes Coercion-Resistant
+                  Custody Worse Than Useless},
+  howpublished = {Companion paper; preprint},
+  note         = {DOI to be inserted. Develops the WDY adversary, the
+                  Non-Negative-Proof Principle, the Deadly Race Lemma, the
+                  No-Gray-Area Criterion and the Time-Gated Perceptual Oracle},
+  year         = {2026}
+}
+
+@misc{cwe656,
+  author       = {{MITRE}},
+  title        = {{CWE-656}: Reliance on Security Through Obscurity},
+  howpublished = {\url{https://cwe.mitre.org/data/definitions/656.html}},
+  note         = {``A protection mechanism whose strength depends heavily on its
+                  obscurity'' --- ``a significant risk if used as the primary
+                  means of protection''},
+  year         = {2024}
+}
+
+@misc{lopp-attacks,
+  author       = {Lopp, Jameson},
+  title        = {Known Physical Bitcoin Attacks},
+  howpublished = {\url{https://github.com/jlopp/physical-bitcoin-attacks}},
+  note         = {Community registry of documented ``\$5 wrench'' incidents.
+                  Coded at commit \texttt{9a4a62a} (2026-08-13), the state
+                  snapshotted in \texttt{registry-analysis/}; the registry is
+                  live and later revisions do not reproduce these figures},
+  year         = {2025}
+}
+
+@inproceedings{aft-wrench,
+  author    = {Ordekian, Marilyne and Atondo-Siu, Gilberto and
+               Hutchings, Alice and Vasek, Marie},
+  title     = {Investigating Wrench Attacks: Physical Attacks Targeting
+               Cryptocurrency Users},
+  booktitle = {6th Conference on Advances in Financial Technologies (AFT 2024)},
+  editor    = {B{\"o}hme, Rainer and Kiffer, Lucianna},
+  series    = {LIPIcs},
+  volume    = {316},
+  pages     = {24:1--24:24},
+  publisher = {Schloss Dagstuhl --- Leibniz-Zentrum f{\"u}r Informatik},
+  year      = {2024},
+  doi       = {10.4230/LIPIcs.AFT.2024.24}
+}
+
+@book{mises-human-action,
+  author    = {von Mises, Ludwig},
+  title     = {Human Action: A Treatise on Economics},
+  publisher = {Yale University Press},
+  year      = {1949},
+  note      = {The source of \emph{praxeology} as used here: economic theorems are
+               deduced from the fact of purposive action rather than induced from
+               observation, and history illustrates a theorem without being able to
+               verify or falsify it}
+}
+
+@book{semmelweis1861,
+  author    = {Semmelweis, Ignaz},
+  title     = {Die {\"A}tiologie, der Begriff und die Prophylaxis des Kindbettfiebers},
+  publisher = {C.~A. Hartleben},
+  address   = {Pest, Vienna and Leipzig},
+  year      = {1861},
+  note      = {English edition: \emph{The Etiology, Concept, and Prophylaxis of
+               Childbed Fever}, trans.\ K.~Codell Carter, University of Wisconsin
+               Press, 1983}
+}
+
+@book{carter-childbed,
+  author    = {Carter, K. Codell and Carter, Barbara R.},
+  title     = {Childbed Fever: A Scientific Biography of Ignaz Semmelweis},
+  publisher = {Greenwood Press},
+  year      = {1994},
+  note      = {Source for the reception history: the grounds on which the
+               chlorine-washing result was rejected, and the open letters that
+               followed the 1861 monograph}
+}
+
+@article{kerckhoffs1883,
+  author  = {Kerckhoffs, Auguste},
+  title   = {La cryptographie militaire},
+  journal = {Journal des sciences militaires},
+  volume  = {IX},
+  pages   = {5--38},
+  year    = {1883}
+}
+
+@article{dolev-yao,
+  author  = {Dolev, Danny and Yao, Andrew C.},
+  title   = {On the Security of Public Key Protocols},
+  journal = {IEEE Transactions on Information Theory},
+  volume  = {29},
+  number  = {2},
+  pages   = {198--208},
+  year    = {1983}
+}
+
+@article{shamir1979,
+  author  = {Shamir, Adi},
+  title   = {How to Share a Secret},
+  journal = {Communications of the ACM},
+  volume  = {22},
+  number  = {11},
+  pages   = {612--613},
+  year    = {1979}
+}
+
+@techreport{rsw1996,
+  author      = {Rivest, Ronald L. and Shamir, Adi and Wagner, David A.},
+  title       = {Time-lock Puzzles and Timed-release Crypto},
+  institution = {MIT Laboratory for Computer Science},
+  number      = {MIT/LCS/TR-684},
+  year        = {1996}
+}
+
+@inproceedings{argon2,
+  author    = {Biryukov, Alex and Dinu, Daniel and Khovratovich, Dmitry},
+  title     = {Argon2: New Generation of Memory-Hard Functions for Password
+               Hashing and Other Applications},
+  booktitle = {IEEE European Symposium on Security and Privacy (EuroS\&P)},
+  pages     = {292--302},
+  year      = {2016}
+}
+
+@inproceedings{depth-robust,
+  author    = {Alwen, Jo{\"e}l and Blocki, Jeremiah and Pietrzak, Krzysztof},
+  title     = {Depth-Robust Graphs and Their Cumulative Memory Complexity},
+  booktitle = {Advances in Cryptology --- EUROCRYPT 2017},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {10212},
+  pages     = {3--32},
+  publisher = {Springer},
+  year      = {2017}
+}
+
+@inproceedings{juels-coercion,
+  author    = {Juels, Ari and Catalano, Dario and Jakobsson, Markus},
+  title     = {Coercion-Resistant Electronic Elections},
+  booktitle = {Proceedings of the 2005 ACM Workshop on Privacy in the
+               Electronic Society (WPES)},
+  pages     = {61--70},
+  publisher = {ACM},
+  year      = {2005}
+}
+
+@inproceedings{bojinov-rubberhose,
+  author    = {Bojinov, Hristo and Sanchez, Daniel and Reber, Paul and
+               Boneh, Dan and Lincoln, Patrick},
+  title     = {Neuroscience Meets Cryptography: Designing Crypto Primitives
+               Secure Against Rubber Hose Attacks},
+  booktitle = {21st USENIX Security Symposium (USENIX Security)},
+  pages     = {129--141},
+  year      = {2012}
+}
+
+@article{monrose-keystroke,
+  author  = {Monrose, Fabian and Rubin, Aviel D.},
+  title   = {Keystroke Dynamics as a Biometric for Authentication},
+  journal = {Future Generation Computer Systems},
+  volume  = {16},
+  number  = {4},
+  pages   = {351--359},
+  year    = {2000}
+}
+
+@book{kahn-codebreakers,
+  author    = {Kahn, David},
+  title     = {The Codebreakers: The Story of Secret Writing},
+  edition   = {Revised},
+  publisher = {Scribner},
+  year      = {1996}
+}
+
+@inproceedings{canetti-deniable,
+  author    = {Canetti, Ran and Dwork, Cynthia and Naor, Moni and Ostrovsky, Rafail},
+  title     = {Deniable Encryption},
+  booktitle = {Advances in Cryptology --- CRYPTO 1997},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {1294},
+  pages     = {90--104},
+  publisher = {Springer},
+  year      = {1997}
+}
+
+@inproceedings{boneh-vdf,
+  author    = {Boneh, Dan and Bonneau, Joseph and B{\"u}nz, Benedikt and Fisch, Ben},
+  title     = {Verifiable Delay Functions},
+  booktitle = {Advances in Cryptology --- CRYPTO 2018},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {10991},
+  pages     = {757--788},
+  publisher = {Springer},
+  year      = {2018}
+}
+
+@inproceedings{grover1996,
+  author    = {Grover, Lov K.},
+  title     = {A Fast Quantum Mechanical Algorithm for Database Search},
+  booktitle = {28th Annual ACM Symposium on Theory of Computing (STOC)},
+  pages     = {212--219},
+  year      = {1996}
+}
+
+@inproceedings{grassl-grover-aes,
+  author    = {Grassl, Markus and Langenberg, Brandon and Roetteler, Martin and
+               Steinwandt, Rainer},
+  title     = {Applying {Grover's} Algorithm to {AES}: Quantum Resource Estimates},
+  booktitle = {Post-Quantum Cryptography --- 7th International Workshop
+               (PQCrypto 2016)},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {9606},
+  pages     = {29--43},
+  publisher = {Springer},
+  year      = {2016}
+}
+
+@misc{casa,
+  author       = {{Casa}},
+  title        = {Casa --- Collaborative Multisig Bitcoin Custody},
+  howpublished = {\url{https://casa.io/}},
+  note         = {2-of-3 / 3-of-5 multisig; client keys on separate devices plus a
+                  Casa co-signing key;
+                  archived at
+                  \url{http://archive.today/2026.09.03-165338/https://casa.io/}},
+  year         = {2026}
+}
+
+@misc{bitvault,
+  author       = {{BitVault}},
+  title        = {BitVault --- Time-Delayed Bitcoin Self-Custody},
+  howpublished = {\url{https://www.bitvault.sv/}},
+  note         = {Vendor site. Product claims verified against the live site
+                  2026-08-24; the ``publicly verifiable, making kidnapping attempts
+                  pointless'' formulation is no longer carried there and is treated
+                  in the text as a former formulation the vendor has acknowledged.
+                  Re-checked and archived 1 September 2026:
+                  \url{http://archive.today/2026.09.01-224759/https://www.bitvault.sv/\%23how-it-works}},
+  year         = {2026}
+}
+
+@misc{bssl,
+  author       = {Madonna, Francesco},
+  title        = {{B-SSL}: Bitcoin Secure Signing Layer},
+  howpublished = {Concept whitepaper (Apache-2.0), self-attributed to
+                  F.~Madonna of BitVault SA and published by a GitHub account
+                  identifying itself with the BitVault organization,
+                  \url{https://github.com/ilghan/bssl-whitepaper/blob/main/B-SSL_WP_Oct_11_2025.pdf},
+                  repository archived at \url{http://archive.today/2026.09.01-225748/https://github.com/ilghan/bssl-whitepaper/}.
+                  The cited PDF is 352{,}036 bytes,
+                  SHA-256 64a0c9c4b440ae8ff90a7ba8ecb62bacef3acf153753b9240
+                  aee17c8723f5320},
+  note         = {Dated 11 October 2025; not linked from the vendor's own site,
+                  and the attribution could not be authenticated further.
+                  Specifies a 2-of-3 whose paths carry timelocks: a
+                  configurable 2\,h--15\,d relative CSV primary and two
+                  multi-year absolute-CLTV fallbacks},
+  year         = {2025}
+}
+
+@misc{rewind-bitcoin,
+  author       = {{Rewind Bitcoin}},
+  title        = {Rewind Bitcoin --- Timelock Vaults with Rescue},
+  howpublished = {\url{https://rewindbitcoin.com/}},
+  note         = {archived at
+                  \url{http://archive.today/2026.09.03-170016/https://rewindbitcoin.com/}},
+  year         = {2025}
+}
+
+@misc{balland,
+  author       = {{DL News}},
+  title        = {Ledger Co-founder David Balland and Wife Kidnapped in France},
+  howpublished = {DL News,
+                  \url{https://www.dlnews.com/articles/regulation/ledger-cofounder-david-balland-and-wife-kidnapped-in-france/}},
+  note         = {archived at
+                  \url{http://archive.today/2026.09.03-171044/https://www.dlnews.com/articles/regulation/ledger-cofounder-david-balland-and-wife-kidnapped-in-france/}},
+  year         = {2025}
+}
+
+@misc{ratirl,
+  author       = {Lopp, Jameson},
+  title        = {Home Invasion and Torture of Streamer {RATIRL} (Sweden, 13 January 2026)},
+  howpublished = {Entry in \emph{Known Physical Bitcoin Attacks},
+                  \url{https://github.com/jlopp/physical-bitcoin-attacks}},
+  note         = {Registry incident: a League of Legends streamer who held no
+                  cryptocurrency was tortured for hours; attackers took only his
+                  Pok\'emon cards; 2 suspects arrested},
+  year         = {2026}
+}
+
+@misc{fisc-leak-2026,
+  author       = {{Journal du Coin}},
+  title        = {France: une employ\'ee du fisc vendait des informations
+                  confidentielles},
+  howpublished = {\url{https://journalducoin.com/actualites/france-employee-fisc-vendait-informations-confidentielles/}},
+  note         = {Reported 2026-01-07: an employee of the French tax
+                  administration placed under judicial investigation for
+                  illicit consultation of the internal ``Mira'' database and
+                  transmission of the results; investigators report queries
+                  targeting cryptocurrency investors. Allegations under
+                  investigation, not a conviction;
+                  archived at
+                  \url{http://archive.today/2026.01.09-094000/https://journalducoin.com/actualites/france-employee-fisc-vendait-informations-confidentielles/}},
+  year         = {2026}
+}
+
+@misc{certik-skynet-2026,
+  author       = {{CertiK}},
+  title        = {Skynet Wrench Attacks Report},
+  howpublished = {CertiK Skynet report,
+                  \url{https://www.certik.com/skynet-report/skynet-wrench-attacks-report}},
+  note         = {72 verified physical-coercion incidents globally in 2025
+                  (+75\% year on year); \$40.9M confirmed losses, stated to be
+                  under-reported; Europe over 40\% of incidents, France the
+                  highest national count;
+                  archived at
+                  \url{http://archive.today/2026.09.03-171000/https://www.certik.com/skynet-report/skynet-wrench-attacks-report}},
+  year         = {2026}
+}
+
+@misc{certik-intel3d-h1-2026,
+  author       = {{CertiK}},
+  title        = {Intel3D: {H1} 2026 Wrench Attacks},
+  howpublished = {CertiK Intel3D report,
+                  \url{https://www.certik.com/certik-report/intel3d/intel3d-wrench-h1-2026}},
+  note         = {52 verified incidents in H1 2026 (39 in H1 2025); \$124.1M
+                  losses against \$10.5M; home invasions 20 of 52, up from 1;
+                  France 33 of 52; targeting driven by leaked databases, tax
+                  records and exchange data. Sources include French Interior
+                  Ministry statements and court documents, independent of the
+                  physical-attack registry;
+                  archived at
+                  \url{http://archive.today/2026.09.03-170208/https://www.certik.com/certik-report/intel3d/intel3d-wrench-h1-2026}},
+  year         = {2026}
+}
+
+@misc{jade-erase-pin,
+  author       = {{Blockstream}},
+  title        = {How do {I} set up a wallet-erase {PIN}?},
+  howpublished = {Blockstream Help Center,
+                  \url{https://help.blockstream.com/blockstream-jade/faqs/how-do-i-set-up-a-wallet-erase-pin}},
+  note         = {Vendor documentation for the Jade wallet-erase PIN: an
+                  alternate PIN that deletes the recovery phrase from the
+                  device, described as ``especially useful in the event of a
+                  physical threat,'' displaying ``Internal Error'' on entry, and
+                  carrying the instruction to ``make sure you have a backup
+                  before proceeding.'' Accessed 2026-08-17;
+                  archived at
+                  \url{http://archive.today/2026.09.03-164738/https://help.blockstream.com/blockstream-jade/faqs/how-do-i-set-up-a-wallet-erase-pin}},
+  year         = {2026}
+}
+
+@misc{jade-duress-pin,
+  author       = {{Blockstream}},
+  title        = {Enable a duress {PIN}},
+  howpublished = {Blockstream Help Center,
+                  \url{https://help.blockstream.com/blockstream-jade/add-more-security-functionality/enable-a-duress-pin}},
+  note         = {Vendor documentation using ``duress PIN'' and ``wallet-erase
+                  PIN'' for the same erase feature: ``an alternate PIN that you
+                  can enable to automatically delete the encrypted wallet
+                  information from Jade if entered.'' Accessed 2026-08-17;
+                  archived at
+                  \url{http://archive.today/2026.09.03-164731/https://help.blockstream.com/blockstream-jade/add-more-security-functionality/enable-a-duress-pin}},
+  year         = {2026}
+}
+
+@misc{sparrow-best-practices,
+  author       = {{Sparrow Wallet}},
+  title        = {Best Practices},
+  howpublished = {Sparrow Wallet documentation,
+                  \url{https://sparrowwallet.com/docs/best-practices.html}},
+  note         = {Vendor guidance, tiered by holding size. At the first
+                  hardware-wallet tier: ``The hardware wallet should be stored
+                  securely along with a backup of the seed words (the latter
+                  ideally in a different location).'' Retrieved 2026-09-06; sha256
+                  \texttt{eb4acdf0\dots{}1e667af}; archived in
+                  \texttt{sources/web/sparrow-best-practices.html} and at
+                  \url{http://archive.today/2026.09.06-152816/https://sparrowwallet.com/docs/best-practices.html}},
+  year         = {2026}
+}
+
+@misc{sparrow-faq,
+  author       = {{Sparrow Wallet}},
+  title        = {Frequently Asked Questions},
+  howpublished = {Sparrow Wallet documentation,
+                  \url{https://www.sparrowwallet.com/docs/faq.html}},
+  note         = {Vendor documentation. Under ``How can I choose where my wallet
+                  is saved?'', the \texttt{-d} data-directory flag is documented
+                  with the claim that ``[t]his feature allows you to store all
+                  Sparrow data on removable media making for more plausible
+                  deniability.'' Retrieved 2026-09-06, sha256
+                  \texttt{0e0273dd\dots{}4a839e}; archived in
+                  \texttt{sources/web/sparrow-faq.html} and at
+                  \url{http://archive.today/2026.09.06-151741/https://www.sparrowwallet.com/docs/faq.html}},
+  year         = {2026}
+}
+
+@misc{jade-passphrase,
+  author       = {{Blockstream}},
+  title        = {How does a passphrase work on {Jade}?},
+  howpublished = {Blockstream Help Center,
+                  \url{https://help.blockstream.com/blockstream-jade/faqs/how-does-a-passphrase-work-on-jade}},
+  note         = {Vendor documentation for {BIP-39;
+                  archived at
+                  \url{http://archive.today/2026.09.03-164822/https://help.blockstream.com/blockstream-jade/faqs/how-does-a-passphrase-work-on-jade}} passphrases on Jade: the
+                  passphrase ``is added to your Jade's recovery phrase or SeedQR
+                  and is used to create your wallet,'' ``any number of
+                  passphrases can be entered to change the wallet you will log
+                  into,'' and ``your Blockstream Jade will not store your
+                  passphrase.'' Notably, the page makes no claim of deniability,
+                  decoy or duress use --- unlike the wallet-erase PIN pages.
+                  Accessed 2026-08-17},
+  year         = {2026}
+}
+
+@incollection{selten-kidnapping,
+  author       = {Selten, Reinhard},
+  title        = {A Simple Game Model of Kidnapping},
+  booktitle    = {Mathematical Economics and Game Theory: Essays in Honor of
+                  Oskar Morgenstern},
+  editor       = {Henn, Rudolf and Moeschlin, Otto},
+  series       = {Lecture Notes in Economics and Mathematical Systems},
+  volume       = {141},
+  pages        = {139--156},
+  publisher    = {Springer},
+  address      = {Berlin, Heidelberg},
+  year         = {1977},
+  note         = {The canonical game-theoretic model of kidnapping: a two-person
+                  sequential game between kidnapper and the hostage's family, in
+                  which the threat to execute is assumed credible \emph{even
+                  though the kidnapper cannot improve his situation by carrying
+                  it out}}
+}
+
+@article{iqbal-selten-extension,
+  author       = {Iqbal, Azhar and Masson, Virginie and Abbott, Derek},
+  title        = {Kidnapping Model: An Extension of {Selten}'s Game},
+  journal      = {Royal Society Open Science},
+  volume       = {4},
+  number       = {12},
+  pages        = {171484},
+  year         = {2017},
+  doi          = {10.1098/rsos.171484},
+  note         = {Relaxes Selten's assumption that the capture probability is
+                  independent of the hostage's fate, modelling the higher
+                  enforcement effort that follows an execution}
+}
+
+@article{lapan-sandler-bargain,
+  author       = {Lapan, Harvey E. and Sandler, Todd},
+  title        = {To Bargain or Not to Bargain: That Is the Question},
+  journal      = {American Economic Review},
+  volume       = {78},
+  number       = {2},
+  pages        = {16--21},
+  year         = {1988},
+  note         = {Papers and Proceedings. On precommitment to no-negotiation
+                  policies and deterrence expenditure --- the question of whether
+                  the encounter occurs, not of the game once it has}
+}
+
+@article{stigler-enforcement,
+  author       = {Stigler, George J.},
+  title        = {The Optimum Enforcement of Laws},
+  journal      = {Journal of Political Economy},
+  volume       = {78},
+  number       = {3},
+  pages        = {526--536},
+  year         = {1970},
+  doi          = {10.1086/259646},
+  note         = {Origin of marginal deterrence in the economic theory of crime:
+                  penalties must be graduated, or an offender already exposed to
+                  the maximum has no reason to stop short of the worse act}
+}
+
+@article{shavell-marginal-deterrence,
+  author       = {Shavell, Steven},
+  title        = {A Note on Marginal Deterrence},
+  journal      = {International Review of Law and Economics},
+  volume       = {12},
+  number       = {3},
+  pages        = {345--355},
+  year         = {1992},
+  note         = {Formal treatment of marginal deterrence; witness elimination is
+                  its standard illustration --- where the marginal sanction for a
+                  further killing is near zero, nothing deters it}
+}
+
+@misc{coldcard-trick-pins,
+  author       = {{Coinkite}},
+  title        = {Settings Menu --- Trick {PINs}},
+  howpublished = {COLDCARD Documentation,
+                  \url{https://coldcard.com/docs/settings/}},
+  note         = {Vendor documentation for the trick-PIN actions: \emph{Brick
+                  Self;
+                  archived at
+                  \url{http://archive.today/2026.09.03-164807/https://coldcard.com/docs/settings/}}, \emph{Wipe Seed}, \emph{Look Blank}, and a
+                  \emph{Duress Wallet} described as ``a personal safety
+                  feature'' --- ``If you must reveal a PIN under duress, give
+                  the duress PIN instead of your Main PIN.'' Accessed 2026-08-24},
+  year         = {2026}
+}
+
+@misc{coldcard-pin-entry,
+  author       = {{Coinkite}},
+  title        = {{PIN} Entry --- {COLDCARD} Firmware Documentation},
+  howpublished = {\url{https://github.com/Coldcard/firmware/blob/7fc656a/docs/pin-entry.md}},
+  note         = {Vendor firmware documentation. The duress wallet is derived
+                  from the real wallet by a one-way process; enabling the brick
+                  PIN warrants ``triple-check your backups are correct''; and on
+                  the case where the decoy is not believed, ``you may be asked
+                  what the actual duress PIN is, while under duress. We suggest
+                  providing the `brickme' PIN in that case.'' Accessed 2026-08-24},
+  year         = {2026}
+}
+
+@misc{trezor-wipe-deniability,
+  author       = {{brianddk}},
+  title        = {Add plausible deniability to wipe-code interface},
+  howpublished = {Issue \#2055, \url{https://github.com/trezor/trezor-firmware/issues/2055}},
+  note         = {Opened 2022-01-10: requests a user-defined message on wipe-code entry so an
+                  erasure can be presented as a hardware fault under duress, rather than the
+                  device reporting that the wipe code was entered. Closed as \emph{not planned;
+                  archived at
+                  \url{http://archive.today/2026.09.03-164059/https://github.com/trezor/trezor-firmware/issues/2055}}},
+  year         = {2022}
+}
+
+@misc{trezor-wipe-code,
+  author       = {{SatoshiLabs}},
+  title        = {Create Wipe Code to Erase Device},
+  howpublished = {Trezor Knowledge Base,
+                  \url{https://trezor.io/learn/security-privacy/personal-security-standards/create-wipe-code-to-erase-device}},
+  note         = {Vendor documentation calling the feature a ``self-destruct''
+                  {PIN;
+                  archived at
+                  \url{http://archive.today/2026.09.03-164822/https://trezor.io/learn/security-privacy/personal-security-standards/create-wipe-code-to-erase-device}} code which ``erases all private data, including the
+                  wallet backup (recovery seed).'' The page makes no mention of
+                  duress, coercion or physical threat. Accessed 2026-08-24},
+  year         = {2026}
+}
+
+@misc{block-coldcard-postmortem,
+  author       = {{Block, Inc.}},
+  title        = {Predictable {RNG} Fallback and 32-bit Reseed in {Coldcard} Firmware},
+  howpublished = {Block Engineering post-mortem,
+                  \url{https://engineering.block.xyz/blog/predictable-rng-fallback-and-32-bit-reseed-in-coldcard-firmware}},
+  note         = {Discovery write-up of the July 2026 seed-entropy incident:
+                  a preprocessor-guard defect, shipped in firmware v4.0.0
+                  (2021-03-17), left a fallback software PRNG as the silent
+                  production entropy path;
+                  archived at
+                  \url{http://archive.today/2026.08.06-112407/https://engineering.block.xyz/blog/predictable-rng-fallback-and-32-bit-reseed-in-coldcard-firmware}},
+  year         = {2026}
+}
+
+@misc{coinkite-entropy,
+  author       = {{Coinkite Inc.}},
+  title        = {Entropy Technical Backgrounder},
+  howpublished = {Coldcard vendor post-mortem and advisory,
+                  \url{https://blog.coinkite.com/entropy-technical-backgrounder/}},
+  note         = {Vendor's candid account of the defect; fixed firmware for
+                  all affected models by 2026-08-01; seeds created with 50+
+                  fair, independent dice rolls deemed not at risk;
+                  archived at
+                  \url{http://archive.today/2026.09.03-171027/https://blog.coinkite.com/entropy-technical-backgrounder/}},
+  year         = {2026}
+}
+
+@misc{coindesk-coldcard,
+  author       = {{CoinDesk}},
+  title        = {How Bitcoin Cold Wallets Lost \$70 Million in an Attack That
+                  Never Touched the Devices},
+  howpublished = {CoinDesk,
+                  \url{https://www.coindesk.com/tech/2026/08/01/how-bitcoin-cold-wallets-lost-usd70-million-in-an-attack-that-never-touched-the-devices}},
+  note         = {First-wave figures: 1,082.65 BTC (about \$70M) drained from
+                  1,196 addresses in a 41-minute window on 2026-07-30, per
+                  Galaxy Research's mapping;
+                  archived at
+                  \url{http://archive.today/2026.08.01-211808/https://www.coindesk.com/tech/2026/08/01/how-bitcoin-cold-wallets-lost-usd70-million-in-an-attack-that-never-touched-the-devices}},
+  year         = {2026}
+}
+
+% ── Companion technical documentation (author's public design record) ──────
+
+@misc{gw-design,
+  author       = {da Silva Villas Boas, Yuri},
+  title        = {Burning Ship Encoder --- Design Document},
+  howpublished = {Technical documentation,
+                  \url{https://github.com/Yuri-SVB/great-wall-docs/blob/main/great-wall-core/DESIGN.md}},
+  note         = {Public-facing protocol and instantiation-parameter reference},
+  year         = {2026}
+}
+
+@misc{gw-threatmodel,
+  author       = {da Silva Villas Boas, Yuri},
+  title        = {Coercion-Resistant Self-Custody --- Threat Model and Design Record},
+  howpublished = {Technical documentation,
+                  \url{https://github.com/Yuri-SVB/great-wall-docs/blob/main/great-wallet/THREAT_MODEL.md}},
+  year         = {2026}
+}
+
+@misc{gw-cpnf,
+  author       = {da Silva Villas Boas, Yuri},
+  title        = {A Spaced-Repetition Companion for Setup Recall},
+  howpublished = {Technical documentation,
+                  \url{https://github.com/Yuri-SVB/great-wall-docs/blob/main/great-wallet/ARCHITECTURE.md}
+                  (memorization-assistant module)},
+  year         = {2026}
+}
+
+@misc{gw-flyingturtle,
+  author       = {da Silva Villas Boas, Yuri},
+  title        = {Flying Turtle --- Outsourced Anonymous Timelock},
+  howpublished = {Technical documentation,
+                  \url{https://github.com/Yuri-SVB/great-wall-docs/blob/main/great-wallet/ARCHITECTURE.md}
+                  (Flying Turtle module)},
+  year         = {2026}
+}
+
+@misc{gw-fourprops,
+  author       = {da Silva Villas Boas, Yuri},
+  title        = {The Four Properties and Tacit Knowledge-Based Authentication (TKBA)},
+  howpublished = {Technical documentation,
+                  \url{https://github.com/Yuri-SVB/great-wall-docs/blob/main/great-wallet/ARCHITECTURE.md}
+                  and \url{https://github.com/Yuri-SVB/great-wall-docs/blob/main/justification-and-economics/JUSTIFICATION.pdf}},
+  year         = {2026}
+}
+
+@misc{gw-justification,
+  author       = {da Silva Villas Boas, Yuri},
+  title        = {Justification and Economics: The Security Cost of Bitcoin Self-Custody},
+  howpublished = {Technical report,
+                  \url{https://github.com/Yuri-SVB/great-wall-docs/blob/main/justification-and-economics/JUSTIFICATION.pdf}},
+  year         = {2026}
+}
+
+@misc{gw-timechain-salt,
+  author       = {da Silva Villas Boas, Yuri},
+  title        = {A Memorization-Free, Precomputation-Resistant Salt from the
+                  Bitcoin Timechain},
+  howpublished = {Companion paper (Namtso),
+                  \url{https://github.com/Yuri-SVB/namtso-the-sacred-salt}},
+  year         = {2026}
+}
+
+@misc{tlt-servicios,
+  author       = {{Tus Llaves, Tus Bitcoin}},
+  title        = {Servicios},
+  howpublished = {Self-custody consultancy service listing,
+                  \url{https://tusllavestusbtc.com/\#servicios}},
+  note         = {paid tiers from \$100 to \$600 USD; lists ``Passphrase
+                  (tu b\'oveda se\~nuelo) --- Billetera se\~nuelo + billetera
+                  real. Protecci\'on ante coacci\'on/coerci\'on''.
+                  Accessed 2026-09-01;
+                  archived at
+                  \url{http://archive.today/2026.09.03-170027/https://tusllavestusbtc.com/\%23servicios}},
+  year         = {2026}
+}
+
+@misc{bsg-passphrase,
+  author       = {{Bitcoin Security Guide}},
+  title        = {Passphrases},
+  howpublished = {\url{https://bitcoinsecurity.org/guide/passphrase/}},
+  note         = {instructs the holder to keep a small decoy balance on the bare
+                  seed as ``what you'd hand over under physical coercion'', and
+                  that ``for this to work, the decoy balance must be believable''.
+                  Accessed 2026-09-01;
+                  archived at
+                  \url{http://archive.today/2026.09.03-170047/https://bitcoinsecurity.org/guide/passphrase/}},
+  year         = {2026}
+}
+
+@misc{ong-autocustodia,
+  author       = {{Ong Bitcoin Argentina}},
+  title        = {Lunes de Autocustodia --- Programa \#2},
+  howpublished = {Live self-custody programme,
+                  \url{https://www.youtube.com/live/X_cCwJubekQ}},
+  note         = {archived at
+                  \url{http://archive.today/2026.09.03-171910/https://www.youtube.com/live/X_cCwJubekQ}},
+  year         = {2026}
+}

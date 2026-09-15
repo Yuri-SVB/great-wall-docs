@@ -1,0 +1,73 @@
+% ══════════════════════════════════════════════════════════════════════════
+\section{What this paper borrows}
+\label{sec:model}
+% ══════════════════════════════════════════════════════════════════════════
+
+Everything in this section is developed in the companion~\cite{deadly-race} and
+restated here only so that this paper can be read alone. Notation: $\Victim$ is
+the holder, $\Attacker$ the coercer, $\Kset$ the \emph{spend authority} --- the
+set of states from which the stash can be spent, a single key being one case ---
+and $t$ the coercion-time budget.
+
+\begin{assumption}[The Wrench--Dolev--Yao (WDY) adversary]\label{ass:power}
+$\Attacker$ knows the protocol and the design landscape (Kerckhoffs), can seize
+every device co-located with $\Victim$, and can coerce $\Victim$ for a bounded
+time $t$. He is \emph{priced}: he holds a value $W$ for the stash and a cost $c$
+for a homicide, and he acts to maximise expected return. The construction is
+\emph{a fortiori} --- he is granted strictly more than a real coercer, so a bar
+cleared against him is cleared against the real one.
+\end{assumption}
+
+\begin{assumption}[Non-Negative-Proof Principle, NNPP]\label{lem:nnpl}
+$\Victim$ cannot prove the non-existence of an undisclosed backup. Non-possession
+is a negative existential over everything in $\Victim$'s reach, the last site
+being whether $\Victim$ has forgotten or never memorised. $\Attacker$ therefore
+cannot be brought to certainty by any disclosure $\Victim$ makes.
+\end{assumption}
+
+\noindent Two consequences of NNPP carry the weight here. First, cooperation
+cannot dispel the incentive: no act of disclosure closes the question, so
+compliance buys no guaranteed release~\cite[Cor.~1]{deadly-race}. We refer to
+this as the \textbf{disclosure corollary}.\label{cor:disclosure} Second, a denial
+is a claim $\Attacker$ has both an incentive to disbelieve and no means of
+settling --- which is the hinge of \S\ref{sec:spiral}.
+
+\begin{definition}[Naive coercion resistance]\label{def:naive-cr}
+A protocol is \textbf{naively coercion-resistant} if it \emph{may} resist a
+\emph{sub-Kerckhoffs} attacker --- one with the physical capabilities but lacking
+knowledge of the design --- because denial, decoy or obscurity may work when the
+attacker does not know $\Victim$'s setup. Both hedges are load-bearing: the
+guarantee is contingent on the attacker's \emph{ignorance}, not on any structural
+property, and so offers none against the full WDY adversary. This is the tier the
+whole obscurity class occupies.
+\end{definition}
+
+\noindent Where the companion's stronger tiers are needed we name them in prose:
+a protocol is \emph{weakly} resistant if a single encounter leaves a
+feasible-but-unfinished path and so a positive-pivotality state, and
+\emph{strongly} resistant if no reachable state has positive
+pivotality~\cite[\S3]{deadly-race}.
+
+\begin{lemma}[Deadly Race, after~{\cite[Lem.~1]{deadly-race}}]\label{lem:drl}
+If, on release, $\Attacker$ holds a feasible path to $\Kset$ while $\Victim$
+retains one too, then $\Victim$ is \emph{pivotal}: removing him raises
+$\Attacker$'s win probability by $\pi > 0$, and the removal pays whenever
+$(1-p_A)\,W > c$. The \textbf{No-Gray-Area Criterion} is the resulting design
+bar --- admit no such state.\label{prin:nga}
+\end{lemma}
+
+\noindent Finally, the companion's \emph{Four Properties} are used here only to
+locate the obscurity class. They are \textbf{(\ref{p:know})} knowledge-based
+authentication, \textbf{(\ref{p:indiv})} individual custody,
+\textbf{(\ref{p:nonob})} non-obscurity --- which \emph{is} the Kerckhoffs premise
+--- and \textbf{(\ref{p:coerc})} coercion resistance:
+\begin{enumerate}[nosep,leftmargin=2.4em,label=\textbf{(\arabic*)},ref=\arabic*]
+  \item\label{p:know} knowledge-based authentication (deviceless);
+  \item\label{p:indiv} individual custody;
+  \item\label{p:nonob} non-obscurity;
+  \item\label{p:coerc} coercion resistance.
+\end{enumerate}
+Clearing the bar while holding all four forces the \emph{tacit}
+route~\cite[Cor.~3]{deadly-race}; the alternative that keeps a winning racer
+beyond the attacker's reach we call the \textbf{remote-delegate}
+route.\label{r:remotewinner}

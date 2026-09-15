@@ -1,0 +1,180 @@
+\documentclass[a4paper,11pt]{article}
+
+% ============================================================================
+%  The Denial Spiral — companion to The Deadly Race
+%  First LaTeX manuscript. Source: papers/deadly-race-coercion-resistance.md,
+%  great-wallet/THREAT_MODEL.md, next-steps/coercion-resistant-orbit-protocol.md
+% ============================================================================
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=24mm]{geometry}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+% break long URLs anywhere, so bibliography links do not run into the margin
+\usepackage{xurl}
+%% let TeX stretch interword space rather than overflow a line;
+%% 2em is the least that clears every box on this branch
+\setlength{\emergencystretch}{2em}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,shapes.geometric,calc}
+
+% ── Paper palette ──────────────────────────────────────────────────────────
+\definecolor{accent}{HTML}{2F6F4E}
+\definecolor{accentdark}{HTML}{234F38}
+\definecolor{accentlight}{HTML}{EBF3EE}
+\definecolor{darktext}{HTML}{1E1E1E}
+\definecolor{graytext}{HTML}{646464}
+\definecolor{attackcol}{HTML}{C0392B}
+
+% ── TikZ / BPMN-style figure styles ────────────────────────────────────────
+\tikzset{
+  gwflow/.style  = {draw=darktext, -{Stealth[length=2mm]}, semithick},
+  gwevent/.style = {circle, draw=accentdark, fill=accentlight, minimum size=9mm,
+                    inner sep=1pt, align=center, font=\small\bfseries},
+  gwstate/.style = {circle, draw=graytext, fill=white, minimum size=7mm,
+                    inner sep=1pt, align=center, font=\small},
+  gwtask/.style  = {rounded corners=3pt, draw=accentdark, fill=accentlight,
+                    align=center, inner sep=4pt, font=\small},
+  gwgate/.style  = {diamond, aspect=1.7, draw=accentdark, fill=white,
+                    align=center, inner sep=1pt, font=\footnotesize},
+  gwkill/.style  = {circle, draw=attackcol, line width=1.1pt, fill=white,
+                    minimum size=11mm, inner sep=1pt, align=center,
+                    font=\small\bfseries, text=attackcol},
+  gwend/.style   = {circle, draw=darktext, line width=1pt, fill=white,
+                    minimum size=11mm, inner sep=1pt, align=center, font=\small},
+  gwlabel/.style = {font=\footnotesize\itshape, text=graytext},
+}
+
+\hypersetup{colorlinks=true, linkcolor=accentdark, urlcolor=accentdark,
+            citecolor=accentdark,
+            pdftitle={The Denial Spiral: how a norm of denial
+                      Coercion-Resistant Custody Worse Than Useless},
+            pdfauthor={Yuri da Silva Villas Boas}}
+
+% ── Headers / footers ──────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[R]{\small\textit{\color{graytext}The Denial Spiral}}
+\fancyfoot[C]{\small\color{graytext}\thepage}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\small\color{graytext}\thepage}}
+
+% ── Section styling ────────────────────────────────────────────────────────
+\titleformat{\section}{\large\bfseries\color{accent}}{\thesection}{0.7em}{}
+  [\vspace{-0.5em}{\color{accent}\rule{\textwidth}{0.4pt}}]
+\titleformat{\subsection}{\normalsize\bfseries\color{darktext}}{\thesubsection}{0.6em}{}
+
+% ── Theorem environments ───────────────────────────────────────────────────
+\newtheoremstyle{gw}{0.6em}{0.6em}{\itshape}{}{\bfseries\color{accentdark}}{.}{.5em}{}
+\theoremstyle{gw}
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
+\newtheorem{criterion}{Criterion}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\newtheorem{stipulation}{Stipulation}
+\newtheorem{definition}{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+% ── Notation shorthands ────────────────────────────────────────────────────
+\newcommand{\Hcheap}{\mathsf{H}}
+\newcommand{\Hhard}{\mathsf{H}^{\!*}}
+\newcommand{\Sh}{\mathit{Sh}}
+\newcommand{\TLP}{\mathsf{TLP}}
+\newcommand{\sftstar}{64^{*}}
+\newcommand{\Victim}{\mathcal{V}}
+\newcommand{\Attacker}{\mathcal{A}}
+\newcommand{\Kset}{\mathcal{K}}
+\newcommand{\cmark}{\textcolor{accent}{\checkmark}}
+\newcommand{\xmark}{\textcolor{attackcol}{\ensuremath{\times}}}
+\newcommand{\qmark}{\textcolor{graytext}{\textbf{?}}}
+
+\begin{document}
+
+% ════════════════════════════════════════════════════════════════════════════
+% TITLE
+
+\thispagestyle{plain}
+\begin{center}
+{\fontsize{22}{26}\selectfont\bfseries\color{accent}The Denial Spiral}\\[8pt]
+{\large How a Norm of Denial Prolongs Coercion,\\
+ and Why the Field Cannot Measure the Damage}\\[7pt]
+{\normalsize\itshape\color{graytext}Companion to \emph{The Deadly Race}: the obscurity
+ class, its\\ commons, and four mechanisms that censor its record}\\[12pt]
+{\color{accent}\rule{78mm}{0.5pt}}\\[9pt]
+{\small\color{graytext}Yuri da Silva Villas Boas \textperiodcentered{} Working paper, v1, September 2026}
+\end{center}
+
+\vspace{6pt}
+
+\begin{abstract}
+\noindent Its companion~\cite{deadly-race} derives a bar for coercion-resistant
+custody and shows that designs leaving a \emph{feasible-but-unfinished} path
+manufacture an incentive to kill the holder. This paper takes up the other
+mechanism the same model yields, and the reason neither can be read off the
+record.
+
+Denial credibility is a \textbf{common resource}: supplied by the population of
+holders, consumed by each holder who denies. A norm of concealment and coached
+denial depletes it, so that a denial carries no information and the rational
+continuation of an interrogation opening with one is \emph{further coercion}
+rather than release. We name this the \textbf{Denial Spiral}, show it is the
+Obscurity Paradox run in reverse, and show that its cost is an \emph{externality}
+--- borne by whoever must be believed, including holders of designs that deplete
+nothing, and including people who hold no bitcoin at all.
+
+We then classify what the industry ships against that mechanism --- wallet-erase
+PINs, duress PINs, decoy passphrase wallets, and one vendor-documented instance
+of concealment marketed as deniability --- and find the class fails under
+Kerckhoffs by construction, on the vendors' own documentation.
+
+Finally we ask why a crisis this visible resists diagnosis, and give four
+compounding censoring mechanisms. Three remove the evidence: the exposure
+covariate is unmeasurable because obscurity does not advertise itself, the
+numerator is misclassified because a robbery whose victim is killed is recorded
+as a homicide, and the residue is held by bereaved families with no reason to
+speak. The fourth removes the \emph{response}, and so survives publication:
+conceding is privately costly to whoever concedes while recalcitrance externalises
+the cost --- a commons problem one level up, with the field's own capacity to
+self-correct as the depleted resource. Coding of $352$ registry incidents grounds
+the argument and bounds what it can claim.
+
+The results are \emph{derived}, not measured, and we say why no observation could
+settle them: every witness to an enacted case has an interest in the answer, so
+the instrument that would test the model is disabled by the mechanism the model
+describes.
+\end{abstract}
+
+\vspace{2pt}
+\noindent\small\textbf{Keywords:}
+Bitcoin; self-custody; wrench (physical-coercion) attacks; obscurity; plausible
+deniability; duress code; Denial Spiral; Obscurity Paradox; praxeology; security
+economics; externalities; commons.\normalsize
+
+\vspace{4pt}
+
+\input{sections/01-introduction}
+\input{sections/02-model}
+\input{sections/03-obscurity-class}
+\input{sections/04-spiral}
+\input{sections/05-method}
+\input{sections/06-anosognosia}
+\input{sections/07-registry}
+\input{sections/08-conclusion}
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

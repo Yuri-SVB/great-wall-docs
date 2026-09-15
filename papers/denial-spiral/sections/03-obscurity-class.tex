@@ -1,0 +1,327 @@
+%% ==========================================================================
+\section{The obscurity class, and what vendors claim for it}
+\label{sec:obscurity}
+%% ==========================================================================
+
+
+The designs above interpose a delay or a veto. A large and widely shipped class
+does something categorically different: it \emph{erases}. An alternate PIN, when
+entered, destroys the device's copy of the secret. Blockstream's Jade documents
+such a PIN under both of the names its help center uses for it --- \emph{duress}
+and \emph{wallet-erase} --- as an alternate PIN that ``automatically delete[s]
+the encrypted wallet information from Jade if entered,'' presented as
+``especially useful in the event of a physical threat, as you can provide this
+PIN to an attacker.'' On entry the device reports only ``Internal Error,'' so
+that the erasure reads as a
+malfunction~\cite{jade-duress-pin,jade-erase-pin}.
+
+Grant the design the strength it genuinely has, and which the delay
+architectures above lack. The erasure is \emph{instantaneous and covert}:
+$\Attacker$ learns of it only once it is complete, so there is no interval in
+which he can intervene to prevent it. Nothing in what follows turns on
+$\Attacker$ out-racing the mechanism, because he cannot.
+
+\medskip\noindent\textbf{The claim decomposes, and only one half is real.} What
+the design offers $\Victim$ is not one mechanism but two, stacked and easily
+conflated:
+\begin{enumerate}[nosep,leftmargin=2.4em,label=(\alph*),ref=\alph*]
+  \item\label{sd:erase} \emph{the erasure} --- a genuine, irreversible state
+        change, which happens whatever $\Attacker$ knows or believes; and
+  \item\label{sd:belief} \emph{the belief} that nothing further remains to be
+        had --- manufactured by the ``Internal Error'' report and the return to
+        setup, which are engineered to read as breakage rather than as a move.
+        This is a \emph{presentation} choice and not a property of erasure as
+        such; Remark~\ref{rem:vendor-claims} records a vendor asked directly for
+        it who declined.
+\end{enumerate}
+Only~\ref{sd:erase} is Kerckhoffs-independent. The whole question is how much
+coercion resistance it carries on its own, and the answer, from the vendor's own
+instructions, is \emph{none}.
+
+The same documentation warns that afterwards ``there is no way to regain access
+to your funds except by restoring using your recovery phrase,'' and directs the
+holder to ``make sure you have a backup before
+proceeding''~\cite{jade-erase-pin}. The feature therefore \emph{presupposes} a
+surviving backup: a holder who follows the documentation has one, and a holder
+who does not has destroyed the stash rather than defended it. What
+erasure removes is thus not the secret but the \emph{device path} to it --- and a
+path that cost $\Attacker$ nothing to lose, since \ref{sd:erase} leaves
+$\Victim$ alive, present, and still holding everything needed to restore. In the
+ideal model \ref{sd:erase} contributes exactly nothing to the floor, for the same
+reason a stage below the memory-hard chain contributes nothing to it
+(the shallow-stage null result in~\cite{deadly-race}): what is reachable without work is not a barrier.
+
+All of the design's protective content therefore sits in~\ref{sd:belief}, which
+is an obscurity bet and nothing else. This is the configuration
+Criterion~\ref{prin:nga} forbids, and NNPP (Assumption~\ref{lem:nnpl}) is what
+makes it hold: $\Attacker$ cannot verify that no further copy exists --- and here
+he need not even reason his way to the suspicion, since the manual states that
+one should. He is therefore correct, by the design's own construction, to read
+the erasure as the closing of one route rather than the end of the matter. The
+route that remains runs through $\Victim$'s memory of a seed phrase, or of where
+a backup is kept: the erasure has deleted the path that required hurting no one
+and retained the path that does.
+
+\begin{remark}[The obscure self-destruct is the obscure scheme with no winning branch]
+\label{rem:two-ignorances}
+Obscure defenses are usually compared by \emph{how likely} $\Attacker$ is to be
+ignorant. The sharper comparison is \emph{how many} independent ignorances each
+one needs, and here the self-destruct is strictly the worse bet --- worse, in
+particular, than the decoy it is commonly sold beside.
+
+A decoy needs one premise: that $\Attacker$ does not know decoys exist. Grant him
+that ignorance and the decoy \emph{terminates the encounter} --- he leaves with a
+plausible balance and a story that closes.
+
+A self-destruct needs two, and they are independent. It needs $\Attacker$ ignorant
+of the feature (sub-Kerckhoffs), so that he reads the failure as breakage rather
+than as a deliberate move; and it needs him ignorant of NNPP's consequence
+(sub-NNPP), so that he does not reason to an undisclosed backup. The second is
+not implied by the first, and this is the design's central weakness: \emph{even
+total success at the first leaves the encounter open.} ``This device is broken''
+does not entail ``this person has no bitcoin''; it entails that the instrument
+for reaching it is broken, whose natural sequel is the question \emph{where is
+your backup?} --- addressed to a $\Victim$ who is still present and still knows.
+
+So the self-destruct fails against an informed $\Attacker$ for the ordinary
+Kerckhoffs reason, and against an ignorant one it fails anyway, because the
+belief it manufactures does not discharge the encounter. It is the one obscure
+scheme with no branch on which it wins.
+
+We did not have to derive that regress: a vendor documents it. Coldcard ships
+trick PINs whose actions include a duress wallet --- ``a personal safety
+feature\ldots{} If you must reveal a PIN under duress, give the duress PIN
+instead of your Main PIN'' --- alongside \emph{Brick Self} and \emph{Wipe
+Seed}~\cite{coldcard-trick-pins}. Its firmware documentation then addresses the
+case where the decoy is not believed, and its advice is to escalate to
+destruction: ``you may be asked what the actual duress PIN is, while under
+duress. We suggest providing the `brickme' PIN in that
+case''~\cite{coldcard-pin-entry}. That is the manufacturer contemplating an
+$\Attacker$ who knows decoys exist, and recommending, as the answer, an
+irreversible erasure performed with $\Victim$ still in the room and still able
+to be asked for a backup --- the ignorance-count argument above, arrived at
+independently and published as guidance. The same document instructs the holder
+to ``triple-check your backups are correct'' before enabling that PIN, so the
+backup presupposition of \S\ref{sec:obscurity} is not peculiar to one vendor
+either.
+
+The same page goes further, in two admissions worth quoting because a vendor
+rarely makes them. The first concedes that the decoy is distinguishable to the
+$\Attacker$ who bothers: ``if you are somehow facing an attacker who is willing
+to verify he has the real main PIN, it's possible that careful analysis of system
+responses will imply he's working with the duress PIN.'' The remedy offered is
+not a repair but a request --- ``if you discover any sequences that reveal this
+easily, please tell us and we'll see if we can cover them up
+better''~\cite{coldcard-pin-entry}. That is obscurity stated as a maintenance
+programme, and it is the clearest statement we have found of what
+Property~\ref{p:nonob} rules out. What is being defended is not that the decoy is
+indistinguishable, but that no one has yet published how to distinguish it; the
+defence is administered by patching the disclosures as they arrive. A scheme
+whose security is the current state of the disclosure backlog is exactly the
+scheme whose guarantee $\Victim$ cannot invoke in the room, because $\Victim$
+cannot know which sequences $\Attacker$ has read.
+
+The second admission is the denial move itself, offered where bricking is
+unpalatable: ``alternatively, you can say you set the duress PIN once, but have
+since forgotten it.'' The escalation to destruction and this are the document's
+two exits, and both are the naive tier. The claim \emph{I have forgotten it} is a
+proposition about $\Victim$'s own knowledge, and NNPP
+(Assumption~\ref{lem:nnpl}) is precisely the observation that $\Victim$ cannot
+close it: there is no move that converts a true \emph{I cannot} into an
+$\Attacker$-verifiable one, and by Definition~\ref{def:naive-cr} the scheme's
+fate on that branch is decided by whether he believes it. The vendor has
+enumerated the branches and found, on each, a bluff.
+
+That the line is published guidance sharpens rather than softens it, in the way
+Remark~\ref{rem:decoy-market} describes for the coached decoy. A script printed
+in a manufacturer's manual is a script $\Attacker$ can read as easily as
+$\Victim$; the sentence that teaches the excuse also teaches that the excuse is
+taught. Its credibility declines in proportion to its circulation, and the
+holder who most needs it inherits the discount without ever having been told it
+exists.
+\end{remark}
+
+\begin{remark}[The class, and what each vendor actually claims for it]
+\label{rem:vendor-claims}
+Three vendors ship the pair, which is what makes this a design consensus rather
+than one firm's misstep; but they do not make the same claims, and the
+difference is worth recording precisely. Blockstream markets the \emph{erasure}
+for physical threat while claiming nothing of the kind for its passphrase
+wallets. Coldcard markets \emph{both} halves, describing the duress wallet as a
+safety feature and the brick PIN as the fallback when it fails. Trezor is the
+mirror image of Blockstream: its passphrase wallets are sold on deniability,
+while its wipe code --- which the vendor itself calls a ``self-destruct'' PIN,
+and which erases the recovery seed with it --- is documented without any mention
+of duress, coercion or physical threat~\cite{trezor-wipe-code}. That vendor was
+moreover asked, in January 2022, to make the wipe \emph{concealable}: a
+user-defined message on entry, so that an erasure could be presented as a
+hardware fault rather than announcing itself. The request was closed as \emph{not
+planned}, and the device still reports the wipe
+plainly~\cite{trezor-wipe-deniability}. Component~\ref{sd:belief} is therefore
+not intrinsic to the self-destruct class at all: it is a presentation one vendor
+builds and another, asked for it directly, refused. What \S\ref{sec:obscurity}
+analyses under~\ref{sd:belief} is specific to the ``Internal Error'' design, and
+a wipe that announces itself carries \ref{sd:erase} alone --- which, by the
+argument above, is no coercion resistance at all, and is not sold as any. Two of the three
+therefore decline to make the coercion claim on one of their two mechanisms. We
+note it because the criterion is not advanced against vendors, and a vendor that
+ships a mechanism without claiming it defeats coercion has not made the error
+this section is about.
+\end{remark}
+
+\begin{remark}[Two bluffs the erasure invites]\label{rem:erase-bluffs}
+An $\Attacker$ who knows the design (Assumption~\ref{ass:power}) need not walk
+into the erasure at all. Two alternatives stand open to him, each a wager rather
+than a certainty:
+\begin{enumerate}[nosep,leftmargin=1.6em]
+  \item \emph{Take the device hostage up front.} Rather than enter any PIN,
+        seize the device and hold it as a hostage token (the hostage-token property in~\cite{deadly-race},
+        the hostage-token remark in~\cite{deadly-race}). An erase PIN is irrelevant to a coercer who
+        never authenticates; and by the backup-probe remark in~\cite{deadly-race} the terms on
+        which $\Victim$ ransoms the device are themselves a probe for the very
+        backups $\Victim$ cannot disprove.
+  \item \emph{Coerce against deployment.} Brutalize $\Victim$ to deter the PIN's
+        use in the first place, wagering that a holder under sufficient duress
+        will not spend the one irreversible move available to them.
+\end{enumerate}
+Neither wager is sure to pay, and that is precisely the point: both are bluff
+games, and the holder who has bet on an erasure has entered one without holding
+the means to end it. A $\Victim$ who erases and then \emph{truthfully} denies
+retaining any backup arrives at the position the registry already records --- the
+streamer whose denial was simply disbelieved, and who was tortured for hours
+regardless~\cite{ratirl} (\S\ref{sec:registry}).
+\end{remark}
+
+The ``Internal Error'' disguise inherits the same objection from a different
+direction: it is a bet on $\Attacker$'s ignorance of a consumer product, and it
+degrades exactly as that product's own public documentation becomes known
+(the Four-Properties development in~\cite{deadly-race}). The class therefore lands in the \textbf{naive} tier of
+the time-gating tiers in~\cite{deadly-race} precisely as that definition describes it --- an
+obscure self-destruct, safe only against a sub-Kerckhoffs attacker --- and it is
+worth keeping the self-destruct distinct from the \emph{cancel} key named
+alongside it there. A cancel reverses a pending action and thereby names a second
+racer; a self-destruct destroys a path and names none. Only the former is subject
+to Lemma~\ref{lem:drl}, which is why the two fail differently despite sharing a
+tier. the perceptual-oracle variants in~\cite{deadly-race} has already disposed of the tier as a
+whole, by the dilemma that an $\Attacker$ whose ignorance can be assumed makes
+the elaborate mechanism unnecessary, and one whose ignorance cannot makes it
+ineffective; the present subsection is that dilemma instantiated in a shipping
+product.
+
+\medskip\noindent\textbf{The companion decoy, classified separately.} The same
+device ships a second and quite different obscure mechanism, and the two should
+not be run together. A BIP-39 passphrase ``is added to your Jade's
+recovery phrase or SeedQR and is used to create your wallet''; ``any number of
+passphrases can be entered to change the wallet you will log into''; and the
+device ``will not store your passphrase''~\cite{jade-passphrase}. Distinct
+passphrases therefore yield distinct wallets from one recovery phrase, and the
+familiar community practice is to keep a low-balance wallet at the empty
+passphrase to be surrendered under coercion.
+
+Two observations. First, and to the vendor's credit, \emph{Blockstream does not
+market it this way}: the passphrase documentation claims no deniability, decoy
+or duress use, in pointed contrast to the erase-PIN pages, which name physical
+threat explicitly. The duress framing here is the community's,
+not the manufacturer's, and the distinction is worth preserving in any account of
+who claimed what.
+
+Second, the mechanism is the plausible-deniability layer already treated in
+the Four-Properties development in~\cite{deadly-race} and dismissed for the same Kerckhoffs reason: it rests on
+$\Attacker$'s ignorance, and an $\Attacker$ who knows that passphrase wallets
+exist simply persists past the surrendered one, with NNPP guaranteeing $\Victim$
+cannot close the question. It is not, however, the \emph{same} failure as the
+self-destruct's, and by Remark~\ref{rem:two-ignorances} it is the less bad of the
+two: the decoy at least has a branch on which it wins, since an $\Attacker$ who
+believes it has been paid and can leave. The self-destruct has none. That a
+single product ships both, marketing only the weaker one for physical threat, is
+the clearest illustration in this section of how little the design space has been
+mapped against the Criterion.
+
+\begin{remark}[A vendor-documented instance of the naive tier]\label{rem:hidden-medium}
+The decoy's duress framing was the community's, not the manufacturer's. One vendor
+does make the claim in its own documentation. Sparrow's FAQ, answering ``How can I
+choose where my wallet is saved?'', documents a data-directory flag and adds that
+``[t]his feature allows you to store all Sparrow data on removable media making for
+more plausible deniability''~\cite{sparrow-faq}.
+
+The feature does not guard the asset. Sparrow's own best-practice page has the seed
+words backed up separately from the device, ``ideally in a different
+location''~\cite{sparrow-best-practices} --- so the concealed directory is neither
+necessary nor sufficient for $\Kset$. A Kerckhoffs $\Attacker$ coerces the seed
+backup, loads it into a wallet of his own, and never touches the concealed medium at
+all. What is left for the medium to do is carry the holder's belief that, having
+surrendered what was found, they may now say there is nothing more. The decoy at
+least stands between $\Attacker$ and the coins; this stands nowhere near them.
+
+That is Definition~\ref{def:naive-cr} exactly --- a guarantee contingent on
+$\Attacker$'s ignorance, here of a \emph{documented} feature --- and the continuation
+is the one the registry records. A denial offered into the prevailing norm is
+pre-discredited (Corollary~\ref{cor:disclosure}), so the rational continuation of an
+interrogation that opens with one is more coercion, and the truthful denier is
+brutalized alongside the lying one (\S\ref{sec:registry}). The feature adds nothing
+but the confidence to make the denial.
+\end{remark}
+
+\begin{remark}[The decoy is sold, and coached for credibility]\label{rem:decoy-market}
+The decoy is not merely a practice the community tolerates; it is a product and a
+curriculum. A Spanish-language self-custody consultancy lists, among paid service
+tiers, ``\emph{Passphrase (tu b\'oveda se\~nuelo)} --- Billetera se\~nuelo +
+billetera real. Protecci\'on ante coacci\'on/coerci\'on'' --- a decoy wallet
+marketed, in as many words, as protection against coercion~\cite{tlt-servicios}.
+Published guidance goes further and coaches the performance: one guide has the
+holder keep a small balance on the bare seed as ``what you'd hand over under
+physical coercion'', and adds that ``for this to work, the decoy balance must be
+\emph{believable} --- enough to look like a real wallet, not enough to devastate
+you if lost''~\cite{bsg-passphrase}. The counsel is also delivered live: one of us
+appeared as guest on a self-custody programme~\cite{ong-autocustodia} in which the
+host worked through a decoy-construction walkthrough over the guest's contrary
+advice.
+
+That last instruction is the naive tier stated as a training objective. A decoy
+need be believable only to an $\Attacker$ who might disbelieve it, and the
+counsel is silent on what happens when he does --- which, by
+Definition~\ref{def:naive-cr}, is the whole question. A better-rehearsed lie
+raises the chance $\Attacker$ takes the bait at the margin; it does not create a
+branch on which the scheme wins against an $\Attacker$ who knows decoys exist,
+and NNPP (Assumption~\ref{lem:nnpl}) guarantees $\Victim$ cannot close that
+question however well the performance goes. What is sold as a mechanism is a
+wager on the attacker's ignorance, priced and taught as though it were a control.
+
+The counsel is also self-defeating in aggregate. Publicised training raises the
+\emph{prior} that a fluent denial was rehearsed: once $\Attacker$ knows credibility
+is taught and sold, fluency stops being evidence of truth and becomes evidence of
+coaching. The remedy degrades the thing it sells --- and not only for its
+customers. A holder who never trained now denies into an $\Attacker$ who discounts
+fluent denial generally, so the cost falls on people who bought nothing. This is
+the Obscurity Paradox (Remark~\ref{rem:obscurity-paradox}) run backwards: there, a
+public non-obscure design makes $\Victim$'s claims \emph{more} plausible; here, a
+public obscure training makes them \emph{less}.
+\end{remark}
+
+\begin{remark}[The Obscurity Paradox --- non-obscure designs strengthen obscure ones]
+\label{rem:obscurity-paradox}
+TGPO enters neither bluff. There is nothing to erase, the deep secret having
+never been on the device (the floor theorem in~\cite{deadly-race}), and so nothing whose
+non-deployment can be coerced. But the comparison yields more than the absence
+of a failure mode, and the surplus runs in a direction the obscurity argument
+would not predict.
+
+An obscure defense asks $\Attacker$ to believe a \emph{claim} --- that this is
+the only wallet, that nothing further remains --- against both an incentive to
+disbelieve it and, by NNPP, no means of settling it. A non-obscure defense
+changes what making that claim costs, and it does so by the mechanism set out in
+the adversary-education remark in~\cite{deadly-race}: an $\Attacker$ who credits that an
+effective mechanism is in place is crediting that lying is not $\Victim$'s only
+available tool, and a holder with effective alternatives has correspondingly
+less reason to resort to one.
+
+The ordering this inverts is worth stating plainly, and we name it \textbf{the
+Obscurity Paradox}: \emph{a publicly specified, Kerckhoffs-clean design improves
+the standing of precisely those obscure denials it was built to make
+unnecessary.} Obscurity remains unsound as a primary defense, for the reasons
+the Four-Properties development in~\cite{deadly-race} gives. It is not, however, indifferent which design it
+accompanies --- a denial made from within a mechanism that removes the need to
+lie is a stronger denial than the same words spoken from within one that
+requires it. The same asymmetry has an epistemic cost, taken up next
+(Remark~\ref{rem:anosognosia}).
+\end{remark}
