@@ -516,6 +516,24 @@ registry codes (\S\ref{sub:empirical}). A design can be innocent of one and guil
 the other, which is why they are named apart.
 \end{remark}
 
+\begin{corollary}[The Spiral is not a sixth axis either]\label{cor:spiral-equiv}
+Whether a design \emph{depletes} the denial commons is equivalent to its failing
+Property~\ref{p:nonob}. A design whose operation requires the holder to deny --- a
+decoy, a concealed erasure --- adds a scripted denial to the population and lowers what
+any denial is worth; a design that does not, and whose specification is public, does the
+reverse, since a denial made from within it is consistent with an ordinary setup rather
+than being the script (Remark~\ref{rem:obscurity-paradox}). Depletion therefore tracks
+non-obscurity exactly, and a Denial Spiral column would reproduce that one as surely as
+a no-hostage column would reproduce Property~\ref{p:know}.
+
+\emph{Exposure} is a different matter, and it is not a property of any design. The
+Spiral's cost is ambient: it falls on whoever must be believed, including the holder of
+a design that depletes nothing, and including the person who holds no bitcoin at all ---
+which is the RATIRL case (\S\ref{sub:empirical}) and the reason the externality is
+worth naming. No column can carry that, because no column has a row for the people it
+lands on.
+\end{corollary}
+
 \begin{remark}[What kind of claim these are --- a praxeological reading]\label{rem:praxeology}
 Neither the Race nor the Spiral is an empirical hypothesis awaiting corroboration, and
 it is worth saying plainly why, because the alternative reading invites a demand this
@@ -669,15 +687,15 @@ statement: each shipping design buys (or tries to buy) coercion resistance by
 property and \emph{still} fails. TGPO is the only design holding all four.
 \begin{center}\footnotesize
 \renewcommand{\arraystretch}{1.3}
-\begin{tabularx}{\linewidth}{@{}l cccc X@{}}
+\begin{tabularx}{\linewidth}{@{}l ccccc >{\raggedright\arraybackslash}X@{}}
 \toprule
-\textbf{Design} & \textbf{(\ref{p:know})\,Know.} & \textbf{(\ref{p:indiv})\,Indiv.} & \textbf{(\ref{p:nonob})\,Non-ob.} & \textbf{(\ref{p:coerc})\,Coerc.} & \textbf{What it trades} \\
+\textbf{Design} & \textbf{(\ref{p:know})\,Know.} & \textbf{(\ref{p:indiv})\,Indiv.} & \textbf{(\ref{p:nonob})\,Non-ob.} & \textbf{(\ref{p:coerc})\,Coerc.} & \textbf{DR-safe} & \textbf{What it trades} \\
 \midrule
-\textbf{TGPO} (this work) & \cmark & \cmark & \cmark & \cmark & holds all four (tacit; \ref{r:removerace}) \\
-Rewind Bitcoin               & \xmark & \xmark & \cmark & \cmark & individual custody: a remote delegate (\ref{r:remotewinner}) \\
-BitVault                     & \qmark & \xmark & \qmark & \xmark & individual custody both ways --- denial blocks the user, collusion spends past three years \\
-Casa                         & \cmark & \xmark & \cmark & \cmark & custody shared with remote co-signer\\
-Self-destruct PIN            & \xmark & \cmark & \xmark & \xmark & non-obscurity: the erasure must read as malfunction (Coldcard, Jade) \\
+\textbf{TGPO} (this work) & \cmark & \cmark & \cmark & \cmark & \cmark & holds all four (tacit; \ref{r:removerace}) \\
+Rewind Bitcoin               & \xmark & \xmark & \cmark & \cmark & \cmark & individual custody: a remote delegate (\ref{r:remotewinner}) \\
+BitVault                     & \qmark & \xmark & \qmark & \xmark & \xmark & individual custody both ways --- denial blocks the user, collusion spends past three years \\
+Casa                         & \cmark & \xmark & \cmark & \cmark & \cmark & custody shared with remote co-signer\\
+Self-destruct PIN            & \xmark & \cmark & \xmark & \xmark & \cmark & non-obscurity: the erasure must read as malfunction (Coldcard, Jade) \\
 \bottomrule
 \end{tabularx}
 \end{center}
@@ -685,7 +703,20 @@ Self-destruct PIN            & \xmark & \cmark & \xmark & \xmark & non-obscurity
 (deviceless --- the secret is knowledge, never a device or a location) row, because
 every competitor keeps a \emph{transmissible} secret on a device. The fifth property
 of \S\ref{sub:hostage} adds no column: by Corollary~\ref{cor:hostage-equiv} it is
-\emph{equivalent} to that one, so it would reproduce it cell for cell. \textbf{Rewind}
+\emph{equivalent} to that one, so it would reproduce it cell for cell. Neither does the
+Denial Spiral, for the reason Corollary~\ref{cor:spiral-equiv} gives.
+
+\emph{The \textbf{DR-safe} column is not derivable from the other four}, and that is why
+it is there. It asks the criterion directly --- does a single encounter leave a state of
+positive pivotality? --- and the answer does not track the properties: \textbf{Rewind}
+forfeits two of them and is DR-safe nonetheless, clearing by \ref{r:remotewinner}, while
+\textbf{BitVault} forfeits them and is not. The \textbf{self-destruct PIN} is the
+instructive row: it is DR-safe and still condemned, because a self-destruct destroys a
+path and names no second racer, so Lemma~\ref{lem:drl} does not reach it --- its failure
+is non-obscurity, a different one. The column is worth reading for what it does
+\emph{not} say: four of the five shipping designs clear the bar this paper defines. The
+claim was never that every deployed countermeasure is lethal. TGPO's mark is subject to
+the bounded residual conceded in \S\ref{sec:residual-dr}. \textbf{Rewind}
 trades individual custody for a remote delegate (\ref{r:remotewinner}). \textbf{Casa}'s collaborative
 multisig --- the client's keys on separate hardware plus a Casa co-signing key ---
 trades individual custody: the co-signer is a remote party, and a coercion-resistant
