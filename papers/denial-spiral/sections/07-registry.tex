@@ -1,0 +1,207 @@
+%% ==========================================================================
+\section{Empirical grounding in the registry}
+\label{sec:registry}
+%% ==========================================================================
+
+
+The two stipulations that lean on the physical-attack registry~\cite{lopp-attacks}
+--- the coercion-time budget $t$ (the limitations section in~\cite{deadly-race}) and the murder-cost weighing of the
+residual-window analysis (the residual deadly-race window in~\cite{deadly-race}) --- admit directional empirical support. The registry records each
+incident only as \emph{date, victim, location, headline}; it carries no duration or
+outcome field, so we code the $352$ incident headlines (at commit \texttt{9a4a62a}) by
+keyword. The coding is coarse and the categories overlap; a reproducible script
+accompanies the paper.\footnote{\texttt{registry-analysis/} in the source tree gives
+the exact keyword patterns, per-year counts, and caveats.} Several things stand out.
+
+\emph{The attack is frequent and worsening.} Recorded incidents climb from a handful
+a year before 2017 to a peak of $85$ in 2025 --- growth the companion asserts and
+this coding counts.
+
+\emph{The terminal move is real.} At least $5.1\%$ ($18/352$) of headlines record a
+\emph{killed} or \emph{murdered} victim. A homicide is usually reported as a homicide,
+not as a ``Bitcoin attack'', so this is a \emph{lower} bound --- yet even so it shows
+the assassination outcome the Deadly-Race Lemma (Lemma~\ref{lem:drl}) predicts is
+attested in practice, and that the cost $c$ is weighed against an action attackers
+demonstrably take.
+
+That censoring compounds with a second: obscurity does not advertise itself, so no
+victim's exposure to an obscurity-dependent design is on record either. The
+numerator is censored by how the terminal event is classified and the covariate by
+what vendors do not say, which is why the pattern cannot be read off the data and
+the bar has to be derived instead (Remark~\ref{rem:anosognosia}).
+
+\emph{A separately sourced count agrees on the trend.} The registry is a
+media-sourced convenience sample, so an independent base matters. Industry
+threat-intelligence reporting --- assembled from law-enforcement disclosures,
+court documents, interior-ministry statements and victim testimony rather than
+from the registry --- records $72$ verified incidents in 2025, up $75\%$ year on
+year, with confirmed losses of \$$40.9$M that the report itself calls an
+undercount~\cite{certik-skynet-2026}; and $52$ incidents in the first half of
+2026 against $39$ a year earlier, with losses of \$$124.1$M against
+\$$10.5$M~\cite{certik-intel3d-h1-2026}. Stricter verification yields counts
+below the registry's headline sweep, as expected; the direction, the European
+concentration, and the category mix agree. Two features bear directly on this
+paper. Reported \emph{home invasions} rose from $1$ to $20$ of $52$ incidents
+year on year --- coercion is moving to where the holder lives, which is the
+setting the model assumes. And their \emph{confirmed} homicide count is far below
+our headline coding ($1$ in the half-year, against our $18$ over twelve years),
+which is what two different evidentiary bars should produce and which reinforces
+that the share coded here is a floor, not an estimate.
+
+\emph{Short attacks dominate; the registry over-counts the dramatic.} Most wrench
+attacks are \emph{hand-over-now} events --- a threat, an immediate transfer, minutes
+on scene; the long, cinematic kidnapping is the exception. A media-sourced registry
+inverts this, because a mutilation-kidnapping is news where a knifepoint mugging is
+not, so the kidnap share coded below \emph{over}-states the long tail rather than
+establishing it. That tacit knowledge-based authentication (TKBA,~\cite[\S2]{deadly-race})
+is realistically \emph{less} effective against a
+long-duration attack --- where hours of pen-and-paper effort under coercion
+\emph{might} walk a deep stage --- is granted, but it is \emph{speculative} pending
+the field study of the limitations section in~\cite{deadly-race}. What is \emph{not} speculative is that the
+fielded alternatives fail; the cases below make that concrete.
+
+\begin{center}\small
+\begin{tabular}{@{}lrr@{}}
+\toprule
+\textbf{Signal (headline keyword coding)} & \textbf{Incidents} & \textbf{Share} \\
+\midrule
+Killed / murdered victim \emph{(a lower bound)} & $18$  & $5.1\%$  \\
+Kidnap / hostage / ransom (long-hold)           & $139$ & $39.5\%$ \\
+Armed robbery at gunpoint (short-hold)          & $101$ & $28.7\%$ \\
+Home invasion / break-in / raid                 & $40$  & $11.4\%$ \\
+Torture or physical violence                    & $82$  & $23.3\%$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent Categories overlap (a kidnapping may also be violent or fatal) and do not
+sum to $100\%$; shares are of all $352$ incidents, and the modality labels are a
+headline proxy, not a measured duration. The sample is media-reported and
+survivorship-biased --- deterred, unreported, and silently-fatal cases are absent ---
+so every figure is directional and the fatality share in particular is a floor.
+Remark~\ref{rem:anosognosia} gives the two mechanisms that censor it, and why they
+leave the diagnosis unavailable rather than merely imprecise.
+
+\medskip\noindent\textbf{The mix is not universal, and the Lemma's bite tracks it.} The
+global shares above average over jurisdictions whose compositions differ by an order of magnitude.
+Taking the ratio of long-hold to short-hold codings, $K{:}G$:
+
+\begin{center}\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+\textbf{Jurisdiction} & \textbf{$n$} & \textbf{Kidnap} & \textbf{Gunpoint} & \textbf{$K{:}G$} \\
+\midrule
+Brazil \emph{(small $n$)}  & $12$  & $75.0\%$ & $8.3\%$  & $9.0$ \\
+France                     & $61$  & $57.4\%$ & $8.2\%$  & $7.0$ \\
+\emph{All incidents}       & $352$ & $39.5\%$ & $28.7\%$ & $1.4$ \\
+United States              & $59$  & $28.8\%$ & $40.7\%$ & $0.7$ \\
+Russia \emph{(small $n$)}  & $10$  & $30.0\%$ & $50.0\%$ & $0.6$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent The comparison that carries weight is France against the United States: the two largest
+national subsets, of near-identical size ($61$ and $59$), with \emph{inverted} compositions --- a
+tenfold difference in $K{:}G$. This is the sharpest available check on the media-inflation caveat
+just stated. That caveat explains a \emph{level} --- why the registry over-counts dramatic incidents
+everywhere --- but it cannot explain this \emph{ordering} without the further claim that French
+reporting is ten times more kidnap-selective than American, in a market that is at least as heavily
+covered. The parsimonious reading is that modality composition genuinely varies with local
+conditions --- firearm availability, the presence of organized kidnap-for-ransom capability --- as
+it does for kidnapping outside this domain entirely.
+
+Two confounds remain and are not dismissed. Outside France and the United States the subsets are
+too small to carry an argument, so the other rows are directional only. And the coding is applied to
+English-language headlines, several of them translations, so a systematic vocabulary difference ---
+French sources reaching for ``kidnapped'' where American ones reach for ``robbed at gunpoint'' ---
+would produce part of this spread without any difference in the underlying events.
+
+If the composition is real, it matters for scope rather than for validity. The Deadly-Race Lemma
+(Lemma~\ref{lem:drl}) is a statement about the \emph{released} holder, and release is the trigger
+(the release-trigger remark in~\cite{deadly-race}); a hand-over-now robbery at gunpoint approximates the clean
+$p_A = 1$ endpoint --- the attacker takes what is reachable and leaves --- whereas a multi-hour hold
+ending in a deliberate release is exactly the gray outcome. Coercion risk is therefore not merely
+higher in some jurisdictions but \emph{differently shaped}, and the No-Gray-Area Criterion
+(Criterion~\ref{prin:nga}) does its work where long holds dominate. That is the regime the record is
+currently growing into: France alone accounts for a majority of the incidents recorded in 2026.
+
+\medskip\noindent\textbf{The attacker often does not need the holder at all.} A fourth
+signal falls outside the keyword table because it was coded by hand: in $12$ of the $352$
+incidents ($3.4\%$) the person seized was \emph{not} a holder but a relative held to compel
+one --- a parent, a spouse, an adult child.\footnote{Keyword screening surfaced $16$ candidates;
+each was read individually and four were discarded as false positives, including one in which
+``son of'' named a \emph{perpetrator} rather than a victim. \texttt{registry-analysis/} carries the
+screen and the full audited list. Because the coding reads a one-line headline, an incident that
+does not name a relative is no evidence that none was involved: $3.4\%$ is a floor, and the coding
+can only understate it.} Two features of this subset matter more than its size.
+
+It is \emph{recent and concentrating}: eleven of the twelve fall in 2023 or later, and \emph{nine}
+occur in a single jurisdiction (France) whose recorded incidents rose from about one a year through
+2024 to $22$ in 2025 and $34$ by August 2026. Whatever share of that rise is genuine incidence
+rather than reporting intensity, the tactic is not a historical scatter; it is being adopted.
+
+It is \emph{not} the hostage token of the hostage-token property in~\cite{deadly-race}, and the difference matters. There the
+leverage is a \emph{seizable object} the protocol requires, which devicelessness removes by leaving
+no such object; here it is a \emph{person}, whom no custody design renders unseizable. What this
+subset shows in the field is the no-delegate-coercion clause of~\cite{deadly-race} failing:
+such an attacker needs no
+cryptographic access and no cooperation a protocol could withhold --- only leverage, and a
+relative supplies it. This bears directly on the delegated route~(\ref{r:remotewinner}), whose
+clearance rests on the deciding party lying beyond $\Attacker$'s coercive reach. The delegate a
+holder is most likely to actually appoint --- a spouse, a parent, an adult child --- is precisely
+the party this subset shows being seized. The route is not thereby refuted: it is bounded. A
+delegate who is reachable is not a second racer but a second victim, so \ref{r:remotewinner}
+clears the bar only for delegates whose unreachability is structural rather than assumed --- and
+that requirement, not the arrangement's convenience, is what the data prices.
+
+\medskip\noindent\textbf{A case in point --- Balland.} The January 2025 abduction of
+David Balland, a co-founder of the hardware-wallet maker Ledger~\cite{balland}, is
+instructive precisely because it is an \emph{embarrassment to the self-custody creed}.
+A professional champion of self-custody was seized from his home and mutilated --- a
+finger severed to force payment --- and neither wealth nor prominence prevented it. He
+was freed by an elite \emph{state} police unit, and the ransom --- paid not by Balland
+but by an associate --- was clawed back largely because part of it moved in a
+\emph{centralized} stablecoin whose issuer could freeze it. A self-custody pioneer
+made whole by the state and by centralization: two mechanisms external to, and in
+tension with, the creed. Only the issuer freeze is independently verifiable; the
+remainder rests on the parties' accounts, according to which roughly $5\%$ was never recovered.
+The case also indicts the delegated route (\ref{r:remotewinner}): an associate
+\emph{did} pay, which is exactly the no-delegate-coercion clause of~\cite{deadly-race}
+assumes away --- a real instance of the indirect coercion,
+routed through the victim's body to a third party who will not refuse. For a brief
+hand-over-now robbery a remote delegate is unreachable in time and so seems to help;
+but merely \emph{not carrying} the device --- leaving the wallet in a home vault ---
+does the same, while for the long attack the delegate is not out of reach but is the
+ransom channel itself. The lesson is not that Balland erred: it is that, against a
+determined long-hold attacker, the fielded options collapse to state rescue and
+centralized freezing, whereas the tacit route removes the leverage --- no standing
+device, no hostage token, no delegate to pay --- rather than relying on ex-post
+recovery.
+
+\medskip\noindent\textbf{A case in point --- RATIRL.}\label{par:ratirl} The registry coded above records
+the obscurity route's failure directly. In one of its 2026 incidents (Sweden, 13
+January)~\cite{ratirl} a League of Legends streamer was bound and tortured for hours by
+armed intruders demanding cryptocurrency he denied holding; unable to credit the
+denial, they persisted long past any value the robbery could rationally return,
+leaving finally with only his Pok\'emon-card collection. This is
+Corollary~\ref{cor:disclosure} in the field: where the community norm is ``deny that
+you own Bitcoin,'' a coerced denial is \emph{pre-discredited} --- presumed to be the
+denial-script --- so a Kerckhoffs-educated $\Attacker$ gets no exculpatory update, and
+the rational continuation of an interrogation that opens with a denial is \emph{more}
+coercion, not less. The case fixes the
+\emph{sign}: obscurity does not merely fail to protect --- it can convert a robbery
+into a torture --- \emph{negative} coercion resistance, not a mere absence. And it does so on \emph{every}
+reading of the denial, which forks three ways --- each indicting obscurity.
+\textbf{(i)}~If the denial was a defensive lie (there was a stash), secrecy still did
+not avert the assault --- a textbook Kerckhoffs failure --- and his only residual
+recourse is to \emph{double down} on it and wager against a repeat. \textbf{(ii)}~If it
+was true (no stash), he bore obscurity's \emph{negative externality}: a genuine
+non-holder attacked only because real holders are coached to look exactly like him ---
+the very coaching that collapses the statistical holder/non-holder distinction.
+\textbf{(iii)}~If the truth is in between --- a real but smaller-than-presumed stash,
+too small to be worth the judicial exposure the attack incurred --- \emph{both}
+pathologies operate at once: others' obscurity redirected the attack onto him, and his
+own failed to stop it. That all three are simultaneously plausible is itself the
+verdict: in the aggregate, across a growing population of holders and lookalikes, each
+is already occurring --- and the obscurity culture, exactly as Kerckhoffs predicts,
+prevents none of them.

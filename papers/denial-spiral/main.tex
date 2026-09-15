@@ -1,7 +1,7 @@
 \documentclass[a4paper,11pt]{article}
 
 % ============================================================================
-%  The Deadly Race — a formal wrench-attack threat model
+%  The Denial Spiral — companion to The Deadly Race
 %  First LaTeX manuscript. Source: papers/deadly-race-coercion-resistance.md,
 %  great-wallet/THREAT_MODEL.md, next-steps/coercion-resistant-orbit-protocol.md
 % ============================================================================
@@ -57,15 +57,15 @@
 
 \hypersetup{colorlinks=true, linkcolor=accentdark, urlcolor=accentdark,
             citecolor=accentdark,
-            pdftitle={The Deadly Race: When Graceful Recovery Makes
-                      Coercion-Resistant Custody Worse Than Useless},
+            pdftitle={The Denial Spiral: How a Norm of Denial Prolongs Coercion,
+                      and Why the Field Cannot Measure the Damage},
             pdfauthor={Yuri da Silva Villas Boas}}
 
 % ── Headers / footers ──────────────────────────────────────────────────────
 \pagestyle{fancy}
 \fancyhf{}
 \renewcommand{\headrulewidth}{0pt}
-\fancyhead[R]{\small\textit{\color{graytext}The Deadly Race}}
+\fancyhead[R]{\small\textit{\color{graytext}The Denial Spiral}}
 \fancyfoot[C]{\small\color{graytext}\thepage}
 \fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\small\color{graytext}\thepage}}
 
@@ -105,81 +105,76 @@
 
 % ════════════════════════════════════════════════════════════════════════════
 % TITLE
-% ════════════════════════════════════════════════════════════════════════════
+
 \thispagestyle{plain}
 \begin{center}
-{\fontsize{22}{26}\selectfont\bfseries\color{accent}The Deadly Race}\\[8pt]
-{\large When Graceful Recovery Makes Coercion-Resistant Custody\\
- Worse Than Useless}\\[7pt]
-{\normalsize\itshape\color{graytext}A formal threat model for physical-coercion
- (``wrench'') attacks,\\ and a construction that clears it}\\[12pt]
+{\fontsize{22}{26}\selectfont\bfseries\color{accent}The Denial Spiral}\\[8pt]
+{\large How a Norm of Denial Prolongs Coercion,\\
+ and Why the Field Cannot Measure the Damage}\\[7pt]
+{\normalsize\itshape\color{graytext}Companion to \emph{The Deadly Race}: the obscurity
+ class, its\\ commons, and four mechanisms that censor its record}\\[12pt]
 {\color{accent}\rule{78mm}{0.5pt}}\\[9pt]
-{\small\color{graytext}Yuri da Silva Villas Boas \textperiodcentered{} Working paper, v2, September 2026}
+{\small\color{graytext}Yuri da Silva Villas Boas \textperiodcentered{} Working paper, v1, September 2026}
 \end{center}
 
 \vspace{6pt}
 
 \begin{abstract}
-\noindent This paper contributes a \emph{design bar} for coercion-resistant
-custody and a \emph{construction} that meets it, motivated by a sharp negative
-result: custody designs that lack such a bar can be \emph{worse than useless} ---
-worse than merely a false sense of security, which would be bad enough ---
-actively endangering the holder they claim to protect. Physical-coercion
-(``wrench'') attacks defeat custody schemes that key management and cryptography
-treat as out of scope. We give a \emph{formal model} of coercion against a
-secret-holder and prove that a large class of
-``graceful'' recovery designs --- those that leave a device seizure holding a
-\emph{feasible-but-unfinished} path to the secret --- are strictly worse than
-useless: they manufacture a material incentive to \emph{assassinate} the
-victim. We name this the \textbf{Deadly Race}, derive it from a single
-impossibility (one cannot prove one has forgotten), and distill a design bar ---
-the \textbf{No-Gray-Area Criterion} --- that any coercion-resistant scheme must
-clear. We then present a construction --- the \textbf{Time-Gated Perceptual
-Oracle} (TGPO) --- that clears the bar for the Bitcoin self-custody setting
-while keeping custody \emph{individual},
-and we locate a shipping alternative --- timelock-rescue vaults --- precisely:
-it clears the same bar by the \emph{other} available route, at the cost of a
-trusted third party. We also classify the most widely shipped consumer
-countermeasure --- the self-destruct (``wallet-erase'') PIN --- and find it
-clears nothing: the vendor's own documentation presupposes a surviving backup,
-so the erasure removes the device path while leaving intact the path that runs
-through the holder. The framework fixes a bar; it does not claim TGPO is
-the unique construction that clears it.
+\noindent Its companion~\cite{deadly-race} derives a bar for coercion-resistant
+custody and shows that designs leaving a \emph{feasible-but-unfinished} path
+manufacture an incentive to kill the holder. This paper takes up the other
+mechanism the same model yields, and the reason neither can be read off the
+record.
+
+Denial credibility is a \textbf{common resource}: supplied by the population of
+holders, consumed by each holder who denies. A norm of concealment and coached
+denial depletes it, so that a denial carries no information and the rational
+continuation of an interrogation opening with one is \emph{further coercion}
+rather than release. We name this the \textbf{Denial Spiral}, show it is the
+Obscurity Paradox run in reverse, and show that its cost is an \emph{externality}
+--- borne by whoever must be believed, including holders of designs that deplete
+nothing, and including people who hold no bitcoin at all.
+
+We then classify what the industry ships against that mechanism --- wallet-erase
+PINs, duress PINs, decoy passphrase wallets, and one vendor-documented instance
+of concealment marketed as deniability --- and find the class fails under
+Kerckhoffs by construction, on the vendors' own documentation.
+
+Finally we ask why a crisis this visible resists diagnosis, and give four
+compounding censoring mechanisms. Three remove the evidence: the exposure
+covariate is unmeasurable because obscurity does not advertise itself, the
+numerator is misclassified because a robbery whose victim is killed is recorded
+as a homicide, and the residue is held by bereaved families with no reason to
+speak. The fourth removes the \emph{response}, and so survives publication:
+conceding is privately costly to whoever concedes while recalcitrance externalizes
+the cost --- a commons problem one level up, with the field's own capacity to
+self-correct as the depleted resource. Coding of $352$ registry incidents grounds
+the argument and bounds what it can claim.
+
+The results are \emph{derived}, not measured, and we say why no observation could
+settle them: every witness to an enacted case has an interest in the answer, so
+the instrument that would test the model is disabled by the mechanism the model
+describes.
 \end{abstract}
 
 \vspace{2pt}
-\noindent\small\textbf{Keywords:} 
-Bitcoin; self-custody; wrench (physical-coercion) attacks; coercion resistance;
-Kerckhoffs's principle; Deadly Race; No-Gray-Area Criterion; 
-Tacit Knowledge-Based Authentication; Time-Gated Perceptual Oracle; memorization;
-hostage token; duress code; Obscurity Paradox; Denial Spiral; praxeology;
-shared custody; geographic custody.\normalsize
+\noindent\small\textbf{Keywords:}
+Bitcoin; self-custody; wrench (physical-coercion) attacks; obscurity; plausible
+deniability; duress code; Denial Spiral; Obscurity Paradox; praxeology; security
+economics; externalities; commons.\normalsize
 
 \vspace{4pt}
 
 \input{sections/01-introduction}
 \input{sections/02-model}
-\input{sections/03-deadly-race}
-\input{sections/04-construction}
-\input{sections/05-classification}
-\input{sections/06-quantum-note}
-\input{sections/07-related-work}
-\input{sections/08-limitations}
-\input{sections/09-ethics}
-\input{sections/10-conclusion}
+\input{sections/03-obscurity-class}
+\input{sections/04-spiral}
+\input{sections/05-method}
+\input{sections/06-anosognosia}
+\input{sections/07-registry}
+\input{sections/08-conclusion}
 
-% ── Availability ────────────────────────────────────────────────────────────
-\paragraph*{Availability.}
-TGPO is implemented in an open-source reference application
-(\url{https://github.com/Yuri-SVB/Great-Wallet}); the protocol's public design
-documentation and the registry-coding script behind \S\ref{sub:empirical} are
-maintained at \url{https://github.com/Yuri-SVB/great-wall-docs}.
-
-\appendix
-\input{sections/A-game-definition}
-
-% ════════════════════════════════════════════════════════════════════════════
-\bibliographystyle{unsrt}
+\bibliographystyle{plain}
 \bibliography{references}
 
 \end{document}
