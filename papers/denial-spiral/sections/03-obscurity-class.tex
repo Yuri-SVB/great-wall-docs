@@ -52,15 +52,23 @@ reason a stage below the memory-hard chain contributes nothing to it
 (the shallow-stage null result in~\cite{deadly-race}): what is reachable without work is not a barrier.
 
 All of the design's protective content therefore sits in~\ref{sd:belief}, which
-is an obscurity bet and nothing else. This is the configuration
-Criterion~\ref{prin:nga} forbids, and NNPP (Assumption~\ref{lem:nnpl}) is what
-makes it hold: $\Attacker$ cannot verify that no further copy exists --- and here
-he need not even reason his way to the suspicion, since the manual states that
-one should. He is therefore correct, by the design's own construction, to read
-the erasure as the closing of one route rather than the end of the matter. The
-route that remains runs through $\Victim$'s memory of a seed phrase, or of where
-a backup is kept: the erasure has deleted the path that required hurting no one
-and retained the path that does.
+is an obscurity bet and nothing else. That places the design squarely in the
+naive tier (Definition~\ref{def:naive-cr}): what protection it offers is
+contingent on $\Attacker$'s ignorance of a documented feature, which is to say it
+forfeits non-obscurity (Property~\ref{p:nonob}). It is worth being exact about
+which failure this is. The design does \emph{not} fail the No-Gray-Area
+Criterion --- an erasure destroys a path and names no second racer, so
+Lemma~\ref{lem:drl} does not reach it, and its row in the comparison is DR-safe
+and condemned regardless.
+
+NNPP (Assumption~\ref{lem:nnpl}) is what makes the obscurity bet unwinnable:
+$\Attacker$ cannot verify that no further copy exists, and here he need not even
+reason his way to the suspicion, since the manual instructs the holder to keep a
+backup. He is therefore correct, by the design's own construction, to read the
+erasure as the closing of one route rather than the end of the matter. The route
+that remains runs through $\Victim$'s memory of a seed phrase, or of where a
+backup is kept: the erasure deletes the path that requires hurting no one and
+retains the path that does.
 
 \begin{remark}[The obscure self-destruct is the obscure scheme with no winning branch]
 \label{rem:two-ignorances}
