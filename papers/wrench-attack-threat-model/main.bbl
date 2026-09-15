@@ -93,6 +93,15 @@ Alex Biryukov, Daniel Dinu, and Dmitry Khovratovich.
 \newblock In {\em IEEE European Symposium on Security and Privacy (EuroS\&P)},
   pages 292--302, 2016.
 
+\bibitem{denial-spiral}
+Yuri da~Silva Villas~Boas.
+\newblock The denial spiral: How a norm of denial prolongs coercion, and why
+  the field cannot measure the damage.
+\newblock Companion paper; preprint, 2026.
+\newblock DOI to be inserted. Develops the obscurity classification, the Denial
+  Spiral, the praxeological reading, the four censoring mechanisms and the
+  registry coding.
+
 \bibitem{gw-fourprops}
 Yuri da~Silva Villas~Boas.
 \newblock The four properties and tacit knowledge-based authentication (tkba).
@@ -169,174 +178,6 @@ Francesco Madonna.
   paths carry timelocks: a configurable 2\,h--15\,d relative CSV primary and
   two multi-year absolute-CLTV fallbacks.
 
-\bibitem{jade-duress-pin}
-{Blockstream}.
-\newblock Enable a duress {PIN}.
-\newblock Blockstream Help Center,
-  \url{https://help.blockstream.com/blockstream-jade/add-more-security-functionality/enable-a-duress-pin},
-  2026.
-\newblock Vendor documentation using ``duress PIN'' and ``wallet-erase PIN''
-  for the same erase feature: ``an alternate PIN that you can enable to
-  automatically delete the encrypted wallet information from Jade if entered.''
-  Accessed 2026-08-17; archived at
-  \url{http://archive.today/2026.09.03-164731/https://help.blockstream.com/blockstream-jade/add-more-security-functionality/enable-a-duress-pin}.
-
-\bibitem{jade-erase-pin}
-{Blockstream}.
-\newblock How do {I} set up a wallet-erase {PIN}?
-\newblock Blockstream Help Center,
-  \url{https://help.blockstream.com/blockstream-jade/faqs/how-do-i-set-up-a-wallet-erase-pin},
-  2026.
-\newblock Vendor documentation for the Jade wallet-erase PIN: an alternate PIN
-  that deletes the recovery phrase from the device, described as ``especially
-  useful in the event of a physical threat,'' displaying ``Internal Error'' on
-  entry, and carrying the instruction to ``make sure you have a backup before
-  proceeding.'' Accessed 2026-08-17; archived at
-  \url{http://archive.today/2026.09.03-164738/https://help.blockstream.com/blockstream-jade/faqs/how-do-i-set-up-a-wallet-erase-pin}.
-
-\bibitem{coldcard-trick-pins}
-{Coinkite}.
-\newblock Settings menu --- trick {PINs}.
-\newblock COLDCARD Documentation, \url{https://coldcard.com/docs/settings/},
-  2026.
-\newblock Vendor documentation for the trick-PIN actions: \emph{Brick Self;
-  archived at
-  \url{http://archive.today/2026.09.03-164807/https://coldcard.com/docs/settings/}},
-  \emph{Wipe Seed}, \emph{Look Blank}, and a \emph{Duress Wallet} described as
-  ``a personal safety feature'' --- ``If you must reveal a PIN under duress,
-  give the duress PIN instead of your Main PIN.'' Accessed 2026-08-24.
-
-\bibitem{coldcard-pin-entry}
-{Coinkite}.
-\newblock {PIN} entry --- {COLDCARD} firmware documentation.
-\newblock
-  \url{https://github.com/Coldcard/firmware/blob/7fc656a/docs/pin-entry.md},
-  2026.
-\newblock Vendor firmware documentation. The duress wallet is derived from the
-  real wallet by a one-way process; enabling the brick PIN warrants
-  ``triple-check your backups are correct''; and on the case where the decoy is
-  not believed, ``you may be asked what the actual duress PIN is, while under
-  duress. We suggest providing the `brickme' PIN in that case.'' Accessed
-  2026-08-24.
-
-\bibitem{trezor-wipe-code}
-{SatoshiLabs}.
-\newblock Create wipe code to erase device.
-\newblock Trezor Knowledge Base,
-  \url{https://trezor.io/learn/security-privacy/personal-security-standards/create-wipe-code-to-erase-device},
-  2026.
-\newblock Vendor documentation calling the feature a ``self-destruct'' {PIN;
-  archived at
-  \url{http://archive.today/2026.09.03-164822/https://trezor.io/learn/security-privacy/personal-security-standards/create-wipe-code-to-erase-device}}
-  code which ``erases all private data, including the wallet backup (recovery
-  seed).'' The page makes no mention of duress, coercion or physical threat.
-  Accessed 2026-08-24.
-
-\bibitem{trezor-wipe-deniability}
-{brianddk}.
-\newblock Add plausible deniability to wipe-code interface.
-\newblock Issue \#2055,
-  \url{https://github.com/trezor/trezor-firmware/issues/2055}, 2022.
-\newblock Opened 2022-01-10: requests a user-defined message on wipe-code entry
-  so an erasure can be presented as a hardware fault under duress, rather than
-  the device reporting that the wipe code was entered. Closed as \emph{not
-  planned; archived at
-  \url{http://archive.today/2026.09.03-164059/https://github.com/trezor/trezor-firmware/issues/2055}}.
-
-\bibitem{jade-passphrase}
-{Blockstream}.
-\newblock How does a passphrase work on {Jade}?
-\newblock Blockstream Help Center,
-  \url{https://help.blockstream.com/blockstream-jade/faqs/how-does-a-passphrase-work-on-jade},
-  2026.
-\newblock Vendor documentation for {BIP-39; archived at
-  \url{http://archive.today/2026.09.03-164822/https://help.blockstream.com/blockstream-jade/faqs/how-does-a-passphrase-work-on-jade}}
-  passphrases on Jade: the passphrase ``is added to your Jade's recovery phrase
-  or SeedQR and is used to create your wallet,'' ``any number of passphrases
-  can be entered to change the wallet you will log into,'' and ``your
-  Blockstream Jade will not store your passphrase.'' Notably, the page makes no
-  claim of deniability, decoy or duress use --- unlike the wallet-erase PIN
-  pages. Accessed 2026-08-17.
-
-\bibitem{sparrow-faq}
-{Sparrow Wallet}.
-\newblock Frequently asked questions.
-\newblock Sparrow Wallet documentation,
-  \url{https://www.sparrowwallet.com/docs/faq.html}, 2026.
-\newblock Vendor documentation. Under ``How can I choose where my wallet is
-  saved?'', the \texttt{-d} data-directory flag is documented with the claim
-  that ``[t]his feature allows you to store all Sparrow data on removable media
-  making for more plausible deniability.'' Retrieved 2026-09-06, sha256
-  \texttt{0e0273dd\dots{}4a839e}; archived in
-  \texttt{sources/web/sparrow-faq.html} and at
-  \url{http://archive.today/2026.09.06-151741/https://www.sparrowwallet.com/docs/faq.html}.
-
-\bibitem{sparrow-best-practices}
-{Sparrow Wallet}.
-\newblock Best practices.
-\newblock Sparrow Wallet documentation,
-  \url{https://sparrowwallet.com/docs/best-practices.html}, 2026.
-\newblock Vendor guidance, tiered by holding size. At the first hardware-wallet
-  tier: ``The hardware wallet should be stored securely along with a backup of
-  the seed words (the latter ideally in a different location).'' Retrieved
-  2026-09-06; sha256 \texttt{eb4acdf0\dots{}1e667af}; archived in
-  \texttt{sources/web/sparrow-best-practices.html} and at
-  \url{http://archive.today/2026.09.06-152816/https://sparrowwallet.com/docs/best-practices.html}.
-
-\bibitem{tlt-servicios}
-{Tus Llaves, Tus Bitcoin}.
-\newblock Servicios.
-\newblock Self-custody consultancy service listing,
-  \url{https://tusllavestusbtc.com/\#servicios}, 2026.
-\newblock paid tiers from \$100 to \$600 USD; lists ``Passphrase (tu b\'oveda
-  se\~nuelo) --- Billetera se\~nuelo + billetera real. Protecci\'on ante
-  coacci\'on/coerci\'on''. Accessed 2026-09-01; archived at
-  \url{http://archive.today/2026.09.03-170027/https://tusllavestusbtc.com/\%23servicios}.
-
-\bibitem{bsg-passphrase}
-{Bitcoin Security Guide}.
-\newblock Passphrases.
-\newblock \url{https://bitcoinsecurity.org/guide/passphrase/}, 2026.
-\newblock instructs the holder to keep a small decoy balance on the bare seed
-  as ``what you'd hand over under physical coercion'', and that ``for this to
-  work, the decoy balance must be believable''. Accessed 2026-09-01; archived
-  at
-  \url{http://archive.today/2026.09.03-170047/https://bitcoinsecurity.org/guide/passphrase/}.
-
-\bibitem{ong-autocustodia}
-{Ong Bitcoin Argentina}.
-\newblock Lunes de autocustodia --- programa \#2.
-\newblock Live self-custody programme,
-  \url{https://www.youtube.com/live/X_cCwJubekQ}, 2026.
-\newblock archived at
-  \url{http://archive.today/2026.09.03-171910/https://www.youtube.com/live/X_cCwJubekQ}.
-
-\bibitem{mises-human-action}
-Ludwig von Mises.
-\newblock {\em Human Action: A Treatise on Economics}.
-\newblock Yale University Press, 1949.
-\newblock The source of \emph{praxeology} as used here: economic theorems are
-  deduced from the fact of purposive action rather than induced from
-  observation, and history illustrates a theorem without being able to verify
-  or falsify it.
-
-\bibitem{semmelweis1861}
-Ignaz Semmelweis.
-\newblock {\em Die {\"A}tiologie, der Begriff und die Prophylaxis des
-  Kindbettfiebers}.
-\newblock C.~A. Hartleben, Pest, Vienna and Leipzig, 1861.
-\newblock English edition: \emph{The Etiology, Concept, and Prophylaxis of
-  Childbed Fever}, trans.\ K.~Codell Carter, University of Wisconsin Press,
-  1983.
-
-\bibitem{carter-childbed}
-K.~Codell Carter and Barbara~R. Carter.
-\newblock {\em Childbed Fever: A Scientific Biography of Ignaz Semmelweis}.
-\newblock Greenwood Press, 1994.
-\newblock Source for the reception history: the grounds on which the
-  chlorine-washing result was rejected, and the open letters that followed the
-  1861 monograph.
-
 \bibitem{casa}
 {Casa}.
 \newblock Casa --- collaborative multisig bitcoin custody.
@@ -344,26 +185,6 @@ K.~Codell Carter and Barbara~R. Carter.
 \newblock 2-of-3 / 3-of-5 multisig; client keys on separate devices plus a Casa
   co-signing key; archived at
   \url{http://archive.today/2026.09.03-165338/https://casa.io/}.
-
-\bibitem{certik-skynet-2026}
-{CertiK}.
-\newblock Skynet wrench attacks report.
-\newblock CertiK Skynet report,
-  \url{https://www.certik.com/skynet-report/skynet-wrench-attacks-report},
-  2026.
-\newblock 72 verified physical-coercion incidents globally in 2025 (+75\% year
-  on year); \$40.9M confirmed losses, stated to be under-reported; Europe over
-  40\% of incidents, France the highest national count; archived at
-  \url{http://archive.today/2026.09.03-171000/https://www.certik.com/skynet-report/skynet-wrench-attacks-report}.
-
-\bibitem{balland}
-{DL News}.
-\newblock Ledger co-founder david balland and wife kidnapped in france.
-\newblock DL News,
-  \url{https://www.dlnews.com/articles/regulation/ledger-cofounder-david-balland-and-wife-kidnapped-in-france/},
-  2025.
-\newblock archived at
-  \url{http://archive.today/2026.09.03-171044/https://www.dlnews.com/articles/regulation/ledger-cofounder-david-balland-and-wife-kidnapped-in-france/}.
 
 \bibitem{grover1996}
 Lov~K. Grover.
