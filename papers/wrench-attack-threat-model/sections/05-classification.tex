@@ -101,7 +101,7 @@ the caveat. What matters is not only whether the delegate is remote, but what
 $\Attacker$ needs from them. Where the delegate's required contribution is an
 \emph{act} --- a payment, a signature --- coercion routes through $\Victim$ to
 them and a humane delegate performs it. The act is self-verifying: $\Attacker$
-knows when he has succeeded. The Balland case (\S\ref{sub:empirical}) is exactly
+knows when he has succeeded. The Balland case~\cite[\S7]{denial-spiral} is exactly
 this failure, and it is the reality clause~\ref{d:nodelegatecoerce} idealizes
 away.
 
@@ -226,7 +226,8 @@ Self-destruct PIN            & \xmark & \cmark & \xmark & \xmark & \cmark & non-
 every competitor keeps a \emph{transmissible} secret on a device. The fifth property
 of \S\ref{sub:hostage} adds no column: by Corollary~\ref{cor:hostage-equiv} it is
 \emph{equivalent} to that one, so it would reproduce it cell for cell. Neither does the
-Denial Spiral, which is equivalent to that column too~\cite[Cor.~2]{denial-spiral}.
+Denial Spiral, which is equivalent to Column~(\ref{p:nonob}) rather than to that
+one~\cite[Cor.~2]{denial-spiral}.
 
 \emph{The \textbf{DR-safe} column is not derivable from the other four}, and that is why
 it is there. It asks the criterion directly --- \emph{can} a single encounter leave a state of
@@ -267,10 +268,12 @@ breakdown; we take from it only what the stipulations require.
 Long-hold modalities --- kidnap, abduction, prolonged captivity --- are a large
 share of the coded set, which is what a budget $t$ measured in hours rather than
 minutes assumes. Fatal outcomes are attested, so the terminal move
-Lemma~\ref{lem:drl} predicts is not hypothetical. Both figures are \emph{floors}:
-a robbery whose victim is killed is recorded as a homicide rather than as a
-Bitcoin attack, so the cases most diagnostic of the Lemma are the least likely to
-be counted at all.
+Lemma~\ref{lem:drl} predicts is not hypothetical. The fatality share is a
+\emph{floor}: a robbery whose victim is killed is recorded as a homicide rather
+than as a Bitcoin attack, so the cases most diagnostic of the Lemma are the least
+likely to be counted at all. The long-hold share is bounded the other way --- a
+media-sourced registry over-counts the dramatic, so the coded kidnap share
+\emph{over}-states the long tail rather than establishing it.
 
 That censoring is the reason this paper derives its bar rather than measuring
 it. The exposure covariate --- what design a given victim was running --- has no

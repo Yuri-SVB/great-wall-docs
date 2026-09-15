@@ -38,6 +38,15 @@ Jameson Lopp.
   cryptocurrency was tortured for hours; attackers took only his Pok\'emon
   cards; 2 suspects arrested.
 
+\bibitem{denial-spiral}
+Yuri da~Silva Villas~Boas.
+\newblock The denial spiral: How a norm of denial prolongs coercion, and why
+  the field cannot measure the damage.
+\newblock Companion paper; preprint, 2026.
+\newblock DOI to be inserted. Develops the obscurity classification, the Denial
+  Spiral, the praxeological reading, the four censoring mechanisms and the
+  registry coding.
+
 \bibitem{certik-intel3d-h1-2026}
 {CertiK}.
 \newblock Intel3d: {H1} 2026 wrench attacks.
@@ -92,15 +101,6 @@ Alex Biryukov, Daniel Dinu, and Dmitry Khovratovich.
   and other applications.
 \newblock In {\em IEEE European Symposium on Security and Privacy (EuroS\&P)},
   pages 292--302, 2016.
-
-\bibitem{denial-spiral}
-Yuri da~Silva Villas~Boas.
-\newblock The denial spiral: How a norm of denial prolongs coercion, and why
-  the field cannot measure the damage.
-\newblock Companion paper; preprint, 2026.
-\newblock DOI to be inserted. Develops the obscurity classification, the Denial
-  Spiral, the praxeological reading, the four censoring mechanisms and the
-  registry coding.
 
 \bibitem{gw-fourprops}
 Yuri da~Silva Villas~Boas.

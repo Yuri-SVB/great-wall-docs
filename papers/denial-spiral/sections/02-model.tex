@@ -25,12 +25,16 @@ being whether $\Victim$ has forgotten or never memorised. $\Attacker$ therefore
 cannot be brought to certainty by any disclosure $\Victim$ makes.
 \end{assumption}
 
-\noindent Two consequences of NNPP carry the weight here. First, cooperation
-cannot dispel the incentive: no act of disclosure closes the question, so
-compliance buys no guaranteed release~\cite[Cor.~1]{deadly-race}. We refer to
-this as the \textbf{disclosure corollary}.\label{cor:disclosure} Second, a denial
-is a claim $\Attacker$ has both an incentive to disbelieve and no means of
-settling --- which is the hinge of \S\ref{sec:spiral}.
+\noindent Two consequences of NNPP carry the weight here.
+
+\begin{corollary}[Disclosure]\label{cor:disclosure}
+Cooperation cannot dispel the incentive: no act of disclosure closes the
+question, so compliance buys no guaranteed release~\cite[Cor.~1]{deadly-race}.
+\end{corollary}
+
+\noindent Second, a denial is a claim $\Attacker$ has both an incentive to
+disbelieve and no means of settling --- which is the hinge of
+\S\ref{sec:spiral}.
 
 \begin{definition}[Naive coercion resistance]\label{def:naive-cr}
 A protocol is \textbf{naively coercion-resistant} if it \emph{may} resist a
@@ -52,9 +56,14 @@ pivotality~\cite[\S3]{deadly-race}.
 If, on release, $\Attacker$ holds a feasible path to $\Kset$ while $\Victim$
 retains one too, then $\Victim$ is \emph{pivotal}: removing him raises
 $\Attacker$'s win probability by $\pi > 0$, and the removal pays whenever
-$(1-p_A)\,W > c$. The \textbf{No-Gray-Area Criterion} is the resulting design
-bar --- admit no such state.\label{prin:nga}
+$(1-p_A)\,W > c$.
 \end{lemma}
+
+\begin{criterion}[No-Gray-Area, after~{\cite[Crit.~1]{deadly-race}}]\label{prin:nga}
+A design must admit no such state: no encounter may leave a \emph{gray} outcome,
+one in which $\Attacker$ holds a state sufficient for $\Kset$ but has not
+completed the spend. Every encounter must resolve to $p_A = 0$ or $p_A = 1$.
+\end{criterion}
 
 \noindent Finally, the companion's \emph{Four Properties} are used here only to
 locate the obscurity class. They are \textbf{(\ref{p:know})} knowledge-based
@@ -67,7 +76,10 @@ authentication, \textbf{(\ref{p:indiv})} individual custody,
   \item\label{p:nonob} non-obscurity;
   \item\label{p:coerc} coercion resistance.
 \end{enumerate}
-Clearing the bar while holding all four forces the \emph{tacit}
-route~\cite[Cor.~3]{deadly-race}; the alternative that keeps a winning racer
-beyond the attacker's reach we call the \textbf{remote-delegate}
-route.\label{r:remotewinner}
+Clearing the bar while holding all four leaves two routes:
+\begin{enumerate}[nosep,leftmargin=2.9em,label=\textbf{(R\arabic*)},ref=R\arabic*]
+  \item\label{r:removerace} the \emph{tacit} route, which removes the race
+        itself~\cite[Cor.~3]{deadly-race};
+  \item\label{r:remotewinner} the \textbf{remote-delegate} route, which keeps a
+        winning racer beyond the attacker's reach.
+\end{enumerate}

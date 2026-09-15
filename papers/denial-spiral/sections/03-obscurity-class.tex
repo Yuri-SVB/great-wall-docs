@@ -4,7 +4,8 @@
 %% ==========================================================================
 
 
-The designs above interpose a delay or a veto. A large and widely shipped class
+The designs classified in the companion~\cite[\S5]{deadly-race} interpose a delay or a
+veto. A large and widely shipped class
 does something categorically different: it \emph{erases}. An alternate PIN, when
 entered, destroys the device's copy of the secret. Blockstream's Jade documents
 such a PIN under both of the names its help center uses for it --- \emph{duress}
@@ -16,7 +17,7 @@ that the erasure reads as a
 malfunction~\cite{jade-duress-pin,jade-erase-pin}.
 
 Grant the design the strength it genuinely has, and which the delay
-architectures above lack. The erasure is \emph{instantaneous and covert}:
+architectures of~\cite[\S5]{deadly-race} lack. The erasure is \emph{instantaneous and covert}:
 $\Attacker$ learns of it only once it is complete, so there is no interval in
 which he can intervene to prevent it. Nothing in what follows turns on
 $\Attacker$ out-racing the mechanism, because he cannot.
@@ -58,7 +59,8 @@ contingent on $\Attacker$'s ignorance of a documented feature, which is to say i
 forfeits non-obscurity (Property~\ref{p:nonob}). It is worth being exact about
 which failure this is. The design does \emph{not} fail the No-Gray-Area
 Criterion --- an erasure destroys a path and names no second racer, so
-Lemma~\ref{lem:drl} does not reach it, and its row in the comparison is DR-safe
+Lemma~\ref{lem:drl} does not reach it, and its row in the companion's design
+comparison~\cite[\S5]{deadly-race} is DR-safe
 and condemned regardless.
 
 NNPP (Assumption~\ref{lem:nnpl}) is what makes the obscurity bet unwinnable:
@@ -210,10 +212,10 @@ worth keeping the self-destruct distinct from the \emph{cancel} key named
 alongside it there. A cancel reverses a pending action and thereby names a second
 racer; a self-destruct destroys a path and names none. Only the former is subject
 to Lemma~\ref{lem:drl}, which is why the two fail differently despite sharing a
-tier. the perceptual-oracle variants in~\cite{deadly-race} has already disposed of the tier as a
+tier. The perceptual-oracle-variants remark of~\cite{deadly-race} has already disposed of the tier as a
 whole, by the dilemma that an $\Attacker$ whose ignorance can be assumed makes
 the elaborate mechanism unnecessary, and one whose ignorance cannot makes it
-ineffective; the present subsection is that dilemma instantiated in a shipping
+ineffective; the present section is that dilemma instantiated in a shipping
 product.
 
 \medskip\noindent\textbf{The companion decoy, classified separately.} The same
@@ -308,7 +310,8 @@ public obscure training makes them \emph{less}.
 
 \begin{remark}[The Obscurity Paradox --- non-obscure designs strengthen obscure ones]
 \label{rem:obscurity-paradox}
-TGPO enters neither bluff. There is nothing to erase, the deep secret having
+The Time-Gated Perceptual Oracle of the companion~\cite[\S4]{deadly-race} enters neither
+bluff. There is nothing to erase, the deep secret having
 never been on the device (the floor theorem in~\cite{deadly-race}), and so nothing whose
 non-deployment can be coerced. But the comparison yields more than the absence
 of a failure mode, and the surplus runs in a direction the obscurity argument
@@ -330,6 +333,6 @@ unnecessary.} Obscurity remains unsound as a primary defense, for the reasons
 the Four-Properties development in~\cite{deadly-race} gives. It is not, however, indifferent which design it
 accompanies --- a denial made from within a mechanism that removes the need to
 lie is a stronger denial than the same words spoken from within one that
-requires it. The same asymmetry has an epistemic cost, taken up next
+requires it. The same asymmetry has an epistemic cost, taken up in \S\ref{sec:anosognosia}
 (Remark~\ref{rem:anosognosia}).
 \end{remark}
