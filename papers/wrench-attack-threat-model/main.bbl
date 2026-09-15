@@ -311,6 +311,32 @@ Francesco Madonna.
 \newblock archived at
   \url{http://archive.today/2026.09.03-171910/https://www.youtube.com/live/X_cCwJubekQ}.
 
+\bibitem{mises-human-action}
+Ludwig von Mises.
+\newblock {\em Human Action: A Treatise on Economics}.
+\newblock Yale University Press, 1949.
+\newblock The source of \emph{praxeology} as used here: economic theorems are
+  deduced from the fact of purposive action rather than induced from
+  observation, and history illustrates a theorem without being able to verify
+  or falsify it.
+
+\bibitem{semmelweis1861}
+Ignaz Semmelweis.
+\newblock {\em Die {\"A}tiologie, der Begriff und die Prophylaxis des
+  Kindbettfiebers}.
+\newblock C.~A. Hartleben, Pest, Vienna and Leipzig, 1861.
+\newblock English edition: \emph{The Etiology, Concept, and Prophylaxis of
+  Childbed Fever}, trans.\ K.~Codell Carter, University of Wisconsin Press,
+  1983.
+
+\bibitem{carter-childbed}
+K.~Codell Carter and Barbara~R. Carter.
+\newblock {\em Childbed Fever: A Scientific Biography of Ignaz Semmelweis}.
+\newblock Greenwood Press, 1994.
+\newblock Source for the reception history: the grounds on which the
+  chlorine-washing result was rejected, and the open letters that followed the
+  1861 monograph.
+
 \bibitem{casa}
 {Casa}.
 \newblock Casa --- collaborative multisig bitcoin custody.
