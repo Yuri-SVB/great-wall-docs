@@ -10,8 +10,9 @@ residual-window analysis (the residual deadly-race window in~\cite{deadly-race})
 incident only as \emph{date, victim, location, headline}; it carries no duration or
 outcome field, so we code the $352$ incident headlines (at commit \texttt{9a4a62a}) by
 keyword. The coding is coarse and the categories overlap; a reproducible script
-accompanies the paper.\footnote{\texttt{registry-analysis/} in the source tree gives
-the exact keyword patterns, per-year counts, and caveats.} Several things stand out.
+accompanies the companion.\footnote{\texttt{registry-analysis/} in the source tree
+of~\cite{deadly-race} gives the exact keyword patterns, per-year counts, and
+caveats.} Several things stand out.
 
 \emph{The attack is frequent and worsening.} Recorded incidents climb from a handful
 a year before 2017 to a peak of $85$ in 2025 --- growth the companion asserts and
@@ -130,8 +131,8 @@ signal falls outside the keyword table because it was coded by hand: in $12$ of 
 incidents ($3.4\%$) the person seized was \emph{not} a holder but a relative held to compel
 one --- a parent, a spouse, an adult child.\footnote{Keyword screening surfaced $16$ candidates;
 each was read individually and four were discarded as false positives, including one in which
-``son of'' named a \emph{perpetrator} rather than a victim. \texttt{registry-analysis/} carries the
-screen and the full audited list. Because the coding reads a one-line headline, an incident that
+``son of'' named a \emph{perpetrator} rather than a victim. The companion's
+\texttt{registry-analysis/}~\cite{deadly-race} carries the screen and the full audited list. Because the coding reads a one-line headline, an incident that
 does not name a relative is no evidence that none was involved: $3.4\%$ is a floor, and the coding
 can only understate it.} Two features of this subset matter more than its size.
 
