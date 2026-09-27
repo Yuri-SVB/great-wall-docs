@@ -1,0 +1,255 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+
+% ── Session 3: "Drawing Inside the Labyrinth" (fractal encoding) ──────────
+% Shared brand theme + \gwtitle/\punch/\memeslot live in gwtheme.tex.
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{../style/greatwall}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{colortbl}
+
+\graphicspath{{./}{../assets/}}
+\def\gwsessionno{3}
+\input{gwtheme.tex}
+
+\begin{document}
+
+\gwtitle{Drawing Inside the Labyrinth}{How a secret becomes an exact point on a fractal --- losslessly}
+
+% ── Recap + hook ──────────────────────────────────────────────────────────
+\begin{frame}{The obvious objection}
+  We said your secret is a \emph{point on a fractal} you can recognize but not
+  describe. Fair pushback:
+  \begin{block}{}
+    ``If you can't even \emph{say} where it is, how is the mapping \textbf{exact},
+    \textbf{lossless}, and \textbf{reversible}? And why a \emph{fractal}?''
+  \end{block}
+  \vspace{4pt}
+  Today we answer all three --- and you'll watch your own words round-trip.
+  \begin{center}\footnotesize\color{graytext}
+  Check-in: one word in \texttt{\#feedback} --- how did the viewer feel to play with?
+  \end{center}
+\end{frame}
+
+% ── Entropy grounding ─────────────────────────────────────────────────────
+\begin{frame}{First: what is a bit of entropy?}
+  \begin{columns}[T]
+    \begin{column}{0.62\textwidth}
+      \small
+      \textbf{A bit of entropy?} One \emph{unpredictable} coin-flip. $n$ bits
+      $=2^n$ equally-likely secrets to sift. (Unpredictable is the point: a bit
+      that's always 1 stores data but \emph{zero} entropy.)
+      \vspace{5pt}
+
+      \textbf{Why 128?} $2^{128}\!\approx\!3.4\times10^{38}$ --- uncrackable by
+      anyone, ever. (64 = grindable; 256 = overkill.) Also BIP39's 12-word
+      default.
+      \vspace{5pt}
+
+      \textbf{Why 32 per point?} A point $=$ 32 left/right bisection choices. Pick
+      the leaf at random from $2^{32}$ $\Rightarrow$ 32 bits. So
+      \textbf{4 points $=$ 128 bits} ($=$ 12 words $=$ 4 stages).
+    \end{column}
+    \begin{column}{0.36\textwidth}
+      \centering
+      \begin{tikzpicture}[font=\scriptsize,
+        b/.style={draw=btccol, fill=accentlight, rounded corners=1.5pt,
+                  minimum width=2.6cm, minimum height=0.55cm}]
+        \node[b] (p1) at (0,0)     {point 1 \;=\; 32};
+        \node[b] (p2) at (0,-0.72) {point 2 \;=\; 32};
+        \node[b] (p3) at (0,-1.44) {point 3 \;=\; 32};
+        \node[b] (p4) at (0,-2.16) {point 4 \;=\; 32};
+        \draw[accentdark, thick] (-1.45,-2.6) -- (1.45,-2.6);
+        \node[accentdark] at (0,-2.95) {\textbf{= 128 bits}};
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+  \vspace{2pt}
+  \begin{center}\footnotesize\color{graytext}
+  The \emph{haystack} (which fractal) isn't part of this count --- that's the
+  coercion \emph{cost} (Session 4), not seed entropy.
+  \end{center}
+\end{frame}
+
+% ── BIP39 words + checksum ────────────────────────────────────────────────
+\begin{frame}{Two more: BIP39 words and checksums}
+  \begin{columns}[T]
+    \begin{column}{0.6\textwidth}
+      \small
+      \textbf{How does a word encode 11 bits?} The BIP39 wordlist is exactly
+      \textbf{2048 words} $=2^{11}$. A word is just an index 0--2047 --- and any
+      number in that range is 11 bits. So 12 words $\Rightarrow 12\times11 =
+      \textbf{132}$ bits.
+      \vspace{6pt}
+
+      \textbf{What are checksum bits?} Of the 132, only 128 are entropy; the last
+      \textbf{4 are a checksum} --- the first 4 bits of
+      $\mathrm{SHA\text{-}256}$(entropy). \emph{Derived}, not random (zero
+      entropy); they let a wallet \textbf{catch typos} --- random 12 words pass
+      only $1/16$ of the time.
+    \end{column}
+    \begin{column}{0.38\textwidth}
+      \centering
+      \vspace{10pt}
+      \resizebox{\linewidth}{!}{%
+      \begin{tikzpicture}[font=\scriptsize]
+        \node[anchor=south] at (2.5,0.32) {12 words $\times$ 11 = \textbf{132} bits};
+        \fill[accent!80] (0,0) rectangle (4.3,0.6);
+        \fill[attackcol] (4.3,0) rectangle (5.0,0.6);
+        \draw[darktext] (0,0) rectangle (5.0,0.6);
+        \node[white] at (2.15,0.3) {\textbf{128 entropy}};
+        \node[white] at (4.65,0.3) {\textbf{4}};
+        \draw[-latex, accentdark, thick] (2.15,-0.15) -- (2.15,-0.6);
+        \node[accentdark, anchor=north, text width=3cm, align=center] at (2.15,-0.6)
+          {Great Wall stores\\these (4 points)};
+        \draw[-latex, attackcol, thick] (4.65,-0.15) -- (4.65,-0.6);
+        \node[attackcol, anchor=north] at (4.9,-0.6) {checksum};
+      \end{tikzpicture}}
+    \end{column}
+  \end{columns}
+  \vspace{10pt}
+  \begin{center}\footnotesize\color{graytext}
+  Great Wall encodes only the \textbf{128 entropy bits} (4 points). The 4 checksum
+  bits aren't stored --- they're \emph{recomputed} on decode.
+  \end{center}
+\end{frame}
+
+% ── Big picture ───────────────────────────────────────────────────────────
+\begin{frame}{The trick: a shared codebook nobody stores}
+  Both encoder and decoder can \textbf{regenerate the same fractal} from the same
+  parameters. Its intricate structure is a codebook neither side saves --- they
+  each rebuild it on demand.
+  \vspace{6pt}
+  \begin{keyidea}[Haystack $\gg$ needle]
+    Specifying \emph{which} fractal (the haystack) is made \textbf{far more
+    expensive} than specifying \emph{where} in it your point sits (the needle,
+    $\approx$ 32 bits). That asymmetry is the security engine --- and it
+    compounds per stage (Session 4).
+  \end{keyidea}
+\end{frame}
+
+% ── Bisection encoding ────────────────────────────────────────────────────
+\begin{frame}{Bisection encoding, one bit at a time}
+  \begin{columns}[T]
+    \begin{column}{0.46\textwidth}
+      \footnotesize
+      \begin{enumerate}
+        \item Find \textbf{islands} (structure) in the current rectangle.
+        \item The \emph{fractal} picks a split line (weighted median).
+        \item Read one bit as a \textbf{direction}: \\
+          vertical $0{=}$left $1{=}$right; horizontal $0{=}$up $1{=}$down.
+        \item Contract if needed; recurse on the chosen child.
+      \end{enumerate}
+      \vspace{2pt}
+      After all bits: the \textbf{center of the final rectangle} is your point.
+    \end{column}
+    \begin{column}{0.52\textwidth}
+      \centering
+      \begin{tikzpicture}[scale=0.9, every node/.style={font=\scriptsize}]
+        \draw[accentdark, thick] (0,0) rectangle (5,2.8);
+        \draw[attackcol, thick, dashed] (3,0) -- (3,2.8);
+        \node at (1.5,2.45) {\textbf{0}=left};
+        \node at (4,2.45) {\textbf{1}=right};
+        \draw[accent, thick] (0,0) rectangle (3,2.8);
+        \draw[attackcol, thick, dashed] (0,1.25) -- (3,1.25);
+        \node at (0.8,1.9) {\textbf{0}=up};
+        \node at (0.85,0.55) {\textbf{1}=down};
+        \draw[goldcol, very thick] (0,0) rectangle (3,1.25);
+        \fill[btccol] (1.45,0.62) circle (2pt);
+        \node[btccol] at (2.25,0.62) {point};
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ── Predict-then-run ──────────────────────────────────────────────────────
+\begin{frame}{Predict, then run}
+  Before the demo, commit in \texttt{\#live-chat}:
+  \begin{itemize}
+    \item Given the bits \texttt{1 0}, which \emph{leaf} does the point land in?
+    \item If we flip the first bit to \texttt{0}, does the point move
+      \emph{left} or \emph{right}?
+  \end{itemize}
+  \vspace{6pt}
+  \begin{center}\small
+  Then we run it in the viewer and see who called it. Predicting first makes the
+  mechanic \emph{stick}.
+  \end{center}
+\end{frame}
+
+% ── Why a bijection ───────────────────────────────────────────────────────
+\begin{frame}{Why it's genuinely a bijection}
+  \begin{itemize}\small
+    \item \textbf{Determinism.} Island discovery is driven by a PRNG seeded from
+      the \emph{path so far} --- encode and decode walk the same path, find the
+      same islands, pick the same splits.
+    \item \textbf{No floating point.} Every bijection-critical step is
+      integer / fixed-point (\textbf{I4F60}, 60 fractional bits) --- bit-identical
+      on any machine. Floats' platform-dependent rounding would silently break the
+      round-trip.
+    \item \textbf{Clean partition.} Half-open intervals $[\min,\max)$ split a
+      parent into two non-overlapping children --- every point in exactly one leaf.
+  \end{itemize}
+  \begin{pitfall}
+    ``A fractal is chaotic, so this must be approximate.'' No --- the chaos is in
+    the \emph{shape}; the \emph{arithmetic} is exact integer math. Same inputs,
+    identical outputs, forever.
+  \end{pitfall}
+\end{frame}
+
+\begin{frame}{Where does this lose people?}
+  \gwfeedback{Three suspects: the \emph{splitting}, the \emph{determinism}
+  (``why no floats''), or the \emph{``why a fractal at all.''} Tell us which one
+  fogged over --- react A/B/C in \texttt{\#live-chat}.}
+  \vspace{6pt}
+  \begin{deeper}[Precision budget]
+    Each bisection level costs $\sim$1 bit of positional precision. With 60
+    fractional bits the encoder reliably places \textbf{32 bits per point} ---
+    which is why bigger seeds use \emph{more stages}, not more bits per point.
+  \end{deeper}
+\end{frame}
+
+% ── Hands-on ──────────────────────────────────────────────────────────────
+\begin{frame}{Hands-on: round-trip a mini-seed}
+  \begin{tryit}[In session]
+    \begin{enumerate}\small
+      \item Encode a \textbf{3-word (32-bit) mini-seed} in the viewer.
+      \item Turn on area visualization (\texttt{V}) and step the bisection
+        (\texttt{<} / \texttt{>}).
+      \item \textbf{Decode the point back} and confirm you get the identical
+        three words.
+    \end{enumerate}
+  \end{tryit}
+  \vspace{2pt}
+  \begin{center}\small\color{graytext}
+  The skeptic's reassurance: your \emph{exact} words come back. Don't take our
+  word --- watch them return.
+  \end{center}
+\end{frame}
+
+% ── Check-out ─────────────────────────────────────────────────────────────
+\begin{frame}{Check-out}
+  \begin{columns}[T]
+    \begin{column}{0.62\textwidth}
+      \begin{block}{In \texttt{\#feedback}}
+        \begin{enumerate}\small
+          \item Muddiest point (name the moment / slide).
+          \item Per-session form --- did the \emph{round-trip} convince you it's
+            truly lossless?
+          \item Did the hands-on \textbf{run on your machine}? If not, where?
+        \end{enumerate}
+      \end{block}
+    \end{column}
+    \begin{column}{0.36\textwidth}
+      \memeslot{fractal-zoom.png}{a deep viewer zoom --- ``there's a whole world
+      down here''}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\punch{We can encode. Next:\\[6pt] why nobody --- not even you ---\\[6pt] can rush it.}
+
+\end{document}

@@ -1,0 +1,854 @@
+\documentclass[a4paper,11pt]{report}
+
+% ── Encoding & fonts ──────────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=24mm]{geometry}
+
+% ── Core packages ─────────────────────────────────────────────────────────
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage[hidelinks]{hyperref}
+
+% Shared brand style (palette + callout boxes). Relative path from textbook/.
+\usepackage{../style/greatwall}
+
+\graphicspath{{./}{../assets/}}
+
+\hypersetup{colorlinks=true, linkcolor=accentdark, urlcolor=accentdark,
+            citecolor=accentdark}
+
+% ── Headers / footers ─────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[R]{\small\itshape\color{graytext}Great Wall — Pilot Course}
+\fancyfoot[C]{\small\color{graytext}\thepage}
+
+% ── Section styling ───────────────────────────────────────────────────────
+\titleformat{\chapter}[display]
+  {\bfseries\color{accent}}
+  {\filright\large\color{graytext}\chaptertitlename\ \thechapter}
+  {0.3em}
+  {\Huge}
+  [\vspace{-0.4em}{\color{accent}\rule{\textwidth}{1pt}}]
+\titleformat{\section}{\large\bfseries\color{accentdark}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{darktext}}{\thesubsection}{0.6em}{}
+
+\newcommand{\probsoln}[3]{%
+  \begin{description}[leftmargin=0pt,labelsep=0.5em,style=nextline]
+    \item[\textcolor{attackcol}{Problem.}] #1
+    \item[\textcolor{accent}{Solution.}] #2
+    \item[\textcolor{modelcol}{Methodology.}] #3
+  \end{description}}
+
+\begin{document}
+
+% ══════════════════════════════════════════════════════════════════════════
+% TITLE PAGE
+% ══════════════════════════════════════════════════════════════════════════
+\begin{titlepage}
+\centering
+\vspace*{2cm}
+{\fontsize{40}{46}\selectfont\bfseries\color{accent}Great Wall\par}
+\vspace{6pt}
+{\Large\color{darktext}A Practical, Hands-On Pilot Course\par}
+\vspace{4pt}
+{\large\itshape\color{graytext}Coercion-resistant self-custody through tacit knowledge\par}
+\vspace{1.4cm}
+{\color{accent}\rule{90mm}{1pt}\par}
+\vspace{1.4cm}
+\begin{minipage}{0.82\textwidth}\centering\small\color{graytext}
+\itshape It's all in your head, in nobody else's; the attacker knows that, and
+is nevertheless unable to rob it.
+\end{minipage}
+\vfill
+{\small\color{graytext}Companion textbook to the five-session pilot.\\
+Tracks chained protocol \texttt{0.3.0}. Draft for cohort~1 — expect bugs;
+report them.\par}
+\vspace{8pt}
+{\small\color{graytext}Dual-licensed Apache-2.0 / MIT.\par}
+\end{titlepage}
+
+% ══════════════════════════════════════════════════════════════════════════
+% PREFACE
+% ══════════════════════════════════════════════════════════════════════════
+\chapter*{How to use this book}
+\addcontentsline{toc}{chapter}{How to use this book}
+\markboth{}{}
+
+This is the written companion to a live, hands-on course. It is deliberately
+\textbf{succinct}: it carries the spine of each session so you can prepare
+before and review after, but the real learning happens at the keyboard, in the
+viewer, and in conversation with the cohort. Read the relevant chapter
+\emph{before} its session.
+
+\section*{The shape of every chapter}
+Each chapter opens with the same three-part frame, and so does most of the
+course:
+\probsoln{What goes wrong — the specific failure we are trying to fix.}
+{What Great Wall does about it.}
+{How we will convince ourselves it actually works (usually: by doing it).}
+
+\section*{The boxes}
+\begin{keyidea}
+The one sentence to carry out of a section. If you remember nothing else,
+remember the key ideas.
+\end{keyidea}
+\begin{tryit}
+A hands-on action — at the viewer, the CLI, or with a partner. The course lives
+here.
+\end{tryit}
+\begin{deeper}
+Optional depth for the curious. \textbf{Never required} to keep up — skip freely
+and the main thread still makes sense.
+\end{deeper}
+\begin{pitfall}
+A common misunderstanding, flagged so you can sidestep it.
+\end{pitfall}
+\noindent And the feedback marker:
+\gwfeedback{Wherever you see this flag, we \emph{predict} this is a confusing
+spot. If it confused you, say so loudly — that is exactly the signal the pilot
+needs.}
+
+\section*{What we assume of you}
+You are comfortable with Bitcoin self-custody at the user level — you know what a
+seed phrase is, why holding your own keys matters, and roughly what hashing and
+signatures do. We do \emph{not} assume cryptography, fractal mathematics, Rust,
+or information theory; every such idea is built from zero when first needed.
+
+\begin{pitfall}[Safety — read this once, mean it forever]
+Everything in this course uses \textbf{throwaway setups and test entropy only}.
+Never put a real seed, or real funds, into a practice setup. Great Wall's own
+rule holds in class too: the master secret is never shown, written, or shared —
+not even with your instructor.
+\end{pitfall}
+
+\tableofcontents
+
+% ══════════════════════════════════════════════════════════════════════════
+\chapter{The Wrench in the Works}
+% ══════════════════════════════════════════════════════════════════════════
+
+\probsoln
+{Self-custody hands you total control of your money — and therefore total
+exposure to anyone who can physically reach you. A growing wave of
+\wrench{}s ($\$5$-wrench attacks: ``give me your keys or else'') turns
+``be your own bank'' into ``be your own vulnerable vault.''}
+{A custody method whose secret \emph{cannot be handed over}, even under duress,
+while keeping full individual self-custody and an openly published design.}
+{Look at the trend and its price first (this chapter), then earn each property
+over the next four sessions by building and using the thing.}
+
+\section{The four-property test}
+An adequate self-custody method should satisfy \emph{four} security properties at
+once. Until now they have been mutually exclusive across deployed methods:
+\term{Deviceless} (access tied only to your mind, not to a seizable object),
+\term{Individual Custody} (no third party between you and your funds),
+\term{Anti-Obscure} (security does not rely on the attacker not knowing the
+trick), and \term{Coercion-Resistant} (force does not extract access within any
+window an attacker can sustain). Score the market against them:
+
+\begin{center}\small
+\renewcommand{\arraystretch}{1.35}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.235\textwidth} c c c c >{\raggedright\arraybackslash}p{0.30\textwidth}@{}}
+\toprule
+\textbf{Method} & \textbf{Devi.} & \textbf{Indiv.} & \textbf{Anti-obsc.} & \textbf{Coerc.} & \textbf{Fails on / cost} \\
+\midrule
+\textbf{TKBA} (Great Wall) & \gwcheck & \gwcheck & \gwcheck & \gwcheck &
+only risk is \emph{forgetting} --- solved by the memory coach (Session~5) \\
+Physical (vault, Shamir, multisig) & \gwcross & \gwcheck & \gwcheck & \gwcheck &
+astronomical cost + geographic binding: ``glorified gold'' \\
+Shared / delegated (Coinbase, Casa) & \gwcheck & \gwcross & \gwcheck & \gwcheck &
+negates self-custody --- ``not your keys\ldots'' \\
+Obscurity (decoy, denial, redirect) & \gwcheck & \gwcheck & \gwcross & \gwskull &
+\emph{backfires}: turns robbery into torture / homicide \\
+Vanilla (Ledger, Trezor, Electrum) & \gwcheck & \gwcheck & \gwcheck & \gwcross &
+wide open to the wrench \\
+\bottomrule
+\end{tabular}
+\end{center}
+\begin{center}\footnotesize\color{graytext}
+\gwcheck~has the property \quad \gwcross~lacks it \quad
+\gwskull~\emph{negative} --- actively worse than merely lacking it (see below)
+\end{center}
+
+\begin{keyidea}
+The four properties are a \term{covering set}, not a wish-list: drop any one and
+the failure mode is concrete and named. Only \GW{} (TKBA) holds all four. The
+recurring hole is \term{coercion-resistance} --- conventional tools guard against
+\emph{remote} theft but do little against a person with a wrench.
+\end{keyidea}
+
+\noindent Read the obscurity row carefully: its coercion cell is a \emph{skull},
+not a cross. Obscurity does not merely \emph{fail} to resist coercion --- it
+\emph{inverts}. Once ``deny you own Bitcoin'' and ``hand over a decoy'' are the
+community's standard advice, every signal a victim can emit has been
+pre-discredited by the defense itself (we return to this next section). That is
+worse than a vanilla wallet, whose owner can at least comply and survive.
+
+\section{Obscurity is a cost, not a defense}
+The community's consensus advice is obscurity: \emph{``No one needs to know you
+own Bitcoin.''} It is offered as security; it is really a recurring tax. Two
+problems:
+
+\begin{enumerate}[leftmargin=1.4em,nosep]
+\item \textbf{It contradicts adoption.} If safety requires being a needle in a
+haystack, then everyone cannot be safe: \emph{if everyone is a needle, there is
+no hay}. Obscurity and mass adoption are mutually exclusive — ``maximalism vs.\
+obscurity: choose one.''
+\item \textbf{It violates Kerckhoffs (1883).} A system's security must not depend
+on the secrecy of its mechanism. Bitcoin is open by design; an educated attacker
+shares the defender's knowledge, so obscurity-based tricks (decoy wallets,
+redirect scripts) \emph{backfire} — the attacker simply keeps coercing past the
+first ``compliant'' transfer, because they cannot tell a decoy from the real
+stash.
+\end{enumerate}
+
+\subsection{The security tax, priced}
+We can put a number on this. Insurance markets price physical-vulnerability risk
+every day for portable luxury goods (jewelry, watches). Cross-referencing the
+documented wrench-attack rate against jewelry premiums, the
+\emph{insurance-equivalent} annual security cost for individual Bitcoin whales
+has, at the 2026 pace, entered the \textbf{gold-storage range} ($\sim$0.5–1.5\%/yr)
+— and, because attacks are growing faster than the whale population, the
+\emph{forward-looking} discount over a multi-year horizon is several times the
+current annual cost. The full derivation is in
+\texttt{justification-and-economics/JUSTIFICATION}; for our purposes the
+takeaway is blunt:
+
+\begin{keyidea}
+The wrench attack is not a tail-risk anecdote. It is a measurable, compounding
+holding cost that the market currently prices at zero — and obscurity, the
+status-quo answer, is part of the cost, not the cure.
+\end{keyidea}
+
+\section{Rhetoric can't save you: two cases and a trilemma}
+\label{sec:trilemma}
+Two documented attacks bracket the failure of \emph{everything except}
+coercion-resistance. Put them side by side.
+
+\subsection{Force beats a fortress: David Balland}
+David Balland co-founded Ledger — a hardware-wallet company. If wealth,
+technical mastery, and security awareness could deter a \wrench{}, he was as
+well-defended as an individual gets. In January 2025 he was nonetheless
+kidnapped and held for roughly two days, and mutilated, while his captors
+extorted a cryptocurrency ransom; he was freed only by a police
+operation.\footnote{One of the most protracted incidents in Jameson Lopp's
+compilation, \emph{Known Physical Bitcoin Attacks},
+\url{https://github.com/jlopp/physical-bitcoin-attacks}.} The lesson is not
+``get more bodyguards.'' It is that \emph{abundant physical defense does not
+prevent the attempt or the harm}: coercion-resistance has to live at the
+\emph{protocol} layer, where there is nothing to hand over, not at the
+operational-security layer, which force simply overruns.
+
+\subsection{Denial gets you tortured: RATIRL}
+The Swedish \emph{League of Legends} streamer RATIRL was bound and tortured for
+hours by armed intruders demanding cryptocurrency he says he did not
+have; unable to credit the denial, they persisted long past any plausible payoff,
+and left with his Pokémon-card collection.\footnote{J.\ Lopp, on X: ``\ldots
+armed intruders broke into his home, tortured him for hours, and demanded
+cryptocurrency he didn't have. The robbers eventually left with only his
+Pok\'emon cards\ldots'' \url{https://x.com/lopp/status/2058917155530293600}.} By
+the victim's own account the ordeal was \emph{prolonged} — and that detail is the
+tell. Prolonged coercion following a denial all but confirms the attackers were
+\emph{predisposed to disbelieve} it, truthful or not. Denial did not save him;
+it very likely \emph{extended} the attack.
+
+\subsection{The rhetoric trilemma}
+Why did denial fail? Because under coercion everything a victim can \emph{do} is
+a \emph{speech act} whose credibility the \emph{attacker} adjudicates — and there
+are only three such moves:
+
+\begin{enumerate}[leftmargin=1.6em,nosep]
+\item \term{Comply} — hand over the real key. Outcome: robbed. And if the
+attacker suspects there is more, compliance does not even end the encounter.
+\item \term{Deny} — ``I have nothing.'' Outcome: in a culture where ``deny you
+own Bitcoin'' is standard advice, denial is pre-discredited as \emph{the
+denial-script} → disbelief → escalation (RATIRL).
+\item \term{Decoy} — surrender a small or fake wallet. Outcome: presumed to be
+\emph{the decoy} → ``now the real one'' → escalation.
+\end{enumerate}
+
+\begin{keyidea}[The trilemma]
+All three moves are \emph{unverifiable claims}, and obscurity culture has already
+discredited the two non-complying ones. So the honest have-nothing victim and the
+stonewalling holder look \emph{identical} to the attacker — whose rational
+continuation of an interrogation that opened with a denial is \emph{more}
+violence, not less. Rhetoric offers no exit.
+\end{keyidea}
+
+\noindent \GW{} dissolves the trilemma by changing the \emph{kind} of signal the
+victim emits — from \emph{rhetoric} (a claim to be believed) to a
+\emph{verifiable physical constraint}. ``I cannot produce it within your window''
+is not something the attacker must take on faith: it is a property of a
+\emph{public} protocol they can check for themselves (this is what
+\term{Anti-Obscurity} buys — the one honest signal becomes credible \emph{because}
+the attacker knows the mechanism). Balland's limb says the barrier must sit at the
+protocol layer; RATIRL's limb says the victim's signal must be verifiable, not
+rhetorical. Great Wall satisfies both at once.
+
+\gwfeedback{The trilemma is subtle: students often first think ``just deny.''
+RATIRL is the counter-example that makes it click — watch whether the
+``pre-discredited signal'' idea lands or needs a second pass.}
+
+\section{What we will build instead: the Four Properties}
+\GW{} claims four properties \emph{at once}:
+
+\begin{enumerate}[leftmargin=1.6em,nosep]
+\item \term{Knowledge-Based Authentication.} The secret lives entirely in your
+memory — no device, vault, or place required.
+\item \term{Individual Custody.} You depend on no one else; full self-custody is
+intact.
+\item \term{Non-Obscurity.} The method is fully public; it does not fail when the
+attacker learns it, and does not rely on hiding that a stash exists.
+\item \term{Coercion-Resistance.} Threatening violence does not get the attacker
+the secret.
+\end{enumerate}
+
+\begin{keyidea}
+In one sentence: \emph{it's all in your head (1), in nobody else's (2), the
+attacker is aware of that (3), and is nevertheless unable to rob it (4).}
+\end{keyidea}
+
+\noindent This sounds like having your cake and eating it too. The next four
+sessions explain why it is nonetheless possible — the secret is \emph{tacit}
+(Session~2), encoded as a place on an indescribable fractal (Session~3), behind a
+wall of unavoidable computation (Session~4), made livable by training and
+inheritance (Session~5).
+
+\gwfeedback{Does the economic framing read as evidence, or as a sales pitch?
+We need to know — this is the hook the whole course hangs on.}
+
+\begin{tryit}[Homework into Session 2]
+Install \texttt{great-wall-core}, build the Rust engine, and launch
+\texttt{python3 viewer.py}. Then just \emph{play}: pan, zoom, change color
+schemes. No goal. Get a feel for how strange and detailed the Burning Ship is.
+Post a screenshot in \texttt{\#show-your-fractal}.
+\end{tryit}
+
+\paragraph{Reflect.} Write one paragraph on \emph{your} threat profile: who could
+plausibly coerce you, for how long, and which conventional defense you currently
+rely on. We build on this next time.
+
+% ══════════════════════════════════════════════════════════════════════════
+\chapter{Secrets You Cannot Tell}
+% ══════════════════════════════════════════════════════════════════════════
+
+\probsoln
+{A secret you can \emph{say} is a secret you can be \emph{made} to say. Under a
+long enough coercion, PINs, passphrases, and seed words all come out — and
+``hidden extra'' tricks just get the victim hurt for plausibly holding more.}
+{Encode the secret as \term{tacit knowledge} — something you can deploy
+(recognize, point at) but genuinely \emph{cannot articulate} — and gate its use
+behind a computation no one can rush.}
+{Feel it before you define it: decode a point by hand, then try to describe its
+location precisely to a partner. You will fail. That failure is the whole idea.}
+
+\section{Explicit vs.\ tacit knowledge}
+\term{Explicit knowledge} is anything you can state: a number, a word, a
+sentence. It is transmissible — which is exactly why it is coercible. \term{Tacit
+knowledge} is knowing-\emph{how} that resists being put into words: recognizing a
+friend's face, riding a bicycle, the ``feel'' of a familiar route. You can use it
+flawlessly and still be unable to dictate it to a stranger.
+
+\begin{keyidea}
+\textbf{Recognition is not recall, and recall is not verbalizable.} You can pick
+your fractal point out of the landscape (recognition) without being able to read
+out its coordinates (verbalization). Coercion can only extract what can be
+verbalized.
+\end{keyidea}
+
+\section{Why this defeats the wrench}
+A \wrench{} works by raising the cost of \emph{refusing} until you comply.
+It assumes the secret is something you \emph{could} hand over if sufficiently
+motivated. Tacit knowledge breaks that assumption: there is no sentence you can
+be tortured into saying that conveys ``the point is \emph{there}.'' The only way
+to extract it is to sit you in front of the fractal and have you point — which,
+as we will see in Session~4, the attacker cannot make happen quickly, because the
+fractal you would point at \emph{does not exist yet} until a long computation
+finishes.
+
+\begin{pitfall}
+Tacit $\neq$ secret-in-the-usual-sense. The attacker may know \emph{everything}
+about the method and that you have a stash (non-obscurity!). What they cannot get
+is the non-transmissible \emph{recognition} in your head.
+\end{pitfall}
+
+\section{TKBA: the theory of the whole system}
+\GW{} is an implementation of \term{Tacit Knowledge-Based Authentication
+(TKBA)}. The four properties are logically coupled: a secret held only in your
+head (1), by nobody else (2), known by the attacker to be there (3), can resist
+coercion (4) \emph{only if} it is non-transmissible — i.e.\ tacit. TKBA is the
+load-bearing premise, not an implementation detail.
+
+TKBA needs a second ingredient: the \emph{interface} that deploys the secret must
+itself be gated by an \term{inescapably lengthy computation}. Otherwise an
+attacker just stands over you repeating ``try again'' until recognition leaks.
+That gate is Argon2 (Session~4).
+
+\begin{deeper}[Why a design choice can break TKBA]
+Any feature that converts tacit recall into an \emph{explicit, memorizable fact}
+weakens property~4. This is why the UX hides the bisection-area rectangles behind
+a debug flag: showing them in normal use would teach you verbalizable facts about
+your own encoding — facts an attacker could then coerce. Security here is a
+property of \emph{what you are allowed to know about your own secret}.
+\end{deeper}
+
+\gwfeedback{Did ``tacit'' actually click, or stay abstract? The pairing exercise
+is the moment of truth — watch whether students can articulate why their
+description failed.}
+
+\begin{tryit}[In session — the pairing exercise]
+With a partner on Discord: each of you decodes one guided point in the viewer.
+Now \emph{describe your point's location to your partner in words} well enough for
+them to click it — no screen-share. Notice how quickly you run out of language,
+and how ``up and a bit left, near that flamey bit'' fails to pin a 32-bit
+location.
+\end{tryit}
+
+% ══════════════════════════════════════════════════════════════════════════
+\chapter{Drawing Inside the Labyrinth}
+% ══════════════════════════════════════════════════════════════════════════
+
+\probsoln
+{``Encode a secret as a point on a fractal'' sounds like hand-waving. How is the
+mapping \emph{exact}, \emph{lossless}, and \emph{reversible} — and why a fractal
+at all?}
+{A \term{bisection bijection}: repeatedly split a rectangle, let the fractal's
+own structure choose where, and read each input bit as a directional choice. Same
+structure on both sides $\Rightarrow$ encode and decode walk the identical tree
+$\Rightarrow$ perfect round-trip.}
+{Do a tiny one by hand (2–3 bits), then scale up in the viewer and watch your
+exact BIP39 words come back out.}
+
+\section{First, some questions about bits and words}
+The whole chapter — and the sizes table in Chapter~1 — leans on vocabulary we
+have used without defining: \emph{bit}, \emph{128}, \emph{11 bits per word},
+\emph{checksum}, and \emph{32 per point}. Settle them now, in order.
+
+\subsection{What exactly is a ``bit of entropy''?}
+Not a bit of \emph{storage} — a bit of \emph{unpredictability}. One bit of
+entropy is one genuinely unpredictable coin-flip: it \emph{doubles} the number of
+equally-likely secrets an attacker must sift. So $n$ bits of entropy means $2^n$
+equally-likely possibilities, and on average $\approx 2^{n-1}$ guesses to hit
+yours. The word \emph{unpredictable} is load-bearing: a bit that is always $1$
+stores data but carries \emph{zero} entropy. Entropy counts only the part an
+attacker cannot anticipate.
+
+\subsection{Why do I need 128 of it?}
+Because brute-force cost grows as $2^n$, and $2^{128}\approx 3.4\times10^{38}$ is
+the line between ``someday, maybe'' and ``not before the heat death of the
+universe.'' At 64 bits a well-funded adversary can grind through the whole space;
+at 128 no one can, with any conceivable hardware, ever; past 128 you are spending
+memory and effort for security you already had. It is also exactly BIP39's
+default — a 12-word seed carries 128 bits of entropy (the 12 words actually spell
+out 132 bits: 128 of entropy plus a 4-bit checksum — the next two questions).
+
+\subsection{How does a BIP39 word encode 11 bits?}
+The BIP39 wordlist is exactly \textbf{2048 words}, and $2048 = 2^{11}$. So a word
+is nothing more than an \emph{index} into that list — a number from 0 to 2047 —
+and any number in that range is written in \textbf{11 bits}. Twelve words
+therefore carry $12\times 11 = \textbf{132}$ bits. (The words are a
+human-friendly \emph{spelling} of the bits, chosen so the first four letters are
+unique and easy to transcribe — nothing more mysterious than that.)
+
+\subsection{What are checksum bits?}
+Of those 132 bits, only \textbf{128 are entropy}; the last \textbf{4 are a
+checksum}. The checksum is not random — it is \emph{derived} from the entropy: it
+is the first $128/32 = 4$ bits of $\mathrm{SHA\text{-}256}$ of the entropy. Being
+derived, it carries \emph{zero} entropy (it tells an attacker nothing). Its job is
+\term{error detection}: when you type a seed, a wallet re-derives the checksum and
+rejects the phrase if it disagrees, so a single mistyped or swapped word is
+caught. A randomly chosen set of 12 valid words passes only $1/2^{4} = 1/16$ of
+the time — that is the check working. (Bigger seeds get proportionally more:
+24 words $=$ 256 entropy $+$ 8 checksum $= 264 = 24\times 11$.)
+
+\subsection{How does one Great Wall point yield 32 of it?}
+A point is pinned down by \textbf{32 binary choices} — the 32 left/right (or
+up/down) bisection steps that locate its leaf (next section). If you picked that
+leaf \emph{uniformly at random} from the $2^{32}$ possible leaves, then ``which
+leaf?'' is worth exactly 32 bits. One point $=$ 32 bits — so 128 bits needs
+\textbf{four} points, which is precisely why a 12-word setup has four point stages
+(Chapter~1's table): $4\times32 = 128$. Great Wall encodes only those \emph{128
+entropy} bits; the 4 checksum bits are \emph{recomputed} on decode, not stored on
+the fractal (which is why it is four points, not ``$132/32$'').
+
+\begin{keyidea}
+Entropy is guessing-difficulty in bits ($n$ bits $\Rightarrow 2^n$ tries). 128
+bits is the uncrackable bar. A BIP39 word is an index into a $2^{11}$-word list
+$=$ 11 bits, so 12 words $=$ 132 bits $=$ 128 entropy $+$ 4 (derived, zero-entropy)
+checksum. One Great Wall point is 32 uniformly-random bisection choices $=$ 32
+bits, so four points carry the 128 entropy bits (the checksum is recomputed, not
+stored). The \term{haystack} (which fractal you are on) is \emph{not} counted
+here — that is the coercion cost (Session~4), not seed entropy. Entropy lives in
+the \emph{needle}; the wall lives in the \emph{haystack}.
+\end{keyidea}
+
+\gwfeedback{The needle-vs-haystack split confuses people: they expect ``the
+fractal'' to add entropy. It doesn't — it adds \emph{cost}. Watch for this.}
+
+\section{The big picture: a shared, unstored codebook}
+Both the encoder and the decoder can regenerate the \emph{same} fractal from the
+same parameters. The fractal's intricate structure acts as a codebook neither
+side has to store — they each reconstruct it on demand. Encoding writes a path
+into that structure; decoding reads it back.
+
+\begin{keyidea}
+\textbf{Haystack $\gg$ needle.} Specifying \emph{which} fractal (the haystack)
+is made far more expensive than specifying \emph{where} in it your point sits
+(the needle, $\approx$ 32 bits). That asymmetry is the security engine: an
+attacker who tries to \emph{describe} a fractal instead of \emph{deriving} it
+faces the haystack cost, per stage, again and again.
+\end{keyidea}
+
+\section{Bisection encoding, step by step}
+Picture the fractal inside a rectangle. To encode a bit string:
+
+\begin{enumerate}[leftmargin=1.5em,nosep]
+\item \textbf{Find structure.} Discover ``islands'' — connected regions sharing
+an escape count — inside the current rectangle.
+\item \textbf{Pick a split line.} Take a (weighted) median of the islands along
+the rectangle's longer axis. The \emph{fractal} chooses the split, not a fixed
+grid.
+\item \textbf{Read one bit as a direction.} On a vertical split, $0=$ left,
+$1=$ right; on a horizontal split, $0=$ up, $1=$ down. Select that child
+rectangle.
+\item \textbf{Contract if needed} (to stop one side ballooning), then
+\textbf{recurse} on the chosen child with the next bit.
+\end{enumerate}
+
+\noindent After all bits, the \emph{center of the final rectangle} is your
+encoded point. Decoding reproduces the very same splits and, at each level, asks
+``which side is the point on?'' to read the bit back.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0, every node/.style={font=\footnotesize}]
+  % level 0 rectangle
+  \draw[accentdark, thick] (0,0) rectangle (6,3.2);
+  % first split (vertical) at x=3.6
+  \draw[attackcol, thick, dashed] (3.6,0) -- (3.6,3.2);
+  \node[accentdark] at (3.0,3.45) {split 1 (median)};
+  \node at (1.8,2.7) {\textbf{0}=left};
+  \node at (4.8,2.7) {\textbf{1}=right};
+  % chosen left child, second split (horizontal) at y=1.4
+  \draw[accent, thick] (0,0) rectangle (3.6,3.2);
+  \draw[attackcol, thick, dashed] (0,1.4) -- (3.6,1.4);
+  \node at (1.0,2.1) {\textbf{0}=up};
+  \node at (1.0,0.6) {\textbf{1}=down};
+  % final leaf + point
+  \draw[goldcol, very thick] (0,0) rectangle (3.6,1.4);
+  \fill[btccol] (1.7,0.7) circle (2.2pt);
+  \node[btccol] at (2.55,0.7) {point};
+\end{tikzpicture}
+\captionof{figure}{Two bisection levels. The fractal's island structure (not
+shown) picks each dashed split line; each input bit selects a child; the leaf's
+center is the encoded point. Decoding walks the identical tree and reads the
+bits back from which side the point lies on.}
+\end{center}
+
+\section{Why it is genuinely a bijection}
+Three guarantees, together:
+\begin{itemize}[leftmargin=1.4em,nosep]
+\item \textbf{Determinism.} The island discovery is driven by a pseudo-random
+generator seeded from the \emph{bisection path so far} — so encode and decode,
+walking the same path, discover identical islands and pick identical splits.
+\item \textbf{No floating point.} Every bijection-critical step uses integer /
+fixed-point arithmetic (\term{I4F60}: 60 fractional bits), so the result is
+\emph{bit-identical} on any machine. Floats, with their platform-dependent
+rounding, would silently break the round-trip.
+\item \textbf{Clean partition.} Half-open intervals $[\min,\max)$ split a parent
+exactly into two non-overlapping children, so every point lands in exactly one
+leaf, and distinct bit strings land in distinct leaves.
+\end{itemize}
+
+\begin{pitfall}
+``A fractal is fuzzy/chaotic, so this must be approximate.'' No. The chaos is in
+the \emph{shape}; the \emph{arithmetic} is exact integer math. Same inputs,
+identical outputs, forever. That exactness is why your seed survives the
+round-trip.
+\end{pitfall}
+
+\gwfeedback{Where does the bijection lose people — the splitting, the
+determinism (``why no floats''), or the ``why a fractal at all''? Pin which one.}
+
+\begin{deeper}[Precision budget]
+Each bisection level consumes roughly one bit of positional precision. With 60
+fractional bits the encoder reliably places \textbf{32 bits per point}. That is
+why the protocol uses exactly one 32-bit point per stage; bigger seeds use
+\emph{more stages}, not more bits per point (see Session~4 and the size table in
+the appendix).
+\end{deeper}
+
+\begin{tryit}[In session]
+Encode a \textbf{3-word (32-bit) mini-seed} in the viewer. Turn on the area
+visualization and step through the bisection (\texttt{V}, then \texttt{<}/\texttt{>}).
+Then decode the point back and confirm you get the identical three words. The
+skeptic's reassurance: your exact words return.
+\end{tryit}
+
+% ══════════════════════════════════════════════════════════════════════════
+\chapter{Building the Wall}
+% ══════════════════════════════════════════════════════════════════════════
+
+\probsoln
+{If the next fractal could be rendered \emph{instantly}, coercion would simply
+wait for it: ``point at it now.'' What makes the secret unreachable \emph{in a
+hurry} — even by a fully cooperative you?}
+{A \term{memory-hard chain}. Each stage's fractal is derived by a slow, RAM-bound
+Argon2 computation over stage-0 text plus all preceding points. It cannot be
+traded for speed, and it is chained — stage $k{+}1$'s fractal does not exist until
+stage $k$'s point is fixed. The wall-clock cost compounds.}
+{Run a (small) calibration live; watch RAM fill and seconds pass; reason through
+why no shortcut exists.}
+
+\section{The wall in one picture}
+\begin{center}
+\begin{tikzpicture}[node distance=8mm, font=\footnotesize,
+  box/.style={draw=accentdark, rounded corners=2pt, fill=accentlight,
+              minimum height=8mm, inner sep=4pt, align=center},
+  pt/.style={draw=btccol, thick, rounded corners=2pt, fill=white,
+             minimum height=8mm, inner sep=4pt, align=center},
+  arg/.style={draw=attackcol, thick, fill=white, rounded corners=2pt,
+              inner sep=4pt, align=center},
+  ar/.style={-latex, thick, accentdark}]
+  \node[box] (s0) {stage 0\\\scriptsize text (salt/pepper)};
+  \node[arg, right=of s0] (a1) {Argon2$^{N}$\\\scriptsize $\to$ SHA-256 $\to (o,p,q)$};
+  \node[pt, right=of a1] (p1) {stage 1\\\scriptsize point};
+  \node[arg, right=of p1] (a2) {Argon2$^{N}$};
+  \node[pt, right=of a2] (p2) {stage 2\\\scriptsize point};
+  \node[right=4mm of p2] (dots) {$\cdots$};
+  \draw[ar] (s0) -- (a1);
+  \draw[ar] (a1) -- (p1);
+  \draw[ar] (p1) -- (a2);
+  \draw[ar] (a2) -- (p2);
+  \draw[ar] (p2) -- (dots);
+  % feedback chain arrow: prior points feed the next Argon2
+  \draw[ar, dashed] (p1) to[bend left=28] (a2);
+\end{tikzpicture}
+\captionof{figure}{The chain. Stage-0 text seeds it; each Argon2 pass consumes
+stage-0 text plus \emph{all} preceding points to derive the next fractal's
+parameters. There is no public ``canonical'' fractal — every point-bearing
+surface is private and chain-derived.}
+\end{center}
+
+\section{What ``memory-hard'' buys}
+\term{Argon2} is a key-stretching function that deliberately needs a lot of RAM
+and runs as a strictly sequential chain of memory-dependent steps. Two
+consequences:
+\begin{itemize}[leftmargin=1.4em,nosep]
+\item \textbf{You cannot trade memory for speed.} An attacker with a big GPU/ASIC
+gains little: the work is gated on memory bandwidth and sequential dependency,
+where commodity CPUs are already near-optimal.
+\item \textbf{You cannot parallelize within a stage}, and you cannot start the
+\emph{next} stage early — the chain forbids it. So total honest cost is
+``one heavy Argon2 run per stage,'' and an attacker faces \emph{at least} that
+much wall-clock to reach the last point.
+\end{itemize}
+
+\begin{keyidea}
+Coercion fails twice over: the locations cannot be \emph{verbalized} (tacit), and
+the later fractals cannot be \emph{materialized} faster than the full chain runs.
+Robbing the whole secret needs custody of the victim for at least the total
+Argon2 delay — and real wrench attacks do not last that long.
+\end{keyidea}
+
+\section{The design choices, in plain words}
+You do not need the cryptographic proofs, but you should be able to say
+\emph{why}:
+\begin{description}[leftmargin=0pt,style=nextline,nosep]
+\item[Stage 0 = salt \emph{or} pepper.] A short \texttt{[A-Z0-9-]} label.
+As a \term{salt} (\texttt{RETIREMENT}, \texttt{MAIN-STASH}) it forks the
+\emph{entire} chain — one memorized seed yields independent wallets per label,
+and the memory of one does not transfer to another. As a \term{pepper} it lets
+you stack this setup on top of a prior secret (a password manager entry, a Shamir
+share, an earlier \GW{} setup).
+\item[$p=1$ (no parallel lanes).] Here the delay \emph{is} the product, not a
+budget to fill. One sequential lane maximizes the memory gate and keeps the
+attacker/defender speed ratio near~1.
+\item[$t=2$ (two passes).] The minimum that forces the whole memory array to stay
+resident at once (the second pass re-reads it data-dependently), defeating the
+classic time--memory trade-off.
+\item[Argon2d (data-dependent).] Side-channel resistance is irrelevant on your
+own device; data-dependent addressing gives the strongest memory-hardness, which
+is what we want.
+\item[Remember $N$, not ``hours.''] The durable parameter is the iteration count
+$N$. ``Three days'' is only a \emph{perishable label} on $N$ — faster hardware
+later changes how long a given $N$ takes, never the result. Recovery reproduces
+the digest from $N$.
+\end{description}
+
+\gwfeedback{$p=1$ is the classic trip-wire: people trained on password hashing
+``know'' more parallelism is better. The inversion (delay is the product) is the
+crux — watch for pushback here.}
+
+\begin{pitfall}[Checkpoints are a loaded gun]
+A ``save intermediate'' option can store the chain's intermediate digests to
+resume later — but that file is \emph{exactly} the artifact that lets an attacker
+skip the time cost. It is \textbf{off by default}, and if you turn it on, it is
+\emph{your} responsibility to securely delete it (\texttt{shred}/\texttt{srm})
+once done. Sibling tools (TLP gating) automate this; the core exposes the raw
+trade-off on purpose.
+\end{pitfall}
+
+\begin{tryit}[In session]
+Pick a short target duration and let the app \emph{calibrate} $N$ on your device.
+Watch memory usage climb. Then try a nearby iteration count using checkpoints to
+feel how ``approximate memory of $N$'' is recoverable — and finish by securely
+deleting the checkpoint file.
+\end{tryit}
+
+% ══════════════════════════════════════════════════════════════════════════
+\chapter{Living With It}
+% ══════════════════════════════════════════════════════════════════════════
+
+\probsoln
+{``Stake your retirement on remembering fractals'' invites three fair fears:
+\emph{I'll forget}; \emph{the wall is too slow for me too}; and \emph{what
+happens when I die or can't recall?}}
+{Three companion systems: \term{Train} (measured memory consolidation with a
+graduation gate), \term{Accelerate} (outsourceable time-lock puzzles without
+losing custody), and \term{Inherit} (a dead-man's switch with cascading
+fallbacks).}
+{Do a complete setup once, then walk each ongoing obligation and decide, out
+loud, whether it convinces you.}
+
+\section{Train: don't trust memory you haven't measured}
+\GW{} does not ask you to \emph{hope} you remember. The
+\term{Celestial Peace: Never Forget} trainer drills your recall with spaced
+repetition (SM-2, Anki-style). Crucially there is a \term{graduation gate}: your
+stash is \textbf{not considered secured} until the trainer \emph{measures} that
+your memory has consolidated. Until then you are bootstrapping.
+
+\begin{keyidea}
+Honesty is a feature. The hard question — ``what if I forget?'' — is answered by
+\emph{measuring} consolidation before declaring the setup safe, not by
+reassurance.
+\end{keyidea}
+
+\begin{deeper}[The bootstrap paradox, and the provisional key]
+To \emph{secure} a stash you must already hold its entropy tacitly; to
+\emph{memorize} it you must train against the setup over weeks. Neither precedes
+the other, so a \term{provisional key} is held externally during the
+consolidation window and \emph{destroyed at graduation}, after which the setup
+self-secures. It is a transient crutch, not a backup.
+\end{deeper}
+
+\section{Accelerate: buy back time without giving up custody}
+Set your Argon2 delay conservatively (say $2\times$), then tune the
+\emph{effective} per-session delay with a \term{time-lock puzzle (TLP)} — an
+RSW repeated-squaring puzzle whose setup is instant but whose solving takes a
+chosen wall-clock time. You can \emph{outsource} the squaring to the
+\term{jade-clock} Lightning marketplace: the solver receives only the puzzle, never
+your vault, learns nothing about what it unlocks, and you pay over Lightning for
+anonymity. Custody never leaves your device.
+
+\section{Inherit: a phoenix, not a lawyer}
+\term{phoenix-scroll} is a dead-man's switch. You periodically ``rotate'' a
+private Lightning channel whose heir-branch key is split into two shares: one the
+heir derives from \emph{their own} \GW{} recall, one you hand off each epoch
+wrapped in a TLP. While you keep rotating, any heir's in-progress solve is
+invalidated — they cannot front-run a living you. When rotation \emph{stops}
+(death, incapacity), the latest puzzle eventually solves and the heir claims.
+Opaque taproot fallbacks let inheritance \emph{cascade} (your heir's heirs)
+without you ever knowing their estate plans.
+
+\begin{pitfall}[The one genuinely terminal failure]
+Without inheritance configured, \emph{total} loss of your tacit recall (with no
+heir set up) is unrecoverable — by anyone, for the same reason coercion fails.
+That is the price of true self-custody with no backdoor. Setting up inheritance is
+the \emph{only} post-loss recovery path.
+\end{pitfall}
+
+\section{The feel of it: an instrument, not an app}
+Two UX north-stars frame the whole experience: \emph{sober, but game-like}
+(tactile, quietly rewarding, never gimmicky) and \emph{an instrument, not an app}
+(you operate and master it; it does not think for you). The deeper bet: spatial
+memory — the \emph{method of loci}, memory palaces — is the most robust trainable
+human memory, and the fractal-as-territory is literally that. The faculty is
+dormant, not absent.
+
+\gwfeedback{After doing one setup, does ``trust my own memory'' feel plausible —
+and what is the single biggest remaining doubt? This is the most important data
+point in the whole pilot.}
+
+\begin{tryit}[In session — the capstone]
+Run a \textbf{complete setup} end-to-end (use a small/sub-standard size for time).
+Configure a mock training schedule. On paper, sketch a one-level inheritance will
+(one heir). Then take the skeptic's seat: name one assumption you are \emph{not}
+yet willing to bet real money on.
+\end{tryit}
+
+% ══════════════════════════════════════════════════════════════════════════
+\appendix
+\chapter{Quick reference}
+% ══════════════════════════════════════════════════════════════════════════
+
+\section{Seed sizes (chained protocol 0.3.0)}
+One mandatory text-only stage~0, then one 32-bit point per later stage
+($N = \text{entropy bits}/32 = \text{words}/3$):
+
+\begin{center}\small
+\begin{tabular}{r r r r l}
+\toprule
+\textbf{Words} & \textbf{Entropy} & \textbf{Point stages $N$} & \textbf{Total (incl.\ 0)} & \textbf{Tier}\\
+\midrule
+3 & 32 & 1 & 2 & sub-standard\\
+6 & 64 & 2 & 3 & sub-standard\\
+9 & 96 & 3 & 4 & sub-standard\\
+12 & 128 & 4 & 5 & standard (default)\\
+15 & 160 & 5 & 6 & standard\\
+18 & 192 & 6 & 7 & standard\\
+21 & 224 & 7 & 8 & standard\\
+24 & 256 & 8 & 9 & standard\\
+\bottomrule
+\end{tabular}
+\end{center}
+\noindent Hard cap: 256 bits / 24 words. Past that, add Argon2 iterations, not
+stages. Default recommendation: 12 words.
+
+\section{Glossary}
+\begin{description}[leftmargin=0pt,style=nextline,nosep]
+\item[TKBA] Tacit Knowledge-Based Authentication — the system's theoretical core.
+\item[Tacit knowledge] Knowing-how you can deploy but not verbalize; the basis of
+coercion-resistance.
+\item[Burning Ship] The fractal whose structure is used as the shared, unstored
+codebook.
+\item[Bisection bijection] The lossless, reversible mapping from bits to a point
+via recursive rectangle splits.
+\item[I4F60] The 64-bit fixed-point format (60 fractional bits) that keeps the
+math float-free and bit-exact.
+\item[Argon2] The memory-hard function that gates each stage; the ``wall.''
+\item[Stage 0] The mandatory text-only label that seeds the chain; salt or pepper.
+\item[$N$] The Argon2 iteration count — the durable parameter you remember.
+\item[$(o,p,q)$] The three numbers that perturb the fractal into your private one.
+\item[TLP / RSW] Time-lock puzzle (repeated modular squaring); used to accelerate.
+\item[jade-clock] The Lightning marketplace for outsourcing TLP solving.
+\item[phoenix-scroll] The inheritance protocol (dead-man's switch + fallbacks).
+\item[Graduation gate] The point at which training \emph{measures} that your
+memory has consolidated and the setup is safe to rely on.
+\end{description}
+
+\section{The four properties, one more time}
+\begin{enumerate}[leftmargin=1.6em,nosep]
+\item Knowledge-based — in your head.
+\item Individual — nobody else's.
+\item Non-obscure — the attacker knows the method and that a stash exists.
+\item Coercion-resistant — and still cannot rob it.
+\end{enumerate}
+
+\vfill
+\begin{center}\small\itshape\color{graytext}
+This is a pilot draft. Found an error, a confusing passage, or a better
+analogy? That is the deliverable — please report it.
+\end{center}
+
+\end{document}

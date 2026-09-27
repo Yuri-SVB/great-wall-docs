@@ -1,0 +1,184 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+
+% ── Session 5: "Living With It" (train / accelerate / inherit) ────────────
+% Shared brand theme + \gwtitle/\punch/\memeslot live in gwtheme.tex.
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{../style/greatwall}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{colortbl}
+
+\graphicspath{{./}{../assets/}}
+\def\gwsessionno{5}
+\input{gwtheme.tex}
+
+\begin{document}
+
+\gwtitle{Living With It}{Train, accelerate, inherit --- making ``trust your memory'' responsible}
+
+% ── Recap + hook ──────────────────────────────────────────────────────────
+\begin{frame}{Three fair fears}
+  You now have the whole mechanism. ``Stake your retirement on remembering
+  fractals'' still invites three honest objections:
+  \begin{enumerate}
+    \item \textbf{I'll forget.}
+    \item \textbf{The wall is too slow --- for me too.}
+    \item \textbf{What happens when I die, or can't recall?}
+  \end{enumerate}
+  \vspace{4pt}
+  \begin{center}\small
+  The ecosystem answers each --- \textbf{Train}, \textbf{Accelerate},
+  \textbf{Inherit}. Today we also \emph{do a real setup}.
+  \end{center}
+\end{frame}
+
+% ── Train ─────────────────────────────────────────────────────────────────
+\begin{frame}{Train --- don't trust memory you haven't measured}
+  \textbf{Celestial Peace: Never Forget} drills your recall with spaced
+  repetition (SM-2, Anki-style).
+  \begin{keyidea}[Honesty is a feature]
+    There's a \textbf{graduation gate}: your stash is \emph{not} considered
+    secured until the trainer \emph{measures} that your memory has consolidated.
+    The hard question --- ``what if I forget?'' --- is answered by measurement,
+    not reassurance.
+  \end{keyidea}
+  \begin{deeper}[The bootstrap paradox]
+    To \emph{secure} a stash you must already recall it; to \emph{memorize} it you
+    must train against it. So a \textbf{provisional key} is held externally during
+    consolidation and \textbf{destroyed at graduation} --- a transient crutch, not
+    a backup.
+  \end{deeper}
+\end{frame}
+
+% ── Accelerate ────────────────────────────────────────────────────────────
+\begin{frame}{Accelerate --- buy back time, keep custody}
+  Set your Argon2 delay conservatively ($\sim$2$\times$), then tune the
+  \emph{effective} per-session delay with a \textbf{time-lock puzzle (TLP)} ---
+  instant to set, chosen wall-clock to solve.
+  \begin{itemize}\small
+    \item \textbf{Outsource the squaring} to the \textbf{jade-clock} Lightning
+      marketplace.
+    \item The solver gets only the puzzle --- never your vault --- and learns
+      nothing about what it unlocks.
+    \item You pay over Lightning (anonymity); \textbf{custody never leaves your
+      device}.
+  \end{itemize}
+  \begin{center}\footnotesize\color{graytext}
+  Same posture the training vault uses --- reused on the inheritance path.
+  \end{center}
+\end{frame}
+
+% ── Inherit ───────────────────────────────────────────────────────────────
+\begin{frame}{Inherit --- a phoenix, not a lawyer}
+  \textbf{phoenix-scroll} is a dead-man's switch:
+  \begin{itemize}\small
+    \item You periodically \emph{rotate} a private Lightning channel. The
+      heir-branch key needs \textbf{two shares}: one the heir derives from
+      \emph{their own} Great Wall recall, one you hand off each epoch wrapped in a
+      TLP.
+    \item While you keep rotating, any heir's in-progress solve is invalidated ---
+      \textbf{they can't front-run a living you}.
+    \item Rotation \emph{stops} (death / incapacity) $\to$ the latest puzzle
+      eventually solves $\to$ the heir claims.
+    \item Opaque taproot fallbacks let inheritance \textbf{cascade} without you
+      ever knowing your heirs' estate plans.
+  \end{itemize}
+  \begin{pitfall}[The one genuinely terminal failure]
+    No inheritance configured $+$ total loss of recall $=$ unrecoverable, by
+    anyone --- the price of true self-custody with no backdoor. Inheritance is the
+    \emph{only} post-loss recovery path.
+  \end{pitfall}
+\end{frame}
+
+% ── The feel ──────────────────────────────────────────────────────────────
+\begin{frame}{The feel: an instrument, not an app}
+  \begin{columns}[T]
+    \begin{column}{0.58\textwidth}
+      Two UX north-stars:
+      \begin{itemize}\small
+        \item \textbf{Sober, but game-like} --- tactile, quietly rewarding, never
+          gimmicky.
+        \item \textbf{An instrument, not an app} --- you operate and master it; it
+          doesn't think for you.
+      \end{itemize}
+      \vspace{4pt}
+      The deeper bet: \emph{spatial} memory (the \textbf{method of loci}, memory
+      palaces) is the most robust trainable human memory --- and the
+      fractal-as-territory is literally that. The faculty is \emph{dormant, not
+      absent}.
+    \end{column}
+    \begin{column}{0.40\textwidth}
+      \memeslot{memory-palace.png}{method of loci --- ``your brain already does
+      this, we just point it at a fractal''}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ── Callback: four properties earned ──────────────────────────────────────
+\begin{frame}{We earned the four properties}
+  Session 1 \emph{claimed} them. Now you've seen why they hold:
+  \begin{center}\footnotesize
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{@{}l l@{}}
+    \toprule
+    \textbf{Property} & \textbf{Because\ldots} \\
+    \midrule
+    Knowledge-based & entropy lives as tacit fractal recall (S2) \\
+    Individual & no third party in the derivation (S3--S4) \\
+    Anti-obscure & security \emph{grows} as the attacker learns the mechanism (S1) \\
+    Coercion-resistant & tacit \emph{and} memory-hard-gated --- fails twice (S2, S4) \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  \vspace{4pt}
+  \begin{center}\small
+  \textbf{\color{accentdark}All in your head, in nobody else's; the attacker
+  knows --- and still can't rob it.}
+  \end{center}
+\end{frame}
+
+% ── Capstone hands-on ─────────────────────────────────────────────────────
+\begin{frame}{Capstone --- do it for real}
+  \begin{tryit}[In session]
+    \begin{enumerate}\small
+      \item Run a \textbf{complete setup} end-to-end (small/sub-standard size for
+        time).
+      \item Configure a mock training schedule.
+      \item On paper, sketch a one-level inheritance will (one heir).
+      \item Take the \textbf{skeptic's seat}: name one assumption you're
+        \emph{not} yet willing to bet real money on.
+    \end{enumerate}
+  \end{tryit}
+  \gwfeedback{The big one: after doing a setup yourself, does ``trust my own
+  memory'' feel plausible --- and what's the single biggest remaining doubt? This
+  is the most important data point in the whole pilot.}
+\end{frame}
+
+% ── Wrap ──────────────────────────────────────────────────────────────────
+\begin{frame}{That's the pilot --- thank you}
+  \begin{columns}[T]
+    \begin{column}{0.62\textwidth}
+      \begin{block}{Two last asks in \texttt{\#feedback}}
+        \begin{enumerate}\small
+          \item The \textbf{post-course survey} (pinned) --- outcomes, the
+            ``would you trust real funds?'' question, and your open critique.
+          \item If you ran the next cohort, the \emph{first} thing you'd change.
+        \end{enumerate}
+      \end{block}
+      \footnotesize You were cohort 1. The diff you produce in these materials
+      \emph{is} the deliverable.
+    \end{column}
+    \begin{column}{0.36\textwidth}
+      \begin{center}\gwflagicon\\[3pt]
+      {\footnotesize\color{attackcol}\itshape Your confusion was the curriculum.}
+      \end{center}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\punch{Now go remember something\\[6pt] worth remembering.}
+
+\end{document}

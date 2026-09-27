@@ -1,0 +1,406 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+
+% ── Session 1: "The Wrench in the Works" ──────────────────────────────────
+% Format-locking deck for the Great Wall pilot. Lively on purpose: humor,
+% memes, big type. Memes are loaded via \IfFileExists guards so a missing
+% image never breaks the build — drop real PNGs into ../assets/ (see
+% ../assets/README.md) and they appear automatically.
+% Shared brand theme + \gwtitle/\punch/\memeslot live in gwtheme.tex.
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{../style/greatwall}   % shared brand palette + boxes + marks
+\usepackage{booktabs}
+\usepackage{array}                % \arraybackslash for p-column alignment
+\usepackage{colortbl}             % \rowcolor in tables
+
+\graphicspath{{./}{../assets/}}
+\def\gwsessionno{1}
+\input{gwtheme.tex}
+
+\begin{document}
+
+\gwtitle{The Wrench in the Works}{Why self-custody isn't enough --- and what we'll do about it}
+
+% ── Check-in ──────────────────────────────────────────────────────────────
+\begin{frame}{Before we start: a one-word check-in}
+  \begin{columns}[T]
+    \begin{column}{0.58\textwidth}
+      Drop \textbf{one word} in \texttt{\#feedback} for how you arrived today.
+      \vspace{8pt}
+
+      And a quick poll --- react in \texttt{\#live-chat}:
+      \begin{itemize}
+        \item[\textbf{\color{accent}(A)}] ``I could lose my crypto to a hacker.''
+        \item[\textbf{\color{btccol}(B)}] ``I could lose my crypto to a \emph{person} standing next to me.''
+      \end{itemize}
+      \vspace{6pt}
+      Hold that thought. By the end of today, \textbf{\color{btccol}(B)} is the one we care about.
+    \end{column}
+    \begin{column}{0.40\textwidth}
+      \begin{block}{House rules}
+        \footnotesize
+        Throwaway setups + test entropy \textbf{only}. Never a real seed, never
+        real funds --- not even to show off.
+      \end{block}
+    \end{column}
+  \end{columns}
+  \note{Keep this to 3 minutes. The poll seeds the whole session's tension.}
+\end{frame}
+
+% ── The hook: the headline ────────────────────────────────────────────────
+\begin{frame}{The headline that started this}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \begin{block}{X, 12 Feb 2026}
+        \footnotesize\itshape
+        ``ATTACKS ON BITCOINERS IN FRANCE ACCELERATING --- Out of 47 documented
+        attacks since 2017, 38 happened in the last 13 months.''
+      \end{block}
+      \vspace{4pt}
+      The top reply, endorsed as \emph{``golden advice''}:
+      \begin{block}{}
+        \footnotesize\itshape ``No one needs to know you own Bitcoin.''
+      \end{block}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \memeslot{wrench-attack-meme.png}{the classic \$5 wrench xkcd vibe ---
+      ``\$5 wrench'' \(>\) any amount of crypto}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ── Define wrench attack ──────────────────────────────────────────────────
+\begin{frame}{The \texorpdfstring{\wrench}{wrench attack}}
+  \begin{keyidea}[The threat we actually can't ignore]
+    A \textbf{wrench attack} (a.k.a.\ ``\$5 wrench attack''): forget hacking the
+    cryptography --- just physically coerce the human who holds the keys.
+    \emph{``Transfer it, or else.''}
+  \end{keyidea}
+  \vspace{4pt}
+  Your hardware wallet's secure element, your 24 words on titanium, your fancy
+  passphrase --- none of it helps when the attacker is in the room and patient.
+  \vspace{6pt}
+  \begin{center}\small\color{graytext}
+  Tracked in the real world: \texttt{jlopp/physical-bitcoin-attacks}.
+  \end{center}
+\end{frame}
+
+% ── The contradiction (punch) ─────────────────────────────────────────────
+\punch{If everyone is a needle,\\[6pt] there is no hay.}
+
+\begin{frame}{Obscurity vs.\ adoption: pick one}
+  The consensus defense is \textbf{obscurity}: ``tell no one.'' But:
+  \begin{itemize}
+    \item \textbf{It fights adoption.} Safety-by-blending-in cannot scale to
+      everyone --- if all Bitcoiners are needles, there's no haystack left.
+    \item \textbf{It violates Kerckhoffs (1883).} Security must not rest on the
+      \emph{secrecy of the method}. Bitcoin is open; an educated attacker knows
+      what you know.
+    \item \textbf{Decoy tricks backfire.} The attacker can't tell a decoy wallet
+      from the real one --- so they just\ldots keep going.
+  \end{itemize}
+  \vspace{4pt}
+  \begin{block}{The community endorses obscurity \emph{in the same threads} where it documents obscurity failing.}
+  \end{block}
+\end{frame}
+
+% ── Skeptic seat intro ────────────────────────────────────────────────────
+\begin{frame}{Interaction: the skeptic's seat}
+  \begin{columns}[T]
+    \begin{column}{0.6\textwidth}
+      One volunteer per session has a job: \textbf{attack the claim.}
+      \vspace{6pt}
+
+      Today's claim to attack:
+      \begin{block}{}
+        ``Obscurity is a \emph{cost}, not a defense.''
+      \end{block}
+      \vspace{6pt}
+      Everyone else: back them up or knock them down in \texttt{\#live-chat}.
+    \end{column}
+    \begin{column}{0.38\textwidth}
+      \memeslot{skeptic-seat.png}{``but couldn't the attacker just\ldots ?'' ---
+      yes. that's the point of this seat.}
+    \end{column}
+  \end{columns}
+  \note{Assign the skeptic now; they hold the role all session.}
+\end{frame}
+
+% ── The data: security tax ────────────────────────────────────────────────
+\begin{frame}{Let's put a price on it}
+  Insurance markets price ``portable-valuable-gets-stolen'' every day (jewelry,
+  watches). Borrow their math for Bitcoin whales:
+  \begin{keyidea}[The security tax]
+    At the 2026 pace, the insurance-equivalent annual security cost for individual
+    BTC whales has entered the \textbf{gold-storage range} ($\sim$0.5--1.5\%/yr) ---
+    a cost the market currently prices at \textbf{zero}.
+  \end{keyidea}
+  And because attacks grow faster than the whale population, the
+  \emph{forward-looking} discount is several times the current annual number.
+  \begin{center}\footnotesize\color{graytext}
+  Full derivation: \texttt{justification-and-economics/JUSTIFICATION}.
+  \end{center}
+\end{frame}
+
+\begin{frame}{Attacks are outgrowing the targets}
+  \begin{columns}[T]
+    \begin{column}{0.56\textwidth}
+      \begin{tikzpicture}[scale=1]
+        \draw[->,thick,graytext] (0,0) -- (5.4,0) node[right]{\scriptsize year};
+        \draw[->,thick,graytext] (0,0) -- (0,3.4) node[above]{\scriptsize rate};
+        % attack rate rising
+        \draw[attackcol,very thick]
+          (0.2,0.4) -- (1.2,0.7) -- (2.2,1.4) -- (3.2,1.6) -- (4.2,2.6) -- (5.0,3.1);
+        \node[attackcol,right] at (3.0,2.9) {\scriptsize attacks/100k};
+        % whale pop rising slower
+        \draw[accent,very thick,dashed]
+          (0.2,0.6) -- (1.2,0.9) -- (2.2,1.1) -- (3.2,1.3) -- (4.2,1.5) -- (5.0,1.7);
+        \node[accent,right] at (3.4,1.2) {\scriptsize whales};
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      The red line (attacks per capita) is pulling away from the green
+      (population). The \emph{per-person} risk is rising.
+      \vspace{6pt}
+      \begin{block}{We are early in the trend}
+        \footnotesize Targeting gets easier and criminal skill diffuses as
+        adoption grows. This converges toward ordinary-robbery economics.
+      \end{block}
+    \end{column}
+  \end{columns}
+  \gwfeedback{Does this read as evidence or as a pitch? Genuinely asking ---
+  it's the hook the course hangs on.}
+\end{frame}
+
+% ── The four-property test ────────────────────────────────────────────────
+\begin{frame}{The four-property test}
+  Four properties an adequate method needs \emph{at once}. Every method on the
+  market drops one --- and the dropped one is the one that gets people hurt.
+  \vspace{4pt}
+  \begin{center}\footnotesize
+  \renewcommand{\arraystretch}{1.35}
+  \begin{tabular}{@{}l c c c c >{\raggedright\arraybackslash}p{0.30\textwidth}@{}}
+    \toprule
+    \textbf{Method} & \textbf{Devi.} & \textbf{Indiv.} & \textbf{Anti-obsc.} & \textbf{Coerc.} & \textbf{Fails on} \\
+    \midrule
+    \rowcolor{accentlight}\textbf{TKBA} (Great Wall) & \gwcheck & \gwcheck & \gwcheck & \gwcheck & only: \emph{forgetting} (we solve it) \\
+    Physical (vault, Shamir) & \gwcross & \gwcheck & \gwcheck & \gwcheck & cost + ``glorified gold'' \\
+    Shared (Coinbase, Casa) & \gwcheck & \gwcross & \gwcheck & \gwcheck & not your keys\ldots \\
+    Obscurity (decoy, denial) & \gwcheck & \gwcheck & \gwcross & \gwskull & \emph{backfires} $\to$ more violence \\
+    Vanilla (Ledger, Electrum) & \gwcheck & \gwcheck & \gwcheck & \gwcross & wide open to the wrench \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  \begin{center}\scriptsize\color{graytext}
+  \gwcheck~has it \quad \gwcross~lacks it \quad \gwskull~\emph{negative} (worse than lacking) \quad\textbf{\color{accentdark}Only the top row holds all four.}
+  \end{center}
+  \gwfeedback{The obscurity row's \gwskull{} (not a \gwcross) is the subtle bit ---
+  does ``negative resistance'' land? We unpack it next.}
+\end{frame}
+
+% ── Two cases: Balland vs RATIRL ──────────────────────────────────────────
+\begin{frame}{Two cases that bracket the problem}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Force beats a fortress --- David Balland}
+        \footnotesize
+        Co-founder of \textbf{Ledger}. Wealthy, expert, security-aware --- about as
+        well-defended as an individual gets.
+        \vspace{3pt}
+        Jan 2025: kidnapped $\sim$2 days, \textbf{mutilated}, ransom extorted;
+        freed only by police.
+      \end{block}
+      \scriptsize\color{graytext} Abundant physical defense didn't prevent the
+      attempt \emph{or} the harm.
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Denial gets you tortured --- RATIRL}
+        \footnotesize
+        Swedish \emph{LoL} streamer. Armed intruders, \textbf{tortured for hours}
+        over crypto he says he didn't have.
+        \vspace{3pt}
+        They didn't believe him; left with his \textbf{Pok\'emon cards}.
+      \end{block}
+      \scriptsize\color{graytext} By his own account the ordeal was
+      \emph{prolonged} --- the tell that the denial was \emph{pre-disbelieved}.
+    \end{column}
+  \end{columns}
+  \vspace{6pt}
+  \begin{center}\small
+  \textbf{\color{accentdark}Bodyguards can't fix it (Balland). Talking can't fix
+  it (RATIRL).}
+  \end{center}
+\end{frame}
+
+% ── The rhetoric trilemma ─────────────────────────────────────────────────
+\begin{frame}{The rhetoric trilemma}
+  Under coercion, everything you can \emph{do} is a \emph{speech act} the
+  \textbf{attacker} judges. Only three moves exist --- all lose:
+  \vspace{2pt}
+  \begin{center}
+  \begin{tikzpicture}[font=\footnotesize, node distance=6mm,
+    m/.style={draw=accentdark, rounded corners=2pt, fill=accentlight,
+              text width=2.7cm, align=center, minimum height=1.05cm, inner sep=3pt},
+    f/.style={draw=attackcol, rounded corners=2pt, fill=white, text=attackcol,
+              text width=2.7cm, align=center, minimum height=1.05cm, inner sep=3pt},
+    ar/.style={-latex, thick, attackcol}]
+    \node[m] (c) {\textbf{Comply}\\\scriptsize hand over the key};
+    \node[m, right=of c] (d) {\textbf{Deny}\\\scriptsize ``I have nothing''};
+    \node[m, right=of d] (k) {\textbf{Decoy}\\\scriptsize a small / fake wallet};
+    \node[f, below=of c] (cf) {robbed\\\scriptsize (and maybe not done)};
+    \node[f, below=of d] (df) {presumed \emph{denial-script} $\to$ escalate};
+    \node[f, below=of k] (kf) {presumed \emph{the decoy} $\to$ escalate};
+    \draw[ar] (c)--(cf); \draw[ar] (d)--(df); \draw[ar] (k)--(kf);
+  \end{tikzpicture}
+  \end{center}
+  \vspace{-2pt}
+  \begin{center}\footnotesize
+  All three are \emph{unverifiable claims}; obscurity culture pre-discredits the
+  last two. Honest ``have-nothing'' and stonewaller look \textbf{identical} ---
+  so the rational next step is \emph{more} violence.
+  \end{center}
+\end{frame}
+
+% ── How Great Wall escapes it ─────────────────────────────────────────────
+\begin{frame}{How Great Wall breaks the trilemma}
+  \begin{keyidea}[Swap rhetoric for a verifiable constraint]
+    ``I \emph{cannot} produce it within your window'' stops being a \emph{claim to
+    be believed} and becomes a \textbf{property of a public protocol the attacker
+    can check for themselves}.
+  \end{keyidea}
+  \vspace{2pt}
+  \begin{itemize}\small
+    \item \textbf{Balland's lesson:} put the barrier at the \emph{protocol} layer
+      (nothing to hand over), not the bodyguard layer that force overruns.
+    \item \textbf{RATIRL's lesson:} the victim's signal must be \emph{verifiable},
+      not rhetorical.
+    \item \textbf{Anti-Obscurity is the trick:} the one honest signal is credible
+      \emph{because} the attacker knows the mechanism --- exactly the property
+      obscurity throws away.
+  \end{itemize}
+\end{frame}
+
+% ── The reveal ────────────────────────────────────────────────────────────
+\punch{What if the secret were\\[6pt] something you literally\\[6pt] \emph{cannot} hand over?}
+
+\begin{frame}{The Four Properties --- all at once}
+  Great Wall claims all four \emph{simultaneously}:
+  \begin{enumerate}
+    \item \textbf{Knowledge-based} --- it's entirely in your memory.
+    \item \textbf{Individual} --- you depend on no one else.
+    \item \textbf{Non-obscure} --- the method is public; hiding nothing.
+    \item \textbf{Coercion-resistant} --- threats don't get the secret.
+  \end{enumerate}
+  \vspace{6pt}
+  \begin{keyidea}[The whole thing in one sentence]
+    It's all in your head (1), in nobody else's (2), the attacker \emph{knows}
+    that (3), and is nevertheless unable to rob it (4).
+  \end{keyidea}
+\end{frame}
+
+\begin{frame}{``That sounds like having your cake and eating it.''}
+  \begin{columns}[T]
+    \begin{column}{0.58\textwidth}
+      Correct. It's possible only because the secret is \textbf{tacit}
+      (you can recognize it but not dictate it) and deploying it is gated by an
+      \textbf{unavoidably slow computation}.
+      \vspace{8pt}
+
+      We don't ask you to believe that today. We'll \emph{build} it:
+      \begin{itemize}\small
+        \item S2 --- secrets you can't tell (tacit knowledge)
+        \item S3 --- drawing inside the labyrinth (the fractal)
+        \item S4 --- building the wall (Argon2)
+        \item S5 --- living with it (train / accelerate / inherit)
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.40\textwidth}
+      \memeslot{cake-eat-it.png}{``have your cake and eat it'' --- except this
+      time the math actually allows it}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ── Roadmap ───────────────────────────────────────────────────────────────
+\begin{frame}{Where we're going (5 sessions)}
+  \begin{center}
+  \begin{tikzpicture}[node distance=4mm and 7mm, font=\footnotesize,
+    s/.style={draw=accentdark, fill=accentlight, rounded corners=2pt,
+              text width=2.0cm, align=center, minimum height=1.5cm},
+    a/.style={-latex,thick,accent}]
+    \node[s,fill=accent,text=white] (s1) {\textbf{1}\\The Problem\\\textit{(today)}};
+    \node[s,right=of s1] (s2) {\textbf{2}\\Tacit\\knowledge};
+    \node[s,right=of s2] (s3) {\textbf{3}\\Fractal\\encoding};
+    \node[s,right=of s3] (s4) {\textbf{4}\\The Argon2\\wall};
+    \node[s,right=of s4] (s5) {\textbf{5}\\Live setup\\+ ecosystem};
+    \draw[a] (s1)--(s2); \draw[a] (s2)--(s3); \draw[a] (s3)--(s4); \draw[a] (s4)--(s5);
+  \end{tikzpicture}
+  \end{center}
+  \vspace{4pt}
+  \begin{center}\itshape\color{graytext}
+  Every session ends at a keyboard. Today's keyboard moment is your homework.
+  \end{center}
+\end{frame}
+
+% ── Hands-on homework ─────────────────────────────────────────────────────
+\begin{frame}{Hands-on: get lost in a fractal}
+  \begin{tryit}[Homework into Session 2]
+    \begin{enumerate}\small
+      \item Clone \texttt{great-wall-core}; build the Rust engine
+        (\texttt{cargo build --release}).
+      \item Launch the viewer: \texttt{cd burning\_ship \&\& python3 viewer.py}
+      \item \textbf{Just play.} Pan, zoom, cycle color schemes (\texttt{1}--\texttt{5}).
+        No goal. Get a feel for how strange and infinitely-detailed the Burning
+        Ship is.
+      \item Post your favorite view in \texttt{\#show-your-fractal}.
+    \end{enumerate}
+  \end{tryit}
+  Stuck on the build? That's what \texttt{\#hands-on-help} (and the optional
+  ``Session~0'' clinic) is for. \emph{Don't} burn your own time silently ---
+  install pain is data we want.
+\end{frame}
+
+% ── Reflect ───────────────────────────────────────────────────────────────
+\begin{frame}{Reflect (one paragraph)}
+  Write your own \textbf{threat profile}:
+  \begin{itemize}
+    \item Who could plausibly coerce you?
+    \item For how long could they realistically hold you?
+    \item Which conventional defense are you relying on right now --- and which
+      hole does it have?
+  \end{itemize}
+  \vspace{6pt}
+  We build directly on this next week. There are no wrong answers --- only
+  un-examined ones.
+\end{frame}
+
+% ── Check-out ─────────────────────────────────────────────────────────────
+\begin{frame}{Check-out --- 60 seconds}
+  \begin{columns}[T]
+    \begin{column}{0.6\textwidth}
+      \begin{block}{Two quick things in \texttt{\#feedback}}
+        \begin{enumerate}\small
+          \item Your \textbf{muddiest point} today, in one line.
+          \item The per-session form (link pinned) --- 3 minutes, please do it
+            \emph{now} while it's fresh.
+        \end{enumerate}
+      \end{block}
+      \vspace{4pt}
+      \footnotesize Especially: did the security-tax framing convince you, or
+      feel like marketing? Be brutal. That's the gift.
+    \end{column}
+    \begin{column}{0.38\textwidth}
+      \begin{center}
+      \gwflagicon\\[4pt]
+      {\footnotesize\color{attackcol}\itshape Your confusion is the curriculum.}
+      \end{center}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ── Closing ───────────────────────────────────────────────────────────────
+\punch{See you in the labyrinth.}
+
+\end{document}

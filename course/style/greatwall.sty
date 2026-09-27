@@ -1,0 +1,105 @@
+% greatwall.sty — shared brand style for the Great Wall pilot course.
+% Usable by BOTH the article-class textbook and the Beamer slide decks.
+% Palette and typographic choices mirror justification-and-economics/JUSTIFICATION.tex
+% so the course matches the rest of great-wall-docs.
+%
+% Provides: brand colors, a small set of callout boxes (keyidea / tryit /
+% deeper / pitfall), an inline feedback marker, and a few text helpers.
+% Dependencies are all in texlive-full (tcolorbox, tikz, xcolor).
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{greatwall}[2026/06/28 Great Wall course shared style]
+
+\RequirePackage{xcolor}
+\RequirePackage{graphicx}
+\RequirePackage{pifont}
+\RequirePackage{tikz}
+\usetikzlibrary{positioning,calc}
+\RequirePackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+% ── Brand palette (from JUSTIFICATION.tex) ────────────────────────────────
+\definecolor{accent}{HTML}{2F6F4E}      % Great Wall green
+\definecolor{accentdark}{HTML}{234F38}
+\definecolor{accentlight}{HTML}{EBF3EE}
+\definecolor{darktext}{HTML}{1E1E1E}
+\definecolor{graytext}{HTML}{646464}
+\definecolor{goldcol}{HTML}{D4A017}
+\definecolor{btccol}{HTML}{F7931A}       % Bitcoin orange
+\definecolor{modelcol}{HTML}{4A90D9}
+\definecolor{attackcol}{HTML}{C0392B}    % wrench-attack red
+\definecolor{lowcol}{HTML}{2E86C1}
+\definecolor{highcol}{HTML}{8E44AD}
+\definecolor{paperbg}{HTML}{FBFCFB}
+
+% ── Text helpers ──────────────────────────────────────────────────────────
+% First-use of a technical term.
+\newcommand{\term}[1]{\textbf{\color{accentdark}#1}}
+% The product / system name, lightly styled.
+\newcommand{\GW}{\mbox{\textbf{Great Wall}}}
+% A "wrench attack" callout phrase.
+\newcommand{\wrench}{\textcolor{attackcol}{\textbf{wrench attack}}}
+
+% ── Property-matrix marks (the four-property table) ───────────────────────
+% Prefer the shared emoji glyphs (../assets/emojis/); degrade to pifont dingbats
+% if the image is absent, so a build never breaks. #1 file, #2 fallback, #3 color.
+\newcommand{\gwmark}[3]{%
+  \IfFileExists{../assets/emojis/#1}%
+    {\raisebox{-0.18em}{\includegraphics[height=1.05em]{emojis/#1}}}%
+    {\textcolor{#3}{#2}}}
+\newcommand{\gwcheck}{\gwmark{green-check-emoji.png}{\ding{51}}{accent}}   % has property
+\newcommand{\gwcross}{\gwmark{red-x-no-emoji.png}{\ding{55}}{graytext}}    % lacks property
+\newcommand{\gwskull}{\gwmark{red-skull-danger-emoji.png}{\textbf{\ding{55}}}{attackcol}} % negative (worse than absent)
+
+% A small TikZ flag used as the feedback marker (no reliance on a unicode glyph).
+\newcommand{\gwflagicon}{%
+  \begin{tikzpicture}[baseline=-0.6ex,scale=0.9]
+    \draw[line width=0.5pt,accentdark] (0,-0.18) -- (0,0.22);
+    \fill[attackcol] (0,0.22) -- (0.26,0.13) -- (0,0.04) -- cycle;
+  \end{tikzpicture}%
+}
+% Inline pre-registered "we expect confusion here" marker, for textbook & slides.
+% Usage: \gwfeedback{why p=1 trips people}
+\newcommand{\gwfeedback}[1]{%
+  \nopagebreak\par\vspace{2pt}%
+  {\small\gwflagicon~\textcolor{attackcol}{\textbf{Feedback watch:}}~\textit{#1}}%
+  \par\vspace{2pt}\nopagebreak}
+
+% ── Callout boxes ─────────────────────────────────────────────────────────
+% Key idea — the one thing to remember.
+\newtcolorbox{keyidea}[1][Key idea]{%
+  enhanced, breakable, colback=accentlight, colframe=accent,
+  boxrule=0.8pt, left=8pt, right=8pt, top=6pt, bottom=6pt, arc=3pt,
+  fonttitle=\bfseries\color{white},
+  coltitle=white, title={#1},
+  attach boxed title to top left={xshift=8pt,yshift=-3pt},
+  boxed title style={colback=accent,arc=2pt}}
+
+% Try it — hands-on instruction.
+\newtcolorbox{tryit}[1][Try it]{%
+  enhanced, breakable, colback=white, colframe=btccol,
+  boxrule=0.8pt, left=8pt, right=8pt, top=6pt, bottom=6pt, arc=3pt,
+  fonttitle=\bfseries\color{white},
+  coltitle=white, title={#1},
+  attach boxed title to top left={xshift=8pt,yshift=-3pt},
+  boxed title style={colback=btccol,arc=2pt}}
+
+% Going deeper — optional depth; safe to skip.
+\newtcolorbox{deeper}[1][Going deeper (optional)]{%
+  enhanced, breakable, colback=paperbg, colframe=graytext,
+  boxrule=0.5pt, left=8pt, right=8pt, top=6pt, bottom=6pt, arc=2pt,
+  fonttitle=\bfseries\color{graytext},
+  coltitle=graytext, title={#1},
+  attach boxed title to top left={xshift=8pt,yshift=-3pt},
+  boxed title style={colback=white,colframe=graytext,arc=2pt}}
+
+% Pitfall / common mistake.
+\newtcolorbox{pitfall}[1][Pitfall]{%
+  enhanced, breakable, colback=white, colframe=attackcol,
+  boxrule=0.8pt, left=8pt, right=8pt, top=6pt, bottom=6pt, arc=3pt,
+  fonttitle=\bfseries\color{white},
+  coltitle=white, title={#1},
+  attach boxed title to top left={xshift=8pt,yshift=-3pt},
+  boxed title style={colback=attackcol,arc=2pt}}
+
+\endinput

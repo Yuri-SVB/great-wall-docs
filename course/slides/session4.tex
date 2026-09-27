@@ -1,0 +1,160 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+
+% ── Session 4: "Building the Wall" (Argon2 memory-hard chain) ─────────────
+% Shared brand theme + \gwtitle/\punch/\memeslot live in gwtheme.tex.
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{../style/greatwall}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{colortbl}
+
+\graphicspath{{./}{../assets/}}
+\def\gwsessionno{4}
+\input{gwtheme.tex}
+
+\begin{document}
+
+\gwtitle{Building the Wall}{Argon2, the memory-hard chain --- why the secret can't be rushed}
+
+% ── Recap + hook ──────────────────────────────────────────────────────────
+\begin{frame}{The gap we haven't closed}
+  We can hide a secret as a tacit point (S2) and encode/decode it exactly (S3).
+  But:
+  \begin{block}{The instant-render problem}
+    If the next fractal could be drawn \emph{instantly}, coercion just waits:
+    ``point at it \emph{now}.'' What makes the secret unreachable \textbf{in a
+    hurry} --- even by a fully cooperative you?
+  \end{block}
+  \begin{center}\footnotesize\color{graytext}
+  Check-in: one word --- how did the round-trip in Session 3 land?
+  \end{center}
+\end{frame}
+
+% ── The wall in one picture ───────────────────────────────────────────────
+\begin{frame}{The wall in one picture}
+  \begin{center}
+  \begin{tikzpicture}[node distance=6mm, font=\scriptsize,
+    box/.style={draw=accentdark, rounded corners=2pt, fill=accentlight,
+                minimum height=8mm, inner sep=3pt, align=center},
+    pt/.style={draw=btccol, thick, rounded corners=2pt, fill=white,
+               minimum height=8mm, inner sep=3pt, align=center},
+    arg/.style={draw=attackcol, thick, fill=white, rounded corners=2pt,
+                inner sep=3pt, align=center},
+    ar/.style={-latex, thick, accentdark}]
+    \node[box] (s0) {stage 0\\text (salt/pepper)};
+    \node[arg, right=of s0] (a1) {Argon2$^{N}$\\$\to$ SHA-256 $\to (o,p,q)$};
+    \node[pt, right=of a1] (p1) {stage 1\\point};
+    \node[arg, right=of p1] (a2) {Argon2$^{N}$};
+    \node[pt, right=of a2] (p2) {stage 2\\point};
+    \node[right=4mm of p2] (dots) {$\cdots$};
+    \draw[ar] (s0)--(a1); \draw[ar] (a1)--(p1); \draw[ar] (p1)--(a2);
+    \draw[ar] (a2)--(p2); \draw[ar] (p2)--(dots);
+    \draw[ar, dashed] (p1) to[bend left=30] (a2);
+  \end{tikzpicture}
+  \end{center}
+  \vspace{2pt}
+  Each Argon2 pass consumes stage-0 text \emph{plus all preceding points}. There
+  is \textbf{no public ``canonical'' fractal} --- every point-bearing surface is
+  private and chain-derived.
+\end{frame}
+
+% ── What memory-hard buys ─────────────────────────────────────────────────
+\begin{frame}{What ``memory-hard'' buys}
+  \textbf{Argon2} deliberately needs gigabytes of RAM and runs as a strictly
+  sequential chain of memory-dependent steps.
+  \begin{itemize}\small
+    \item \textbf{Can't trade memory for speed.} Big GPU/ASIC gains little; the
+      work is gated on memory bandwidth + sequential dependency, where commodity
+      CPUs are already near-optimal.
+    \item \textbf{Can't parallelize within a stage}, and \textbf{can't start the
+      next stage early} --- the chain forbids it.
+  \end{itemize}
+  \begin{keyidea}[Coercion fails \emph{twice}]
+    The locations can't be \emph{verbalized} (tacit), \textbf{and} the later
+    fractals can't be \emph{materialized} faster than the full chain runs.
+    Robbing the whole secret needs custody for at least the total Argon2 delay ---
+    longer than real wrench attacks last.
+  \end{keyidea}
+\end{frame}
+
+% ── Design choices in plain words ─────────────────────────────────────────
+\begin{frame}{The design choices, in plain words}
+  \small
+  \begin{itemize}
+    \item \textbf{Stage 0 = salt \emph{or} pepper.} A short \texttt{[A-Z0-9-]}
+      label. \emph{Salt} (\texttt{RETIREMENT}) forks a whole independent wallet
+      from one seed; \emph{pepper} stacks this setup on a prior secret.
+    \item \textbf{$p=1$, $t=2$, Argon2d.} One sequential lane (the delay
+      \emph{is} the product, not a budget); two passes force the whole memory
+      resident; data-dependent addressing = strongest memory-hardness.
+    \item \textbf{Remember $N$, not ``hours.''} $N$ (the iteration count) is
+      durable. ``Three days'' is a \emph{perishable label} on $N$ --- faster
+      hardware later changes only how long a given $N$ takes, never the result.
+  \end{itemize}
+  \gwfeedback{$p=1$ is the trip-wire: people trained on password hashing ``know''
+  more parallelism is better. The inversion --- \emph{delay is the product} --- is
+  the crux. Watch for pushback.}
+\end{frame}
+
+% ── Pitfall: checkpoints ──────────────────────────────────────────────────
+\begin{frame}{Pitfall: checkpoints are a loaded gun}
+  \begin{pitfall}[Off by default --- for a reason]
+    A ``save intermediate'' option stores the chain's intermediate digests so you
+    can resume or try a nearby $N$. But that file is \textbf{exactly} the artifact
+    that lets an attacker skip the time cost.
+  \end{pitfall}
+  \vspace{2pt}
+  \begin{itemize}\small
+    \item If iteration 9\,999 of 10\,000 sits on disk, the whole wall collapses to
+      one Argon2 pass.
+    \item If you turn it on, it is \emph{your} job to \textbf{securely delete}
+      it (\texttt{shred} / \texttt{srm}) once done.
+    \item Sibling tools (TLP gating) automate this; the core exposes the raw
+      trade-off on purpose.
+  \end{itemize}
+\end{frame}
+
+% ── Hands-on ──────────────────────────────────────────────────────────────
+\begin{frame}{Hands-on: feel the wall}
+  \begin{tryit}[In session]
+    \begin{enumerate}\small
+      \item Pick a \textbf{short} target duration; let the app \emph{calibrate}
+        $N$ on your device.
+      \item Watch memory usage climb. Feel the seconds.
+      \item Try a \emph{nearby} iteration count via checkpoints (``approximate
+        memory of $N$'' is enough).
+      \item \textbf{Securely delete} the checkpoint file when done.
+    \end{enumerate}
+  \end{tryit}
+  \begin{center}\footnotesize\color{graytext}
+  Use a tiny delay in class --- the point is the \emph{mechanism}, not a real
+  multi-hour wait.
+  \end{center}
+\end{frame}
+
+% ── Check-out ─────────────────────────────────────────────────────────────
+\begin{frame}{Check-out}
+  \begin{columns}[T]
+    \begin{column}{0.62\textwidth}
+      \begin{block}{In \texttt{\#feedback}}
+        \begin{enumerate}\small
+          \item Muddiest point.
+          \item Per-session form --- especially: did the \emph{``why it can't be
+            rushed''} argument feel airtight, or leaky?
+          \item Did the calibration \textbf{run} on your machine?
+        \end{enumerate}
+      \end{block}
+    \end{column}
+    \begin{column}{0.36\textwidth}
+      \memeslot{argon2-ram.png}{RAM bar pinned at 100\% --- ``it's not a bug,
+      it's a wall''}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\punch{The pieces are all here.\\[6pt] Next: living with it.}
+
+\end{document}

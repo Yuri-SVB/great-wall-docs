@@ -1,0 +1,90 @@
+% gwtheme.tex — shared Beamer theme for the Great Wall pilot-course decks.
+% \input this from each slides/sessionN.tex *after* loading greatwall.sty and
+% *after* defining \gwsessionno (the session number, e.g. \def\gwsessionno{2}).
+% Provides the brand look plus three helpers: \gwtitle, \punch, \memeslot.
+%
+% Depends on: beamer, greatwall.sty (palette + boxes + marks), tikz.
+
+\providecommand{\gwsessionno}{?}
+
+% ── Minimal custom theme (no external font deps; texlive-full only) ────────
+\usefonttheme{professionalfonts}
+\setbeamertemplate{navigation symbols}{}
+\setbeamercolor{normal text}{fg=darktext, bg=white}
+\setbeamercolor{structure}{fg=accent}
+\setbeamercolor{frametitle}{fg=white, bg=accent}
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{block title}{fg=white, bg=accentdark}
+\setbeamercolor{block body}{fg=darktext, bg=accentlight}
+\setbeamercolor{itemize item}{fg=accent}
+\setbeamercolor{itemize subitem}{fg=btccol}
+\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamerfont{title}{series=\bfseries, size=\Huge}
+\setbeamertemplate{itemize item}{\textbf{--}}
+
+% Frametitle as a solid green bar
+\setbeamertemplate{frametitle}{%
+  \nointerlineskip
+  \begin{beamercolorbox}[wd=\paperwidth,ht=2.6ex,dp=1.2ex,leftskip=0.4cm,rightskip=0.4cm]{frametitle}%
+    \usebeamerfont{frametitle}\insertframetitle%
+  \end{beamercolorbox}%
+}
+
+% Footline: course | session | frame number
+\setbeamercolor{gwfootline}{fg=graytext, bg=white}
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.4ex,dp=1ex,leftskip=0.4cm]{gwfootline}%
+    \tiny Great Wall --- Pilot Course%
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.5\paperwidth,ht=2.4ex,dp=1ex,rightskip=0.4cm]{gwfootline}%
+    \hfill\tiny Session \gwsessionno{} \;\textbullet\; \insertframenumber%
+  \end{beamercolorbox}}%
+}
+
+% ── Helpers ───────────────────────────────────────────────────────────────
+% Big punchy centered statement frame (full-bleed green).
+\newcommand{\punch}[1]{%
+  \begin{frame}[plain]
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[accent] (current page.south west) rectangle (current page.north east);
+  \end{tikzpicture}
+  \begin{center}\vfill
+  {\color{white}\Huge\bfseries #1}\par
+  \vfill\end{center}
+  \end{frame}}
+
+% Meme slot — shows the image if present, else a labelled placeholder box.
+% #1 = filename in ../assets/, #2 = caption/placeholder text.
+\newcommand{\memeslot}[2]{%
+  \IfFileExists{../assets/#1}{%
+    \includegraphics[width=\linewidth,height=0.62\textheight,keepaspectratio]{#1}%
+  }{%
+    \begin{tcolorbox}[colback=accentlight,colframe=graytext,sharp corners,
+      halign=center, valign=center, height=0.55\textheight]
+      \color{graytext}\itshape [meme slot: \texttt{#1}]\\[4pt]\small #2
+    \end{tcolorbox}%
+  }%
+}
+
+% Branded title frame. #1 = title, #2 = subtitle.
+\newcommand{\gwtitle}[2]{%
+  \begin{frame}[plain]
+    \begin{tikzpicture}[remember picture,overlay]
+      \fill[accent] (current page.south west) rectangle (current page.north east);
+      \foreach \i in {1,...,8}{
+        \fill[white,opacity=0.08] ([xshift=-\i cm,yshift=\i cm]current page.south east)
+          rectangle ++(0.7cm,0.7cm);
+      }
+    \end{tikzpicture}
+    \vfill
+    \begin{center}
+    {\color{white}\Huge\bfseries #1\par}
+    \vspace{6pt}
+    {\color{accentlight}\large #2\par}
+    \vspace{18pt}
+    {\color{accentlight}\small Great Wall \;\textbullet\; Session \gwsessionno{} of 5 \;\textbullet\; hands-on, on Discord\par}
+    \end{center}
+    \vfill
+  \end{frame}}

@@ -1,0 +1,198 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+
+% ── Session 2: "Secrets You Cannot Tell" (tacit knowledge / TKBA) ─────────
+% Shared brand theme + \gwtitle/\punch/\memeslot live in gwtheme.tex.
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{../style/greatwall}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{colortbl}
+
+\graphicspath{{./}{../assets/}}
+\def\gwsessionno{2}
+\input{gwtheme.tex}
+
+\begin{document}
+
+\gwtitle{Secrets You Cannot Tell}{Tacit knowledge --- the one secret a wrench can't extract}
+
+% ── Recap + hook ──────────────────────────────────────────────────────────
+\begin{frame}{Where we left off}
+  \begin{columns}[T]
+    \begin{column}{0.6\textwidth}
+      Last time: the \textbf{rhetoric trilemma}. Under coercion, comply / deny /
+      decoy all lose, because the attacker judges your \emph{words}.
+      \vspace{6pt}
+      \begin{block}{So the escape must be structural}
+        We need a secret you \emph{cannot say}, even if you wanted to --- and a
+        constraint the attacker can \emph{verify} is real.
+      \end{block}
+      Today: the first half --- a secret that isn't words.
+    \end{column}
+    \begin{column}{0.38\textwidth}
+      \begin{tryit}[Check-in]
+        \footnotesize One word in \texttt{\#feedback}: what stuck from Session 1?
+      \end{tryit}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ── Prime intuition ───────────────────────────────────────────────────────
+\begin{frame}{A quick thought experiment}
+  \begin{columns}[T]
+    \begin{column}{0.58\textwidth}
+      Describe your \textbf{best friend's face} --- in words --- precisely enough
+      that a stranger could pick them out of a crowd of a thousand.
+      \vspace{8pt}
+
+      You can't. Yet you'd recognize that face \emph{instantly}.
+      \vspace{8pt}
+
+      That gap --- between what you can \emph{do} and what you can \emph{say} ---
+      is the entire security model of Great Wall.
+    \end{column}
+    \begin{column}{0.40\textwidth}
+      \memeslot{tacit-face.png}{``describe your friend's face so I can find
+      them'' --- brain: \emph{no}.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ── Explicit vs tacit ─────────────────────────────────────────────────────
+\begin{frame}{Explicit vs.\ tacit knowledge}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Explicit}
+        \footnotesize Anything you can \emph{state}: a number, a word, a seed
+        phrase. \\[4pt]\textbf{Transmissible} --- which is exactly why it's
+        \textbf{coercible}.
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Tacit}
+        \footnotesize Knowing-\emph{how} you can't put into words: a face, riding
+        a bike, the ``feel'' of a route. \\[4pt]\textbf{Non-transmissible} ---
+        so \textbf{non-coercible}.
+      \end{block}
+    \end{column}
+  \end{columns}
+  \vspace{8pt}
+  \begin{keyidea}
+    Recognition $\neq$ recall $\neq$ verbalizable. You can pick your fractal
+    point out of the landscape without being able to \emph{read out} its
+    coordinates. Coercion can only extract what can be verbalized.
+  \end{keyidea}
+\end{frame}
+
+\punch{``We can know more\\[6pt] than we can tell.''\\[10pt] {\normalsize\itshape --- Michael Polanyi, 1966}}
+
+% ── Why it defeats the wrench ─────────────────────────────────────────────
+\begin{frame}{Why this defeats the wrench}
+  A wrench attack raises the cost of \emph{refusing} until you comply. It assumes
+  the secret is something you \emph{could} hand over.
+  \vspace{6pt}
+  \begin{itemize}
+    \item There is no sentence you can be tortured into saying that conveys
+      ``the point is \emph{there}.''
+    \item The only extraction is to sit you at the fractal and have you point ---
+      and (Session 4) the fractal you'd point at \textbf{doesn't exist yet} until
+      a long computation finishes.
+  \end{itemize}
+  \vspace{4pt}
+  \begin{pitfall}
+    Tacit $\neq$ secret-in-the-usual-sense. The attacker may know \emph{everything}
+    about the method and that you have a stash (non-obscurity!). What they can't
+    get is the non-transmissible \emph{recognition} in your head.
+  \end{pitfall}
+\end{frame}
+
+% ── TKBA ──────────────────────────────────────────────────────────────────
+\begin{frame}{TKBA --- the theory of the whole system}
+  Great Wall is \textbf{Tacit Knowledge-Based Authentication}. The four
+  properties are \emph{logically coupled}:
+  \vspace{4pt}
+  \begin{center}\small
+  in your head \textbf{(1)} $+$ nobody else's \textbf{(2)} $+$ attacker knows
+  \textbf{(3)} \;$\Rightarrow$\; resists coercion \textbf{(4)} \emph{only if} the
+  secret is non-transmissible \;$=$\; \textbf{tacit}.
+  \end{center}
+  \vspace{6pt}
+  \begin{keyidea}[The second ingredient]
+    TKBA also needs the \emph{interface} to be gated by an \textbf{inescapably
+    slow computation} --- otherwise the attacker just says ``try again'' until
+    recognition leaks. That gate is Argon2 (Session 4).
+  \end{keyidea}
+\end{frame}
+
+% ── Design consequence ────────────────────────────────────────────────────
+\begin{frame}{A design choice can \emph{break} TKBA}
+  \begin{deeper}[Why the area-visualization is hidden by default]
+    Anything that turns tacit recall into an \emph{explicit, memorizable fact}
+    weakens property 4. So the UX gates the bisection-area rectangles behind a
+    debug flag: showing them in normal use would teach you verbalizable facts
+    about your own encoding --- facts an attacker could then coerce.
+  \end{deeper}
+  \vspace{4pt}
+  \begin{center}\small
+  Security here is a property of \textbf{what you're allowed to know about your
+  own secret.}
+  \end{center}
+  \gwfeedback{Did ``tacit'' actually click, or stay abstract? The pairing
+  exercise is the moment of truth.}
+\end{frame}
+
+% ── Interaction ───────────────────────────────────────────────────────────
+\begin{frame}{Interaction: describe your point}
+  \begin{tryit}[Pairs, on Discord --- no screen-share]
+    \begin{enumerate}\small
+      \item Each of you decodes one guided point in the viewer.
+      \item Now \textbf{describe your point's location in words} well enough that
+        your partner can click it.
+      \item Watch how fast ``up and a bit left, near that flamey bit'' fails to
+        pin a 32-bit location.
+    \end{enumerate}
+  \end{tryit}
+  \vspace{4pt}
+  The \emph{failure} is the lesson: you just experienced the difference between
+  knowing where it is and being able to \emph{say} where it is.
+\end{frame}
+
+% ── Homework bridge ───────────────────────────────────────────────────────
+\begin{frame}{Before next time}
+  \begin{tryit}[Homework into Session 3]
+    Keep the viewer handy and read textbook Ch.~3. Next session we stop
+    hand-waving about ``encode a secret as a point'' and \textbf{do it} --- and
+    watch your exact words round-trip back out.
+  \end{tryit}
+  \begin{center}\small\color{graytext}
+  Question to sit with: if you can't \emph{say} where your point is, how can a
+  computer store it \emph{exactly} and get it back? That's Session 3.
+  \end{center}
+\end{frame}
+
+% ── Check-out ─────────────────────────────────────────────────────────────
+\begin{frame}{Check-out --- 60 seconds}
+  \begin{columns}[T]
+    \begin{column}{0.62\textwidth}
+      \begin{block}{In \texttt{\#feedback}}
+        \begin{enumerate}\small
+          \item Muddiest point today, one line.
+          \item Per-session form (pinned) --- especially: \emph{did ``tacit''
+            land, or stay abstract?}
+        \end{enumerate}
+      \end{block}
+    \end{column}
+    \begin{column}{0.36\textwidth}
+      \begin{center}\gwflagicon\\[3pt]
+      {\footnotesize\color{attackcol}\itshape Your confusion is the curriculum.}
+      \end{center}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\punch{Next: how a secret becomes\\[6pt] a point on a labyrinth.}
+
+\end{document}

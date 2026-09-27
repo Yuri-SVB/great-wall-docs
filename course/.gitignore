@@ -1,0 +1,17 @@
+# LaTeX build artifacts — only sources are versioned; PDFs are built locally.
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+# Beamer
+*.nav
+*.snm
+*.vrb
+# Built PDFs (rebuild with `make`). Remove these lines if you prefer to commit PDFs.
+textbook/*.pdf
+slides/*.pdf
