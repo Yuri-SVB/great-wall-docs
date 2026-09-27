@@ -100,6 +100,8 @@ course/
   README.md          ← you are here (course design: problem/solution/methodology)
   syllabus.md        Session-by-session map (5 sessions), outcomes, prep, timing
   methodology.md     The Discord format, interaction patterns, feedback collection
+  community/
+    DISCORD.md       Server rules to pin, plus the settings and failure modes
   feedback/          Feedback instruments (pre-course, per-session, post-course)
   style/
     greatwall.sty    Shared brand style (palette, fonts, boxes) for all LaTeX
