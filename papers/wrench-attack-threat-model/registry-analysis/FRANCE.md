@@ -1,11 +1,17 @@
 # France cut of the registry — findings
 
 **Snapshot:** `jlopp/physical-bitcoin-attacks` `README.md`, branch `master`, fetched **2026-08-14**.
-**352 incidents; 61 with France in the location column.**
-**Reproduce:** `python3 analyze_country.py registry.md France` (raw output in `france-cut.txt`).
+**351 audited incidents (352 rows, one duplicate); 61 with France in the location column.**
+**Reproduce:** `python3 analyze_country.py registry.md France --audit audit-9a4a62a.tsv`
+(raw output in `france-cut.txt`).
 
 Coding reuses `analyze.py`'s `CATEGORIES` verbatim, so every category number here is directly
 comparable to the global table in the manuscript. One axis is new and is flagged as such.
+
+⚠️ **Every global column on this page was recomputed on 2026-10-04** and the France ones with
+them. The regexes had been matching the headline cell's markdown URLs as well as its prose, which
+inflated every category; see `README.md`. The France-vs-global *skews* all survived and two got
+larger, but no number here is the one this file carried before that date.
 
 ---
 
@@ -14,10 +20,10 @@ comparable to the global table in the manuscript. One axis is new and is flagged
 | Year | France | Global | France share |
 |---|---:|---:|---:|
 | 2017–2024 | ~1/yr | 12–42/yr | 0–8% |
-| **2025** | **22** | 85 | **25.9%** |
+| **2025** | **22** | 84 | **26.2%** |
 | **2026** (to Aug) | **34** | 54 | **63.0%** |
 
-**61 of 352 incidents — 17.3% of the entire global registry**, from a country with about 0.9% of
+**61 of 351 incidents — 17.4% of the entire global registry**, from a country with about 0.9% of
 world population. France is the largest national cluster in the dataset by a wide margin, and
 **nearly two thirds of everything recorded worldwide in 2026 is French.**
 
@@ -51,12 +57,12 @@ crypto crime** — they may already know whether the drop is real.
 
 | Category | France | Global | Skew |
 |---|---:|---:|---:|
-| **kidnap / hostage / ransom (long-hold)** | **57.4%** | 39.5% | **+17.9pp** |
-| **armed robbery at gunpoint (short-hold)** | **8.2%** | 28.7% | **−20.5pp** |
-| home invasion / break-in / raid | 11.5% | 11.4% | +0.1pp |
-| torture / physical violence | 16.4% | 23.3% | −6.9pp |
-| killed / murdered *(floor)* | 1.6% *(n=1)* | 5.1% | −3.5pp |
-| ATM/BTM (not holder coercion) | 0.0% | 3.7% | −3.7pp |
+| **kidnap / hostage / ransom (long-hold)** | **57.4%** | 35.0% | **+22.3pp** |
+| **armed robbery at gunpoint (short-hold)** | **8.2%** | 22.8% | **−14.6pp** |
+| home invasion / break-in / raid | 9.8% | 9.4% | +0.4pp |
+| torture / physical violence | 16.4% | 20.5% | −4.1pp |
+| killed / murdered *(audited floor)* | 1.6% *(n=1)* | 4.6% | −3.0pp |
+| ATM/BTM (not holder coercion) | 0.0% | 3.4% | −3.4pp |
 
 **This is the theoretically important finding.** The manuscript uses modality as its proxy for
 *duration* — gunpoint and home-invasion headlines stand in for short holds, kidnap/hostage/ransom for
@@ -74,16 +80,16 @@ would also favour *kidnappings over muggings*, since kidnappings are more newswo
 | Jurisdiction | n | Kidnap | Gunpoint | K:G |
 |---|---:|---:|---:|---:|
 | Brazil *(small n)* | 12 | 75.0% | 8.3% | 9.0 |
-| Spain *(small n)* | 8 | 62.5% | 12.5% | 5.0 |
 | **France** | **61** | **57.4%** | **8.2%** | **7.0** |
-| India *(small n)* | 12 | 58.3% | 33.3% | 1.8 |
-| Canada | 18 | 44.4% | 27.8% | 1.6 |
-| *Global* | *352* | *39.5%* | *28.7%* | *1.4* |
-| **United States** | **59** | **28.8%** | **40.7%** | **0.7** |
+| Spain *(small n)* | 7 | 57.1% | 14.3% | 4.0 |
+| Canada | 18 | 33.3% | 16.7% | 2.0 |
+| India *(small n)* | 12 | 41.7% | 25.0% | 1.7 |
+| *Global* | *351* | *35.0%* | *22.8%* | *1.5* |
+| **United States** | **59** | **20.3%** | **33.9%** | **0.6** |
 | Russia *(small n)* | 10 | 30.0% | 50.0% | 0.6 |
 
 **France and the United States are the two largest national subsets, near-identical in size (61 vs
-59), with inverted compositions — a tenfold difference in K:G.** The media-inflation story explains
+59), with inverted compositions — an elevenfold difference in K:G.** The media-inflation story explains
 a *level* (the registry over-counts drama everywhere) but not this *ordering*: it would have to
 claim French reporting is ten times more kidnap-selective than American, in a market at least as
 heavily covered. The ordering also tracks plausible real-world causes — the gunpoint-heavy end is
@@ -95,7 +101,7 @@ And the coding runs on English-language headlines, several translated — if Fre
 rather than events. **That is a good question for him**, and one he can answer from French-language
 sources that this coding cannot see.
 
-France's fatality rate reads *lower* (1.6% vs 5.1%) — consistent with professionalised
+France's fatality rate reads *lower* (1.6% vs the audited 4.6%) — consistent with professionalised
 kidnap-for-ransom being economically rather than lethally motivated — but **n = 1**, so it is noise.
 Do not use it.
 
@@ -106,7 +112,7 @@ were read individually and none is a false positive.
 
 | | France | Global |
 |---|---:|---:|
-| family member / partner named | **36.1%** | 15.9% |
+| family member / partner named | **36.1%** | 14.8% |
 | associate / colleague / employee named | 3.3% | 4.0% |
 | **PROXY VICTIM — a relative seized to reach the holder** | **14.8%** *(n=9)* | **3.4%** *(n=12)* |
 
@@ -171,4 +177,4 @@ support for the fifth property, and the France long-hold skew is worth a sentenc
 operative regime is where the incidents are concentrating.
 
 **Before anything is published or quoted**, re-fetch and re-run — the registry changes weekly, and
-these numbers are a 2026-08-14 snapshot.
+these numbers are a 2026-08-14 snapshot, recoded 2026-10-04.

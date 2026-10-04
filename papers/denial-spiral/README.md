@@ -19,6 +19,14 @@ registry material out of that manuscript; see
 | §7 Empirical grounding in the registry | §5.6, lines 739–940 |
 | §8 Conclusion | new |
 
+## Versions
+
+`CHANGES-v2.md` records the one correction between v1 and v2: the registry
+coding in §7 was matching the registry's markdown URLs as well as its headline
+prose, which inflated every row. v2 codes the prose, audits the fatality and
+duplicate screens by hand, and reports 351 incidents rather than 352. No
+argument changed.
+
 ## Status
 
 The Deadly Race manuscript is **not yet trimmed**. Both papers currently carry

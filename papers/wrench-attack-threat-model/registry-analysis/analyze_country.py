@@ -15,15 +15,20 @@ table in the manuscript. Adds two things analyze.py does not do:
     to them, then "remote" delegates who are spouses or relatives are inside the
     attacker's reach, and R2 is illusory for them.
 
+Coding is on the headline PROSE only, as in analyze.py: the headline cell is
+markdown and its URLs are not evidence. The country totals here are therefore
+not the ones this file printed before 2026-10-04, when the URLs were being
+matched too.
+
 Usage:
     curl -sSL https://raw.githubusercontent.com/jlopp/physical-bitcoin-attacks/master/README.md -o registry.md
-    python3 analyze_country.py registry.md France
+    python3 analyze_country.py registry.md France [--audit audit-9a4a62a.tsv]
 """
 import re
 import sys
 from collections import Counter, defaultdict
 
-from analyze import CATEGORIES, load
+from analyze import CATEGORIES, load, load_audit
 
 # NEW axis -- not part of the manuscript's published coding.
 PROXIMITY = {
@@ -71,15 +76,18 @@ def month_of(d):
 
 
 def code(rows, pat):
-    return sum(1 for *_, h in rows if re.search(pat, h, re.I))
+    return sum(1 for r in rows if re.search(pat, r[3], re.I))
 
 
 def pct(a, b):
     return 100.0 * a / b if b else 0.0
 
 
-def main(path, country):
+def main(path, country, audit_path=None):
     allrows = load(path)
+    if audit_path:
+        dropped = load_audit(audit_path).get("duplicate", {})
+        allrows = [r for r in allrows if (r[0], r[2]) not in dropped]
     rows = [r for r in allrows if country.lower() in r[2].lower()]
     n, N = len(rows), len(allrows)
     if not n:
@@ -127,23 +135,33 @@ def main(path, country):
     proxy = [r for r in rows if re.search(proxy_pat, r[3], re.I)]
     if proxy:
         print(f"\n  the {len(proxy)} proxy-victim cases in {country} (audit them, then cite them):")
-        for d, _v, _l, h in proxy:
+        for d, _v, _l, h, _s in proxy:
             print(f"    {d[:20]:22} {h[:96]}")
 
-    both = sum(1 for *_, h in rows
-               if any(re.search(p, h, re.I) for p in PROXIMITY.values()))
-    gboth = sum(1 for *_, h in allrows
-                if any(re.search(p, h, re.I) for p in PROXIMITY.values()))
+    both = sum(1 for r in rows
+               if any(re.search(p, r[3], re.I) for p in PROXIMITY.values()))
+    gboth = sum(1 for r in allrows
+                if any(re.search(p, r[3], re.I) for p in PROXIMITY.values()))
     print(f"  {'ANY third party named':50} {pct(both,n):>9.1f}% {pct(gboth,N):>9.1f}%  (n={both})")
 
     print("\nCaveats: coding is on the one-line headline only; categories overlap; the "
           "registry is a media/convenience sample, so deterred, unreported and privately "
           "settled cases are structurally absent, and coverage is English-biased. The "
-          "fatality figure is a FLOOR, not an estimate. The proximity axis is coarse: a "
+          "fatality row above is the raw SCREEN and overstates: it fires on plots that "
+          "were only planned and on attackers shot by police. The audited global figure "
+          "is 16/351, and it is still a FLOOR. The proximity axis is coarse too: a "
           "headline that does not name a relative is not evidence that none was involved.")
 
 
 if __name__ == "__main__":
-    if len(sys.argv) not in (2, 3):
+    argv = sys.argv[1:]
+    audit_path = None
+    if "--audit" in argv:
+        i = argv.index("--audit")
+        if i + 1 >= len(argv):
+            sys.exit(__doc__)
+        audit_path = argv[i + 1]
+        del argv[i:i + 2]
+    if len(argv) not in (1, 2):
         sys.exit(__doc__)
-    main(sys.argv[1], sys.argv[2] if len(sys.argv) == 3 else "France")
+    main(argv[0], argv[1] if len(argv) == 2 else "France", audit_path)

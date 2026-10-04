@@ -1,0 +1,14 @@
+# Hand audit of the screens in analyze.py, over registry-snapshot-9a4a62a.md.
+# Every line is a judgement a regex cannot make, and each names the evidence.
+# Columns: verdict <TAB> date <TAB> location <TAB> reason
+#
+# verdict=duplicate   the row is another row's incident entered twice; dropped
+#                     from the incident count and from every category.
+# verdict=not-fatal   the fatality screen fired but nobody in scope died.
+# verdict=fatal       the victim died and the headline prose does not say so,
+#                     so the screen missed it.
+duplicate	December 10, 2025	Spain	Same incident as April, 2025 / Southern Spain: both source URLs identical (archive.is/FwjIT, trtworld.com/article/92e9109bcf2f) and the headlines differ by two words.
+not-fatal	October 22, 2020	Riga, Latvia	"arrested for planning kidnapping and killing" — a plot, charged before anything happened. No victim.
+not-fatal	May 22, 2026	Mulhouse, France	"facing death threats" — a threat, and the victim was found alive. The pattern reads the word "death" and cannot see who it was aimed at.
+not-fatal	June 24, 2025	Goiania, Brazil	"Attack failed, 2 attackers were killed by police". The deaths are the attackers'; the victim lived.
+fatal	June 17, 2017	Gifu, Japan	"Woman strangled" does not match the pattern, but she died: the source is titled "bitcoin murder — Nagoya woman likely killed on evening she went missing".
