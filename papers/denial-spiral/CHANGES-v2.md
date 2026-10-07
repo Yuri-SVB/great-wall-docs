@@ -127,9 +127,10 @@ coercion may extract more than a released holder would ever have surrendered —
 and the two must not be run together. That second thing is real and it is this
 paper's duration mechanism, but in it the two parties want opposite things and
 the holder volunteers for nothing. The bargain is the one case in which the
-interests *align*: the holder keeps his life, the attacker keeps the holder's
-pivotality in hand rather than loose, at a judicial disutility below `c`.
-Nothing is disclosed to buy it. What the holder supplies is being held.
+interests *align*: the holder keeps his life, and the attacker collects the
+pivotality increment π that the terminal move would have bought him — a holder
+in custody is a holder not racing — at a judicial disutility below `c`. Nothing
+is disclosed to buy it. What the holder supplies is being held.
 
 It is fenced: a lead-in saying it is a conjecture and that nothing else rests on
 it, and a statement that there is no empirical evidence of any particular

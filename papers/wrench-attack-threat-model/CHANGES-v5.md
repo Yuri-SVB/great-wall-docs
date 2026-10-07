@@ -93,9 +93,10 @@ together. More hours of coercion may extract more than a released holder would
 ever have surrendered — real, but there the two parties want opposite things and
 the holder volunteers for nothing. That is the Spiral's duration mechanism and
 belongs to the companion. The bargain is the other case, the only one in which
-the interests *align*: the holder keeps his life, the attacker keeps the
-holder's pivotality in hand rather than loose, at a judicial disutility below
-`c`. Nothing is disclosed to buy it; what the holder supplies is being held.
+the interests *align*: the holder keeps his life, and the attacker collects the
+same win probability the terminal move would have bought him — a holder in
+custody is a holder not racing — at a judicial disutility below `c`. Nothing is
+disclosed to buy it; what the holder supplies is being held.
 
 Three things are then said in the same breath, because the misreading is
 available and costly:
