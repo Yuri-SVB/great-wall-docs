@@ -116,11 +116,20 @@ one who does.
 A `WDY^Bay` attacker who has updated his way to being satisfied that he holds
 everything may still not release, because a released holder with a feasible path
 is a competitor: detention buys the same assurance as the terminal move at a
-fraction of the judicial disutility, and it keeps the one channel to anything
-undisclosed open. Gray-area vulnerability therefore prices **custody as
-collateral on the holder's own abstention** — and the conjecture is that the
-holder, having run the same arithmetic, volunteers for it. *Take me with you,
-and you will know I am not racing you.*
+fraction of the judicial disutility. Gray-area vulnerability therefore prices
+**custody as collateral on the holder's own abstention** — and the conjecture is
+that the holder, having run the same arithmetic, volunteers for it. *Take me
+with you, and you will know I am not racing you.*
+
+**What is traded is non-racing, and the section says so before drawing the
+analogy.** The same captivity makes a second thing possible — more hours of
+coercion may extract more than a released holder would ever have surrendered —
+and the two must not be run together. That second thing is real and it is this
+paper's duration mechanism, but in it the two parties want opposite things and
+the holder volunteers for nothing. The bargain is the one case in which the
+interests *align*: the holder keeps his life, the attacker keeps the holder's
+pivotality in hand rather than loose, at a judicial disutility below `c`.
+Nothing is disclosed to buy it. What the holder supplies is being held.
 
 It is fenced: a lead-in saying it is a conjecture and that nothing else rests on
 it, and a statement that there is no empirical evidence of any particular
@@ -131,18 +140,23 @@ rather than withheld.
 
 The section is explicit about what the name does and does not carry. The analogy
 holds on exactly two things: volunteering into custody to avert a killing, and
-one more night instead of the terminal move in exchange for something. What buys
-the next morning is that the *tale* is unfinished, not the night, which ends on
-time — the companion's feasible-but-unfinished path wearing a costume.
+custody accepted in place of the terminal move in exchange for something — the
+king buying the end of the story, the attacker the same race advantage at a lower
+judicial price.
 
-And it is not a reprieve, on three counts: it strengthens the Criterion rather
-than softening it, since it converts a robbery into a kidnapping; it fails on its
-own terms, because by NNPP the hold settles nothing and has no natural end state;
-and the holder's payment is not renewable in the way the tale's is, since the
-lesser charge is a property of the penal code and his one currency, a further
-disclosure, raises the floor on how many copies he kept without putting a ceiling
-on it. In the book she is pardoned on the thousand and second morning; the
-registry records no counterpart to that morning.
+And it is not a reprieve, on three counts. It **strengthens** the Criterion
+rather than softening it, since it converts a robbery into a kidnapping. It
+**does not deliver what it is bought for**: custody removes the holder from the
+race but not the race, and by NNPP an accomplice, heir, delegate or dead-man
+arrangement may already be moving, none of them in the attacker's hands, so the
+assurance is partial exactly where it would have to be total. And the
+**alignment expires** — custody substitutes for the terminal move only while it
+is the cheaper way to buy non-racing, its cost accrues on every day of the hold
+where `c` is paid once, and what the holder supplies is supplied by the
+attacker's own act of holding him, so he has no lever to withhold. Scheherazade's
+payment is renewable and hers to withhold, which is how she reaches night 1001.
+In the book she is pardoned on the thousand and second morning; the registry
+records no counterpart to that morning.
 
 The route does not escape the Spiral. It feeds into it by a second road: the
 Spiral's duration is epistemic deadlock, this is a strategic hostage problem,

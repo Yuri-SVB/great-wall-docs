@@ -87,14 +87,31 @@ disutility. A gray outcome therefore prices not only the holder's elimination
 but **custody, as collateral on his own abstention** — and the conjecture is
 that the holder, having run the same arithmetic, volunteers for it.
 
-Three things are said in the same breath, because the misreading is available
-and costly:
+**What is traded is non-racing, and the remark says so explicitly**, because
+the captivity makes two different things possible and they are easy to run
+together. More hours of coercion may extract more than a released holder would
+ever have surrendered — real, but there the two parties want opposite things and
+the holder volunteers for nothing. That is the Spiral's duration mechanism and
+belongs to the companion. The bargain is the other case, the only one in which
+the interests *align*: the holder keeps his life, the attacker keeps the
+holder's pivotality in hand rather than loose, at a judicial disutility below
+`c`. Nothing is disclosed to buy it; what the holder supplies is being held.
+
+Three things are then said in the same breath, because the misreading is
+available and costly:
 
 - It **strengthens** the Criterion. A gray outcome does not save a life; it
   converts a robbery into a kidnapping, so the band costs more than the Lemma
   prices, not less.
-- The bargain fails on its own terms, by NNPP. The hold establishes nothing
-  about a resumable copy or an accomplice, so it has no natural end state.
+- It does not deliver what it is bought for, by NNPP. Custody removes the holder
+  from the race; it does not remove the race. An accomplice, heir, delegate or
+  dead-man arrangement may already be moving, and none of those racers is in the
+  attacker's hands, so the assurance is partial exactly where it would have to
+  be total.
+- The alignment **expires**. Custody substitutes for the terminal move only
+  while it is the cheaper way to buy non-racing, and its cost accrues per day of
+  the hold where `c` is paid once. The bargain postpones the terminal move onto
+  a clock the holder does not control.
 - A time-gate `G` **shorter** than `t` is not a weaker defense under this
   conjecture. It is a published schedule for how long the holder will be held.
 
