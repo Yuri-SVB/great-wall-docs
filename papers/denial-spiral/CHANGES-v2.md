@@ -145,19 +145,36 @@ custody accepted in place of the terminal move in exchange for something — the
 king buying the end of the story, the attacker the same race advantage at a lower
 judicial price.
 
-And it is not a reprieve, on three counts. It **strengthens** the Criterion
-rather than softening it, since it converts a robbery into a kidnapping. It
-**does not deliver what it is bought for**: custody removes the holder from the
-race but not the race, and by NNPP an accomplice, heir, delegate or dead-man
-arrangement may already be moving, none of them in the attacker's hands, so the
-assurance is partial exactly where it would have to be total. And the
-**alignment expires** — custody substitutes for the terminal move only while it
-is the cheaper way to buy non-racing, its cost accrues on every day of the hold
-where `c` is paid once, and what the holder supplies is supplied by the
-attacker's own act of holding him, so he has no lever to withhold. Scheherazade's
-payment is renewable and hers to withhold, which is how she reaches night 1001.
-In the book she is pardoned on the thousand and second morning; the registry
-records no counterpart to that morning.
+**The remote delegate is not an escape, and the section says so deliberately.**
+An earlier draft argued the opposite — that custody cannot deliver what it is
+bought for, since by NNPP the attacker can never rule out an access-dominating
+delegate beyond his reach. That reasons in the holder's favour, which is the
+wrong direction for an *a fortiori* model, and it is empirically false besides:
+abductions happen, so real attackers proceed, on a good guess. Custody without a
+remote party able to lock its owner out has plain advantages over custody with
+one; many holders choose it for that reason; under Kerckhoffs the attacker knows
+both; and where subjugation is fast a delegate may not learn of the encounter in
+time to intervene. Pricing that probability is more machinery for a weaker bar,
+so the attacker proceeds as though there is none.
+
+It is then not a reprieve, on two counts. It **strengthens** the Criterion
+rather than softening it, since it converts a robbery into a kidnapping. And the
+**alignment expires**, which is now set out formally. Writing `R` for the racer
+set and `p_A(S)` for the attacker's probability of prevailing against `S`, the
+three moves separate: holding and the terminal move both buy `p_A(R\{V})`,
+release buys `p_A(R)`. The first two differ only in price and tenure —
+**detention rents what the terminal move buys outright** — so with `κ` the
+per-period cost of a hold, the rent crosses the purchase price at `T* = c/κ`.
+The bargain exists only where the Lemma's incentive is live, `πW > c`; inside
+that region the hold is preferred only while `κT < c`; past `T*` the terminal
+move is strictly cheaper for an identical result; and by NNPP the hold has no
+natural end state to reach first. A forward-looking attacker who expects at the
+outset to hold past `T*` does better to kill at once. Scheherazade's payment is
+renewable and hers to withhold, which is how she reaches night 1001; what the
+holder supplies is supplied by the attacker's own act of holding him, so he has
+no lever and nothing to renegotiate with. In the book she is pardoned on the
+thousand and second morning; the registry records no counterpart to that
+morning.
 
 The route does not escape the Spiral. It feeds into it by a second road: the
 Spiral's duration is epistemic deadlock, this is a strategic hostage problem,

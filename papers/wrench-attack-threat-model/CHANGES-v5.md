@@ -87,6 +87,21 @@ disutility. A gray outcome therefore prices not only the holder's elimination
 but **custody, as collateral on his own abstention** — and the conjecture is
 that the holder, having run the same arithmetic, volunteers for it.
 
+**The remote delegate is not an escape, and the model says so deliberately.**
+An earlier draft argued the opposite — that custody cannot deliver what it is
+bought for, because by NNPP the attacker can never rule out an access-dominating
+delegate beyond his reach. That is backwards for an *a fortiori* model. It
+reasons in the holder's favour, and it is also empirically false: abductions
+happen, so real attackers evidently proceed. They proceed on a good guess.
+Custody without a remote party able to lock its owner out has plain advantages
+over custody with one; many holders choose it for that reason; under Kerckhoffs
+the attacker knows both, so he knows the setup stands a real chance of having no
+such delegate; and where subjugation is fast, a delegate may not learn of the
+encounter in time to intervene at all. Pricing that probability would be more
+machinery for a weaker bar, so the attacker proceeds as though there is none —
+the attacker for whom the bargain is most attractive, which is the conservative
+reading and leaves the holder nothing to be rescued by.
+
 **What is traded is non-racing, and the remark says so explicitly**, because
 the captivity makes two different things possible and they are easy to run
 together. More hours of coercion may extract more than a released holder would
@@ -104,15 +119,15 @@ available and costly:
 - It **strengthens** the Criterion. A gray outcome does not save a life; it
   converts a robbery into a kidnapping, so the band costs more than the Lemma
   prices, not less.
-- It does not deliver what it is bought for, by NNPP. Custody removes the holder
-  from the race; it does not remove the race. An accomplice, heir, delegate or
-  dead-man arrangement may already be moving, and none of those racers is in the
-  attacker's hands, so the assurance is partial exactly where it would have to
-  be total.
-- The alignment **expires**. Custody substitutes for the terminal move only
-  while it is the cheaper way to buy non-racing, and its cost accrues per day of
-  the hold where `c` is paid once. The bargain postpones the terminal move onto
-  a clock the holder does not control.
+- The alignment **expires**, and this is stated formally. Detention and the
+  terminal move buy the attacker the *same* win probability, `p_A(R\{V})`, and
+  differ only in price and tenure: **detention rents what the terminal move buys
+  outright.** With `κ` the per-period cost of a hold, the accumulated rent
+  crosses the purchase price at `T* = c/κ`, past which the terminal move is
+  strictly cheaper for an identical result — and by NNPP nothing in the
+  encounter ever makes the holder safe to release, so the hold has no natural
+  end state to reach first. What the holder buys is a postponement whose length
+  is set entirely by the attacker's costs.
 - A time-gate `G` **shorter** than `t` is not a weaker defense under this
   conjecture. It is a published schedule for how long the holder will be held.
 

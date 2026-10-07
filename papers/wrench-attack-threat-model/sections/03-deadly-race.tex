@@ -387,19 +387,35 @@ $\Attacker$ collects the same win probability the terminal move would have
 bought him --- a $\Victim$ in custody is a $\Victim$ not racing --- at a
 judicial disutility below $c$.
 
-\textbf{Even so it does not deliver what it is bought for, and NNPP is why.}
-Custody removes $\Victim$ from the race; it does not remove the race. By
-Assumption~\ref{lem:nnpl} $\Attacker$ cannot establish that no accomplice, heir,
-delegate or dead-man arrangement is already moving on the same $\Kset$, and
-those racers are not in his hands. The assurance he is paying for is therefore
-partial exactly where it would have to be total.
+\textbf{The remote delegate is not an escape here.} One may object that custody
+cannot give $\Attacker$ what he is buying, since by Assumption~\ref{lem:nnpl} he
+can never rule out an access-dominating delegate
+(Definition~\ref{def:dominating}) beyond his reach. Abductions happen, so real
+attackers evidently proceed anyway, on a guess that is a good one: custody
+without a remote party able to lock its owner out has plain advantages over
+custody with one, many holders choose it for that reason, and under Kerckhoffs
+$\Attacker$ knows both and so knows $\Victim$'s setup stands a real chance of
+having no such delegate --- and where subjugation is fast, a delegate may not
+learn of the encounter in time to intervene at all. Pricing that probability
+would be more machinery for a weaker bar, so the model keeps the \emph{a
+fortiori} reading and lets $\Attacker$ proceed as though there is none. That is
+the attacker for whom the bargain is most attractive, and it leaves $\Victim$
+nothing to be rescued by here.
 
-\textbf{And the alignment expires.} Custody substitutes for the terminal move
-only while it is the cheaper way to buy non-racing. Its cost accrues for every
-day of the hold --- exposure, logistics, a charge that compounds --- where $c$
-is paid once. The bargain thus postpones the terminal move onto a clock
-$\Victim$ does not control, and by NNPP the hold has no natural end state to
-reach first.
+\textbf{And the alignment expires.} Detention and the terminal move buy
+$\Attacker$ the \emph{same} win probability --- $p_A(R\setminus\{\Victim\})$, in
+the notation of Definition~\ref{def:game} --- and differ only in price and in
+tenure: detention \emph{rents} what the terminal move buys outright. Let
+$\kappa$ be what a hold costs $\Attacker$ per period. The accumulated rent
+crosses the purchase price at
+\[
+  T^{*} \;=\; c/\kappa ,
+\]
+past which the terminal move is strictly cheaper for an identical result, and by
+Assumption~\ref{lem:nnpl} nothing in the encounter ever makes $\Victim$ safe to
+release, so the hold has no natural end state to reach first. What $\Victim$
+buys is a postponement whose length is set entirely by $\Attacker$'s costs. The
+companion works the three moves out in full~\cite[\S4]{denial-spiral}.
 
 One consequence is uncomfortable enough to record rather than leave for a
 reviewer to reach. A time-gate $G$ longer than the coercion-time budget $t$ is

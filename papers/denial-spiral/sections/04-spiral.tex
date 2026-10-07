@@ -96,30 +96,73 @@ move now, in exchange for something. This is the clause worth stating, because i
 names what the captor is buying: the king is buying the end of the story, the
 attacker the same race advantage at a lower judicial price.
 
-\medskip\noindent\textbf{It is not a reprieve, on three counts.}
+\medskip\noindent\textbf{The remote delegate is not an escape here, and the
+model says so deliberately.} One may object that custody cannot give
+$\Attacker$ what he is buying, since by Assumption~\ref{lem:nnpl} he can never
+rule out an access-dominating remote delegate who is not in his hands.
+Empirically the objection does not survive: abductions happen, so real
+attackers evidently do proceed. They proceed on an educated guess about the
+setup, and the guess is a good one. Custody without a remote party able to lock
+its owner out has plain advantages over custody with one; many holders choose it
+for exactly that reason; and under Kerckhoffs $\Attacker$ knows both of those
+facts, so he knows $\Victim$'s setup stands a real chance of having no such
+delegate. Where subjugation is fast, a delegate may in any case not learn of the
+encounter until intervening is already too late.
+
+For the model the choice is between an $\Attacker$ who prices the probability of
+a delegate and one who proceeds as though there is none. The first is more
+machinery for a weaker bar. We take the second, \emph{a fortiori}: it is the
+attacker for whom the bargain is most attractive, so what holds against him
+holds generally --- and it leaves $\Victim$ nothing to be rescued by here.
+
+\medskip\noindent\textbf{It is not a reprieve, on two counts.}
 
 \emph{(i) It strengthens the Criterion rather than softening it.} The available
 misreading is that a gray outcome may therefore save a life. It converts a
 robbery into a kidnapping: the gray band costs more than
 Lemma~\ref{lem:drl} prices, not less.
 
-\emph{(ii) It does not deliver what it is bought for, and NNPP is why.} Custody
-removes $\Victim$ from the race; it does not remove the race. By
-Assumption~\ref{lem:nnpl} $\Attacker$ cannot establish that no accomplice, heir,
-delegate or dead-man arrangement is already moving on the same stash, and none
-of those racers is in his hands. The assurance he is paying for is partial
-exactly where it would have to be total, so the hold settles nothing and has no
-natural end state to reach.
+\emph{(ii) The alignment expires, on a clock $\Victim$ does not hold.} Write $R$
+for the racer set and $p_A(S)$ for $\Attacker$'s probability of prevailing
+against racers $S$ (\cite[Def.~6]{deadly-race}), and let $\kappa$ be what a hold
+costs $\Attacker$ per period --- exposure, logistics, a charge that compounds.
+The three moves separate cleanly:
 
-\emph{(iii) The alignment expires, on a clock $\Victim$ does not hold.} Custody
-substitutes for the terminal move only while it remains the cheaper way to buy
-non-racing, and its cost accrues on every day of the hold --- exposure,
-logistics, a charge that compounds --- where $c$ is paid once. Scheherazade's
-payment is renewable and hers to withhold, which is how she reaches night
-$1001$; what $\Victim$ supplies is supplied by $\Attacker$'s own act of holding
-him, so he has no lever to withhold and nothing to renegotiate with. In the book
-she is pardoned on the thousand and second morning; the registry
-(\S\ref{sec:registry}) records no counterpart to that morning.
+\begin{center}\small
+\begin{tabular}{@{}lcl@{}}
+\toprule
+$\Attacker$'s move & win probability & cost \\
+\midrule
+hold $\Victim$ for $T$ & $p_A(R \setminus \{\Victim\})$ & $\kappa T$, and still running \\
+terminal move & $p_A(R \setminus \{\Victim\})$ & $c$, once \\
+release $\Victim$ & $p_A(R)$ & $0$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent The first two buy the \emph{same} win probability and differ only in
+price and in tenure: \textbf{detention rents what the terminal move buys
+outright.} The bargain is therefore available only inside the region where the
+Lemma's incentive is already live, $\pi W > c$ --- below it $\Attacker$ releases
+and there is nothing to bargain over --- and inside that region the hold is
+preferred only while the accumulated rent stays under the purchase price,
+\[
+  \kappa T \;<\; c, \qquad\text{that is,}\qquad T \;<\; T^{*} \;=\; c/\kappa .
+\]
+Past $T^{*}$ the terminal move is strictly cheaper for an identical result. And
+by Assumption~\ref{lem:nnpl} nothing in the encounter ever makes $\Victim$ safe
+to release, so the hold has no natural end state to reach before $T^{*}$: what
+$\Victim$ has bought is a postponement whose length is set entirely by
+$\Attacker$'s cost parameters. Worse for him, a forward-looking $\Attacker$ who
+expects at the outset to hold past $T^{*}$ does better to enact the terminal
+move at once, and NNPP gives him no reason to expect otherwise.
+
+$\Victim$ has no lever on either term. Scheherazade's payment is renewable and
+hers to withhold, which is how she reaches night $1001$; what $\Victim$ supplies
+is supplied by $\Attacker$'s own act of holding him, so there is nothing for him
+to withhold and nothing to renegotiate with. In the book she is pardoned on the
+thousand and second morning; the registry (\S\ref{sec:registry}) records no
+counterpart to that morning.
 
 \medskip\noindent The route therefore does not escape the Spiral. It feeds into
 it by a second road: the Spiral's duration is epistemic deadlock, where the
