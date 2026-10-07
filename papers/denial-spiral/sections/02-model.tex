@@ -100,10 +100,13 @@ authentication, \textbf{(\ref{p:indiv})} individual custody,
   \item\label{p:nonob} non-obscurity;
   \item\label{p:coerc} coercion resistance.
 \end{enumerate}
-Clearing the bar while holding all four leaves two routes:
+Clearing the bar leaves two routes~\cite[Cor.~2]{deadly-race}:
 \begin{enumerate}[nosep,leftmargin=2.9em,label=\textbf{(R\arabic*)},ref=R\arabic*]
-  \item\label{r:removerace} the \emph{tacit} route, which removes the race
-        itself~\cite[Cor.~3]{deadly-race};
+  \item\label{r:removerace} \emph{removing the race itself}, whose
+        knowledge-based leg is the \emph{tacit} route --- the only way to clear
+        the bar while holding all four~\cite[Cor.~3]{deadly-race};
   \item\label{r:remotewinner} the \textbf{remote-delegate} route, which keeps a
-        winning racer beyond the attacker's reach.
+        winning racer beyond the attacker's reach, at the cost of
+        Property~\ref{p:indiv}: an access-dominating delegate is shared custody,
+        not individual~\cite[Cor.~3]{deadly-race}.
 \end{enumerate}

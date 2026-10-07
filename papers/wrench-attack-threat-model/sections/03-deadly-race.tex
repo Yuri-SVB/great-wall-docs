@@ -420,15 +420,23 @@ free on the evidence $\Victim$ supplies. The companion works the three moves out
 in full~\cite[\S4]{denial-spiral}.
 
 One consequence is uncomfortable enough to record rather than leave for a
-reviewer to reach. By Definition~\ref{def:gray} a gray outcome requires the
-gate outstanding at release to exceed what is left of the coercion budget $t$;
-a time-gate $G$ that $\Attacker$ can walk to completion inside the window
-(Definition~\ref{def:timegate}) leaves a clear success, no race, and nothing a
-hold could buy. The defense is therefore not $G > t$ on its own: it is a
-residual beyond $t$ that also exceeds the detention horizon $c/\kappa$. The band
-in between --- a residual past $t$ but under $c/\kappa$ --- is the uncomfortable
-one, because there $\Attacker$ does better to wait the gate out in custody, and
-the design has published how long $\Victim$ will be held.
+reviewer to reach, and it is not about \emph{short} gates. A gate $\Attacker$
+can finish inside the window is finished inside it: $p_A = 1$, a clear success
+(Criterion~\ref{prin:nga}), $\pi = 0$, so there is nothing for a hold to buy and
+no bargain to strike. The band that carries the consequence is
+Definition~\ref{def:timegate}'s \emph{weak} one --- a gate that leaves a
+feasible-but-unfinished path, its remainder at release exceeding what is left of
+$t$ (Definition~\ref{def:gray}). There the hold has the end named above:
+$\Victim$ never becomes safe to release (Assumption~\ref{lem:nnpl}), but
+$\Attacker$ completing the gate ends the race by leaving no prize to run for.
+That end arrives after the remainder, and under \ref{d:kerckhoffs} the design
+has published how long it is. $\Attacker$ waits it out in custody for as long as
+$\kappa$ times it stays under $c$, and reverts to the terminal move past the
+same $T^{*}$. So neither band is a defense --- a longer gate does not buy
+safety, it buys a longer kidnapping and then a killing. What escapes both moves
+is a seized state that reaches nothing at all, $p_A = 0$ (\ref{r:removerace},
+Definition~\ref{def:tacit}), which is why Definition~\ref{def:timegate} grades
+time-gating as a mechanism and not a strength.
 
 The bargain itself --- the tale, what the analogy holds on and where it breaks,
 and why the resulting silence in the registry is over-determined rather than

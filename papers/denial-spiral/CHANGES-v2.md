@@ -195,3 +195,14 @@ Post 006 and its four translations carry a fence saying the conjecture is "not
 in the paper, with no DOI behind it". True until this version and the
 companion's v5 are deposited, false the moment they are. Rewrite that fence in
 the same week the deposit happens.
+
+
+## §2's route list contradicted the corollary on its own next line
+
+"Clearing the bar **while holding all four** leaves two routes" is false of the
+second route. The companion's Cor. 2 says R2 makes custody *shared*, at the cost
+of a trusted party, so the remote delegate spends Property 2 — and Cor. 3, which
+the line cited, is what says the tacit route is the only one that keeps all
+four. The scoping clause is dropped, the two-route count now cites Cor. 2, and
+each route carries what it costs. Found while checking §4's new delegate
+paragraph against the companion; it predates that paragraph.

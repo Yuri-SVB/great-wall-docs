@@ -139,12 +139,23 @@ available and costly:
 - **The time-gate consequence was stated inverted and is fixed.** By `def:gray`
   a gray outcome requires the gate outstanding at release to exceed what is left
   of `t`; a gate the attacker can walk to completion inside the window leaves a
-  clear success, no race and nothing a hold could buy. So the defense is not
-  `G > t` on its own but a residual beyond `t` that also exceeds `c/κ`. The band
-  in between — residual past `t`, under `c/κ` — is the uncomfortable one: the
-  attacker waits the gate out in custody and the design has published how long
-  the holder will be held. The inverted form came from the project's working
-  notes and is also in post 006; both need the correction.
+  clear success, `π = 0`, and nothing a hold could buy. The band that carries
+  the consequence is `def:timegate`'s **weak** one — a remainder at release past
+  what is left of `t` — where the attacker's own completion of the gate ends the
+  race, after a delay the design has published under Kerckhoffs. He waits it out
+  while `κ` times the remainder stays under `c`, and reverts to the terminal
+  move past the same `T*`.
+
+  **So neither band is a defense.** A longer gate does not buy safety; it buys a
+  longer kidnapping and then a killing. What escapes both moves is a seized
+  state that reaches nothing at all, `p_A = 0` — R1 and the tacit route — which
+  is why `def:timegate` grades time-gating as a mechanism and not a strength.
+  Note that the *first* repair of this paragraph was itself wrong in the same
+  direction, calling "a residual beyond `t` that also exceeds `c/κ`" the
+  defense; past `c/κ` is where the attacker kills, which is worse, not safer.
+
+  The inverted form came from the project's working notes and is also in post
+  006 in five languages. Both need the correction.
 
 The bargain itself — the tale, what the analogy holds on, where it breaks — is
 a `WDY^Bay` subject and is developed in the companion's §4 rather than here.
