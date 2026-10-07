@@ -163,13 +163,21 @@ rather than softening it, since it converts a robbery into a kidnapping. And the
 set and `p_A(S)` for the attacker's probability of prevailing against `S`, the
 three moves separate: holding and the terminal move both buy `p_A(R\{V})`,
 release buys `p_A(R)`. The first two differ only in price and tenure —
-**detention rents what the terminal move buys outright** — so with `κ` the
-per-period cost of a hold, the rent crosses the purchase price at `T* = c/κ`.
-The bargain exists only where the Lemma's incentive is live, `πW > c`; inside
-that region the hold is preferred only while `κT < c`; past `T*` the terminal
-move is strictly cheaper for an identical result; and by NNPP the hold has no
-natural end state to reach first. A forward-looking attacker who expects at the
-outset to hold past `T*` does better to kill at once. Scheherazade's payment is
+**detention rents what the terminal move buys outright**. With `κ` the
+per-period cost of a hold, undiscounted, there are three pairwise comparisons
+and so two horizons: the hold beats release while `κT < πW` and beats the
+terminal move while `κT < c`, so it runs to the earlier of `πW/κ` and
+`T* = c/κ`. The Lemma's condition is exactly the switch between them — `πW > c`
+iff `T*` is the earlier — and the bargain lives only in that half, since only
+there is there a killing for the holder to avert. In the other half the attacker
+may still detain, but on his own account, with nothing offered and nothing
+agreed. Where the bargain lives, the holder buys a postponement of at most
+`c/κ`; absent new information an attacker who expects at the outset to hold past
+`T*` does better to kill at once. The hold has one end that is not the terminal
+move — the attacker completing the spend, after which `π = 0` — but it turns on
+his residual latency, and by NNPP release never becomes free on the evidence the
+holder supplies. `π` is defined relationally where it is first used, and
+reconciled with the `(1−p_A)W` form the borrowed Lemma states. Scheherazade's payment is
 renewable and hers to withhold, which is how she reaches night 1001; what the
 holder supplies is supplied by the attacker's own act of holding him, so he has
 no lever and nothing to renegotiate with. In the book she is pardoned on the

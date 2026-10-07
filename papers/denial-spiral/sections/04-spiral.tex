@@ -124,9 +124,14 @@ Lemma~\ref{lem:drl} prices, not less.
 
 \emph{(ii) The alignment expires, on a clock $\Victim$ does not hold.} Write $R$
 for the racer set and $p_A(S)$ for $\Attacker$'s probability of prevailing
-against racers $S$ (\cite[Def.~6]{deadly-race}), and let $\kappa$ be what a hold
-costs $\Attacker$ per period --- exposure, logistics, a charge that compounds.
-The three moves separate cleanly:
+against racers $S$ (\cite[Def.~6]{deadly-race}), and $\pi := p_A(R \setminus
+\{\Victim\}) - p_A(R)$ for $\Victim$'s pivotality. Lemma~\ref{lem:drl} prices
+the terminal move as $(1-p_A)\,W > c$; the two forms agree under individual
+custody, where removing $\Victim$ leaves no racer at all and $\pi = 1 - p_A$,
+and $\pi$ is the form to use wherever another racer survives. Let $\kappa$ be
+what a hold costs $\Attacker$ per period --- logistics, custody, exposure --- and
+take $\kappa$ and $c$ undiscounted, which is the $r=0$ case and the simplest
+one. The three moves then separate:
 
 \begin{center}\small
 \begin{tabular}{@{}lcl@{}}
@@ -142,20 +147,36 @@ release $\Victim$ & $p_A(R)$ & $0$ \\
 
 \noindent The first two buy the \emph{same} win probability and differ only in
 price and in tenure: \textbf{detention rents what the terminal move buys
-outright.} The bargain is therefore available only inside the region where the
-Lemma's incentive is already live, $\pi W > c$ --- below it $\Attacker$ releases
-and there is nothing to bargain over --- and inside that region the hold is
-preferred only while the accumulated rent stays under the purchase price,
+outright.} There are three pairwise comparisons, not two, and they give the hold
+two horizons:
 \[
-  \kappa T \;<\; c, \qquad\text{that is,}\qquad T \;<\; T^{*} \;=\; c/\kappa .
+  \text{hold beats release} \iff \kappa T < \pi W,
+  \qquad
+  \text{hold beats the terminal move} \iff \kappa T < c .
 \]
-Past $T^{*}$ the terminal move is strictly cheaper for an identical result. And
-by Assumption~\ref{lem:nnpl} nothing in the encounter ever makes $\Victim$ safe
-to release, so the hold has no natural end state to reach before $T^{*}$: what
-$\Victim$ has bought is a postponement whose length is set entirely by
-$\Attacker$'s cost parameters. Worse for him, a forward-looking $\Attacker$ who
-expects at the outset to hold past $T^{*}$ does better to enact the terminal
-move at once, and NNPP gives him no reason to expect otherwise.
+The hold therefore runs until the earlier of $T^{\dagger} = \pi W/\kappa$ and
+$T^{*} = c/\kappa$, and the Lemma's own condition is exactly the switch between
+them: $\pi W > c$ iff $T^{*} < T^{\dagger}$. The \emph{bargain} --- $\Victim$
+volunteering --- lives only in that half, because only there is there a killing
+for him to avert. In the other half $\Attacker$ may still detain, but on his own
+account, with nothing offered and nothing agreed.
+
+\medskip\noindent Where the bargain does live, it buys $\Victim$ no reprieve.
+The hold expires at $T^{*}$, past which the terminal move is strictly cheaper
+for an identical result, so what $\Victim$ has bought is a postponement of
+length at most $c/\kappa$, set entirely by $\Attacker$'s cost parameters. Absent
+new information, an $\Attacker$ who expects at the outset to hold past $T^{*}$
+does better to enact the terminal move at once.
+
+There is one end to the hold that is not the terminal move: $\Attacker$
+completing the spend, after which $\pi = 0$ and release is free. But its arrival
+is $\Attacker$'s residual latency on his own path, which $\Victim$ cannot hasten
+once held --- and it is the \emph{only} such end, because by
+Assumption~\ref{lem:nnpl} $\Attacker$'s posterior on an undisclosed path never
+reaches $0$, so release never becomes free on the evidence $\Victim$ supplies.
+Note the regime: this is the Bayesian reading, in which the posterior moves but
+cannot be driven to zero, not the dogmatic one in which nothing moves it at all
+(Definition~\ref{def:belief}).
 
 $\Victim$ has no lever on either term. Scheherazade's payment is renewable and
 hers to withhold, which is how she reaches night $1001$; what $\Victim$ supplies

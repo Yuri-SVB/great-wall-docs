@@ -406,22 +406,29 @@ nothing to be rescued by here.
 $\Attacker$ the \emph{same} win probability --- $p_A(R\setminus\{\Victim\})$, in
 the notation of Definition~\ref{def:game} --- and differ only in price and in
 tenure: detention \emph{rents} what the terminal move buys outright. Let
-$\kappa$ be what a hold costs $\Attacker$ per period. The accumulated rent
-crosses the purchase price at
-\[
-  T^{*} \;=\; c/\kappa ,
-\]
-past which the terminal move is strictly cheaper for an identical result, and by
-Assumption~\ref{lem:nnpl} nothing in the encounter ever makes $\Victim$ safe to
-release, so the hold has no natural end state to reach first. What $\Victim$
-buys is a postponement whose length is set entirely by $\Attacker$'s costs. The
-companion works the three moves out in full~\cite[\S4]{denial-spiral}.
+$\kappa$ be the per-period cost of a hold, undiscounted. The hold then has two
+horizons, $\pi W/\kappa$ against release and $T^{*} = c/\kappa$ against the
+terminal move, and runs to whichever binds first; the Lemma's condition is
+precisely the switch between them, since $\pi W > c$ iff $T^{*}$ is the earlier.
+So where the Lemma's incentive is live --- the only region in which $\Victim$
+has a killing to avert, and hence the only one in which a bargain is struck ---
+what he buys is a postponement of at most $c/\kappa$, set by $\Attacker$'s
+costs. The one end that is not the terminal move is $\Attacker$ completing the
+spend, which turns on $\Attacker$'s residual latency and not on anything
+$\Victim$ can do once held: by Assumption~\ref{lem:nnpl} release never becomes
+free on the evidence $\Victim$ supplies. The companion works the three moves out
+in full~\cite[\S4]{denial-spiral}.
 
 One consequence is uncomfortable enough to record rather than leave for a
-reviewer to reach. A time-gate $G$ longer than the coercion-time budget $t$ is
-the defense (Definition~\ref{def:timegate}). A gate \emph{shorter} than $t$ is
-not merely a weaker defense: under this conjecture it is a published schedule
-for how long $\Victim$ will be held.
+reviewer to reach. By Definition~\ref{def:gray} a gray outcome requires the
+gate outstanding at release to exceed what is left of the coercion budget $t$;
+a time-gate $G$ that $\Attacker$ can walk to completion inside the window
+(Definition~\ref{def:timegate}) leaves a clear success, no race, and nothing a
+hold could buy. The defense is therefore not $G > t$ on its own: it is a
+residual beyond $t$ that also exceeds the detention horizon $c/\kappa$. The band
+in between --- a residual past $t$ but under $c/\kappa$ --- is the uncomfortable
+one, because there $\Attacker$ does better to wait the gate out in custody, and
+the design has published how long $\Victim$ will be held.
 
 The bargain itself --- the tale, what the analogy holds on and where it breaks,
 and why the resulting silence in the registry is over-determined rather than

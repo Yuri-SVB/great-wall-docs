@@ -122,14 +122,29 @@ available and costly:
 - The alignment **expires**, and this is stated formally. Detention and the
   terminal move buy the attacker the *same* win probability, `p_A(R\{V})`, and
   differ only in price and tenure: **detention rents what the terminal move buys
-  outright.** With `κ` the per-period cost of a hold, the accumulated rent
-  crosses the purchase price at `T* = c/κ`, past which the terminal move is
-  strictly cheaper for an identical result — and by NNPP nothing in the
-  encounter ever makes the holder safe to release, so the hold has no natural
-  end state to reach first. What the holder buys is a postponement whose length
-  is set entirely by the attacker's costs.
-- A time-gate `G` **shorter** than `t` is not a weaker defense under this
-  conjecture. It is a published schedule for how long the holder will be held.
+  outright.** With `κ` the per-period cost of a hold, undiscounted, there are
+  three pairwise comparisons and so two horizons — `πW/κ` against release and
+  `T* = c/κ` against the terminal move — and the hold runs to whichever binds
+  first. The Lemma's condition is exactly the switch between them: `πW > c` iff
+  `T*` is the earlier. The bargain lives only in that half, since only there is
+  there a killing for the holder to avert; in the other half the attacker may
+  still detain, but on his own account. Where it does live, the holder buys a
+  postponement of at most `c/κ`, set by the attacker's costs.
+- The hold has **one** end that is not the terminal move: the attacker
+  completing the spend, after which `π = 0` and release is free. It turns on his
+  residual latency, not on anything the holder can do once held, and by NNPP
+  release never becomes free on the evidence the holder supplies. (An earlier
+  draft said "no natural end state", which is too strong, and said it in
+  dogmatic-regime language inside a Bayesian section.)
+- **The time-gate consequence was stated inverted and is fixed.** By `def:gray`
+  a gray outcome requires the gate outstanding at release to exceed what is left
+  of `t`; a gate the attacker can walk to completion inside the window leaves a
+  clear success, no race and nothing a hold could buy. So the defense is not
+  `G > t` on its own but a residual beyond `t` that also exceeds `c/κ`. The band
+  in between — residual past `t`, under `c/κ` — is the uncomfortable one: the
+  attacker waits the gate out in custody and the design has published how long
+  the holder will be held. The inverted form came from the project's working
+  notes and is also in post 006; both need the correction.
 
 The bargain itself — the tale, what the analogy holds on, where it breaks — is
 a `WDY^Bay` subject and is developed in the companion's §4 rather than here.
