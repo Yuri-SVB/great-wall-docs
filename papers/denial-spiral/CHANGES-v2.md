@@ -206,3 +206,40 @@ the line cited, is what says the tacit route is the only one that keeps all
 four. The scoping clause is dropped, the two-route count now cites Cor. 2, and
 each route carries what it costs. Found while checking §4's new delegate
 paragraph against the companion; it predates that paragraph.
+
+
+## §4.1, second pass
+
+Four corrections, all Yuri's.
+
+**`r` was used and never defined.** The discount rate appeared in "the `r=0`
+case" with nothing introducing it. Both papers now just say no time preference
+is modeled.
+
+**"The hold runs until T*" implied the hold always happens.** It does not: the
+attacker holds iff his arithmetic at the moment says so. And the consequence of
+saying it properly is a concession the section had been refusing — **where he
+does hold, the holder is alive who would otherwise be dead, and that is a real
+reprieve**, bounded at `c/κ` and priced in the attacker's parameters. "It is not
+a reprieve, on two counts" became "What it buys, and what that costs". The
+second count is the one that does the work: the killing being postponed is one
+the gray band created, so the concession is the charge against the band rather
+than a defense of it.
+
+**The holder's willingness is not a free variable in the idealized model.** The
+adversary is granted complete subjugation and the holder's full cooperation, so
+an abduction happens iff the attacker chooses one. The volunteering is not a
+mechanism of that model at all — it means something only as one moves toward the
+real encounter, which is a second and better reason the conjecture lives in this
+paper and in the Bayesian regime.
+
+**The no-delegate simplification moved to the companion**, as its `rem:nodelegate`
+— see that paper's changelog. It was stated here as "the attacker for whom the
+bargain is most attractive", which undersells it: pinning the delegate's
+probability at zero maximizes assessed pivotality and so the payoff of *every*
+move the Lemma prices. The bar is DR-safety, not bargain-safety. §4.1 keeps a
+two-line pointer.
+
+Also: "the Spiral's duration is epistemic deadlock" in the closing became "the
+abduction's duration", since the sentence contrasts two mechanisms producing one
+observable, and the observable is the abduction.

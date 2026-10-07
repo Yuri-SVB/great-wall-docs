@@ -73,6 +73,36 @@ Stated as the instrument it is: **if a setup admits no gray outcome against
 `rem:worstcase` now names the regime in the worst-case identity, which previously
 read as if plain WDY were fixed by the payoff coordinates alone.
 
+## A second belief, also resolved conservatively: the undemonstrated delegate
+
+`rem:nodelegate` joins the belief apparatus, right after the regimes. By NNPP
+the attacker can no more rule out an access-dominating delegate than an
+undisclosed copy, and the model does not have him price that probability:
+**unless dominance has been *demonstrated* to him, he proceeds as though there
+is none.**
+
+It belongs here and not in the conjecture that first needed it, because the
+reach of the argument is wider than the conjecture. Pinning that probability at
+zero maximizes the attacker's assessed pivotality, and so the assessed payoff of
+*every* move the Lemma prices — the terminal move and detention alike. The bar
+at stake is DR-safety, not the safety of any one substitute move. A design that
+clears the Criterion against an attacker who believes himself unopposed clears
+it against one who suspects a delegate.
+
+It also pays for itself where it sits: **it is why R2 turns on demonstration
+rather than on existence.** A delegate who merely exists leaves the assessed
+pivotality untouched and the holder exactly as pivotal as before. What clears
+the Criterion is dominance the attacker can *check* (`rem:verifiable-dominance`),
+which is what moves the belief. `def:gray`'s "gray but safe" is that case and
+only that case. Stated this way the simplification supports R2 instead of
+sitting in tension with it.
+
+The field agrees: abductions happen, so real attackers proceed. Custody with no
+remote party able to lock its owner out has plain advantages over custody with
+one, many holders choose it for that reason, under Kerckhoffs the attacker knows
+both, and where subjugation is fast a delegate may not learn of the encounter in
+time to intervene.
+
 ## A conjecture: custody as the cheaper substitute
 
 §3.3 gains `rem:scheherazade`, fenced on both sides — a lead-in saying it does
@@ -86,21 +116,6 @@ the same assurance as the terminal move at a fraction of the judicial
 disutility. A gray outcome therefore prices not only the holder's elimination
 but **custody, as collateral on his own abstention** — and the conjecture is
 that the holder, having run the same arithmetic, volunteers for it.
-
-**The remote delegate is not an escape, and the model says so deliberately.**
-An earlier draft argued the opposite — that custody cannot deliver what it is
-bought for, because by NNPP the attacker can never rule out an access-dominating
-delegate beyond his reach. That is backwards for an *a fortiori* model. It
-reasons in the holder's favour, and it is also empirically false: abductions
-happen, so real attackers evidently proceed. They proceed on a good guess.
-Custody without a remote party able to lock its owner out has plain advantages
-over custody with one; many holders choose it for that reason; under Kerckhoffs
-the attacker knows both, so he knows the setup stands a real chance of having no
-such delegate; and where subjugation is fast, a delegate may not learn of the
-encounter in time to intervene at all. Pricing that probability would be more
-machinery for a weaker bar, so the attacker proceeds as though there is none —
-the attacker for whom the bargain is most attractive, which is the conservative
-reading and leaves the holder nothing to be rescued by.
 
 **What is traded is non-racing, and the remark says so explicitly**, because
 the captivity makes two different things possible and they are easy to run
@@ -116,9 +131,26 @@ disclosed to buy it; what the holder supplies is being held.
 Three things are then said in the same breath, because the misreading is
 available and costly:
 
-- It **strengthens** the Criterion. A gray outcome does not save a life; it
-  converts a robbery into a kidnapping, so the band costs more than the Lemma
-  prices, not less.
+- **It does buy a reprieve, and the paper now says so.** Nothing obliges the
+  attacker to rent: he holds only where his own arithmetic says so. Where he
+  does, the holder is alive who would otherwise be dead. Claiming otherwise was
+  an overclaim, and an overclaim is what a reviewer pulls on. What is true is
+  that the reprieve is **bounded** — at most `c/κ`, priced in the attacker's
+  parameters, ended by the terminal move unless his own path completes first,
+  and not the holder's to extend.
+- **The concession is the charge, not a defense.** The killing being postponed
+  is one the gray band created. A design clearing the Criterion leaves no racer
+  to remove, hence no terminal move to be reprieved from, hence nothing for a
+  kidnapping to substitute for. The misreading — that a gray outcome may save a
+  life — gets the sign right and the baseline wrong. The band buys the holder at
+  most `c/κ` and bills him a kidnapping for it.
+- **The holder's willingness is not a free variable in the idealized model.**
+  Under complete subjugation the attacker meets no resistance and enjoys full
+  cooperation, so an abduction happens iff he chooses one. The volunteering is
+  therefore not a mechanism of that model at all; it means something only as one
+  moves toward the real encounter, where the attacker's assessment can be moved
+  and the offer is information rather than consent. A second reason the bargain
+  is the companion's subject.
 - The alignment **expires**, and this is stated formally. Detention and the
   terminal move buy the attacker the *same* win probability, `p_A(R\{V})`, and
   differ only in price and tenure: **detention rents what the terminal move buys

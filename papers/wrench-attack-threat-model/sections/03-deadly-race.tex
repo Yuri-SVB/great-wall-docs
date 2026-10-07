@@ -264,6 +264,39 @@ not here. One consequence of it bears directly on the Criterion, and only that
 one is recorded below (Remark~\ref{rem:scheherazade}).
 \end{remark}
 
+\begin{remark}[The delegate that has not been demonstrated]\label{rem:nodelegate}
+One further belief is resolved conservatively, and it belongs here beside
+Definition~\ref{def:belief} rather than wherever it is first needed. By NNPP
+$\Attacker$ can no more rule out an access-dominating delegate
+(Definition~\ref{def:dominating}) than an undisclosed copy. The model does not
+have him price that probability: \textbf{unless dominance has been
+\emph{demonstrated} to him, he proceeds as though there is none.}
+
+It is the conservative branch, for the usual reason. Pinning that probability at
+zero maximizes $\Attacker$'s assessed pivotality, and hence the assessed payoff
+of \emph{every} move the Deadly-Race Lemma prices, not merely one of them. A
+design that clears Criterion~\ref{prin:nga} against an $\Attacker$ who believes
+himself unopposed clears it against one who suspects a delegate, so the
+simplification costs nothing, where pricing the probability would be more
+machinery for a weaker bar.
+
+It is also what the field looks like. Abductions happen, so real attackers
+evidently do proceed. Custody with no remote party able to lock its owner out
+has plain advantages over custody with one, many holders choose it for exactly
+that reason, and under \ref{d:kerckhoffs} $\Attacker$ knows both --- so he knows
+a given setup stands a real chance of having no delegate at all. Where
+subjugation is fast (\ref{d:subjugation}), a delegate may not learn of the
+encounter until intervening is already too late.
+
+\textbf{This is why \ref{r:remotewinner} turns on demonstration rather than on
+existence.} A delegate who merely exists leaves $\Attacker$'s assessed
+pivotality untouched and $\Victim$ exactly as pivotal as before. What clears the
+Criterion is dominance $\Attacker$ can \emph{check}
+(Remark~\ref{rem:verifiable-dominance}) --- that is what moves the belief, and
+with it the payoff of every move. Definition~\ref{def:gray}'s ``gray but safe''
+is that case and only that case.
+\end{remark}
+
 \noindent In the dogmatic regime NNPP reduces to a plain observation:
 \textbf{exhaustive search is so ineffective that $\Attacker$ always assumes
 another backup exists, whatever the terrorized $\Victim$ pleads.} It is
@@ -379,45 +412,49 @@ the Lemma taken alone.
 
 \textbf{What is traded is non-racing, not a further disclosure.} The two must
 not be run together. More hours of coercion may of course extract more, but
-there $\Victim$ and $\Attacker$ want opposite things and $\Victim$ volunteers
-for nothing; that is the Spiral's duration mechanism and it is the companion's
-(\cite[\S4]{denial-spiral}). The bargain is the other case, and it is the only
-one in which the two interests \emph{align}: $\Victim$ keeps his life, and
-$\Attacker$ collects the same win probability the terminal move would have
-bought him --- a $\Victim$ in custody is a $\Victim$ not racing --- at a
-judicial disutility below $c$.
+there $\Victim$ and $\Attacker$ want opposite things; that is the Spiral's
+duration mechanism and it is the companion's (\cite[\S4]{denial-spiral}), and it
+is a reason to refuse the bargain rather than to strike it. The bargain is the
+other case, the only one in which the two interests \emph{align}: $\Victim$
+keeps his life, and $\Attacker$ collects the same win probability the terminal
+move would have bought him --- a $\Victim$ in custody is a $\Victim$ not racing
+--- at a judicial disutility below $c$. $\Victim$ may volunteer despite the
+first, because it is his life at stake, not because of it. The delegate is no
+escape from this, and for a reason more general than the bargain:
+Remark~\ref{rem:nodelegate}.
 
-\textbf{The remote delegate is not an escape here.} One may object that custody
-cannot give $\Attacker$ what he is buying, since by Assumption~\ref{lem:nnpl} he
-can never rule out an access-dominating delegate
-(Definition~\ref{def:dominating}) beyond his reach. Abductions happen, so real
-attackers evidently proceed anyway, on a guess that is a good one: custody
-without a remote party able to lock its owner out has plain advantages over
-custody with one, many holders choose it for that reason, and under Kerckhoffs
-$\Attacker$ knows both and so knows $\Victim$'s setup stands a real chance of
-having no such delegate --- and where subjugation is fast, a delegate may not
-learn of the encounter in time to intervene at all. Pricing that probability
-would be more machinery for a weaker bar, so the model keeps the \emph{a
-fortiori} reading and lets $\Attacker$ proceed as though there is none. That is
-the attacker for whom the bargain is most attractive, and it leaves $\Victim$
-nothing to be rescued by here.
+\textbf{In this model $\Victim$'s willingness is not a free variable.} Under
+complete subjugation (\ref{d:subjugation}) $\Attacker$ meets no resistance and
+enjoys full cooperation, so an abduction happens if and only if $\Attacker$
+chooses one, and what $\Victim$ would prefer changes nothing. The volunteering
+is therefore not a mechanism of the idealized model at all. It becomes
+meaningful only as one moves toward the real encounter --- a $\WDYbay$
+$\Attacker$ whose assessment can be moved, and an offer that is information
+rather than consent --- which is a second reason the bargain is the companion's
+subject and not this paper's.
 
-\textbf{And the alignment expires.} Detention and the terminal move buy
-$\Attacker$ the \emph{same} win probability --- $p_A(R\setminus\{\Victim\})$, in
-the notation of Definition~\ref{def:game} --- and differ only in price and in
-tenure: detention \emph{rents} what the terminal move buys outright. Let
-$\kappa$ be the per-period cost of a hold, undiscounted. The hold then has two
-horizons, $\pi W/\kappa$ against release and $T^{*} = c/\kappa$ against the
-terminal move, and runs to whichever binds first; the Lemma's condition is
-precisely the switch between them, since $\pi W > c$ iff $T^{*}$ is the earlier.
-So where the Lemma's incentive is live --- the only region in which $\Victim$
-has a killing to avert, and hence the only one in which a bargain is struck ---
-what he buys is a postponement of at most $c/\kappa$, set by $\Attacker$'s
-costs. The one end that is not the terminal move is $\Attacker$ completing the
-spend, which turns on $\Attacker$'s residual latency and not on anything
-$\Victim$ can do once held: by Assumption~\ref{lem:nnpl} release never becomes
-free on the evidence $\Victim$ supplies. The companion works the three moves out
-in full~\cite[\S4]{denial-spiral}.
+\textbf{It does buy a reprieve, and the reprieve is bounded.} Detention and the
+terminal move buy $\Attacker$ the \emph{same} win probability ---
+$p_A(R\setminus\{\Victim\})$, in the notation of Definition~\ref{def:game} ---
+and differ only in price and in tenure: detention \emph{rents} what the terminal
+move buys outright. Let $\kappa$ be the per-period cost of a hold, with no time
+preference modeled. Nothing obliges $\Attacker$ to rent: he holds only where his
+own arithmetic says so, against $\kappa T < \pi W$ for release and
+$\kappa T < c$ for the terminal move, and the Lemma's condition is precisely the
+switch between those two, since $\pi W > c$ iff $T^{*} = c/\kappa$ is the
+binding one. Where he does hold, $\Victim$ is alive who would otherwise be dead,
+and that is a real reprieve --- bounded at $c/\kappa$, priced in $\Attacker$'s
+parameters, and ended by the terminal move unless $\Attacker$'s own path
+completes first. It is not $\Victim$'s to extend: by Assumption~\ref{lem:nnpl}
+release never becomes free on the evidence he supplies.
+
+\textbf{That concession is not a defense of the gray band; it is the charge
+against it.} The killing being postponed is one the band itself created. A
+scheme clearing Criterion~\ref{prin:nga} leaves no racer to remove, hence no
+terminal move to be reprieved from, hence no kidnapping as the cheaper
+substitute. The gray band buys $\Victim$ at most $c/\kappa$, and bills him a
+kidnapping for it. The companion works the three moves out in
+full~\cite[\S4]{denial-spiral}.
 
 One consequence is uncomfortable enough to record rather than leave for a
 reviewer to reach, and it is not about \emph{short} gates. A gate $\Attacker$
