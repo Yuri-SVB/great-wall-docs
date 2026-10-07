@@ -150,10 +150,11 @@ feasibility), and $\mathrm{WDY}[W,c,b,t]$ ($+$ coercion-time budget).
 \end{definition}
 
 \begin{remark}[Plain WDY as a worst case]\label{rem:worstcase}
-Plain $\mathrm{WDY}$ is exactly the worst case of the priced family over the
-\emph{payoff} coordinates, taken at the model's \emph{fixed} capability:
+Plain $\WDY$ is exactly the worst case of the priced family over the
+\emph{payoff} coordinates, taken at the model's \emph{fixed} capability and in
+the dogmatic belief regime (Definition~\ref{def:belief}):
 \[
-  \mathrm{WDY} \;=\; \mathrm{WDY}[\,W\!\to\!\infty,\;\; c\!\to\!0,\;\; b = \sftstar,\;\; t = t_{\mathrm{reg}}\,].
+  \WDY \;=\; \WDYdog[\,W\!\to\!\infty,\;\; c\!\to\!0,\;\; b = \sftstar,\;\; t = t_{\mathrm{reg}}\,].
 \]
 The payoff coordinates are sent to their extreme --- infinite stake, costless
 homicide: the maximally kill-prone attacker, which assassinates in \emph{every}
@@ -180,14 +181,22 @@ undisclosed backup short-cutting $\Kset$ --- but \emph{not} how many such backup
 $\Victim$ keeps, or where. NNPP covers exactly that gap: what $\Attacker$
 \emph{cannot} know is whether any undisclosed backup \emph{actually} exists. The
 two do not conflict --- one is the public mechanism, the other $\Victim$'s private
-state --- so NNPP \emph{qualifies} Kerckhoffs, and we resolve the gap
-conservatively: \textbf{$\Attacker$ always assumes an undisclosed backup exists}.
-Notice that something as small as an SD card, as inconspicuous as steganographic 
-notes in a book, or as interior as the memorized login and password of an email account suffices
-to store a short-cutting state.
+state --- so NNPP \emph{qualifies} Kerckhoffs. Notice that something as small as
+an SD card, as inconspicuous as steganographic notes in a book, or as interior as
+the memorized login and password of an email account suffices to store a
+short-cutting state.
+
+NNPP is an \emph{epistemic impossibility} and it binds every attacker: no
+disclosure $\Victim$ can make settles the negative existential, whatever either
+party would prefer. What NNPP does \emph{not} fix is how $\Attacker$ resolves
+the gap it leaves --- that is a modelling choice, not a consequence, and
+conflating the two is how a reader comes to believe the paper has assumed its
+conclusion. The choice is made explicit in Definition~\ref{def:belief}, and
+this paper takes the conservative branch throughout.
 
 Both halves point the \emph{same} way --- toward killing. Knowing the protocol
-(Kerckhoffs) and always presuming $\Victim$ a live racer (NNPP) each \emph{raise}
+(Kerckhoffs) and resolving NNPP's gap dogmatically (Definition~\ref{def:belief},
+below) each \emph{raise}
 $\Attacker$'s assessed deadly-race payoff $\pi\,W$, hence its proclivity to kill
 --- precisely the outcome the method must survive. Each is therefore \emph{a
 fortiori}: we endow $\Attacker$ with the \emph{most kill-prone} epistemics and
@@ -199,22 +208,66 @@ deadly-race-safe.
 \end{quote}
 \end{assumption}
 
-\noindent To avoid a nightmarishly complex bluffing game between $\Attacker$ and
-$\Victim$, and to avoid encouraging real users to bet their stashes --- and their
-lives --- on it (see~\cite[\S3]{denial-spiral}), we also do not consider $\Attacker$ reading truthfulness off
-$\Victim$'s terrorized demeanor or tone. The simplification this forces is that
-$\Attacker$ is \emph{uniformly distrusting}: it always defaults to assuming that
-whatever NNPP posits \emph{might} exist does in fact exist. The one alternative
-simplification --- a \emph{gullible} $\Attacker$ that always believes $\Victim$
---- is trivially sub-NNPP and sub-Kerckhoffs, hence useless as a threat model.
-Erring toward distrust is therefore the only valid choice, and it is what makes
-the model \emph{a fortiori}: a protocol that delivers seizure resistance or
-deadly-race resistance against a uniformly distrusting attacker delivers them
-against a real one too.
+\begin{definition}[Belief regimes: dogmatic and Bayesian]\label{def:belief}
+NNPP says no disclosure brings $\Attacker$ to certainty. It does not say what
+$\Attacker$ does with that, and two regimes fix it. They are a \emph{separate
+coordinate} from the $[W,c,b,t]$ rungs of Definition~\ref{def:priced}: either
+regime composes with any rung.
 
-\noindent In practice NNPP reduces to a plain observation: \textbf{exhaustive search
-is so ineffective that $\Attacker$ always assumes another backup exists, whatever the
-terrorized $\Victim$ pleads.} It is rational, not paranoid --- non-possession is a
+\textbf{Dogmatic}, written $\WDYdog$, holds the posterior on ``at least one
+undisclosed resumable copy remains'' pinned at $1$, unconditionally. No
+disclosure, no demeanor and no demonstration moves it. Call the object it
+always posits the \textbf{cornucopia}: a residual stash, of no bounded size,
+that $\Victim$ can always be squeezed for once more. $\WDYdog$ is coherent
+precisely \emph{because} NNPP holds --- no evidence could refute the posit --- so
+it is the limit of distrust rather than a psychological claim. Its own absurdity
+is the clearest statement of it: $\Victim$ may surrender the twenty-one-millionth
+coin and still be asked where the rest is.
+
+\textbf{Bayesian}, written $\WDYbay$, carries a prior over $\Victim$'s residual
+holdings and updates it on what the encounter discloses. Fluent initial input to
+a time-gated derivation, for instance, is evidence that the bulk is
+operationally unreachable, and the posterior moves on it. $\Attacker$ then
+chooses among release, continued coercion and the terminal move by expected
+utility under the updated posterior. By NNPP that posterior never reaches $0$;
+it is simply not pinned at $1$.
+\end{definition}
+
+\begin{remark}[Why the dogmatic regime needs $t$, and what each regime is for]\label{rem:regimes}
+$\WDYdog$ with an unbounded coercion window decides nothing. The cornucopia is
+by construction still out there, so release forfeits it and the terminal move
+closes the only channel to it: such an $\Attacker$ neither releases nor kills,
+and the encounter simply runs. The budget $t$ is what makes the regime
+decidable --- the substantive reason $t$ is pinned at $t_{\mathrm{reg}}$ rather
+than sent to $\infty$ (Remark~\ref{rem:worstcase}). Read
+$\WDYdog[W,c,b,t]$ as: \emph{interrogate for $t$; if a gray outcome
+(Definition~\ref{def:gray}) stands open when $t$ expires, enact the terminal move
+iff $(1-p_A)\,W > c$.} The belief is frozen; the decision is still priced.
+
+The two regimes do different work, and the results below use only the first.
+$\WDYdog$ is the \emph{a fortiori} instrument:
+\begin{quote}\itshape
+if a setup admits no gray outcome against $\WDYdog$ with $W\!\to\!\infty$ and
+$c\!\to\!0$, it admits none against any attacker at all.
+\end{quote}
+It is also the only defensible simplification. Modeling $\Attacker$ as reading
+truthfulness off a terrorized $\Victim$'s demeanor or tone opens a bluffing game
+with no determinate solution, and shipping it would invite real holders to stake
+their lives on winning it (\cite[\S3]{denial-spiral}); the opposite
+simplification, a \emph{gullible} $\Attacker$ who believes $\Victim$, is
+trivially sub-NNPP and sub-Kerckhoffs and so useless as a threat model.
+
+$\WDYbay$ is what a bar cannot see: which encounters end in release, which in a
+long hold, which in a killing. That is the register of \emph{duration} rather
+than of outcome, so it belongs to the companion~\cite[\S4]{denial-spiral} and
+not here. One consequence of it bears directly on the Criterion, and only that
+one is recorded below (Remark~\ref{rem:scheherazade}).
+\end{remark}
+
+\noindent In the dogmatic regime NNPP reduces to a plain observation:
+\textbf{exhaustive search is so ineffective that $\Attacker$ always assumes
+another backup exists, whatever the terrorized $\Victim$ pleads.} It is
+rational, not paranoid --- non-possession is a
 \emph{negative existential} (``nothing anywhere in $\Victim$'s reach reproduces
 $\Kset$'') that cannot be certified on either reading of ``prove.''
 
@@ -238,10 +291,11 @@ the only world that falsifies it is one in which the question does not arise.
 \end{remark}
 
 \begin{corollary}[Cooperation cannot dispel the incentive]\label{cor:disclosure}
-Let $b$ be the number of resumable copies $\Victim$ holds, and under the coercion
+Let $m$ be the number of resumable copies $\Victim$ holds --- not the
+feasibility bound $b$ of Definition~\ref{def:priced} --- and under the coercion
 oracle (\ref{d:subjugation}, Assumption~\ref{ass:power}) let $\Victim$ disclose some of them. Each
 disclosure \emph{confirms} a specific copy existed, raising a known lower bound
-$\hat b \le b$; none yields an upper bound $\hat b \ge b$, which would require the
+$\hat m \le m$; none yields an upper bound $\hat m \ge m$, which would require the
 covering search of Remark~\ref{rem:selfdefeat}. Disclosure is thus a \emph{monotone
 lower-bound estimator} --- ``$\Victim$ has revealed everything'' is precisely the
 direction NNPP forbids. Hence no degree of cooperation drives $\Attacker$'s
@@ -303,63 +357,46 @@ assassination incentive. Graceful degradation, a virtue everywhere else, is here
 liability --- hence the title.
 \end{remark}
 
-\noindent A fourth observation does \emph{not} follow from the Lemma. It is set
-down as a \textbf{conjecture}, and nothing later in this paper rests on it.
+\noindent A fourth observation does \emph{not} follow from the Lemma. It is
+set down as a \textbf{conjecture}, and nothing later in this paper rests on it.
 
-\begin{remark}[A conjecture: ``Take me with you'' --- the Scheherazadian bargain]\label{rem:scheherazade}
-What follows is a hypothesis about what the incentive structure may lead agents
-to do. To this day we have no empirical evidence confirming any particular
-instance of that chain of events, though by the same information-suppression
-mechanisms covered in~\cite[\S6]{denial-spiral} the silence is over-determined:
-a headline records that a holder was held for eleven hours, never whether those
-hours went on interrogation or on waiting for a path to clear.
+\begin{remark}[Custody as the cheaper substitute --- the Scheherazadian bargain]\label{rem:scheherazade}
+A $\WDYbay$ attacker (Definition~\ref{def:belief}) who has updated his way to
+being satisfied that he holds everything may \emph{still} not release, because a
+released holder with a feasible path is a competitor: detention buys the same
+assurance as the terminal move at a fraction of the judicial disutility. A gray
+outcome therefore prices not only $\Victim$'s elimination (Lemma~\ref{lem:drl})
+but also \textbf{custody, as collateral on $\Victim$'s own abstention} --- and the
+conjecture is that $\Victim$, having run the same arithmetic, will volunteer for
+it, in a twisted \textbf{Scheherazadian bargain}: \emph{take me with you, and you
+will know I am not racing you}.
 
-At any given point in a wrench attack on a Deadly-Race-vulnerable setup,
-$\Attacker$, $\Victim$ or both may realize the incentive of
-Lemma~\ref{lem:drl}. In that situation $\Victim$ may actually \emph{volunteer}
-to go into $\Attacker$'s custody, in a twisted \textbf{Scheherazadian bargain}.
-In the \emph{One Thousand and One Nights}, the protagonist volunteers for what
-turns out to be a captivity in order to stop the killing of third parties, then
-prolongs that captivity night by night, a thousand and one times, to stave off
-her own, bidding cliffhanger resolutions for her life. What buys the next
-morning is that the tale is \emph{unfinished}, which is
-Definition~\ref{def:gray}'s feasible-but-unfinished path wearing a costume.
-Trading the terminal move for an abduction lowers $\Attacker$'s judicial
-liability while retaining much the same race advantage, and spares $\Victim$'s
-life. Both might thus conclude that the bargain is mutually beneficial, and
-cooperate with the abduction.
+\textbf{It strengthens Criterion~\ref{prin:nga}; it does not soften it.} The
+available misreading is that a gray outcome may therefore save a life. It does
+not. It converts a robbery into a kidnapping, so the gray band costs more than
+Lemma~\ref{lem:drl} prices, not less, and the bar is if anything under-argued by
+the Lemma taken alone.
 
-\textbf{Read it as strengthening Criterion~\ref{prin:nga}, not as softening
-it.} The available misreading is that a gray outcome may therefore save a life.
-It does not; it converts a robbery into a kidnapping, so the gray band costs
-more than Lemma~\ref{lem:drl} prices, not less. The two mechanisms are also
-distinct. The Lemma's is the priced elimination of a competing racer. This one
-is a hostage problem, in which $\Attacker$ may be perfectly satisfied that he
-holds everything and \emph{still} not release, because a released holder with a
-feasible path is a competitor, and detention buys the same assurance as
-elimination at a fraction of the judicial disutility. Gray-area vulnerability
-thus prices \emph{custody} as collateral on $\Victim$'s own abstention --- and
-$\Victim$ will volunteer for it. In the tale she is pardoned on the thousand
-and second morning; the registry records no counterpart to that morning.
+\textbf{Nor does the bargain work on its own terms, and NNPP is why.} Holding
+$\Victim$ establishes neither that no resumable copy exists nor that no
+accomplice is already moving, so by Assumption~\ref{lem:nnpl} the hold settles
+nothing and has no natural end state: its length is $\Attacker$'s cost-benefit on
+another hour, not a stopping point that any design contains. The one currency
+$\Victim$ can keep paying with --- a further disclosure --- raises the floor on
+how many copies he kept without putting a ceiling on it
+(Corollary~\ref{cor:disclosure}).
 
-Nor does the bargain work on its own terms, and NNPP is why. Holding $\Victim$
-does not establish that no resumable copy exists, nor that no accomplice is
-already moving, so by Assumption~\ref{lem:nnpl} the hold settles nothing and has
-no natural end state either: its length is $\Attacker$'s cost-benefit on another
-hour, not a stopping point that any design contains. Neither is $\Victim$'s
-payment renewable in the way the tale's is. Scheherazade controls hers, which is
-how she reaches night $1001$; the lower charge is a property of the penal code
-rather than anything $\Victim$ supplies, and the one currency he does hold --- a
-further disclosure --- raises the floor on how many copies he kept without
-putting a ceiling on it (Corollary~\ref{cor:disclosure}). He is a Scheherazade
-whose every story makes the king more suspicious. The race-hostage route does
-not escape the Spiral; it feeds into it by another road.
+One consequence is uncomfortable enough to record rather than leave for a
+reviewer to reach. A time-gate $G$ longer than the coercion-time budget $t$ is
+the defense (Definition~\ref{def:timegate}). A gate \emph{shorter} than $t$ is
+not merely a weaker defense: under this conjecture it is a published schedule
+for how long $\Victim$ will be held.
 
-One consequence is uncomfortable enough to record here rather than wait for a
-reviewer to reach it. A time-gate $G$ longer than the coercion-time budget $t$
-of $\mathrm{WDY}[W,c,b,t]$ is the defense (Definition~\ref{def:timegate}). A
-gate \emph{shorter} than $t$ is not merely a weaker defense: under this
-conjecture it is a published schedule for how long $\Victim$ will be held.
+The bargain itself --- the tale, what the analogy holds on and where it breaks,
+and why the resulting silence in the registry is over-determined rather than
+evidence of absence --- is a $\WDYbay$ subject, hence the companion's and not
+this paper's~\cite[\S4]{denial-spiral}. We have no empirical evidence
+confirming any particular instance of the chain of events above.
 \end{remark}
 
 \subsection{The No-Gray-Area Criterion}

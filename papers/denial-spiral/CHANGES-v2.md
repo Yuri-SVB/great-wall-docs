@@ -4,10 +4,11 @@ Zenodo concept DOI resolves to this version; v1 (`10.5281/zenodo.22778481`)
 remains citable at its own DOI. Baseline for the comparison below is the v1
 release.
 
-One kind of change: a correction to the registry coding in §7. Nothing else in
-the paper moves — no argument, no classification, no stipulation. The
-correction is ours, it is arithmetic rather than interpretive, and it moves
-every figure in the same direction.
+Two kinds of change. First, a correction to the registry coding in §7: ours,
+arithmetic rather than interpretive, and it moves every figure in the same
+direction. Second, §2 names the adversary's belief regime and §4 gains a
+conjecture that belongs to this paper's register rather than the companion's.
+No classification moves and no stipulation is withdrawn.
 
 ## The registry coding was too high, in every row
 
@@ -88,3 +89,69 @@ Anything quoting v1's numbers. Inside this repository that was
 `registry-analysis/france-cut.txt`, one cross-reference in the companion's §5,
 and §1 and the abstract of this paper, all updated here. The registry itself is
 Jameson Lopp's and the duplicate row is worth reporting upstream.
+
+
+## §2 names the belief regime, and this paper works in the Bayesian one
+
+The companion's v5 splits what was a single buried stipulation into two: NNPP,
+the epistemic impossibility that binds every attacker, and the *belief regime*,
+the modelling choice about what the attacker does with it. The regimes are
+`WDY^dog`, which pins the posterior on "an undisclosed copy remains" at 1 and
+never moves it, and `WDY^Bay`, which carries a prior and updates. They are
+orthogonal to `(W,c,t)`.
+
+§2 restates the pair and says which one this paper uses. **The Spiral is a
+`WDY^Bay` phenomenon, and that is not a convenience.** A bar must hold against
+the attacker who cannot be moved, so the Race is argued against `WDY^dog`. But
+what the Spiral describes is a denial *losing its informational value*, and a
+denial can only lose value for an attacker who would otherwise have updated on
+it. Against `WDY^dog` there is nothing to deplete, because nothing was ever
+going to be believed. The same split explains the division of labour the two
+papers already observed on other grounds: the Race prices the outcome, against
+the attacker who does not update; the Spiral prices the duration, against the
+one who does.
+
+## §4 gains the Scheherazadian bargain, as a conjecture
+
+A `WDY^Bay` attacker who has updated his way to being satisfied that he holds
+everything may still not release, because a released holder with a feasible path
+is a competitor: detention buys the same assurance as the terminal move at a
+fraction of the judicial disutility, and it keeps the one channel to anything
+undisclosed open. Gray-area vulnerability therefore prices **custody as
+collateral on the holder's own abstention** — and the conjecture is that the
+holder, having run the same arithmetic, volunteers for it. *Take me with you,
+and you will know I am not racing you.*
+
+It is fenced: a lead-in saying it is a conjecture and that nothing else rests on
+it, and a statement that there is no empirical evidence of any particular
+instance. The silence is over-determined by this paper's own §6 — a headline
+records that a holder was held for eleven hours, never whether those hours went
+on interrogation or on waiting for a path to clear — which is why it is set down
+rather than withheld.
+
+The section is explicit about what the name does and does not carry. The analogy
+holds on exactly two things: volunteering into custody to avert a killing, and
+one more night instead of the terminal move in exchange for something. What buys
+the next morning is that the *tale* is unfinished, not the night, which ends on
+time — the companion's feasible-but-unfinished path wearing a costume.
+
+And it is not a reprieve, on three counts: it strengthens the Criterion rather
+than softening it, since it converts a robbery into a kidnapping; it fails on its
+own terms, because by NNPP the hold settles nothing and has no natural end state;
+and the holder's payment is not renewable in the way the tale's is, since the
+lesser charge is a property of the penal code and his one currency, a further
+disclosure, raises the floor on how many copies he kept without putting a ceiling
+on it. In the book she is pardoned on the thousand and second morning; the
+registry records no counterpart to that morning.
+
+The route does not escape the Spiral. It feeds into it by a second road: the
+Spiral's duration is epistemic deadlock, this is a strategic hostage problem,
+both produce the same observable, and §6's first mechanism is why no registry
+column will ever separate them.
+
+## On deposit
+
+Post 006 and its four translations carry a fence saying the conjecture is "not
+in the paper, with no DOI behind it". True until this version and the
+companion's v5 are deposited, false the moment they are. Rewrite that fence in
+the same week the deposit happens.

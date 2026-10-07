@@ -36,6 +36,30 @@ question, so compliance buys no guaranteed release~\cite[Cor.~1]{deadly-race}.
 disbelieve and no means of settling --- which is the hinge of
 \S\ref{sec:spiral}.
 
+\begin{definition}[Belief regimes, after~{\cite[Def.~5]{deadly-race}}]\label{def:belief}
+NNPP fixes what $\Attacker$ \emph{cannot} settle. It does not fix what he does
+with that, and the companion separates two regimes, orthogonal to $(W,c,t)$.
+\textbf{Dogmatic} $\WDYdog$ pins the posterior on ``at least one undisclosed
+resumable copy remains'' at $1$ and never moves it --- the limit of distrust,
+coherent precisely because NNPP holds, and the regime in which every bar in the
+companion is proved, since clearing it clears every attacker.
+\textbf{Bayesian} $\WDYbay$ carries a prior over $\Victim$'s residual holdings
+and updates it on what the encounter discloses, then chooses among release,
+continued coercion and the terminal move by expected utility. By NNPP that
+posterior never reaches $0$; it is simply not pinned at $1$.
+\end{definition}
+
+\noindent \textbf{This paper works in $\WDYbay$}, and the division of labor
+follows from it. A bar must hold against the attacker who cannot be moved, so
+the Race is argued against $\WDYdog$. How long an encounter runs, and whether it
+ends in release, a long hold or a killing, is a question about an attacker whose
+assessment \emph{does} move --- which is why duration is this paper's subject
+and the outcome is the companion's. It is also why the Spiral has empirical
+purchase at all: what depletes is the informational value of a denial, and a
+denial can only lose value for an $\Attacker$ who would otherwise have updated
+on it. Against $\WDYdog$ there is nothing for a denial to deplete, because
+nothing was ever going to be believed.
+
 \begin{definition}[Naive coercion resistance]\label{def:naive-cr}
 A protocol is \textbf{naively coercion-resistant} if it \emph{may} resist a
 \emph{sub-Kerckhoffs} attacker --- one with the physical capabilities but lacking
