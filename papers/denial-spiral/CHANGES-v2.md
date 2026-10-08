@@ -243,3 +243,30 @@ two-line pointer.
 Also: "the Spiral's duration is epistemic deadlock" in the closing became "the
 abduction's duration", since the sentence contrasts two mechanisms producing one
 observable, and the observable is the abduction.
+
+
+## §4.1, third pass: the prose stays here, the arithmetic goes to the companion
+
+The section was cut back to prose. The three-move table, `π` defined
+relationally, the two horizons `πW/κ` and `T* = c/κ`, and the bounded-reprieve
+derivation now live only in the companion's `rem:scheherazade`, which is the
+right home for them: this paper's register is duration and the reader it is
+written for, and an optimal-stopping calculation in the middle of a conjecture
+was carrying more apparatus than the claim needs. The entries above describing
+that material as §4's remain accurate about what was argued and when; they are
+wrong about where it ended up. The companion's pointer was corrected to match —
+it had promised that this paper "works the three moves out in full".
+
+What stays here: the bargain, the tale, the two things the analogy holds on,
+the two the model settles first (the undemonstrated delegate, and the holder's
+preference being no free variable under complete subjugation), the concession
+that the trade also buys the attacker longer coercion, and the closing on the
+two roads to one observable.
+
+**Added: a worked hypothetical.** The holder offers an exit route, names an
+alarm and offers to disable it, and the attacker takes the bargain with the
+terminal move still to hand. It is there to show the one thing the idealized
+model cannot: that the holder's preference can be load-bearing once the
+attacker is one whose assessment moves, because what the holder volunteers is
+intelligence a real attacker, mid-encounter, might not have noticed, thought to
+extract, or been able to act on in time.

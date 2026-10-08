@@ -10,7 +10,11 @@ residual-window analysis (the residual deadly-race window in~\cite{deadly-race})
 incident only as \emph{date, victim, location, headline}; it carries no duration or
 outcome field, so we code the incident headlines (at commit \texttt{9a4a62a}) by
 keyword. The snapshot carries $352$ rows, of which one is a second entry for an
-incident already recorded, giving $351$ incidents. The coding is coarse and the
+incident already recorded, giving $351$ incidents. That row --- the Mijas,
+M\'alaga case, entered twice under two dates with both source URLs identical ---
+was reported upstream and removed by the registry on 5 October 2026
+(\texttt{jlopp/physical-bitcoin-attacks} PR~\#229). Everything below stays on
+the pinned snapshot, where the deduplication is still ours. The coding is coarse and the
 categories overlap; a reproducible script accompanies the
 companion.\footnote{\texttt{registry-analysis/} in the source tree
 of~\cite{deadly-race} gives the exact keyword patterns, per-year counts, and
