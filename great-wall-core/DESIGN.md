@@ -1,33 +1,47 @@
 # Burning Ship Encoder — Design Document
 
-> **Chained protocol version: `0.3.0`** (one 32-bit point per *point* stage,
-> plus a mandatory text-only **stage 0**; pre-1.0, unstable). This document is
-> the **single source of truth** for `great-wall-core` at this protocol version;
-> the code declares the same `PROTOCOL_VERSION`
-> (`great-wall-core/burning_ship/protocol.py`) and stamps it into encode/decode
-> output (`protocol_version`). Bump both together when the protocol's behaviour
-> changes. Version `0.3.0` makes three behaviour-changing moves:
+> **Protocol version: `0.5.0`** — the **Namtso-rooted orbit** (pre-1.0,
+> unstable). This document is the **single source of truth** for
+> `great-wall-core` at this protocol version; the code declares the same
+> `PROTOCOL_VERSION` (`great-wall-core/burning_ship/protocol.py`) and stamps it
+> into encode/decode output (`protocol_version`). Bump both together when the
+> protocol's behaviour changes.
 >
-> 1. A **mandatory, point-less stage 0** carries only a short text input and is
->    chained into stage 1 exactly like any other stage. Because stage 1's
->    fractal now derives from stage-0 text, **there is no longer a public
->    "canonical" first fractal** — every point-bearing fractal is private and
->    chain-derived (see *Chained Protocol*).
+> **Two protocols live in the tree at once.** The orbit is **canonical**: rooted
+> at the public Namtso salt `σ`, with `t_i` fractals and a Shamir polynomial
+> `Sh_i` per stage, a per-stage master secret `K_i`, and label-salted exported
+> keys `K_i^L` (`encode_orbit` / `decode_orbit` — see *Orbit Protocol*). The
+> `0.3.0` chain (`encode_entropy` / `decode_entropy` plus the Argon2id transcript
+> export) is **retained as LEGACY**: it still drives the pygame dev viewer
+> (`viewer.py`) until that is ported to the orbit; the shipped Dart app is the
+> orbit's real interface. Legacy output is stamped
+> `LEGACY_CHAIN_VERSION = "0.3.0"` so it can never be mislabelled as the orbit's.
+>
+> What `0.3.0` established, and which the orbit keeps:
+>
+> 1. A **mandatory, point-less stage 0** carries only a short text input.
+>    Because stage 1's fractal derives from it, **there is no public "canonical"
+>    first fractal** — every point-bearing fractal is private and derived.
 > 2. Stage-0 text is **strongly restricted** for user safety (upper-case
 >    ASCII alphanumerics and `-` only) and doubles as a **salt** (a label such
 >    as `MAIN-STASH` / `RETIREMENT`) or a **pepper** (build one setup over
 >    another — a password manager, Shamir share, or a prior Great Wall setup).
-> 3. The master-secret carry-over is no longer `SHA512(seedphrase ‖ text)`; it
->    is a single **Argon2id** pass over the full, reproducible setup transcript
->    (*Master-Secret Export*).
+> 3. The master-secret carry-over is not `SHA512(seedphrase ‖ text)`. In the
+>    legacy chain it is a single **Argon2id** pass over the reproducible setup
+>    transcript (*Master-Secret Export*); in the orbit it is the exported key
+>    `K_i^L` (*Orbit Protocol*).
 >
 > Lineage: `0.1.0` two-stage prototype → `0.2.0` chained (one point per stage)
-> → `0.3.0` stage-0 text + Argon2id carry-over (current) → `1.0.0` first stable
-> (at which point comprehensive frozen test vectors are rebuilt; interim vectors
-> are provisional and a harness version guard flags mismatches as STALE). This
-> is a **hard, backward-incompatible** change: `0.2.0` encodings do not
-> round-trip across it. (Independent of the Rust `ENGINE_VERSION` — the
-> single-fractal encode/decode algorithm — unchanged at `0.1.0`.)
+> → `0.3.0` stage-0 text + Argon2id carry-over (legacy) → `0.4.0` Namtso-rooted
+> orbit, `H` = SHA-256, master secret equal to the advance commitment →
+> `0.5.0` `H` = SHA-512, commitment, master secret and exported key
+> domain-separated (**current**) → `1.0.0` first stable (at which point
+> comprehensive frozen test vectors are rebuilt; interim vectors are provisional
+> and a harness version guard flags mismatches as STALE). Each step is **hard
+> and backward-incompatible** — encodings and keys do not carry across them.
+>
+> The Rust `ENGINE_VERSION` — the single-fractal encode/decode algorithm — is
+> versioned independently and is currently **`0.3.0`** (`rust_engine/src/lib.rs`).
 
 ## Purpose
 
@@ -47,7 +61,136 @@ stored state beyond the shared parameters.
 
 ---
 
-## Chained Protocol — Stage 0 Text, One Point Per Later Stage
+## Orbit Protocol (`0.5.0` — canonical)
+
+The orbit replaces the `0.3.0` single-fractal chain with an **orbit** rooted at
+the public **Namtso salt `σ`**. The construction is defined over two
+**unspecified** hash functions, and the split between them is what matters:
+
+- `H` — a cheap, non-entropy-collapsing hash, and `TH`, its tagged form:
+  `TH(tag, m) = H( H(tag) ‖ H(tag) ‖ m )` (BIP-340 style).
+- `H*` — a memory-hard hash.
+
+The protocol is stated in terms of `H` and `H*` alone. The **current
+instantiation** is `H` = SHA-512 and `H*` = Argon2d with a 64-byte output
+(`orbit.rs`, `argon2_hash.rs`). That choice — like the two domain tags below —
+is frozen *at the implementation level* for determinism: changing any of them
+changes the whole orbit and every key, so it is a protocol-version bump. It is
+an instantiation, not part of the definition.
+
+```text
+o_0     = H(σ)                                    # orbit root — public
+θ_i_j   = H(o_i ‖ j)                              # parameter digest of fractal j at stage i
+p_i_j   = encode(chunk_i_j on θ_i_j)              # one 32-bit point per fractal
+Sh_i    = shamir_interp(points)                   # full polynomial, t_i · 32 bits
+u_i     = H(o_i ‖ Sh_i)                           # advance commitment
+o_{i+1} = H*(u_i)                                 # advance (iterated D times)
+K_i     = TH("GreatWall/TGPO/master-secret/v1", o_i ‖ Sh_i)   (i > 0)  # master secret
+K_i^L   = TH("GreatWall/TGPO/export-label/v1",  K_i ‖ L)      (i > 0)  # exported key
+```
+
+Byte layout: the board index `j` is **big-endian over 4 bytes**; `Sh_i` is
+serialised as its `t_i` coefficients in ascending powers, each a **big-endian
+u32**; `L` is the canonical label (see below). `o_i`, `θ_i_j`, `u_i`, `K_i` and
+`K_i^L` are 64 bytes each.
+
+### `u_i`, `K_i` and `K_i^L` — domain-separated
+
+Through `0.4.0` the commitment and the master secret were the same value,
+`H(o_i ‖ Sh_i)`, so a leaked `K_i` advanced the orbit directly:
+`o_{i+1} = H*(K_i)`, without the stage-`i` points that should gate it. That
+orbit point renders every board of stage `i+1` — coercion-accelerating — and
+`K_i` was the value handed out. `0.5.0` separates them:
+
+- `u_i` and `K_i` are both functions of `(o_i, Sh_i)` and neither is a function
+  of the other: getting `u_i` from `K_i` requires a preimage on `H`.
+- The **tag** contributes a fixed prefix of two digests whatever its length, so
+  the separation is structural rather than a padding rule. With SHA-512 that
+  prefix is 128 bytes, exactly one block, so its midstate is precomputable.
+- `o_i` and `K_i` are fixed-width and the variable field (`Sh_i`, `L`) comes
+  last, so neither concatenation needs length framing. **Appending any further
+  field would.**
+- `K_i` **never leaves the engine**. A holder receives `K_i^L` — for every label,
+  including the empty one. `L` must be canonical `[A-Z0-9-]`; the engine owns
+  that rule (`bs_salt_pepper_canonicalize`), so the same label typed years apart
+  yields the same key.
+
+`orbit_step` enforces the ordering **through ownership**: it takes owned
+`Zeroizing` inputs, evaluates `K_i` and `u_i` (instant), **drops — and so
+zeroizes — the raw `o_i` and `Sh_i`**, and only then runs the long `H*` on `u_i`
+alone. This minimises the window in which the raw orbit point and Shamir
+polynomial are resident and seizable; `K_i` is retained, so the export path never
+needs them again.
+
+The master secret uses the cheap `H` on purpose: a memory-hard step there would
+*prolong* that window. Resistance lives in the stage's ≥ 96-bit entropy instead.
+
+There is **no `K_0`**. `o_0 = H(σ)` is public and stage-0 points are seizable, so
+a stage-0 "master secret" would carry no coercion resistance. Master secrets
+start at `K_1` (the entry-level Setup 1). The advance itself runs from stage 0
+(`o_1 = H*(u_0)`).
+
+Rationale and history: `great-wall-docs/next-steps/domain-separate-u-and-k.md`.
+
+### Width and entropy ceiling
+
+`ORBIT_POINT_LEN = 64` (published as `bs_orbit_point_len`). The legacy `0.3.0`
+chain keeps its 256-bit digest deliberately, so widening the orbit did not move
+the chain; the two Argon2 outputs are not prefixes of each other, because
+Argon2's output length feeds its final hash.
+
+A fixed-width state cannot preserve unbounded entropy. Setup tiers place
+`64 + 96N` bits over `N` deep stages, which exceeds 512 at `N = 5` (level 6);
+beyond that the keyspace saturates at the state width. This is harmless where
+the ceiling sits — `2⁵¹²` preimage and `2²⁵⁶` collision classically, `2²⁵⁶` and
+about `2¹⁷⁰` under Grover and BHT — against a model that already treats `2⁹⁶`
+cheap operations as prohibitive. Stages beyond saturation still buy memory-hard
+duration, tacit-recall structure and Shamir thresholds; they stop buying
+keyspace.
+
+### Setup tiers — how many fractals per stage
+
+Each setup **level** fixes, per stage, the Shamir threshold `t_i`, which equals
+the entropy-bearing fractal count `r_i`; the stage carries `t_i · 32` bits. The
+engine is authoritative (`setup_tiers.rs`) so callers never hand-mirror this:
+
+| Level | Thresholds `t_i` (index 0 = stage 0) | Deep stages | Note |
+|-------|--------------------------------------|-------------|------|
+| 1     | `[2 \| 2]`                            | 1           | **SUBSTANDARD** — 64-bit |
+| 2     | `[2 \| 3]`                            | 1           | standard, 96-bit |
+| 3     | `[2 \| 3, 3]`                         | 2           | |
+| `k`   | `[2 \| 3 × (k−1)]`                    | `k−1`       | |
+
+- **Stage 0** is always `t_0 = 2` — the two `σ`-public entry points, assumed
+  seizable.
+- **Deep stages** are standard at `t_i = 3`, the `r_i > 2` rule (≥ 96 bits).
+- The **sole exception** is entry-level Setup 1, whose single deep stage runs
+  `t_1 = 2` (64 bits) and is flagged substandard.
+- Setup 1 → 2 is the only step that *upgrades a stage in place* (`t_1: 2 → 3`);
+  every later step *appends* a standard deep stage.
+
+The `t_i` primary shares sit at abscissae `1, 2, 3, …`; opt-in
+forgetting-resistance shares sit at `0x8000_0000 | (k + 1)` and do not change
+`Sh_i`. `MAX_SETUP_LEVEL = 64` bounds the table as an FFI DoS guard.
+
+### Relationship to the legacy chain
+
+The orbit **reuses the per-board bisection encoder** (`encode` / `decode_full`)
+unchanged — only the derivation above it changed. `encode_orbit` /
+`decode_orbit` (`protocol.py`) drive it; `advance_fn` is injectable so the
+orchestration is testable with a cheap deterministic advance instead of a
+multi-GiB Argon2. Frozen vectors: `burning_ship/test_vectors/orbit-v0.5.0/`.
+
+> **Doc debt.** The pygame dev viewer still runs the legacy `0.3.0` chain, so the
+> *GUI Viewer* sections below — and their stage-1/stage-2 framing — describe the
+> legacy path, not the orbit. They are retained as-is until the viewer is ported.
+
+---
+
+## Chained Protocol — Stage 0 Text, One Point Per Later Stage (`0.3.0`, LEGACY)
+
+> **Legacy.** Superseded by the *Orbit Protocol* above. Retained because it still
+> drives the pygame dev viewer; its output is stamped `0.3.0`.
 
 **Official rule.** The protocol begins with a mandatory **stage 0 that carries
 no point — only a short text input** — and then encodes **exactly one 32-bit
@@ -642,8 +785,12 @@ In practice, the encoder reliably handles **32 bits per point.** Beyond that,
 the rectangle becomes too small for island discovery to find meaningful
 structure at the minimum pixel resolution.
 
-The protocol encodes **exactly one 32-bit point per point stage** (see *Chained
-Protocol — Stage 0 Text, One Point Per Later Stage* below), so the number of
+Both protocols place **32 bits per point**. The orbit groups `t_i` points per
+stage, sized by setup level (*Setup tiers* above). The size table and policy
+below describe the **legacy chain**.
+
+The legacy chain encodes **exactly one 32-bit point per point stage** (see *Chained
+Protocol — Stage 0 Text, One Point Per Later Stage* above), so the number of
 **point** stages `N` equals the entropy size divided by 32 — equivalently, words
 divided by 3 — atop a mandatory, point-less **stage 0** (total stages `N + 1`).
 Every BIP39 size that is a multiple of 32 bits is supported uniformly, from 32
@@ -806,6 +953,25 @@ symbols use the `bs_` prefix and C calling convention (`extern "C"`).
 - `bs_encode_result_step` returns split_coord as `Fixed`, contraction as
   separate `u64` numerator/denominator (not a single `f64` ratio).
 
+**Orbit protocol (`0.5.0`)** — see *Orbit Protocol*. Every orbit buffer is
+`bs_orbit_point_len()` bytes:
+
+| Function                               | Signature (abridged)                                 | Purpose                                     |
+|----------------------------------------|------------------------------------------------------|---------------------------------------------|
+| `bs_orbit_point_len`                   | `() → u32`                                           | Orbit width in bytes (64)                   |
+| `bs_orbit_root`                        | `(*σ, len, *out)`                                    | `o_0 = H(σ)`                                |
+| `bs_theta`                             | `(*o, j, *out)`                                      | `θ_i_j = H(o_i ‖ j)`                        |
+| `bs_orbit_commitment`                  | `(*o, *sh, sh_len, *out)`                            | `u_i` — seeds a streamed advance            |
+| `bs_master_secret`                     | `(*o, *sh, sh_len, *out)`                            | `K_i` (internal)                            |
+| `bs_export_key`                        | `(*K, *L, len, *out)`                                | `K_i^L` — the only exported key             |
+| `bs_orbit_argon2_single`               | `(*in, len, profile, *out)`                          | One `H*` pass                               |
+| `bs_orbit_advance`                     | `(*o, *sh, sh_len, D, profile, *K, *next) → u8`      | `(K_i, o_{i+1})`; status `ORBIT_ADVANCE_OK`, or `ORBIT_ADVANCE_REJECTED` (nothing written) when `D = 0` |
+| `bs_shamir_interp` / `bs_shamir_eval`  | `(*xs, *ys, t, *sh)` / `(*sh, t, x) → u32`           | Shamir interpolation / evaluation over GF(2³²) |
+| `bs_shamir_generate_resistance_shares` | `(*sh, t, count, *out)`                              | Forgetting-resistance share values          |
+| `bs_setup_tier_thresholds`             | `(level, *out, cap) → u32`                           | Per-stage `t_i` (query-then-fill)           |
+| `bs_setup_tier_substandard`            | `(level) → u8`                                       | Whether a level is substandard (Setup 1)    |
+| `bs_salt_pepper_canonicalize`          | `(*in, len, *out, cap) → u32`                        | The `[A-Z0-9-]` rule for stage-0 text and export labels |
+
 ---
 
 ## Determinism Contract
@@ -835,6 +1001,9 @@ and decode calls. The following invariants must hold:
    must be carried forward between levels. For incremental encoding, seeds
    are serialized across the FFI as 24-byte records (re: i64 LE, im: i64 LE,
    esc: u32 LE, pad: u32).
+9. The **orbit derivation** is identical: `H`, `H*`, the two domain tags, and
+   the byte layout of every hash input (*Orbit Protocol*). A setup's Argon2
+   profile and pass count `D` are recorded with it, so the advance reproduces.
 
 **No floating-point operation participates in any determinism-critical path.**
 
@@ -1234,11 +1403,21 @@ than expected.
 
 ---
 
-## Per-Stage Parameter Derivation (Hash Byte Attribution)
+## Per-Fractal Parameter Derivation (Hash Byte Attribution)
 
-Every point stage (index `k`, `1 ≤ k ≤ N`) derives its fractal parameters from
-the memory-hard chain run over **stage-0 text followed by the concatenated bits
-of all preceding points**:
+**The byte attribution below is shared by both protocols** — only the digest
+feeding it differs.
+
+**Orbit (`0.5.0`, canonical).** Each fractal `j` of the stage at orbit point
+`o_i` takes its parameters from the theta digest:
+
+```
+h = θ_i_j = H(o_i ‖ j)        // H = the orbit's cheap hash; j big-endian over 4 bytes
+```
+
+**`0.3.0` chain (legacy).** Every point stage (index `k`, `1 ≤ k ≤ N`) derives
+its parameters from the memory-hard chain run over **stage-0 text followed by
+the concatenated bits of all preceding points**:
 
 ```
 digest_k = Argon2^N( stage-0 text  ‖  bits of points 1 .. k−1 )   // the memory-hard chain
@@ -1249,8 +1428,9 @@ Stage-0 text is the ASCII bytes of the normalised `[A-Z0-9-]` label/pepper, so
 stage 1 (`k = 1`, empty point prefix) already depends on it — which is exactly
 why no fractal in the chain is the old public "canonical" surface.
 
-The first 24 bytes of `h` are split into three 8-byte big-endian uint64 values
-in **alphabetical order**:
+In both cases the first 24 bytes of `h` are split into three 8-byte big-endian
+uint64 values in **alphabetical order**; the rest of the digest is unused (8
+bytes of the chain's 32, 40 of the orbit's 64):
 
 ```
 o = h[0:8]       // orbit seed (z₀)
@@ -1266,17 +1446,19 @@ Each parameter encodes a complex number with magnitude bits and sign bits:
 | p     | 31 per component | bit 31 (Re), bit 63 (Im) | 2^(-3) = 1/8 | 2^(-4) |
 | q     | 31 per component | bit 31 (Re), bit 63 (Im) | none | 2^(-5) |
 
-The byte-attribution and per-parameter encoding are unchanged from the earlier
-prototype; what changed is the **input** to the chain (the cumulative prior
-points) and that the derivation now runs **once per secret stage** rather than a
-single time. The candidate *new* parameter families under study (history-
-dependent folds, polynomial perturbations, bit-gated masks, …) are deliberately
-**out of scope** for this protocol update and tracked separately in
+The byte-attribution and per-parameter encoding are unchanged from the earliest
+prototype; what has changed across versions is the **digest feeding it**. The
+candidate *new* parameter families under study (history-dependent folds,
+polynomial perturbations, bit-gated masks, …) are deliberately **out of scope**
+here and tracked separately in
 `great-wall-docs/next-steps/research-notes-substrate-hardness.md`.
 
 ---
 
 ## Master-Secret Export (final Argon2id over the setup transcript)
+
+> **Legacy (`0.3.0` chain).** The orbit exports `K_i^L` instead (*Orbit
+> Protocol*); this section describes the chain the pygame viewer still drives.
 
 A setup can export a **master secret** for blind hand-off (paste into another
 wallet, derive a non-BIP39 seed, or act as the *pepper* of a downstream setup).
