@@ -97,7 +97,7 @@ framework rather than re-implemented per platform.
   rather than first-party.
 - **Tauri + a web frontend.** Solid desktop story and small binaries
   but the mobile path is immature and the canvas pipeline depends on
-  the host webview's capabilities, which varies per platform. Web
+  the host webview's capabilities, which vary per platform. Web
   performance for full-viewport fractal blits is not competitive with
   Skia.
 - **Qt / QML (PyQt or PySide).** Mature desktop and reasonable mobile,
@@ -143,7 +143,7 @@ re-litigated.
   determinism-sensitive blit path. The larger initial download is
   accepted as part of the web tier's cost.
 - **Threading model: two-tier.** A long-lived UI isolate handles
-  Flutter rendering and gesture arena; a Rust-side thread pool
+  Flutter rendering and the gesture arena; a Rust-side thread pool
   (managed inside the core crate, exposed across FFI) runs
   `escape_count` and encode/decode work. The UI isolate dispatches
   work units to the Rust pool and receives results via FFI callbacks;
@@ -164,25 +164,25 @@ re-litigated.
   result when ready. This preserves smooth motion under load at the
   cost of brief blurriness — the established pattern from
   map-style viewers.
-- **Escape-count transform: fixed log, no toggle.** The escape-count
-  index passed to the palette is `log2(1 + n)` (normalised against
-  `log2(1 + max_iter)`), and nothing else. The pygame prototype's
-  per-keystroke cycle through Identity / Square / Cube / Exp / Sqrt /
-  Cbrt / Log is not carried forward. Rationale: function before
-  aesthetics — dog-fooding established log as the most legible
-  transform across the full escape-count range, and any toggle is a
-  way for the user to land on a different mapping than the one they
-  trained on without realising it. The library does not even expose
-  the transform as a parameter.
-- **Palette set: single hue × 6, brightness-ramped.** The entire palette
-  surface is a **constant-hue ramp**: within any one scheme the hue is
-  **fixed** and the saturation is **full**, and only **brightness** varies —
-  brightness ramps with the (fixed-log) transformed escape count. The same
-  scheme is offered in **six hues evenly spaced around the wheel**
-  (0°, 60°, 120°, 180°, 240°, 300°), named by hue, with **green the
-  default** (a green-on-black terminal allusion). Switching hue is an
-  explicit, labelled wheel action, not a cycle-on-keypress. Rationale,
-  in order of weight:
+- **Escape-count transform: none, no toggle.** An escape count affects
+  a pixel only through the brightness falloff (*Brightness modulation*
+  below). The pygame prototype's per-keystroke cycle through Identity /
+  Square / Cube / Exp / Sqrt / Cbrt / Log is not carried forward: any
+  toggle lets the user land on a different mapping than the one they
+  trained on without realising it.
+
+  *History:* a fixed `log2(1 + n)` transform once fed a brightness ramp
+  in the palette. Both were removed (see *Palette set* below).
+- **Palette set: six single-hue schemes, flat.** Within a scheme every
+  escaping count takes the **same color**: the pure hue, which the
+  falloff (*Brightness modulation* below) then dims; points inside the
+  set are black. The falloff **decreases strictly with the escape
+  count**, so a higher count is never brighter. The six schemes are
+  named by their hues, **evenly spaced around the wheel** (red 0°,
+  yellow 60°, green 120°, cyan 180°, blue 240°, magenta 300°), with
+  **green the default** (a green-on-black terminal allusion). Switching
+  hue is an explicit, labelled wheel action, not a cycle-on-keypress.
+  Rationale, in order of weight:
     1. **One perceptual dimension.** Hue variance *within* a scheme reads
        as arbitrary and competes for attention; fixing the hue makes
        **brightness** the single dimension the user's visual cognition
@@ -191,7 +191,7 @@ re-litigated.
        logic that fixes the escape-count transform, and it composes with
        the always-on brightness modulation below.
     2. **Anti-confusion / anti-chaining.** A small number of
-       visually-distinct, named hues means the user cannot drift
+       visually distinct, named hues means the user cannot drift
        between schemes by accident, and cannot unknowingly chain
        different mappings across sessions in a way that would
        degrade recognition of paths they have memorised.
@@ -202,36 +202,40 @@ re-litigated.
     4. **Color-vision accessibility.** A handful of well-separated
        hues gives users with color-blindness or other color-perception
        differences a meaningfully better chance of finding a hue whose
-       brightness ramp works for them than a single fixed hue would.
-  Once a tagged release ships, the six hues' escape-count → RGBA mappings
-  are not silently changed — the user's visual memory is treated as an
-  API surface, per the palette stability invariant below.
+       brightness range works for them than a single fixed hue would.
 
-  *History:* an earlier revision locked this surface to the **Classic**
-  multi-hue base (inherited from `great-wall-core`) rotated into six
-  variants. That was superseded — before any tagged release — by the
-  single-hue, brightness-ramped scheme above, on the "one perceptual
-  dimension" rationale; the six-hue wheel and its anti-chaining /
-  circadian / accessibility rationale are retained.
+  Once a tagged release ships, a scheme's hue is not silently changed —
+  the user's visual memory is treated as an API surface, per the
+  palette stability invariant below.
+
+  *History:* the six schemes first rotated the **Classic** multi-hue
+  base inherited from `great-wall-core`; single hues replaced it before
+  any tagged release. The single-hue schemes then ramped brightness up
+  with the escape count, which, combined with the falloff, made
+  brightness rise and then fall. The ramp was removed, also before any
+  tagged release, matching the demo film (great-wall-render).
 - **Color pipeline: GPU fragment shader, in great-wall-ux.** The
-  escape-count → pixel mapping (log transform → palette lookup →
-  brightness modulation) runs entirely in a Flutter `FragmentProgram`
-  inside this library; `great-wall-core` returns only the raw
-  single-channel escape-count buffer and never emits colored pixels.
-  This is the division of labour fixed by
+  escape-count → pixel mapping (palette lookup → brightness modulation;
+  the lookup gives the hue, or black inside the set) runs entirely in a
+  Flutter `FragmentProgram` inside this library; `great-wall-core`
+  returns only raw escape counts and never emits colored pixels. Counts
+  reach the shader exactly, as 16-bit values (high byte in red, low
+  byte in green, nearest sampling), so even at the deep-render cap of
+  1024 each count keeps its own shade. This is the division of labour
+  fixed by
   `great-wallet/ARCHITECTURE.md` ("color schemes, lighting effects …
   do not touch the engine"); it is restated here because an earlier
   deliberation had tentatively placed coloring in the core and it is
   now settled the other way. Rationale:
-    1. **Live adjustment is free.** Brightness offset and hue rotation
-       are changed *during navigation* (see *Brightness modulation*
-       below); as shader uniforms / a swapped palette LUT they cost
-       nothing per frame and never re-rasterise. The expensive Rust
-       `escape_count` re-runs only when the viewport actually moves.
-       Coloring in the core would force a round-trip — and would drag
-       viewport zoom and the live brightness offset (interaction
-       state) into the engine, which the architecture separates ux to
-       prevent.
+    1. **Live adjustment is free.** Brightness offset, slope, and hue
+       are changed *during navigation* (see *Palette set* above and
+       *Brightness modulation* below); as shader uniforms / a swapped
+       palette LUT they cost nothing per frame and never re-rasterise.
+       The expensive Rust `escape_count` re-runs only when the viewport
+       actually moves. Coloring in the core would force a round-trip —
+       and would drag viewport zoom and the live brightness offset and
+       slope (interaction state) into the engine; keeping the UX layer
+       separate is precisely what prevents that.
     2. **Determinism is unaffected.** Only escape counts and the
        pixel-to-coordinate mapping feed the bijection, and both stay
        bit-deterministic in Rust regardless of where coloring runs.
@@ -253,14 +257,23 @@ re-litigated.
   with falloff base `B = 16`, raw escape count `n`, zoom `z` (derived
   from the viewport), and brightness-exponent offset `beo`. High
   escape counts dim, zooming in brightens, and `beo` slides which
-  escape-count band is lit. Locked properties:
+  escape-count band is lit. Written as a sigmoid with a **slope** `s`,
+
+      factor = 1 / (1 + 2^((n − h) / s)),   h = beo + log2 B + 2·log2 z
+
+  `s = 1` is the curve above, unchanged; a larger `s` spreads the
+  falloff over more escape counts (more shades), a smaller one sharpens
+  it. The half-brightness point `h` does not depend on `s`. Brightness
+  always decreases as the escape count rises.
+  Locked properties:
     - **Always on, no toggle.** The prototype's `L`-key on/off toggle
       is dropped, for the same "function before aesthetics" reason the
-      transform toggle is dropped.
-    - **`beo` is reset to a fixed default at the start of every
-      session** and is **never persisted** — consistent with the
-      no-stored-secrets posture (a persisted offset would be one more
-      thing coercion could extract).
+      transform toggle is dropped. (Auto exposure, below, only decides
+      who sets `beo` and `s`.)
+    - **`beo` and `s` are reset to fixed defaults at the start of
+      every session** (`4` and `1`) and are **never persisted** —
+      consistent with the no-stored-secrets posture (a persisted offset
+      or slope would be one more thing coercion could extract).
     - **Live adjustment via `L` + mouse scroll**, in fine steps of
       **0.1** (down from the prototype's coarse 1.5). The small step is
       deliberate: it makes the during-navigation brightness adjustment
@@ -272,13 +285,32 @@ re-litigated.
       walk an unfamiliar route in a city whose language you cannot
       read: you procedurally learn to recognise alien scenery you
       could never verbally describe; asked to recite the landmarks "in
-      a vacuum" you cannot — much as one reliably recognises a coin
+      a vacuum", you cannot — much as one reliably recognises a coin
       without being able to describe it.) The 0.1 step is a starting
       point, expected to be optimised empirically during dog-fooding.
-    - **No on-screen readout of `beo`.** The prototype's
+    - **Slope via `G` + mouse scroll** (`G` for gradient), multiplicative
+      so it stays positive: ten steps double or halve `s`; scroll up
+      spreads the falloff. Same tacit rationale and granularity as the
+      offset.
+    - **Keyboard counterparts `L` + Up/Down and `G` + Up/Down**, bound
+      by the consuming app like `V` + arrows (see *Audio cues* below;
+      the canvas widget owns only the scroll gestures).
+    - **Auto exposure, toggled with `A`** (bound by the consuming app).
+      It sets `beo` and `s` from what is on screen, using the demo
+      film's rule: half brightness at the midpoint of the 5th and 95th
+      percentile escape counts of the smooth areas (pixels whose four
+      neighbours are within one count), and a slope that lights those
+      two counts at 80% and 20%, never steeper than halving every 2
+      counts. Pixels inside the set are ignored. New values are eased in
+      over half a second. Setting `beo` or `s` any other way (`L` / `G`,
+      or great-wallet's canonical view) turns it off. It is off when the
+      app starts, kept across resets, never persisted, and its values
+      are never shown.
+    - **No on-screen readout of `beo` or `s`.** The prototype's
       "Brightness offset +N.N" status message is removed; surfacing
-      the value would convert a tacit skill into an explicit,
-      verbalizable fact and weaken TKBA.
+      the values would convert a tacit skill into an explicit,
+      verbalizable fact and weaken TKBA (Tacit Knowledge-Based
+      Authentication).
 - **Audio cues: discrete volume, `V` + arrow live control.** Short
   synthesised "console blip" cues (click / select / confirm / deny)
   give tactile feedback for the "sober, but game-like" surface. Volume
@@ -297,9 +329,9 @@ re-litigated.
       the mute toggle simply drops to `0` and restores the previous
       level. This keeps "volume 0 == muted" true by construction.
     - **Not a tacit control — a readout is allowed.** Unlike the
-      brightness offset, the cue volume carries no coercion-relevant
-      tacit knowledge, so a host *may* surface it (a numeric readout, a
-      volume icon).
+      brightness offset and slope, the cue volume carries no
+      coercion-relevant tacit knowledge, so a host *may* surface it (a
+      numeric readout, a volume icon).
     - **Best-effort and never logged.** Any audio backend error is
       swallowed to silence; cues carry no coordinate data, consistent
       with the no-leak posture.
@@ -339,25 +371,25 @@ revision.
   (button presses, navigation, errors that do not include
   coordinate data) only.
 - **Tacit-only navigation controls.** Controls whose *setting* is part
-  of the user's tacit recall — currently the brightness offset — are
-  never displayed as a value, labelled, logged, or persisted. Their
-  state lives only as ephemeral session state. Surfacing such a value
+  of the user's tacit recall — currently the brightness offset and
+  slope — are never displayed as a value, labelled, logged, or
+  persisted, whether set by hand or by auto exposure. Their state lives
+  only as ephemeral session state. Surfacing such a value
   would convert tacit recognition into explicit, verbalizable
   knowledge and weaken TKBA.
 - **Pixel-to-coordinate determinism.** Given identical viewport
-  state — centre `(re, im)`, zoom, device-pixel-ratio, palette,
-  escape-count transform — the pixel-to-coordinate mapping is
-  bit-deterministic across CPU/GPU build, OS, and device. This
-  is enforced by golden tests and is a load-bearing property of
-  the bisection's pixel-to-coordinate contract; without it,
-  decoded points would drift between platforms.
-- **Palette stability.** Once a tagged release ships, each of the six
-  single-hue, brightness-ramped schemes has a frozen escape-count →
-  RGBA mapping. Tweaks ship as new named variants, never as silent
-  updates to existing ones. Users' visual memory of a scheme is a UX
-  dependency treated as an API surface.
+  state — centre `(re, im)`, zoom, device-pixel-ratio — the
+  pixel-to-coordinate mapping is bit-deterministic across CPU/GPU
+  build, OS, and device. This is enforced by golden tests and is a
+  load-bearing property of the bisection's pixel-to-coordinate
+  contract; without it, decoded points would drift between platforms.
+- **Palette stability.** Once a tagged release ships, each scheme's hue
+  is frozen. Tweaks
+  ship as new named variants, never as silent updates to existing
+  ones. Users' visual memory of a scheme is a UX dependency treated as
+  an API surface.
 - **No alternative escape-count transforms, no extra palettes.** The
-  log transform and the single-hue × 6 set are the entire surface;
+  brightness falloff and the six single-hue schemes are the entire surface;
   re-introducing a transform toggle or a user-extensible palette
   loader is a breaking change to the ecosystem's TKBA posture
   (users can no longer be confident which mapping they trained on)
