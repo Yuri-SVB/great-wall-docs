@@ -42,6 +42,9 @@
 >
 > The Rust `ENGINE_VERSION` — the single-fractal encode/decode algorithm — is
 > versioned independently and is currently **`0.3.0`** (`rust_engine/src/lib.rs`).
+> The **landmark path** (*Landmark Path*, a visualisation that never touches the
+> encoded bits) is versioned on its own too: `LANDMARK_PATH_VERSION` is
+> **`0.1.0`** (`rust_engine/src/landmark/mod.rs`).
 
 ## Purpose
 
@@ -338,6 +341,7 @@ in `argon2_pipeline.derive_stage_params` (built on the reusable
 | `discovery.rs`   | Island discovery via random sampling + flood fill   |
 | `bisect.rs`      | Bisection tree: encode and decode bit sequences     |
 | `render_cache.rs`| FIFO hash table cache for escape_count (rendering)  |
+| `landmark/`      | Default landmark path of a leaf (visualisation)     |
 | `ffi.rs`         | C-ABI interface consumed by the Python bridge       |
 
 ---
@@ -912,6 +916,220 @@ interactive. The test suite uses its own set (`max_iter=200`, `target_good=30`,
 
 ---
 
+## Landmark Path (visualisation)
+
+The **landmark path** of a board's point is a tour from the whole encode area
+down to the point's leaf: an ordered list of features, from the **outer
+shell** of the fractal to the **leaf feature** (the leaf's canonical island
+with its shells), each a landmark a user can find by panning and zooming. It
+is a visualisation: it never touches the encoded bits. It ports the demo
+film's rule (great-wall-render `gwrender/landmarks.py`, `pathfind.py`,
+`zoomdist.py`) to integer and fixed-point arithmetic, so every device computes
+the same path, with one change: the path may zoom out (the film's path only
+zooms in).
+
+`landmark_path(o, p, q, leaf, leaf_path, params)` (`rust_engine/src/landmark/`)
+returns the stops and the zoom distance of each hop. It is slow — about 10 s on
+a 4-core desktop — so callers run it off the UI thread.
+
+### Terms
+
+- **Area:** a rectangle in I4F60. The **root area** is the encode area.
+- **Board:** one fractal `(o, p, q)` with a placed point. Decoding the point
+  gives the **leaf** (its rectangle and bisection path) and the leaf's
+  **canonical island**: the largest island discovery finds in the leaf
+  (`discovery::canonical_island`; see great-wallet `ARCHITECTURE.md`
+  §"Canonical-Island Highlighting").
+- **Scan raster:** a grid of cells over an area, each holding the escape count
+  at its centre.
+- **Feature:** a region of a scan raster that can serve as a landmark.
+
+### Scan raster
+
+For an area of width `w` and height `h`:
+
+- **Cell size** `c`: the largest power of two with `w·h / c² ≥ FLOOD_CELLS`
+  (the `compute_p0` rule of island discovery).
+- **Grid:** `⌈w/c⌉ × ⌈h/c⌉` inside cells plus a one-cell margin. Cell `(i, j)`
+  has its centre at `(re_min + (2i − 1)·c/2, im_min + (2j − 1)·c/2)`, exact in
+  fixed point; row `j = 0` is the lowest imaginary part.
+- **Counts:** `escape_count_generic` at each centre, capped at
+  `SCAN_MAX_ITER`. A cell is **blocked** if it is in the margin, inside the set
+  (count `≥ SCAN_MAX_ITER`), below `MIN_ESCAPE`, or on an excluded feature.
+- **Labels:** the 4-connected components of equal count over open cells,
+  numbered by each component's first cell in row-major order (`j`, then `i`).
+  Every tie-break below relies on this order.
+
+### Features of an area
+
+- **Descent:** each component drains to its lowest neighbour, as island
+  discovery's lower-escape redirection does; ties go to the lowest count, then
+  an open cell over a blocked one, then the lowest label. A component with no
+  lower neighbour is a **pit**. A chain that reaches a blocked cell rules out
+  every component on it.
+- **Feature:** for a pit of count `b`, the 4-connected component of open cells
+  with count `≤ b + SHELLS` holding it: the pit with its shells. If that
+  component holds counts below `b`, the pit stands instead for the components
+  of count `≤ low + SHELLS` around its lowest cells, `low` being its lowest
+  count. A feature touching the area's border cells or an excluded feature is
+  dropped (it would show as a straight cut).
+- **Enumeration:** seeds on a `SEED_GRID × SEED_GRID` lattice of the area
+  (column-major) lead to their pits; features are kept in first-reached order,
+  without duplicates. With none, the lattice doubles while its spacing stays
+  at least one cell. The components of every level are found at once by a
+  component tree built with union-find, level by level.
+- **Measures (exact):** cell count `n`, area `n·c²`, barycentre (the mean of
+  the cell centres, rounded down, from integer sums), bounding box of the cell
+  centres.
+
+### Coast (root area only)
+
+- **Sea:** inside cells with count `≤ bottom + SHELLS`, `bottom` being the
+  lowest inside count. The rest is **land**.
+- **Hull:** one convex hull per 4-connected land piece, their union the hull;
+  integer arithmetic (Andrew's monotone chain on each row's outermost cells,
+  then a half-plane test, edges included).
+- **Outer shell (the path's start):** the sea outside every hull.
+- **Fiords:** components of sea inside the hull that touch a cell outside it
+  (a mouth), reach further than `REACH` cells from outside it (Chebyshev; they
+  are deep), and have no blocked cell or cell at the border or next to an
+  excluded feature. Largest first, ties in label order.
+
+*Why one hull per piece, not one for all land.* On the raster the pieces are
+finite (at most one per cell) and the labelling lists them. On the encode area
+of 12 boards (the plain one and 11 random), the main body held over 99% of the
+land; 6 boards also had 1–11 offshore islands of 1–482 cells. A single hull
+reaches out to those islands: it closes off open sea and merges neighbouring
+bays into one fiord (on 4 of the 6 boards). One hull per piece leaves the
+coast as the main body draws it. Its own risk, a thin neck splitting a body in
+two at the raster's resolution, did not occur.
+
+### Leaf feature (the end)
+
+The leaf's canonical island has count `n` (cap `ENCODE_MAX_ITER`, flood cap
+`CANONICAL_MAX_FLOOD_POINTS`). The leaf feature is the 4-connected component of
+cells with `MIN_ESCAPE ≤ count < SCAN_MAX_ITER` and `count ≤ n + SHELLS`
+holding the island's points, scanned in a window centred on the island's box,
+reaching `max(box width, box height)` (at least one island cell) each way and
+clipped to the leaf rectangle; the window doubles while the feature touches a
+side where it stops short of the leaf rectangle. If no island point lands on
+such a cell, the leaf feature is the island itself. The search's target `T` is
+computed with nothing excluded; the path's last stop is recomputed with every
+landmark of the path excluded, so the two can differ.
+
+### Zoom distance
+
+A feature is the point `(b, s)` of zoom space: barycentre `b` and
+`s = ⌊√area⌋`. Between two features,
+
+```text
+d = (1/ρ) · arcosh(1 + q),   q = (ρ²·|b₁ − b₂|² + (s₁ − s₂)²) / (2·s₁·s₂)
+```
+
+the hyperbolic metric of zoom space (van Wijk & Nuij), `ρ = RHO`. Zooming by a
+factor `k` costs `|ln k| / ρ`; panning by one feature size costs about 1
+whatever `ρ`, so a larger `ρ` favours zooming over panning. In integers: with
+`ρ = n/m`, `q = A/B` exactly (`A = n²·|Δb|² + m²·(Δs)²`, `B = 2·m²·s₁·s₂`, 256-bit
+products), and `arcosh(1 + q) = 2·ln(√A + √(A + 2B)) − ln(2B)`, with integer
+square roots and an integer base-2 logarithm, to `METRIC_FRAC_BITS` fractional
+bits. The metric module knows nothing about features.
+
+### The path
+
+1. **Ladder of areas.** Area 0 is the root area. Each next area moves every
+   edge toward the leaf island's barycentre, to `LADDER_RATIO` of its distance
+   (an exact rational), never inside the leaf rectangle. The ladder stops
+   before an area the leaf rectangle would exceed `LEAF_SHARE` of, or one that
+   repeats.
+2. **Candidates.** Each area is scanned with the leaf's canonical island
+   excluded; its `KEEP` largest features are kept. Area 0 also gives the outer
+   shell (the start) and the fiords (not subject to `KEEP`). A candidate stays
+   only if its area exceeds `T`'s and its bounding box's shorter side spans at
+   least `MIN_CELLS` cells.
+3. **Nodes.** The start, then the candidates by decreasing area (a stable
+   sort: ties keep ladder order, then area order), then `T`. Ties below go to
+   the lower index.
+4. **Edges.** From any node `a` to any other `b` (never into the start), in
+   either direction of size, unless `b ≠ T` and either barycentre lies on the
+   other's cells. The path may therefore zoom out: between two small features
+   far apart, the cheapest route in zoom space passes through a larger scale.
+5. **Cost.** A hop of distance `h` costs `h^BADNESS_EXPONENT + BADNESS_CHARGE`:
+   convex in `h`, so even hops are cheap, and positive, so each landmark is
+   charged.
+6. **Search: Dijkstra.** Settle the unsettled node of least distance (ties:
+   lower index), relax every unsettled node with a strictly smaller distance,
+   stop at `T`, backtrack. Costs are computed only for settled nodes, in
+   parallel.
+7. **Stops.** The outer shell, the chosen features, the leaf feature.
+
+*Alternatives, for the record.* One forward pass in size order (the film's)
+is cheaper but cannot zoom out. Min-plus powers of the badness matrix and
+Bellman–Ford give the same path at more cost (min-plus also gives the best
+path per number of landmarks). A\* with the admissible bound `2·d(u, T)` (under
+the defaults) gives the same path settling fewer nodes: a possible speed-up.
+Greedy choice is not optimal.
+
+### Parameters
+
+Every number lives in one `LandmarkParams` value (`landmark/params.rs`); its
+defaults cross the FFI (`bs_landmark_params`) and callers pass them back.
+
+| Name | Default | Meaning |
+|---|---|---|
+| `FLOOD_CELLS` | 2^18 | minimum cells per scan raster |
+| `SCAN_MAX_ITER` | 255 | scan escape cap; at or above is inside the set |
+| `MIN_ESCAPE` | 1 | counts below are blocked |
+| `SEED_GRID` | 128 | seeds per side of an area's lattice |
+| `SHELLS` | 5 | a feature spans counts `b ..= b + SHELLS` |
+| `REACH` | 1 | fiord depth margin, in cells |
+| `LADDER_RATIO` | 7/10 | share of each edge's distance kept per ladder step |
+| `LEAF_SHARE` | 1/20 | the ladder stops once the leaf exceeds this share |
+| `KEEP` | 200 | features kept per ladder area |
+| `MIN_CELLS` | 12 | minimum cells across a candidate |
+| `RHO` | 1 | cost of zooming against panning |
+| `BADNESS_EXPONENT` | 2 | hop cost exponent |
+| `BADNESS_CHARGE` | 1 | cost per hop |
+| `METRIC_FRAC_BITS` | 32 | fractional bits of distances and costs |
+| `CANONICAL_MAX_FLOOD_POINTS` | 50,000 | the leaf island's flood cap (`protocol.rs`, shared with display) |
+
+### Determinism
+
+- Integer and fixed-point arithmetic decide everything. The one floating-point
+  operation seeds an integer Newton iteration for square roots, whose result is
+  the exact floor whatever the seed.
+- Stable sorts; strict `<` keeps the first element on a tie; labels and seeds
+  in the orders above.
+- The output is frozen by test vectors (`test_vectors/landmark-v0.1.0/`, a
+  plain and a perturbed board) under `LANDMARK_PATH_VERSION` (`0.1.0`), which
+  is bumped whenever the path for the same board, leaf and parameters changes.
+
+### Feature identity
+
+A stop is identified, independently of any scan, by its **kind** (outer shell,
+fiord, feature, leaf), its **ladder index** `k` (the ladder is reproducible
+from the board and the leaf), its **bottom count** `b`, and a **seed**: the
+fixed-point centre of its first cell in row-major order. A saved path can
+therefore hold integers only. Editing and saving paths, and recomputing a
+feature from its identity, are not yet implemented.
+
+### Modules
+
+Each is independent and tested alone (`rust_engine/src/landmark/`):
+
+| Module | Role |
+|---|---|
+| `raster.rs` | the scan raster and cell bitmaps |
+| `features.rs` | labelling, descent, the component tree, features, the leaf feature |
+| `hull.rs` | integer convex hull and its fill |
+| `coast.rs` | the outer shell and fiords |
+| `metric.rs` | the zoom distance on points `(b, s)` |
+| `pathfind.rs` | Dijkstra over caller-supplied edges and costs |
+| `path.rs` | the ladder, the candidates, the search, the stops |
+| `params.rs` | `LandmarkParams` and its defaults |
+| `wide.rs` | 256-bit products and the integer square root |
+
+---
+
 ## FFI Interface
 
 The Rust engine is compiled as a C dynamic library (`cdylib`). All exported
@@ -971,6 +1189,24 @@ symbols use the `bs_` prefix and C calling convention (`extern "C"`).
 | `bs_setup_tier_thresholds`             | `(level, *out, cap) → u32`                           | Per-stage `t_i` (query-then-fill)           |
 | `bs_setup_tier_substandard`            | `(level) → u8`                                       | Whether a level is substandard (Setup 1)    |
 | `bs_salt_pepper_canonicalize`          | `(*in, len, *out, cap) → u32`                        | The `[A-Z0-9-]` rule for stage-0 text and export labels |
+
+**Canonical island and landmark path** — see *Landmark Path*. Handle-based, as
+the result is variable-length:
+
+| Function                               | Signature (abridged)                                 | Purpose                                     |
+|----------------------------------------|------------------------------------------------------|---------------------------------------------|
+| `bs_canonical_island_*`                | compute / found / meta / num_points / points / free  | A leaf's canonical island and its flood points |
+| `bs_canonical_island_barycentre`       | `(*H, *Fixed, *Fixed)`                               | The island's barycentre (mean of its points, rounded down) |
+| `bs_canonical_max_flood_points`        | `() → u64`                                           | The island's flood cap (the engine owns it) |
+| `bs_landmark_params`                   | `(*out × 19)`                                        | Default `LandmarkParams`, field by field    |
+| `bs_landmark_path_version`             | `(*buf, len) → u32`                                  | `LANDMARK_PATH_VERSION`                     |
+| `bs_landmark_path_compute`             | `(o, p, q, leaf rect, *path, len, params…) → *H`     | Compute a leaf's path (seconds)             |
+| `bs_landmark_path_status`              | `(*H) → i32`                                         | `LANDMARK_PATH_OK`, `_INVALID_PARAMS`, `_NO_ISLAND`, `_NO_COAST` |
+| `bs_landmark_path_num_stops`           | `(*H) → u32`                                         | Number of stops                             |
+| `bs_landmark_path_stop`                | `(*H, idx, …out pointers…) → i32`                    | Kind, ladder index, bottom, seed, barycentre, bbox, cell count and size, bitmap origin and size |
+| `bs_landmark_path_stop_cells`          | `(*H, idx, *out, cap) → u32`                         | The stop's cell bitmap, a byte per cell     |
+| `bs_landmark_path_hop`                 | `(*H, idx) → u64`                                    | Zoom distance of a hop (`2^-METRIC_FRAC_BITS` units) |
+| `bs_landmark_path_free`                | `(*H)`                                               | Free the handle                             |
 
 ---
 

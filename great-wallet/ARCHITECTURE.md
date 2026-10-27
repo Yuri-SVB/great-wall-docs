@@ -948,7 +948,8 @@ Two geometry facts, learned by exercising the engine end-to-end:
   canonical island at a far finer grid
   (`EncodingConstants.canonicalIslandMinGridCells` ≈ 2²⁰ ≈ 1.05M),
   yielding 15–15000 cells while staying under the flood cap
-  (`maxFloodPoints` = 50000). A pure visualisation override; it never
+  (`maxFloodPoints` = 50000, owned by the engine and read through
+  `bs_canonical_max_flood_points`). A pure visualisation override; it never
   touches encoded bits. Cost ≈ 220 ms per stage (one-off; a candidate to
   move off the UI isolate later).
 - **Framing.** The biggest island is only ~0.5–40 % of the leaf's extent
@@ -1040,6 +1041,61 @@ too-many / `2` budget) → `count` → per-leaf `rect` + `path` → `free`.
   rect). The per-stage island is resolved lazily and **cached per stage**;
   the `E` scan and per-leaf discoveries are bounded by the budget/cap.
   Moving the heavy discovery off the UI isolate is a follow-up.
+
+---
+
+## Landmark Path (`Alt+E`)
+
+A second visualisation layer: the **landmark path** of a board's point, a
+tour from the whole fractal down to the point's leaf through landmarks a user
+can find by panning and zooming — the outer shell, then fiords and islands with
+their shells, ending at the leaf's canonical island with its shells. It never
+touches the encoded bits. The algorithm is great-wall-core's
+(`great-wall-core/DESIGN.md` §"Landmark Path"); this section covers the app and
+the overlay. Not yet implemented: editing and saving a path, and a faster
+search.
+
+### App wiring (great-wallet Setup)
+
+- **`Alt+E`** toggles the path on the active board (plain `E` remains the
+  in-view canonical-island reveal). It is listed in the F1 manual.
+- The path is computed by the engine in a **worker isolate**
+  (`GreatWallCore.landmarkPath`, `Isolate.run`): about 10 s on a 4-core
+  desktop. The board's point is decoded on the UI isolate first (as for its
+  island decoration), and the leaf rectangle and path are sent over.
+- Paths are **cached per (stage, slot)** and **dropped, and wiped,** wherever
+  the board's points change: a point placed or re-derived, the required-point
+  count changed, σ changed, or the screen disposed. A computation started
+  before a drop is discarded when it returns. Switching stages keeps them.
+- **Modes are announced; the path never is.** Toasts say on, off, computing,
+  or that a point has no path; no coordinate, count or distance is shown,
+  logged or persisted.
+
+### Model (`app/lib/src/core/landmark_path.dart`)
+
+`LandmarkFeature` (one stop) and `LandmarkPath` (the stops, the hop distances
+and the engine's `LANDMARK_PATH_VERSION`) hold **integer fields only** — raw
+I4F60 coordinates and a byte per cell — with **`wipe()`** and a **redacted
+`toString`**. A path leads to its leaf, and so to the point: it is sensitive
+material, handled like the point itself. Each stop carries its identity (kind,
+ladder index, bottom count, seed), enough for core to recompute it, so a
+future vault section can save a path as integers only.
+
+### Overlay (great-wall-ux `CanvasPath`)
+
+`CanvasOverlays.path` draws, over the fractal:
+
+- each stop's feature **highlighted** in translucent white — an island with its
+  shells (and the leaf) by a **count-range flood** over the raster on screen,
+  seeded from its cells, so it stays crisp at every zoom; the outer shell and
+  fiords by their **cells**. A flood that cannot resolve (its counts reach the
+  render cap, or the feature is sub-pixel) falls back to the cells — `Alt+L`
+  deep render lets deep features flood;
+- a **line** through the stops' barycentres;
+- the stops **numbered** from 1.
+
+Each stop fills independently, so touching features do not block each other.
+The highlights are re-filled per raster, like the island highlights.
 
 ---
 
