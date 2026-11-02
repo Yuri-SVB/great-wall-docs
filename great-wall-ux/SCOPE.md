@@ -58,7 +58,11 @@ internal module layout.
   incompatible mappings against their trained visual memory).
 - Stage-aware rendering: canonical fractal (stage 1) vs. user-perturbed
   fractal (stage 2, parameterised by `(o, p, q)`).
-- Overlays: point markers, crosshairs, leaf rectangles.
+- Overlays: point markers, crosshairs, leaf rectangles, canonical-island
+  highlights, and landmark paths (`CanvasPath`: a line through numbered
+  stops, each stop's feature highlighted — by a count-range flood at render
+  resolution, or by its cells). The library draws what the host hands it;
+  the path itself is computed by `great-wall-core`.
 - **Debug-mode** bisection-area visualisation, gated behind an explicit
   flag because surfacing it during normal use would teach the user
   explicit, verbalizable facts whose memorisation undermines TKBA (see

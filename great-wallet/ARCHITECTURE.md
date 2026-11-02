@@ -595,6 +595,30 @@ Begin background TLP computation
 Imports from great-wall-core (encode/decode for validation) and
 star-clock (TLP encrypt/decrypt/solve).
 
+#### Implemented (library and Setup)
+
+- **Scheduler:** conservative SM-2 (Woźniak 1990) with four-button grading,
+  every number named (`Sm2Params`); honest grading (a hint, a bailout or a
+  lucky guess grades Again); time only through an injected `Clock`.
+- **A card per memorised map** (stage, slot), plus the fact cards (`m`, `N`,
+  `D`, salt, provenance, export salts, reminders). Each map card carries its
+  **landmark cues**: the route (ρ and the exponent, the engine's values) and
+  the stops shown before the leaf ([Landmark Path](#landmark-path-alt-e)).
+  While stops show, attempts are **practice** and leave the schedule
+  untouched; once none shows, they are graded.
+- **Consolidation** (interval ≥ 90 days and ≥ 5 successes in a row) and
+  **reminders** (at least daily, sooner when a graded card falls due).
+- **The deck:** the user adds, removes or swaps maps freely — any `r_i` of a
+  stage's maps give its polynomial — and its progress reports, per stage, the
+  maps held against `r_i`, how many are unaided and how many consolidated.
+  No study order is imposed (UX principle 3).
+- **Saved with the setup:** the deck is a section of the provisional-key file
+  (orbit vault v3), encrypted with the setup. Setup builds it at the first
+  save, a card per placed map; a map whose point changes restarts its card.
+
+Not yet implemented: the review session (Train mode), the graduation gate,
+and the post-graduation bundles.
+
 Design detail for the deck contents and the pre-/post-graduation
 lifecycle ("setup standing on its own legs" — the `CPNF-NNNN` own-legs
 key schedule, RSW-TLP deck encryption, panic button, and outsourced
@@ -771,7 +795,7 @@ puzzles for instant setup of arbitrary, user-defined delay.
 
 ## Guiding UX Principles
 
-Two principles govern the *feel* of every Great Wall surface, app-wide.
+Three principles govern the *feel* of every Great Wall surface, app-wide.
 They are design north-stars, not security claims — but they are
 load-bearing: the product asks the user to trust their own memory with
 their savings, and whether that proposition feels *plausible* is largely
@@ -885,6 +909,17 @@ Two guard-rails so this stays an argument, not a slogan:
 > thing. The Metaverse fought the body and broke; we put your keys
 > somewhere only a body can go."
 
+### 3. Free by default
+
+The app enforces only what the threat model shows to be necessary, and even
+then prefers an emphatic warning the user acknowledges over a hard block.
+Everything else is the user's choice: which maps to memorise, in what order,
+together or one after another, swapped for easier ones. The app's job is to
+inform — what has to be memorised, how much is left, and why — not to
+prescribe a path; as in a game with several goals, the player advances each
+as they like. A user who wants to experiment should be able to do so in the
+app, not in a fork.
+
 ---
 
 ## Canonical-Island Highlighting ("entropy crystals")
@@ -948,7 +983,8 @@ Two geometry facts, learned by exercising the engine end-to-end:
   canonical island at a far finer grid
   (`EncodingConstants.canonicalIslandMinGridCells` ≈ 2²⁰ ≈ 1.05M),
   yielding 15–15000 cells while staying under the flood cap
-  (`maxFloodPoints` = 50000). A pure visualisation override; it never
+  (`maxFloodPoints` = 50000, owned by the engine and read through
+  `bs_canonical_max_flood_points`). A pure visualisation override; it never
   touches encoded bits. Cost ≈ 220 ms per stage (one-off; a candidate to
   move off the UI isolate later).
 - **Framing.** The biggest island is only ~0.5–40 % of the leaf's extent
@@ -1040,6 +1076,73 @@ too-many / `2` budget) → `count` → per-leaf `rect` + `path` → `free`.
   rect). The per-stage island is resolved lazily and **cached per stage**;
   the `E` scan and per-leaf discoveries are bounded by the budget/cap.
   Moving the heavy discovery off the UI isolate is a follow-up.
+
+---
+
+## Landmark Path (`Alt+E`)
+
+A second visualisation layer: the **landmark path** of a board's point, a
+tour from the whole fractal down to the point's leaf through landmarks a user
+can find by panning and zooming — the outer shell, then fiords and islands with
+their shells, ending at the leaf's canonical island with its shells. It never
+touches the encoded bits. The algorithm is great-wall-core's
+(`great-wall-core/DESIGN.md` §"Landmark Path"); this section covers the app and
+the overlay. Not yet implemented: editing a path.
+
+### App wiring (great-wallet Setup)
+
+- **`Alt+E`** toggles the path on the active board (plain `E` remains the
+  in-view canonical-island reveal). It is listed in the F1 manual.
+- The engine scans the point's **candidates** in a **worker isolate**
+  (`GreatWallCore.landmarkCandidates`, `Isolate.run`): about 10 s on a 4-core
+  desktop, once per point. The engine keeps them (`LandmarkCandidates`, freed
+  by `dispose`, at once or when its running searches end). Each route is then
+  a search, also in a worker isolate (`LandmarkCandidates.search`, about
+  0.4 s). The board's point is decoded on the UI isolate first (as for its
+  island decoration), and the leaf rectangle and path are sent over.
+- **Route panel.** While the path is shown, a panel on the right sets the
+  route: *zoom ↔ pan* (ρ), *fewer ↔ more stops* (the exponent), and the
+  *visible stops* before the leaf, the shallowest hidden first. Both route
+  sliders give more stops to the right. Words only: the value lists are the
+  engine's. A new ρ or exponent shows every stop again; the old path stays
+  drawn until the new one arrives. Each map's settings are saved with the
+  setup, as the cues of its card in the CPNF deck
+  ([celestial-peace-nf-core](#4-celestial-peace-nf-core)).
+- Candidates and paths are **cached per (stage, slot)** and **dropped** (paths
+  wiped, candidates freed) wherever the board's points change: a point placed
+  or re-derived, the required-point count changed, σ changed, or the screen
+  disposed. A map whose point changed keeps its route's ρ and exponent with
+  every stop visible again, and its deck card restarts; an excluded stage's
+  maps leave the deck. A computation started before a drop is discarded when
+  it returns. Switching stages keeps them.
+- **Modes are announced; the path never is.** Toasts say on, off, computing,
+  or that a point has no path; no coordinate, count or distance is shown,
+  logged or persisted.
+
+### Model (`app/lib/src/core/landmark_path.dart`)
+
+`LandmarkFeature` (one stop) and `LandmarkPath` (the stops, the hop distances
+and the engine's `LANDMARK_PATH_VERSION`) hold **integer fields only** — raw
+I4F60 coordinates and a byte per cell — with **`wipe()`** and a **redacted
+`toString`**. A path leads to its leaf, and so to the point: it is sensitive
+material, handled like the point itself. Each stop carries its identity (kind,
+ladder index, bottom count, seed), enough for core to recompute it, so a
+future vault section can save a path as integers only.
+
+### Overlay (great-wall-ux `CanvasPath`)
+
+`CanvasOverlays.path` draws, over the fractal:
+
+- each stop's feature **highlighted** in translucent white, from its own
+  cells as core computed them: traced once into an **outline** (closed loops,
+  holes included, filled even-odd) and rounded (two Chaikin passes) once a
+  cell spans 4 px. It depends on the cells alone, not on the raster, so it is
+  the same at every pan and zoom;
+- a **line** through the stops' barycentres;
+- the stops **numbered** from 1.
+
+All stops share one translucent layer, so overlapping features read as one
+highlight.
 
 ---
 
