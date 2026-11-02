@@ -929,8 +929,11 @@ the same path, with one change: the path may zoom out (the film's path only
 zooms in).
 
 `landmark_path(o, p, q, leaf, leaf_path, params)` (`rust_engine/src/landmark/`)
-returns the stops and the zoom distance of each hop. It is slow — about 10 s on
-a 4-core desktop — so callers run it off the UI thread.
+returns the stops and the zoom distance of each hop. It runs in two steps:
+`Candidates::new` scans the ladder (slow: about 10 s on a 4-core desktop), and
+`Candidates::search` finds the route for a hop cost (about 0.4 s), so a caller
+changing ρ or the exponent searches again without rescanning. Callers run both
+off the UI thread.
 
 ### Terms
 
@@ -1071,8 +1074,11 @@ Greedy choice is not optimal.
 
 ### Parameters
 
-Every number lives in one `LandmarkParams` value (`landmark/params.rs`); its
-defaults cross the FFI (`bs_landmark_params`) and callers pass them back.
+Every number lives in one `LandmarkParams` value (`landmark/params.rs`), in two
+parts: `ScanParams` decide the candidates, `SearchParams` (`RHO`,
+`BADNESS_EXPONENT`, `BADNESS_CHARGE`, `METRIC_FRAC_BITS`) the route through
+them. Its defaults cross the FFI (`bs_landmark_params`) and callers pass them
+back.
 
 | Name | Default | Meaning |
 |---|---|---|
@@ -1091,6 +1097,13 @@ defaults cross the FFI (`bs_landmark_params`) and callers pass them back.
 | `BADNESS_CHARGE` | 1 | cost per hop |
 | `METRIC_FRAC_BITS` | 32 | fractional bits of distances and costs |
 | `CANONICAL_MAX_FLOOD_POINTS` | 50,000 | the leaf island's flood cap (`protocol.rs`, shared with display) |
+
+**Route choices.** A user may pick ρ from `RHO_CHOICES` (1/4, 1/2, 1, 2, 4)
+and the exponent from `BADNESS_EXPONENT_CHOICES` (2, 3, 4); the defaults are
+among them. A lower ρ or a higher exponent gives more stops: on the plain test
+board, from 1 landmark (ρ = 4, exponent 2) to 30 (ρ = 1/4, exponent 4).
+Exponent 1 is left out: a direct hop is then cheapest, so the path has no
+landmarks.
 
 ### Determinism
 
@@ -1124,8 +1137,8 @@ Each is independent and tested alone (`rust_engine/src/landmark/`):
 | `coast.rs` | the outer shell and fiords |
 | `metric.rs` | the zoom distance on points `(b, s)` |
 | `pathfind.rs` | Dijkstra over caller-supplied edges and costs |
-| `path.rs` | the ladder, the candidates, the search, the stops |
-| `params.rs` | `LandmarkParams` and its defaults |
+| `path.rs` | the ladder, the candidates (`Candidates::new`), the search (`Candidates::search`), the stops |
+| `params.rs` | `LandmarkParams` (`ScanParams`, `SearchParams`), its defaults and the route choices |
 | `wide.rs` | 256-bit products and the integer square root |
 
 ---
@@ -1200,7 +1213,13 @@ the result is variable-length:
 | `bs_canonical_max_flood_points`        | `() → u64`                                           | The island's flood cap (the engine owns it) |
 | `bs_landmark_params`                   | `(*out × 19)`                                        | Default `LandmarkParams`, field by field    |
 | `bs_landmark_path_version`             | `(*buf, len) → u32`                                  | `LANDMARK_PATH_VERSION`                     |
-| `bs_landmark_path_compute`             | `(o, p, q, leaf rect, *path, len, params…) → *H`     | Compute a leaf's path (seconds)             |
+| `bs_landmark_rho_choices`              | `(*num, *den, cap) → u32`                            | `RHO_CHOICES`; returns their count          |
+| `bs_landmark_exponent_choices`         | `(*out, cap) → u32`                                  | `BADNESS_EXPONENT_CHOICES`; returns their count |
+| `bs_landmark_path_compute`             | `(o, p, q, leaf rect, *path, len, params…) → *H`     | Compute a leaf's path (seconds): the two calls below in one |
+| `bs_landmark_candidates_compute`       | `(o, p, q, leaf rect, *path, len, scan params…) → *C` | Scan a leaf's candidates (seconds)         |
+| `bs_landmark_candidates_status`        | `(*C) → i32`                                         | As `bs_landmark_path_status`                |
+| `bs_landmark_path_search`              | `(*C, search params…) → *H`                          | Search the candidates for a route (fast); `*C` stays valid |
+| `bs_landmark_candidates_free`          | `(*C)`                                               | Free the candidates                         |
 | `bs_landmark_path_status`              | `(*H) → i32`                                         | `LANDMARK_PATH_OK`, `_INVALID_PARAMS`, `_NO_ISLAND`, `_NO_COAST` |
 | `bs_landmark_path_num_stops`           | `(*H) → u32`                                         | Number of stops                             |
 | `bs_landmark_path_stop`                | `(*H, idx, …out pointers…) → i32`                    | Kind, ladder index, bottom, seed, barycentre, bbox, cell count and size, bitmap origin and size |

@@ -1052,21 +1052,33 @@ can find by panning and zooming — the outer shell, then fiords and islands wit
 their shells, ending at the leaf's canonical island with its shells. It never
 touches the encoded bits. The algorithm is great-wall-core's
 (`great-wall-core/DESIGN.md` §"Landmark Path"); this section covers the app and
-the overlay. Not yet implemented: editing and saving a path, and a faster
-search.
+the overlay. Not yet implemented: editing a path, and saving a path or its
+route.
 
 ### App wiring (great-wallet Setup)
 
 - **`Alt+E`** toggles the path on the active board (plain `E` remains the
   in-view canonical-island reveal). It is listed in the F1 manual.
-- The path is computed by the engine in a **worker isolate**
-  (`GreatWallCore.landmarkPath`, `Isolate.run`): about 10 s on a 4-core
-  desktop. The board's point is decoded on the UI isolate first (as for its
+- The engine scans the point's **candidates** in a **worker isolate**
+  (`GreatWallCore.landmarkCandidates`, `Isolate.run`): about 10 s on a 4-core
+  desktop, once per point. The engine keeps them (`LandmarkCandidates`, freed
+  by `dispose`, at once or when its running searches end). Each route is then
+  a search, also in a worker isolate (`LandmarkCandidates.search`, about
+  0.4 s). The board's point is decoded on the UI isolate first (as for its
   island decoration), and the leaf rectangle and path are sent over.
-- Paths are **cached per (stage, slot)** and **dropped, and wiped,** wherever
-  the board's points change: a point placed or re-derived, the required-point
-  count changed, σ changed, or the screen disposed. A computation started
-  before a drop is discarded when it returns. Switching stages keeps them.
+- **Route panel.** While the path is shown, a panel on the right sets the
+  route: *zoom ↔ pan* (ρ), *fewer ↔ more stops* (the exponent), and the
+  *visible stops* before the leaf, the shallowest hidden first. Both route
+  sliders give more stops to the right. Words only: the value lists are the
+  engine's. A new ρ or exponent shows every stop again; the old path stays
+  drawn until the new one arrives. Session only for now: the settings will be
+  saved with the CPNF state.
+- Candidates and paths are **cached per (stage, slot)** and **dropped** (paths
+  wiped, candidates freed) wherever the board's points change: a point placed
+  or re-derived, the required-point count changed, σ changed, or the screen
+  disposed. Routes keep their ρ and exponent, with every stop visible again. A
+  computation started before a drop is discarded when it returns. Switching
+  stages keeps them.
 - **Modes are announced; the path never is.** Toasts say on, off, computing,
   or that a point has no path; no coordinate, count or distance is shown,
   logged or persisted.
