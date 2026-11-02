@@ -595,6 +595,30 @@ Begin background TLP computation
 Imports from great-wall-core (encode/decode for validation) and
 star-clock (TLP encrypt/decrypt/solve).
 
+#### Implemented (library and Setup)
+
+- **Scheduler:** conservative SM-2 (Woźniak 1990) with four-button grading,
+  every number named (`Sm2Params`); honest grading (a hint, a bailout or a
+  lucky guess grades Again); time only through an injected `Clock`.
+- **A card per memorised map** (stage, slot), plus the fact cards (`m`, `N`,
+  `D`, salt, provenance, export salts, reminders). Each map card carries its
+  **landmark cues**: the route (ρ and the exponent, the engine's values) and
+  the stops shown before the leaf ([Landmark Path](#landmark-path-alt-e)).
+  While stops show, attempts are **practice** and leave the schedule
+  untouched; once none shows, they are graded.
+- **Consolidation** (interval ≥ 90 days and ≥ 5 successes in a row) and
+  **reminders** (at least daily, sooner when a graded card falls due).
+- **The deck:** the user adds, removes or swaps maps freely — any `r_i` of a
+  stage's maps give its polynomial — and its progress reports, per stage, the
+  maps held against `r_i`, how many are unaided and how many consolidated.
+  No study order is imposed (UX principle 3).
+- **Saved with the setup:** the deck is a section of the provisional-key file
+  (orbit vault v3), encrypted with the setup. Setup builds it at the first
+  save, a card per placed map; a map whose point changes restarts its card.
+
+Not yet implemented: the review session (Train mode), the graduation gate,
+and the post-graduation bundles.
+
 Design detail for the deck contents and the pre-/post-graduation
 lifecycle ("setup standing on its own legs" — the `CPNF-NNNN` own-legs
 key schedule, RSW-TLP deck encryption, panic button, and outsourced
@@ -771,7 +795,7 @@ puzzles for instant setup of arbitrary, user-defined delay.
 
 ## Guiding UX Principles
 
-Two principles govern the *feel* of every Great Wall surface, app-wide.
+Three principles govern the *feel* of every Great Wall surface, app-wide.
 They are design north-stars, not security claims — but they are
 load-bearing: the product asks the user to trust their own memory with
 their savings, and whether that proposition feels *plausible* is largely
@@ -884,6 +908,17 @@ Two guard-rails so this stays an argument, not a slogan:
 > *Positioning one-liner (tentative):* "Not every newest thing is the next
 > thing. The Metaverse fought the body and broke; we put your keys
 > somewhere only a body can go."
+
+### 3. Free by default
+
+The app enforces only what the threat model shows to be necessary, and even
+then prefers an emphatic warning the user acknowledges over a hard block.
+Everything else is the user's choice: which maps to memorise, in what order,
+together or one after another, swapped for easier ones. The app's job is to
+inform — what has to be memorised, how much is left, and why — not to
+prescribe a path; as in a game with several goals, the player advances each
+as they like. A user who wants to experiment should be able to do so in the
+app, not in a fork.
 
 ---
 
@@ -1052,8 +1087,7 @@ can find by panning and zooming — the outer shell, then fiords and islands wit
 their shells, ending at the leaf's canonical island with its shells. It never
 touches the encoded bits. The algorithm is great-wall-core's
 (`great-wall-core/DESIGN.md` §"Landmark Path"); this section covers the app and
-the overlay. Not yet implemented: editing a path, and saving a path or its
-route.
+the overlay. Not yet implemented: editing a path.
 
 ### App wiring (great-wallet Setup)
 
@@ -1071,14 +1105,16 @@ route.
   *visible stops* before the leaf, the shallowest hidden first. Both route
   sliders give more stops to the right. Words only: the value lists are the
   engine's. A new ρ or exponent shows every stop again; the old path stays
-  drawn until the new one arrives. Session only for now: the settings will be
-  saved with the CPNF state.
+  drawn until the new one arrives. Each map's settings are saved with the
+  setup, as the cues of its card in the CPNF deck
+  ([celestial-peace-nf-core](#4-celestial-peace-nf-core)).
 - Candidates and paths are **cached per (stage, slot)** and **dropped** (paths
   wiped, candidates freed) wherever the board's points change: a point placed
   or re-derived, the required-point count changed, σ changed, or the screen
-  disposed. Routes keep their ρ and exponent, with every stop visible again. A
-  computation started before a drop is discarded when it returns. Switching
-  stages keeps them.
+  disposed. A map whose point changed keeps its route's ρ and exponent with
+  every stop visible again, and its deck card restarts; an excluded stage's
+  maps leave the deck. A computation started before a drop is discarded when
+  it returns. Switching stages keeps them.
 - **Modes are announced; the path never is.** Toasts say on, off, computing,
   or that a point has no path; no coordinate, count or distance is shown,
   logged or persisted.
