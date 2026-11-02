@@ -1133,17 +1133,16 @@ future vault section can save a path as integers only.
 
 `CanvasOverlays.path` draws, over the fractal:
 
-- each stop's feature **highlighted** in translucent white — an island with its
-  shells (and the leaf) by a **count-range flood** over the raster on screen,
-  seeded from its cells, so it stays crisp at every zoom; the outer shell and
-  fiords by their **cells**. A flood that cannot resolve (its counts reach the
-  render cap, or the feature is sub-pixel) falls back to the cells — `Alt+L`
-  deep render lets deep features flood;
+- each stop's feature **highlighted** in translucent white, from its own
+  cells as core computed them: traced once into an **outline** (closed loops,
+  holes included, filled even-odd) and rounded (two Chaikin passes) once a
+  cell spans 4 px. It depends on the cells alone, not on the raster, so it is
+  the same at every pan and zoom;
 - a **line** through the stops' barycentres;
 - the stops **numbered** from 1.
 
-Each stop fills independently, so touching features do not block each other.
-The highlights are re-filled per raster, like the island highlights.
+All stops share one translucent layer, so overlapping features read as one
+highlight.
 
 ---
 

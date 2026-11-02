@@ -44,7 +44,7 @@
 > versioned independently and is currently **`0.3.0`** (`rust_engine/src/lib.rs`).
 > The **landmark path** (*Landmark Path*, a visualisation that never touches the
 > encoded bits) is versioned on its own too: `LANDMARK_PATH_VERSION` is
-> **`0.1.0`** (`rust_engine/src/landmark/mod.rs`).
+> **`0.2.0`** (`rust_engine/src/landmark/mod.rs`).
 
 ## Purpose
 
@@ -976,9 +976,18 @@ For an area of width `w` and height `h`:
   of count `≤ low + SHELLS` around its lowest cells, `low` being its lowest
   count. A feature touching the area's border cells or an excluded feature is
   dropped (it would show as a straight cut).
+- **Reach:** a feature's **island** is its cells at its lowest count. Its shells
+  stay within reach of it: the feature is the island and the cells of the
+  component above reached from the island through cells whose centres lie
+  within `ISLAND_REACH · √(island cells)` cells of the island's barycentre (a
+  disk; exact, in integers). Shells cannot spread far from the island they
+  surround. On the plain test board's ladder areas, 81 of 1,236 features are
+  clipped; the largest feature-to-island ratio falls from 50 to 11, and the
+  typical feature (its island, a thin ring at most) is unchanged.
 - **Enumeration:** seeds on a `SEED_GRID × SEED_GRID` lattice of the area
   (column-major) lead to their pits; features are kept in first-reached order,
-  without duplicates. With none, the lattice doubles while its spacing stays
+  without duplicates, and the `KEEP` largest (by clipped cells; ties in that
+  order) are candidates. With none, the lattice doubles while its spacing stays
   at least one cell. The components of every level are found at once by a
   component tree built with union-find, level by level.
 - **Measures (exact):** cell count `n`, area `n·c²`, barycentre (the mean of
@@ -1012,11 +1021,12 @@ two at the raster's resolution, did not occur.
 The leaf's canonical island has count `n` (cap `ENCODE_MAX_ITER`, flood cap
 `CANONICAL_MAX_FLOOD_POINTS`). The leaf feature is the 4-connected component of
 cells with `MIN_ESCAPE ≤ count < SCAN_MAX_ITER` and `count ≤ n + SHELLS`
-holding the island's points, scanned in a window centred on the island's box,
-reaching `max(box width, box height)` (at least one island cell) each way and
-clipped to the leaf rectangle; the window doubles while the feature touches a
-side where it stops short of the leaf rectangle. If no island point lands on
-such a cell, the leaf feature is the island itself. The search's target `T` is
+holding the island's points, within reach of the island as for any feature
+(`ISLAND_REACH · √(island area)` from its barycentre; the cells holding its
+points always in). It is scanned once, in the square around the barycentre
+holding that disk and the island's box, clipped to the leaf rectangle: nothing
+of it lies outside. If no island point lands on such a cell, the leaf feature
+is the island itself. The search's target `T` is
 computed with nothing excluded; the path's last stop is recomputed with every
 landmark of the path excluded, so the two can differ.
 
@@ -1092,6 +1102,7 @@ back.
 | `LEAF_SHARE` | 1/20 | the ladder stops once the leaf exceeds this share |
 | `KEEP` | 200 | features kept per ladder area |
 | `MIN_CELLS` | 12 | minimum cells across a candidate |
+| `ISLAND_REACH` | 2 | a feature's reach from its island, in `√(island area)` |
 | `RHO` | 1 | cost of zooming against panning |
 | `BADNESS_EXPONENT` | 2 | hop cost exponent |
 | `BADNESS_CHARGE` | 1 | cost per hop |
@@ -1112,8 +1123,8 @@ landmarks.
   the exact floor whatever the seed.
 - Stable sorts; strict `<` keeps the first element on a tie; labels and seeds
   in the orders above.
-- The output is frozen by test vectors (`test_vectors/landmark-v0.1.0/`, a
-  plain and a perturbed board) under `LANDMARK_PATH_VERSION` (`0.1.0`), which
+- The output is frozen by test vectors (`test_vectors/landmark-v0.2.0/`, a
+  plain and a perturbed board) under `LANDMARK_PATH_VERSION` (`0.2.0`), which
   is bumped whenever the path for the same board, leaf and parameters changes.
 
 ### Feature identity
@@ -1211,7 +1222,7 @@ the result is variable-length:
 | `bs_canonical_island_*`                | compute / found / meta / num_points / points / free  | A leaf's canonical island and its flood points |
 | `bs_canonical_island_barycentre`       | `(*H, *Fixed, *Fixed)`                               | The island's barycentre (mean of its points, rounded down) |
 | `bs_canonical_max_flood_points`        | `() → u64`                                           | The island's flood cap (the engine owns it) |
-| `bs_landmark_params`                   | `(*out × 19)`                                        | Default `LandmarkParams`, field by field    |
+| `bs_landmark_params`                   | `(*out × 21)`                                        | Default `LandmarkParams`, field by field    |
 | `bs_landmark_path_version`             | `(*buf, len) → u32`                                  | `LANDMARK_PATH_VERSION`                     |
 | `bs_landmark_rho_choices`              | `(*num, *den, cap) → u32`                            | `RHO_CHOICES`; returns their count          |
 | `bs_landmark_exponent_choices`         | `(*out, cap) → u32`                                  | `BADNESS_EXPONENT_CHOICES`; returns their count |
