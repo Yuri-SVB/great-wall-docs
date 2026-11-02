@@ -935,8 +935,8 @@ learned them).
 
   | Context | Its board |
   |---|---|
-  | Main | keyboard layout · save · open · QR templates · volume − / + · show or hide secrets · file path · reset · stage bar |
-  | Setup | salt or key label · profile · steps `D` · calibrate · new random point · import words · import hex · place by click · exclude stage · halt · copy key · copy digest |
+  | Main | keyboard layout · save · open · QR templates · volume − / + · show or hide secrets · file path · reset |
+  | Setup | salt or key label · profile · steps `D` · calibrate · system random · Dragon Dice · import hex · place by click · exclude stage · halt · copy key · copy digest |
   | Path | previous / next stop · ρ toward zoom / pan · numbers · lines · exponent − / + · path on/off · frame the path · stops − / + |
   | View | reveal islands · deep render · auto brightness · brighter / darker · more / fewer shades · hue − / + |
 
@@ -946,19 +946,31 @@ learned them).
   letters printed on the buttons: QWERTY, AZERTY, QWERTZ, Dvorak or Colemak.
   The default is set at build time (`--dart-define=KEYBOARD_LAYOUT=azerty`,
   QWERTY if unset), never detected; Main switches it for the session.
-- **Buttons.** An icon and its key's letter; the exponent's two buttons have
-  drawn glyphs, `|◂▸|` (longer hops tolerated: fewer stops) and `▸||◂`
-  (shorter hops: more stops). A command not available now stays in place,
-  greyed; a toggle that is on is lit. Stepping commands (volume, brightness,
+- **Buttons.** An icon and its key's letter; some have drawn glyphs: the
+  exponent's `|◂▸|` (longer hops tolerated: fewer stops) and `▸||◂` (shorter
+  hops: more stops), and a d20 for Dragon Dice. A command not available now
+  stays in place, greyed; a toggle that is on is lit. Stepping commands (volume, brightness,
   shades, hue, stops shown) repeat while their key is held.
 - **Explanations.** Hovering or focusing (Tab) a button or a tab shows what
   it does in the log, in place of the log's text; it returns when the
   pointer or focus leaves.
 - **The panel.** The board sits in the bottom panel, flush left; then the
-  context's **pane** — Main the setup file and the engine version, Setup the
-  slot's status, the setup fields, editors and notices, Path the route
-  sliders, View the hue wheel; then the log. **F1** collapses or restores the
-  panel. The board never scrolls; a long pane does.
+  context's **pane**; then the log. A pane holds no list of fields: a field
+  (salt or key label, profile, steps `D`, file path) comes up when its button
+  is pressed and goes on Esc. Main's pane shows the engine version, Setup's
+  the slot's status and notices (an open import editor alone), Path's the
+  route sliders, View's the hue wheel, centred. A confirmation takes the
+  whole log. **F1** collapses or restores the panel together with the stage
+  and slot tabs.
+- **Point entry.** *Dragon Dice* takes rolls of a d20, at least 8 a point
+  (`⌈32 / log₂ 20⌉`), hashed with SHA-512 under a domain tag and cut to the
+  point's 32 bits (an interim encoding, `v0` in its tag). *Import hex* takes
+  8 digits a point. *System random* asks every time, under a warning: the
+  point is only as good as the device's random generator, the app bears no
+  responsibility for it, and Dragon Dice is the safer entropy.
+- **Standard setups only.** Nine fractal slots a stage (keys 1–9; 0 is the
+  salt). `r_0 = 2` and every deeper `r_i = 3`, fixed; a file holding any
+  other count is refused.
 - **Global keys** stay as they were: F1–F5, digits (slots) and Alt+digits
   (stages), Esc, Tab, arrows, scroll and drag. The key dialogs keep their own
   keys.

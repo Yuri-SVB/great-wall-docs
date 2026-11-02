@@ -49,10 +49,9 @@ that the Linux platform is not configured for the project, regenerate it with
 `flutter create --platforms=linux .` from inside `example/`.
 
 In both web and desktop, the example wires `DemoEscapeCountSource` —
-synthetic test data, **not** a fractal — so the colour pipeline, hue wheel,
-and `L`+scroll brightness are visible without the `great-wall-core` FFI
-binding. Hold **L** and scroll to adjust brightness; click the hue wheel to
-rotate the palette.
+synthetic test data, **not** a fractal — so the colour pipeline, hue wheel
+and brightness are visible without the `great-wall-core` FFI binding. The
+brightness buttons step it; click the hue wheel to rotate the palette.
 
 ## Test
 
