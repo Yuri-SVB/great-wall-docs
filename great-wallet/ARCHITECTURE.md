@@ -277,7 +277,7 @@ device while `N` itself stays the durable, reproducible parameter — see the
 [`next-steps/chained-protocol-size-and-ux-roadmap.md`](../next-steps/chained-protocol-size-and-ux-roadmap.md)
 §3. It ships as a calibration dialog:
 
-- **Entry.** `Alt+D` opens a spacious modal; `Esc` (or Cancel) requests
+- **Entry.** *Calibrate* (Setup board) opens a spacious modal; `Esc` (or Cancel) requests
   close and confirms before discarding, so a mis-key never throws away a
   measurement.
 - **On-device benchmark.** Runs Argon2 at the *current* memory profile in a
@@ -922,6 +922,47 @@ app, not in a fork.
 
 ---
 
+## Command Board
+
+Setup is worked from a **command board** at the bottom left, after the
+command cards of 1990s strategy games (Warcraft II): what a 3 × 4 grid of
+buttons does depends on the context, as a unit's commands depend on the
+unit selected (UX principle 2: an instrument, its controls where the hand
+learned them).
+
+- **Contexts.** Four boards, switched with **Alt** and a top-row key: the
+  left thumb on Alt, the four fingers on the context.
+
+  | Context | Its board |
+  |---|---|
+  | Main | keyboard layout · save · open · QR templates · volume − / + · show or hide secrets · file path · reset · stage bar |
+  | Setup | salt or key label · profile · steps `D` · calibrate · new random point · import words · import hex · place by click · exclude stage · halt · copy key · copy digest |
+  | Path | previous / next stop · ρ toward zoom / pan · numbers · lines · exponent − / + · path on/off · frame the path · stops − / + |
+  | View | reveal islands · deep render · auto brightness · brighter / darker · more / fewer shades · hue − / + |
+
+- **Keys by position.** The grid's keys are the 3 × 4 block under the left
+  hand (`Q W E R` / `A S D F` / `Z X C V` on QWERTY), bound by **physical
+  position**, so the board works on any layout. The layout only sets the
+  letters printed on the buttons: QWERTY, AZERTY, QWERTZ, Dvorak or Colemak.
+  The default is set at build time (`--dart-define=KEYBOARD_LAYOUT=azerty`,
+  QWERTY if unset), never detected; Main switches it for the session.
+- **Buttons.** An icon and its key's letter; the exponent's two buttons have
+  drawn glyphs, `|◂▸|` (longer hops tolerated: fewer stops) and `▸||◂`
+  (shorter hops: more stops). A command not available now stays in place,
+  greyed; a toggle that is on is lit. Stepping commands (volume, brightness,
+  shades, hue, stops shown) repeat while their key is held.
+- **Explanations.** Hovering or focusing (Tab) a button or a tab shows what
+  it does in the log, in place of the log's text; it returns when the
+  pointer or focus leaves.
+- **The panel.** The board sits in the bottom panel, flush left; then the
+  context's **pane** — Main the setup file and the engine version, Setup the
+  slot's status, the setup fields, editors and notices, Path the route
+  sliders, View the hue wheel; then the log. **F1** collapses or restores the
+  panel. The board never scrolls; a long pane does.
+- **Global keys** stay as they were: F1–F5, digits (slots) and Alt+digits
+  (stages), Esc, Tab, arrows, scroll and drag. The key dialogs keep their own
+  keys.
+
 ## Canonical-Island Highlighting ("entropy crystals")
 
 A per-stage **visualisation** layer on top of the existing island
@@ -1013,9 +1054,9 @@ without re-running discovery.
   island exactly), and return its escape count, **all** discovery points,
   the `pixel_delta` grid spacing, its bounding box, and pixel count.
 
-### Enumerating every in-view leaf area — the `E` action
+### Enumerating every in-view leaf area — *Reveal islands*
 
-`E` highlights the canonical island of **every leaf area currently in
+*Reveal islands* (View board) highlights the canonical island of **every leaf area currently in
 view** (`great-wall-core/.../leaf_enum.rs`). For a view (origin/step pixel
 grid) the engine samples on an N×N grid (`scan_step`, default every 4 px)
 and classifies each sample by decoding it:
@@ -1056,7 +1097,7 @@ too-many / `2` budget) → `count` → per-leaf `rect` + `path` → `free`.
 
 ### UX wiring (great-wallet Setup; great-wall-ux overlays)
 
-- **`E`** enumerates the in-view leaf areas and highlights **each one's**
+- **Reveal islands** (View board) enumerates the in-view leaf areas and highlights **each one's**
   canonical island (flat-white `CanvasIsland` cells). Feedback: a toast +
   console count, and "too many / too dense — zoom in" on
   `TooMany`/`BudgetExhausted`. Sound cues: *focus* on start; *confirm* /
@@ -1074,12 +1115,12 @@ too-many / `2` budget) → `count` → per-leaf `rect` + `path` → `free`.
 - great-wall-ux overlay additions: `CanvasIsland` (tiled cells),
   `CrossMarker` (fixed pixel size), `SelectionFrame` (padded axis-aligned
   rect). The per-stage island is resolved lazily and **cached per stage**;
-  the `E` scan and per-leaf discoveries are bounded by the budget/cap.
+  the scan and per-leaf discoveries are bounded by the budget/cap.
   Moving the heavy discovery off the UI isolate is a follow-up.
 
 ---
 
-## Landmark Path (`Alt+E`)
+## Landmark Path (Path board)
 
 A second visualisation layer: the **landmark path** of a board's point, a
 tour from the whole fractal down to the point's leaf through landmarks a user
@@ -1091,8 +1132,9 @@ the overlay. Not yet implemented: editing a path.
 
 ### App wiring (great-wallet Setup)
 
-- **`Alt+E`** toggles the path on the active board (plain `E` remains the
-  in-view canonical-island reveal). It is listed in the F1 manual.
+- The **Path board** ([Command Board](#command-board)) works it: the path on
+  or off, the route, the stops shown, the numbers and the line, and flights
+  from stop to stop.
 - The engine scans the point's **candidates** in a **worker isolate**
   (`GreatWallCore.landmarkCandidates`, `Isolate.run`): about 10 s on a 4-core
   desktop, once per point. The engine keeps them (`LandmarkCandidates`, freed
@@ -1100,11 +1142,11 @@ the overlay. Not yet implemented: editing a path.
   a search, also in a worker isolate (`LandmarkCandidates.search`, about
   0.4 s). The board's point is decoded on the UI isolate first (as for its
   island decoration), and the leaf rectangle and path are sent over.
-- **Route panel.** While the path is shown, a panel on the right sets the
-  route: *zoom ↔ pan* (ρ), *fewer ↔ more stops* (the exponent), and the
-  *visible stops* before the leaf, the shallowest hidden first. Both route
-  sliders give more stops to the right. Words only: the value lists are the
-  engine's. A new ρ or exponent shows every stop again; the old path stays
+- **Route.** While the path is shown, the Path board's buttons and its pane's
+  sliders set the route: *zoom ↔ pan* (ρ), *fewer ↔ more stops* (the
+  exponent), and the *visible stops* before the leaf, the shallowest hidden
+  first. Both route sliders give more stops to the right; the buttons mirror
+  them, row for row. Words only: the value lists are the engine's. A new ρ or exponent shows every stop again; the old path stays
   drawn until the new one arrives. Each map's settings are saved with the
   setup, as the cues of its card in the CPNF deck
   ([celestial-peace-nf-core](#4-celestial-peace-nf-core)).
@@ -1115,6 +1157,11 @@ the overlay. Not yet implemented: editing a path.
   every stop visible again, and its deck card restarts; an excluded stage's
   maps leave the deck. A computation started before a drop is discarded when
   it returns. Switching stages keeps them.
+- **Flights.** *Previous* / *next stop* fly to each stop shown in turn
+  (wrapping), and *frame the path* to the view holding them all, along van
+  Wijk & Nuij's optimal pan-and-zoom (2003): zooming out, across and back in,
+  the metric the hops are measured in, at a constant speed (0.35 to 3 s). Any
+  pointer input on the map stops a flight.
 - **Modes are announced; the path never is.** Toasts say on, off, computing,
   or that a point has no path; no coordinate, count or distance is shown,
   logged or persisted.
@@ -1140,6 +1187,9 @@ future vault section can save a path as integers only.
   the same at every pan and zoom;
 - a **line** through the stops' barycentres;
 - the stops **numbered** from 1.
+
+The line and the numbered markers can each be hidden (`showLine`,
+`showNumbers`); the highlights always show.
 
 All stops share one translucent layer, so overlapping features read as one
 highlight.
