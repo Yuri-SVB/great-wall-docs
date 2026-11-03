@@ -88,8 +88,11 @@ internal module layout.
 - **UI sound cues.** Short, synthesised audio blips (click on tap, plus
   select / confirm / deny outcomes) for tactile, "game-like" feedback,
   exposed as a muteable `SoundBoard` primitive the app wires to interaction
-  outcomes. Cues are display-only feedback: they carry no coordinate data
-  and are never logged or persisted.
+  outcomes. Cues are played by name through a soft-coded, plain-text cue map
+  (`SoundCueMap`: name → file, loudness, minimum gap between repeats; a name
+  falls back to its dotted parent), which an app can replace at run time
+  with files of its own. Cues are display-only feedback: they carry no
+  coordinate data, never depend on secret content, and are never logged.
 - Practice-session UX primitives reusable by `celestial-peace-nf-core`'s
   training flow (point-by-point confirm, hesitation timing surface, grade
   picker chrome).
