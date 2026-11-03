@@ -979,6 +979,18 @@ learned them).
 - **Global keys** stay as they were: F1–F5, digits (slots) and Alt+digits
   (stages), Esc, Tab, arrows, scroll and drag. The key dialogs keep their own
   keys.
+- **Sound cues, swappable at run time.** Every cue plays by name through a
+  plain-text cue map in a folder (`GREAT_WALL_SOUNDS`, else `sound_cues` in
+  the app's data folder). A first run writes `cues.txt` there: every built-in
+  cue, the app's own defaults, and every cue name the app plays, commented
+  out. Saving the map or dropping a sound file in the folder reloads the
+  cues; bad lines and missing files are reported in the log. The names: the
+  press and hover of each board button (`press.setup.dice`), tab and other
+  button; `alert.*`; `dialog.open.*` / `dialog.close.*`; `key.f1`–`key.f5`;
+  `zoom.in` / `zoom.out` when scrolling. A name without its own line falls
+  back to its dotted parent, down to `press`, `hover`, `alert` and so on;
+  hover and zoom are quieter and rate-limited. The placeholders reuse the
+  existing sounds.
 
 ## Canonical-Island Highlighting ("entropy crystals")
 
