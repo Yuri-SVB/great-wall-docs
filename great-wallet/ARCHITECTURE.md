@@ -28,6 +28,7 @@ inheritance.
 | 6 | **mountain-dynasty**        | Dynastic succession        | Inheritance protocol (LN + taproot)       | In development  |
 | 7 | **namtso-core**             | Namtso, the sacred lake    | Timechain salt from block headers         | In development  |
 | 8 | **great-wallet**            | Wall + wallet (pun)        | Unified end-user app                      | In development  |
+| 9 | **dragon-dice**             | Dragon Ball's dragon       | Auditable dice entropy, Bayesian estimate | In development  |
 
 Only `great-wall-core` is currently public. Everything marked
 *In development* is non-public work-in-progress and may change
@@ -75,8 +76,9 @@ celestial-peace-nf-core  (no submodules)
 flying-turtle            (no submodules)
 mountain-dynasty         (no submodules)
 namtso-core              (no submodules)
+dragon-dice              (no submodules)
 
-great-wallet             (seven submodules, flat, plus its own app/ source tree —
+great-wallet             (eight submodules, flat, plus its own app/ source tree —
                           the only repo with submodules)
   great-wall-core/            <- submodule
   star-clock/                 <- submodule
@@ -85,6 +87,7 @@ great-wallet             (seven submodules, flat, plus its own app/ source tree 
   flying-turtle/              <- submodule
   mountain-dynasty/           <- submodule
   namtso-core/                <- submodule
+  dragon-dice/                <- submodule
   app/                      (not a submodule: great-wallet's own UI / orchestration)
 ```
 
@@ -97,7 +100,7 @@ great-wallet             (seven submodules, flat, plus its own app/ source tree 
 3. **Version pinning is the app's responsibility.** great-wallet pins
    each library to a specific commit hash. Libraries declare
    dependencies on each other at the import/build level, but
-   great-wallet ensures all seven are at compatible versions.
+   great-wallet ensures all eight are at compatible versions.
 4. **Libraries may depend on each other at the API level** (e.g.,
    great-wall-ux imports from great-wall-core, celestial-peace-nf-core
    imports from star-clock) but never via submodules — the consuming app
@@ -116,6 +119,7 @@ Which libraries does each library import from?
 | flying-turtle            | star-clock                            |
 | mountain-dynasty         | star-clock                            |
 | namtso-core              | (none)                                |
+| dragon-dice              | (none)                                |
 
 ---
 
@@ -716,11 +720,11 @@ argument are written up in
 
 **Status:** In development.
 
-**The unified end-user application.** Integrates all seven libraries
+**The unified end-user application.** Integrates all eight libraries
 into a single app with four modes that flow naturally:
 
 1. **Setup** — encode seed on fractal
-   (great-wall-core + great-wall-ux)
+   (great-wall-core + great-wall-ux; dragon-dice for points by dice)
 2. **Train** — spaced repetition with TLP-gated practice
    (celestial-peace-nf-core + star-clock + great-wall-ux)
 3. **Accelerate** — outsource TLP solving via Lightning Network
@@ -731,7 +735,7 @@ into a single app with four modes that flow naturally:
    fallback for cascading inheritance)
    (mountain-dynasty + star-clock + flying-turtle)
 
-This is the only repo with submodules (all seven libraries, flat).
+This is the only repo with submodules (all eight libraries, flat).
 
 ```
 great-wallet/
@@ -742,8 +746,31 @@ great-wallet/
   flying-turtle/              <- submodule
   mountain-dynasty/           <- submodule
   namtso-core/                <- submodule
+  dragon-dice/                <- submodule
   app/                        Unified UI and orchestration (not a submodule)
 ```
+
+### 9. dragon-dice
+
+**Status:** In development.
+
+**Entropy from real dice that anyone can audit.** The rolls of one or
+more physical dice — D2 (a coin), D4, D6, D8, D10, D12, D20, or any
+custom die in advanced mode — become a canonical JSON (keys sorted, no
+whitespace, dice in the order started) whose SHA-512 is the secret, so a
+digest can be checked with `sha512sum`. From the digest: a BIP39
+mnemonic, or any number of bits (Great Wall: a map's 32-bit point).
+
+A Bayesian estimate says how much entropy the rolls carry if the dice
+may be biased: per die a symmetric Dirichlet prior and its posterior
+after the rolls, min-entropy (or Shannon), by Monte Carlo. The vanilla
+flow assumes fair dice; advanced mode rolls until the chance of falling
+short of the target is under a bound.
+
+Pure Dart: the engine and a terminal app, a Flutter wizard any app
+embeds, and a standalone desktop app. No library dependencies; the
+format is pinned by frozen vectors. Its own documentation (format,
+advanced mode) lives in the repository's `doc/`.
 
 ---
 
@@ -967,10 +994,12 @@ learned them).
   together with the stage and slot tabs.
 - **Halt and resume.** Halt stops the advance between stages after asking;
   the passes done are kept, and the same key then resumes it.
-- **Point entry.** *Dragon Dice* takes rolls of a d20, at least 8 a point
-  (`⌈32 / log₂ 20⌉`), hashed with SHA-512 under a domain tag and cut to the
-  point's 32 bits (an interim encoding, `v0` in its tag). *Import hex* takes
-  8 digits a point. *System random* asks every time, under a warning: the
+- **Point entry.** *Dragon Dice* opens the dragon-dice wizard, targeting
+  the point's 32 bits: add dice, type their rolls, finish once they carry
+  32 bits if fair (or, in advanced mode, once the chance of falling short
+  is under the bound). The point is the first 32 bits of the SHA-512 of
+  the rolls' canonical JSON (§"9. dragon-dice"). *Import hex* takes 8
+  digits a point. *System random* asks every time, under a warning: the
   point is only as good as the device's random generator, the app bears no
   responsibility for it, and Dragon Dice is the safer entropy.
 - **Standard orbit setups only.** Nine fractal slots a stage (keys 1–9; 0 is
