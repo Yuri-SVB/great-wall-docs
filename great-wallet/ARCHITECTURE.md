@@ -759,18 +759,29 @@ more physical dice — D2 (a coin), D4, D6, D8, D10, D12, D20, or any
 custom die in advanced mode — become a canonical JSON (keys sorted, no
 whitespace, dice in the order started) whose SHA-512 is the secret, so a
 digest can be checked with `sha512sum`. From the digest: a BIP39
-mnemonic, or any number of bits (Great Wall: a map's 32-bit point).
+mnemonic, or any number of bits (Great Wall: a map's 32-bit point, from
+rolls carrying 40 bits, as a digest cut to 32 bits loses some and 32-bit
+outputs can be tabulated).
+
+Captures of the mouse, the accelerometer and the camera can be mixed in;
+only their SHA-512 enters the JSON, beside the dice. Each is credited by
+NIST SP 800-90B's most-common-value estimate and counts toward the
+target. The system's randomness (1 KiB) can be mixed in too, as a
+backup that is never counted.
 
 A Bayesian estimate says how much entropy the rolls carry if the dice
 may be biased: per die a symmetric Dirichlet prior and its posterior
-after the rolls, min-entropy (or Shannon), by Monte Carlo. The vanilla
-flow assumes fair dice; advanced mode rolls until the chance of falling
-short of the target is under a bound.
+after the rolls, min-entropy (or Shannon), by Monte Carlo integration
+with a fixed-seed pseudorandom generator (xoshiro256**), never the
+system's. The vanilla flow assumes fair dice; advanced mode rolls until
+the chance of falling short of the target is under a bound. Its curves
+show the rolls' spread, so it asks for a private screen first.
 
 Pure Dart: the engine and a terminal app, a Flutter wizard any app
-embeds, and a standalone desktop app. No library dependencies; the
-format is pinned by frozen vectors. Its own documentation (format,
-advanced mode) lives in the repository's `doc/`.
+embeds, and a standalone desktop app. The engine's one dependency is
+`crypto`; the wizard's sources use `sensors_plus` and `flutter_webrtc`.
+The format is pinned by frozen vectors. Its own documentation (format,
+advanced mode, sources) lives in the repository's `doc/`.
 
 ---
 
@@ -995,10 +1006,12 @@ learned them).
 - **Halt and resume.** Halt stops the advance between stages after asking;
   the passes done are kept, and the same key then resumes it.
 - **Point entry.** *Dragon Dice* opens the dragon-dice wizard, targeting
-  the point's 32 bits: add dice, type their rolls, finish once they carry
-  32 bits if fair (or, in advanced mode, once the chance of falling short
-  is under the bound). The point is the first 32 bits of the SHA-512 of
-  the rolls' canonical JSON (§"9. dragon-dice"). *Import hex* takes 8
+  40 bits for the point's 32 (8 to spare, for cutting the digest): add
+  dice, type their rolls, mix in the mouse or camera if you like, and
+  finish once they carry 40 bits if fair (or, in advanced mode, once the
+  chance of falling short is under the bound). The system's randomness is
+  mixed in by default, uncounted. The point is the first 32 bits of the
+  SHA-512 of the rolls' canonical JSON (§"9. dragon-dice"). *Import hex* takes 8
   digits a point. *System random* asks every time, under a warning: the
   point is only as good as the device's random generator, the app bears no
   responsibility for it, and Dragon Dice is the safer entropy.
