@@ -767,9 +767,10 @@ outputs can be tabulated).
 
 Captures of the mouse, the accelerometer and the camera can be mixed in;
 only their SHA-512 enters the JSON, beside the dice. Each counts toward
-the target at most 1 bit per reading (a move, a sample, a frame; one per
-10 ms), less when NIST SP 800-90B's most-common-value estimate finds the
-readings predictable from the moves before. The system's randomness (1 KiB) can be mixed in too, as a
+the target at most 1 bit per reading (a move, a sample, a frame), counted
+at most once per 33 ms and only after a real move (8 px for the mouse),
+less when NIST SP 800-90B's most-common-value estimate finds the readings
+predictable from the moves before. The system's randomness (1 KiB) can be mixed in too, as a
 backup that is never counted.
 
 A Bayesian estimate says how much entropy the rolls carry if the dice
