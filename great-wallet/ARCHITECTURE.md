@@ -495,7 +495,9 @@ the consuming app provides both.
 
 ### 4. celestial-peace-nf-core
 
-**Status:** In development.
+**Status:** In development. Before graduation, built: the scheduler, a card
+per memorised map with its landmark cues, the deck saved with the setup,
+and the wallet's Train mode (§"Command Board", *Train mode*).
 
 **Spaced-repetition training logic.** Implements the "Celestial Peace:
 Never Forget" training system that helps users consolidate tacit memory
@@ -975,6 +977,7 @@ learned them).
   |---|---|
   | Main | keyboard layout · save · open · QR templates · volume − / + · show or hide secrets · file path · reset |
   | Setup | key label · profile · steps `D` · calibrate · system random · Dragon Dice · import hex · place by click · exclude stage · halt / resume · copy key · copy digest |
+  | Train (in Setup's place, F3) | next due map · recall · show the answer · progress · Again · Hard · Good · Easy · save progress |
   | Path | previous / next stop · ρ toward zoom / pan · numbers · lines · exponent − / + · path on/off · frame the path · stops − / + |
   | View | reveal islands · deep render · auto brightness · brighter / darker · more / fewer shades · hue − / + |
 
@@ -1021,6 +1024,19 @@ learned them).
 - **Global keys** stay as they were: F1–F5, digits (slots) and Alt+digits
   (stages), Esc, Tab, arrows, scroll and drag. The key dialogs keep their own
   keys.
+- **Train mode (F3).** The open setup's maps are recalled on the same
+  screen; F2 returns to Setup. Any map, in any order; *next due map* goes
+  to the longest-due. While a map is recalled, its point, its island
+  highlight and the leaf's landmark stop are hidden; the stops before it
+  show as its card sets them. *Recall* arms a click: the leaf clicked is
+  the answer. A hit on a graded map waits for the user's grade (Hard, Good,
+  Easy, or Again if it was luck or came after giving up); a miss is graded
+  Again and shows the answer; showing it first is giving up. An attempt is
+  graded only with no stop shown, when the map is due, with no route change
+  during it and once a session; otherwise it is practice and leaves the
+  schedule alone. Revealing the islands during a graded attempt turns a
+  find into Again. *Save progress* writes the deck into the setup file
+  under the key that opened it, after checking that key opens it.
 - **Sound cues, swappable at run time.** Every cue plays by name through a
   plain-text cue map in a folder (`GREAT_WALL_SOUNDS`, else `sound_cues` in
   the app's data folder). A first run writes `cues.txt` there: every built-in
