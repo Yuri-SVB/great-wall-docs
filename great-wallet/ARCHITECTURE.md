@@ -623,9 +623,11 @@ star-clock (TLP encrypt/decrypt/solve).
 - **Graduation gate** (`graduationGates`): a stage passes when the chance of
   recalling fewer than `r_i` of its nine maps after a gap `T` is at most `ε`
   (a Poisson binomial over the maps' `R(T)`; a map not yet graded counts 0).
-  `ε` is 0.01% by default (`GraduationParams`); the app sets `T`.
+  `ε` is 0.01% by default (`GraduationParams`); the app sets `T`, and counts
+  only the maps you study.
 - **Fact cards:** the salt's and the setup's parameters `m`, `D` and `N`
-  (always on), the supply chain's (optional) and the user's own
+  (always on), each stage's selection once its studied maps are set
+  (`maps:<i>`), the supply chain's (optional) and the user's own
   (`misc:<n>`).
 - **Consolidation** (interval ≥ 90 days and ≥ 5 successes in a row) and
   **reminders** (at least daily, sooner when a graded card falls due). The
@@ -1106,20 +1108,32 @@ learned them).
     point it is, informative only. The setup's parameters are recalled as
     for a hard reset: the memory profile `m` picked from the three, the
     derivation steps per stage `D` and the deep stages `N` typed, each
-    compared with the setup's. The supply chain's card (on or off in
-    *Cards*) sits in a third row of tabs, opened by click: after cloning,
-    building and running the release anew, paste its commit digest and
-    confirm it; without the confirmation, or in a build made without
-    `app/tool/build.sh`, only Again can be scored. The user's own cards are a prompt and an answer,
-    matched ignoring case and extra spaces; at most 64, of 256 characters
-    each. Main's *cards* adds and removes them.
+    compared with the setup's. Each stage's *selection* card asks which of
+    its nine maps you study, ticked from memory and matched as a set: two
+    maps can look alike, and knowing which are yours keeps you from trying
+    the wrong one. The supply chain's card (on or off in *Cards*): after
+    cloning, building and running the release anew, paste its commit digest
+    and confirm it; without the confirmation, or in a build made without
+    `app/tool/build.sh`, only Again can be scored. The user's own cards are a
+    prompt and an answer, matched ignoring case and extra spaces; at most
+    64, of 256 characters each. Main's *cards* adds and removes them, sets
+    the supply chain's on or off, and ticks the maps you study per stage
+    (prefilled with the maps you graded).
+  - **The third row of tabs** (Train), under the stage and map tabs, opens
+    by click the cards without a map: `m`, `D`, `N`, the active stage's
+    selection (once set) and the supply chain's (when on).
   - **Card stats** (Main, in Train). Every card, ↑ ↓ to pick one: its state,
     interval, ease, successes in a row, lapses, last review, due date, the
     chance of recalling it now, and whether it is consolidated; and its
     forgetting curve from the last review, *due* and *now* marked.
   - **Graduation** (Train). Each stage at the gate: the chance of recalling
-    fewer than `r_i` of its maps after the gap `T`, against `ε` (0.01% by
-    default). `T` is the user's, in days; unset, it is the time a derivation
+    fewer than `r_i` of the maps you study after the gap `T`, against `ε`
+    (0.01% by default); a stage with no maps set as studied does not pass.
+    Each fact — the salt, `m`, `D`, `N` and every stage's selection — must
+    also hold for `T`: its chance of recall after `T` at 90% (`r*`) or more.
+    A fact is a single answer with no forgiveness, so `ε` cannot apply to
+    it: a 1 − 0.01% chance after a week would take an interval of decades.
+    `T` is the user's, in days; unset, it is the time a derivation
     of the deep stages takes (stages × `D` × the time a pass takes, measured
     by calibration and by real passes, reset when the profile changes),
     else a week. A `T` below the derivation time is asked about
