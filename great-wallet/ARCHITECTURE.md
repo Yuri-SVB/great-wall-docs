@@ -784,7 +784,8 @@ formats do not open.
 **Stage 0's bundle.** Written when the provisional key is retired, next to the
 setup file (`<setup file>.stage0`): σ and the records of stage 0's cards,
 under stage 0's polynomial `Sh₀` hardened by `D` Argon2d passes at profile `m`
-(the bundle's own: `m` defaults to the setup's, `D` to about two minutes).
+(the bundle's own: `m` defaults to Basic, so the clear part shows nothing of
+the setup's profile, and `D` to about two minutes).
 In the clear: `m`, `D`, a random salt and θ₀, stage 0's map parameters, so its
 maps render without σ, and a user who forgot σ recalls two maps and gets it
 back. The clear part is the encryption's associated data, and the plaintext
