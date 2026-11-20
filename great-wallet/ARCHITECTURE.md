@@ -781,6 +781,20 @@ show when it was used. The threat: a leaked file that is not deciphered must
 not tell an attacker when its owner will next open it. Files in the older
 formats do not open.
 
+**Stage 0's bundle.** Written when the provisional key is retired, next to the
+setup file (`<setup file>.stage0`): σ and the records of stage 0's cards,
+under stage 0's polynomial `Sh₀` hardened by `D` Argon2d passes at profile `m`
+(the bundle's own: `m` defaults to the setup's, `D` to about two minutes).
+In the clear: `m`, `D`, a random salt and θ₀, stage 0's map parameters, so its
+maps render without σ, and a user who forgot σ recalls two maps and gets it
+back. The clear part is the encryption's associated data, and the plaintext
+is padded to a fixed 16 KiB. Stage 0 is lost to any wrench attack anyway;
+the hardening keeps a stolen copy from being a cheap oracle for its points,
+each guess costing the whole derivation. θ₀ gives σ away to whoever holds
+the bundle (σ comes from a date, and θ₀ checks a guess cheaply); the threat
+model counts σ public. The salt keeps one guess from testing every bundle of
+setups harvested on the same date.
+
 **Launch.** `great_wallet [path]`: the path names the setup file, which
 Save and Open then start from, and the log says to open it to see what is
 due. The app schedules no reminders: launched at login with the path, it is
@@ -1138,9 +1152,10 @@ learned them).
     by calibration and by real passes, reset when the profile changes),
     else a week. A `T` below the derivation time is asked about
     first: reviewing sooner than a derivation takes needs two or more setups
-    in turn. When every stage passes: the green light to shred the
-    provisional key, with a way to the wipe. *Progress* writes each stage's
-    gate in the log.
+    in turn. When every stage passes and every fact holds: the green light
+    to shred the provisional key. *Retire the provisional key* then seals
+    stage 0's bundle (§"8. great-wallet") and leads to the wipe. *Progress*
+    writes each stage's gate in the log.
   - *Save progress* writes the deck into the setup file under the key that
     opened it, after checking that key opens it.
 - **Sound cues, swappable at run time.** Every cue plays by name through a
