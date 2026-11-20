@@ -126,7 +126,7 @@ speed*; and it's chained, so stage *k+1* can't even begin before stage *k*'s
 point is fixed. The wall-clock cost compounds. We unpack the design choices
 conceptually: **stage 0** as salt (a label that forks whole wallets) or pepper
 (stack on a prior secret); why **`p=1`**, **`t=2`**, **Argon2d**; and "**no
-public fractal**." Plus the durable-parameter idea: `N` (iterations) is what you
+public fractal**." Plus the durable-parameter idea: `D` (iterations) is what you
 remember; "hours" is just a perishable label on it.
 
 **Methodology.** Make the delay *visceral*: run a (small) calibration live, watch
@@ -134,7 +134,7 @@ RAM fill, feel the seconds. Discuss the checkpoint trade-off (and why "save
 intermediate" is off by default and your responsibility to shred).
 
 - Outcomes: explain memory-hardness and chaining in plain words; justify
-  `p=1`/`t=2`/Argon2d at a high level; explain salt vs. pepper; explain why `N`
+  `p=1`/`t=2`/Argon2d at a high level; explain salt vs. pepper; explain why `D`
   (not wall-clock) is the thing to remember.
 - Prep: textbook Ch. 4.
 - Hands-on: calibrate a short delay on your device; try a nearby iteration count

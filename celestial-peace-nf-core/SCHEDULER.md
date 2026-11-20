@@ -17,7 +17,7 @@ Per `next-steps/cpnf-step1-scheduler.md`:
 | `Grade`, `CardKind`, `MemCard`, `ReviewQueue` | The card model — point cards and fact cards |
 | `MemSchedule` | Conservative SM-2 scheduling |
 | `honestGrade` | Forces a grade to reflect memory rather than outcome |
-| `buildDeck` | The card set for a setup: N point cards plus fact cards |
+| `buildDeck` | The card set for a setup: a point card per map, plus fact cards |
 
 **A card holds only SM-2 schedule state.** A point's answer stays in the
 encrypted setup and is read solely to *validate* a recall attempt — the deck is
@@ -42,7 +42,9 @@ retention under pressure, is the failure that matters.
 ## Not in Step 1
 
 The review-session flow, encryption-at-rest, and the TLP-gated / graduation /
-inheritance lifecycle. See `cpnf-lifecycle-and-deck.md`.
+inheritance lifecycle. See `cpnf-lifecycle-and-deck.md`. Built since: the
+review rules (`ReviewSession`), the forgetting curve and the graduation gate
+(`graduationGates`) — see `../great-wallet/ARCHITECTURE.md` §4, *Implemented*.
 
 ## Testing and consumption
 

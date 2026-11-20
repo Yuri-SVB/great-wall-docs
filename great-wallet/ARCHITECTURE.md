@@ -209,7 +209,7 @@ other primitive:
    payment. The TLP-gated ciphertext — the vault itself — never
    leaves the user's device. What the marketplace receives is only
    the TLP *setup*: the operand to be repeatedly squared and the
-   RSW modulus `N`. It returns the raw solution and learns nothing
+   RSW modulus `n`. It returns the raw solution and learns nothing
    about what that solution unlocks (or about the user's identity).
    The user gets time back without giving up custody.
 
@@ -222,7 +222,7 @@ other primitive:
    never shared with the solver. The client checks them offline
    after the solver returns. If a milestone disagrees with the
    delivered result, the client has self-contained evidence of the
-   discrepancy — the original request `(N, x, t)`, the expected
+   discrepancy — the original request `(n, x, t)`, the expected
    milestone digest, and the obtained result — which it presents
    to an arbiter to adjudicate whether the solver cheated,
    whether the client is repudiating honest work, or whether a
@@ -271,12 +271,12 @@ of stage-1 bits could just re-derive via Argon2 in less time —
 while inheritance and acceleration use TLPs on their own independent
 schedules (see the *Inheritance Protocol* section).
 
-**Implementation — on-device calibration of `N`.** The GUI calibrates the
-iteration count `N` **per setup, on the user's own device**, rather than
+**Implementation — on-device calibration of `D`.** The GUI calibrates the
+iteration count `D` **per setup, on the user's own device**, rather than
 shipping a hard-coded value: the user picks a target wall-clock duration,
 the app micro-benchmarks Argon2 at the selected memory profile, and solves
-for the `N` that hits the target. This keeps the time→`N` mapping fresh per
-device while `N` itself stays the durable, reproducible parameter — see the
+for the `D` that hits the target. This keeps the time→`D` mapping fresh per
+device while `D` itself stays the durable, reproducible parameter — see the
 *"time is a perishable label on a durable parameter"* framing in
 [`next-steps/chained-protocol-size-and-ux-roadmap.md`](../next-steps/chained-protocol-size-and-ux-roadmap.md)
 §3. It ships as a calibration dialog:
@@ -285,18 +285,18 @@ device while `N` itself stays the durable, reproducible parameter — see the
   close and confirms before discarding, so a mis-key never throws away a
   measurement.
 - **On-device benchmark.** Runs Argon2 at the *current* memory profile in a
-  **worker isolate** (the UI stays responsive), timing **1 warm-up pass + a
-  median of N timed passes** (default 3). The median — not the mean — is the
+  **worker isolate** (the UI stays responsive), timing **1 warm-up pass + the
+  median of a few timed passes** (3 by default). The median — not the mean — is the
   estimator, so a single scheduler hiccup can't skew the result. The run is
   **cancellable**: Run↔Stop, and closing mid-run kills the isolate.
 - **Progress + ETA.** A determinate progress bar reports `Measuring k / n…`
   with a live **estimated time remaining** (elapsed time over completed
   passes), because a default user has no prior expectation of how long a
   profile takes.
-- **Target → N.** The user picks a **target wall-clock** from presets
+- **Target → D.** The user picks a **target wall-clock** from presets
   grounded in the two calibration points above (and
   `great-wallet/THREAT_MODEL.md`), and the dialog solves
-  `N = ceil(target_per_stage × margin ÷ seconds_per_pass)`. A **per-stage
+  `D = ceil(target_per_stage × margin ÷ seconds_per_pass)`. A **per-stage
   vs all-stages** scope toggle (with a stage-count input) disambiguates
   whether the target is one inter-stage derivation or the whole chain.
 - **KISS + safety margin.** A **default ×2 safety margin** bakes in the
@@ -305,7 +305,7 @@ device while `N` itself stays the durable, reproducible parameter — see the
   everything else (pass count, margin, scope internals) hides behind an
   **Advanced** expander captioned *"if you don't know what these mean, leave
   them unchanged."*
-- **Apply.** Writes the solved `N` into the setup's iteration field; the CLI
+- **Apply.** Writes the solved `D` into the setup's iteration field; the CLI
   `--iterations` reference path is unchanged.
 
 ### Determinism guarantees
@@ -495,7 +495,10 @@ the consuming app provides both.
 
 ### 4. celestial-peace-nf-core
 
-**Status:** In development.
+**Status:** In development. Before graduation, built: the scheduler, a card
+per map with its landmark cues, fact cards, the review rules, the forgetting
+curve, the graduation gate, the deck saved with the setup, and the wallet's
+Train mode (§"Command Board", *Train mode*).
 
 **Spaced-repetition training logic.** Implements the "Celestial Peace:
 Never Forget" training system that helps users consolidate tacit memory
@@ -508,18 +511,19 @@ Responsibilities:
   scheduler state)
 - Vault encryption/decryption (via star-clock)
 - Background TLP solver management with checkpointing
-- **Explicit-recall training of the derivation parameters `N` (Argon2
-  iteration count) and `m` (memory profile)**, so a *hard recovery* (device /
-  setup lost) goes smoothly. Unlike the fractal locations — which must stay
-  *tacit* (recognition only) to remain coercion-resistant — `N` and `m` are
+- **Explicit-recall training of the derivation parameters `m` (memory
+  profile), `D` (Argon2 iterations per stage) and `N` (deep stages)**, so a
+  *hard recovery* (device / setup lost) goes smoothly. Unlike the fractal
+  locations — which must stay *tacit* (recognition only) to remain
+  coercion-resistant — `m`, `D` and `N` are
   derivation **parameters, not the secret**: an adversary who learns them still
   has no points, so drilling them as explicit facts does **not** weaken
   coercion-resistance of the seed. Note the asymmetry: `m` must be recalled
   *exactly* (a wrong profile changes the Argon2 digest and breaks every derived
-  fractal), whereas `N` needs only *approximate* recall — checkpoint
+  fractal), whereas `D` needs only *approximate* recall — checkpoint
   trial-and-error and stored, recognizable intermediate results close the gap
   (see `great-wall-core` DESIGN / next-steps). This complements the existing
-  mitigations for a forgotten `N`.
+  mitigations for a forgotten `D`.
 
 #### Core Concept
 
@@ -551,7 +555,8 @@ Key properties:
   externally across the consolidation window and destroyed at
   graduation, after which the setup self-secures (its own entropy gates
   its own TLP). A first version is **implemented** in the app's Setup
-  mode: the setup is encrypted to a file (AES-256-GCM keyed by Argon2id)
+  mode: the setup is encrypted to a file (AES-256-GCM keyed by Argon2id;
+  random-looking bytes of a random size, §"8. great-wallet")
   and the compact 128- or 256-bit key is carried as a hand-coloured
   byte-mode QR, a blind-copied hex string for a password manager, or the
   user's own entropy — never persisted as a durable digital artifact. See
@@ -604,24 +609,39 @@ star-clock (TLP encrypt/decrypt/solve).
 - **Scheduler:** conservative SM-2 (Woźniak 1990) with four-button grading,
   every number named (`Sm2Params`); honest grading (a hint, a bailout or a
   lucky guess grades Again); time only through an injected `Clock`.
-- **A card per memorised map** (stage, slot), plus the fact cards (`m`, `N`,
-  `D`, salt, provenance, export salts, reminders). Each map card carries its
-  **landmark cues**: the route (ρ and the exponent, the engine's values) and
-  the stops shown before the leaf ([Landmark Path](#landmark-path-alt-e)).
-  While stops show, attempts are **practice** and leave the schedule
-  untouched; once none shows, they are graded.
+- **A card per map** (stage, slot): all nine of a stage, placed or derived,
+  so any map can be trained. Each carries its **landmark cues**: the route
+  (ρ and the exponent, the engine's values) and the stops before the leaf
+  that count as targets ([Landmark Path](#landmark-path-alt-e)).
+- **Review rules** (`ReviewSession`): an attempt is **practice**, leaving the
+  schedule untouched, while stops count as targets, after a route change
+  during it, when the map was already graded this session, or when it is not
+  due (`PracticeReason`); otherwise it is graded.
+- **Forgetting curve:** the chance of recalling a card `t` days after its
+  last review is `R(t) = r*^(t / interval)`, with `r*` = 90% when due
+  (`ForgettingParams`).
+- **Graduation gate** (`graduationGates`): a stage passes when the chance of
+  recalling fewer than `r_i` of its nine maps after a gap `T` is at most `ε`
+  (a Poisson binomial over the maps' `R(T)`; a map not yet graded counts 0).
+  `ε` is 0.01% by default (`GraduationParams`); the app sets `T`, and counts
+  only the maps you study.
+- **Fact cards:** the salt's and the setup's parameters `m`, `D` and `N`
+  (always on), each stage's selection once its studied maps are set
+  (`maps:<i>`), the supply chain's (optional) and the user's own
+  (`misc:<n>`).
 - **Consolidation** (interval ≥ 90 days and ≥ 5 successes in a row) and
-  **reminders** (at least daily, sooner when a graded card falls due).
+  **reminders** (at least daily, sooner when a graded card falls due). The
+  wallet schedules none (§"8. great-wallet", *Launch*).
 - **The deck:** the user adds, removes or swaps maps freely — any `r_i` of a
   stage's maps give its polynomial — and its progress reports, per stage, the
   maps held against `r_i`, how many are unaided and how many consolidated.
   No study order is imposed (UX principle 3).
-- **Saved with the setup:** the deck is a section of the provisional-key file
-  (orbit vault v3), encrypted with the setup. Setup builds it at the first
-  save, a card per placed map; a map whose point changes restarts its card.
+- **Saved with the setup:** the deck, the user's fact cards and the gate's
+  settings are sections of the setup file's encrypted payload. Setup builds
+  the deck at the first save, a card per map; a map whose point changes
+  restarts its card.
 
-Not yet implemented: the review session (Train mode), the graduation gate,
-and the post-graduation bundles.
+Not yet implemented: the post-graduation bundles.
 
 Design detail for the deck contents and the pre-/post-graduation
 lifecycle ("setup standing on its own legs" — the `CPNF-NNNN` own-legs
@@ -750,6 +770,51 @@ great-wallet/
   app/                        Unified UI and orchestration (not a submodule)
 ```
 
+**The setup file.** One opaque blob, `salt ‖ nonce ‖ ciphertext ‖ tag`
+(Argon2id over the provisional key, then AES-256-GCM), with nothing in the
+clear: no format name, version, settings or dates. The plaintext is padded
+to a random 256–512 KiB, so the file's size says nothing of how many stages
+or maps it holds, and it changes with every save. While the app runs, it
+rewrites the file with its own bytes at random times (exponentially spaced,
+30 minutes apart on average, at least 1 minute), so the file's times do not
+show when it was used. The threat: a leaked file that is not deciphered must
+not tell an attacker when its owner will next open it. Files in the older
+formats do not open.
+
+**Stage 0's bundle.** Written when the provisional key is retired, next to the
+setup file (`<setup file>.stage0`): σ and the records of stage 0's cards,
+under stage 0's polynomial `Sh₀` hardened by `D` Argon2d passes at profile `m`
+(the bundle's own: `m` defaults to Basic, so the clear part shows nothing of
+the setup's profile, and `D` to about two minutes).
+In the clear: `m`, `D`, a random salt and θ₀, stage 0's map parameters, so its
+maps render without σ, and a user who forgot σ recalls two maps and gets it
+back. The clear part is the encryption's associated data, and the plaintext
+is padded to a fixed 16 KiB. Stage 0 is lost to any wrench attack anyway;
+the hardening keeps a stolen copy from being a cheap oracle for its points,
+each guess costing the whole derivation. θ₀ gives σ away to whoever holds
+the bundle (σ comes from a date, and θ₀ checks a guess cheaply); the threat
+model counts σ public. The salt keeps one guess from testing every bundle of
+setups harvested on the same date.
+
+Stage 0 then trains without the key. *Open* (Main › E) takes the bundle's
+path and asks no key: the setup on screen gives way, and stage 0's maps render
+from θ₀. Placing `r₀` of their points (Setup board, *place by click*) derives
+the key and opens the bundle; points that do not open it are cleared, to try
+others. Opened, σ and stage 0's cards are back, and Train reviews stage 0 as
+in any setup; *save progress* reseals the bundle with the key held, with no
+new derivation. The cards for `m`, `D` and `N` stay out of it: the bundle holds
+no answer for them, and the setup's depth and derivation would tell a wrench
+attacker how long to hold the victim. A wipe (Main › V) wipes the open bundle.
+
+**Launch.** `great_wallet [path]`: the path names the setup file, which
+Save and Open then start from, and the log says to open it to see what is
+due. The app schedules no reminders: launched at login with the path, it is
+the reminder.
+
+**Build.** `app/tool/build.sh [platform]` builds a release with the commit
+it is built from (`GW_COMMIT`), which the supply-chain card checks; a tree
+with uncommitted changes builds without it, with a warning.
+
 ### 9. dragon-dice
 
 **Status:** In development.
@@ -764,9 +829,11 @@ rolls carrying 40 bits, as a digest cut to 32 bits loses some and 32-bit
 outputs can be tabulated).
 
 Captures of the mouse, the accelerometer and the camera can be mixed in;
-only their SHA-512 enters the JSON, beside the dice. Each is credited by
-NIST SP 800-90B's most-common-value estimate and counts toward the
-target. The system's randomness (1 KiB) can be mixed in too, as a
+only their SHA-512 enters the JSON, beside the dice. Each counts toward
+the target at most 1 bit per reading (a move, a sample, a frame), counted
+at most once per 33 ms and only after a real move (8 px for the mouse),
+less when NIST SP 800-90B's most-common-value estimate finds the readings
+predictable from the moves before. The system's randomness (1 KiB) can be mixed in too, as a
 backup that is never counted.
 
 A Bayesian estimate says how much entropy the rolls carry if the dice
@@ -973,8 +1040,9 @@ learned them).
 
   | Context | Its board |
   |---|---|
-  | Main | keyboard layout · save · open · QR templates · volume − / + · show or hide secrets · file path · reset |
+  | Main | new · save · open · volume − / + · show or hide secrets · keyboard layout · card stats · cards · wipe |
   | Setup | key label · profile · steps `D` · calibrate · system random · Dragon Dice · import hex · place by click · exclude stage · halt / resume · copy key · copy digest |
+  | Train (in Setup's place, F3) | next due map · recall · show the answer · progress · Again · Hard · Good · Easy · save progress · graduation |
   | Path | previous / next stop · ρ toward zoom / pan · numbers · lines · exponent − / + · path on/off · frame the path · stops − / + |
   | View | reveal islands · deep render · auto brightness · brighter / darker · more / fewer shades · hue − / + |
 
@@ -986,7 +1054,8 @@ learned them).
   QWERTY if unset), never detected; Main switches it for the session.
 - **Buttons.** An icon and its key's letter; some have drawn glyphs: the
   exponent's `|◂▸|` (longer hops tolerated: fewer stops) and `▸||◂` (shorter
-  hops: more stops), and a d20 for Dragon Dice. A command not available now
+  hops: more stops), a d20 for Dragon Dice, a dead face (X eyes) for Again
+  and a face with a sweat drop for Hard. A command not available now
   stays in place, greyed; a toggle that is on is lit. Stepping commands
   (volume, brightness, shades, hue, stops shown) repeat while their key is
   held.
@@ -998,13 +1067,30 @@ learned them).
   context's **pane**, always there at a fixed width; then the log. A pane
   holds input only, centred, and nothing scrolls. A field comes up when its
   button is pressed and stays until another replaces it; Esc only returns to
-  the map. Main's pane holds the file path and the versions (protocol,
-  engine, path finder); Setup's the key label, profile or steps `D`, or an
+  the map. Main's pane holds the versions (protocol, engine, path finder);
+  Save and Open ask for the file's path in their dialogs. Setup's pane holds
+  the key label, profile or steps `D`, or an
   open import editor; Path's the route sliders; View's the hue wheel. A
   confirmation takes the whole log. **F1** collapses or restores the panel
   together with the stage and slot tabs.
 - **Halt and resume.** Halt stops the advance between stages after asking;
-  the passes done are kept, and the same key then resumes it.
+  the passes done are kept, and the same key then resumes it. A halted
+  advance is saved with the setup: after Open, selecting the stage it was
+  deriving resumes it from the pass it stopped at.
+- **Provisional key.** Save asks the file's path, then the key: generated
+  and shown as a QR or copied blind for a password manager, rolled with
+  Dragon Dice (128 or 256 bits, the first bytes of the rolls' digest), or
+  the user's own 32 or 64 hex digits. The QR shows the key's dots over its
+  codewords' colours, the format cells grey, with how many codewords a copy
+  may get wrong and still scan: 2 for 128 bits (QR version 1), 4 for 256
+  bits (version 2), any number of wrong cells in one codeword counting once.
+  `app/tool/qr_templates.dart` prints the blank templates in the same
+  colours (the wallet's `templates/`). Open asks the path, then the key:
+  scan the QR or type it.
+- **Wipe.** Main's *wipe* overwrites the setup file (and its temporary copy)
+  with random bytes, deletes it, and clears the setup on screen, halting any
+  advance. Its one button must be pressed seven times, a counter showing how
+  many are left. It cannot be undone.
 - **Point entry.** *Dragon Dice* opens the dragon-dice wizard, targeting
   40 bits for the point's 32 (8 to spare, for cutting the digest): add
   dice, type their rolls, mix in the mouse or camera if you like, and
@@ -1021,6 +1107,68 @@ learned them).
 - **Global keys** stay as they were: F1–F5, digits (slots) and Alt+digits
   (stages), Esc, Tab, arrows, scroll and drag. The key dialogs keep their own
   keys.
+- **Train mode (F3).** The open setup's maps are recalled on the same
+  screen; F2 returns to Setup. Any map of any stage, at any time, in any
+  order: all nine of a stage, placed or derived. *Next due map* goes to the
+  longest-due, fact cards included, and past a fact card even when it was
+  cancelled. While a map is recalled, its point, its
+  island highlight and its route are hidden.
+  - **Targets.** The leaf, and the stops before it that the Path board's
+    *fewer / more stops count* (C / V) let count. *Recall* arms a click: the
+    leaf or a target's cell is a hit; a shallower stop is a miss that says
+    which stop it reached and where the targets start. While a stop counts,
+    the attempt is practice; with the leaf alone it can be graded.
+  - **Grading.** A hit on a graded map waits for the user's grade (Hard,
+    Good, Easy, or Again if it was luck); a miss is graded Again. A hit, a
+    miss or *show the answer* draws the point and the route, the targets
+    bright and the other stops dimmed; showing it before answering is giving
+    up. An attempt is graded only when no stop counts, the map is due, the
+    route did not change during it, and once a session; otherwise it is
+    practice and leaves the schedule alone. Revealing the islands during a
+    graded attempt turns a find into Again.
+  - **Fact cards.** Each is checked first, then graded (only Again after a
+    miss). The salt's card opens from slot 0 of stage 0: by its date, which
+    Namtso harvests again, or by σ typed as hex. A burial's date and label
+    may be added: Namtso unburies it and the card says which stage's orbit
+    point it is, informative only. The setup's parameters are recalled as
+    for a hard reset: the memory profile `m` picked from the three, the
+    derivation steps per stage `D` and the deep stages `N` typed, each
+    compared with the setup's. Each stage's *selection* card asks which of
+    its nine maps you study, ticked from memory and matched as a set: two
+    maps can look alike, and knowing which are yours keeps you from trying
+    the wrong one. The supply chain's card (on or off in *Cards*): after
+    cloning, building and running the release anew, paste its commit digest
+    and confirm it; without the confirmation, or in a build made without
+    `app/tool/build.sh`, only Again can be scored. The user's own cards are a
+    prompt and an answer, matched ignoring case and extra spaces; at most
+    64, of 256 characters each. Main's *cards* adds and removes them, sets
+    the supply chain's on or off, and ticks the maps you study per stage
+    (prefilled with the maps you graded).
+  - **The third row of tabs** (Train), under the stage and map tabs, opens
+    by click the cards without a map: `m`, `D`, `N`, the active stage's
+    selection (once set) and the supply chain's (when on).
+  - **Card stats** (Main, in Train). Every card, ↑ ↓ to pick one: its state,
+    interval, ease, successes in a row, lapses, last review, due date, the
+    chance of recalling it now, and whether it is consolidated; and its
+    forgetting curve from the last review, *due* and *now* marked.
+  - **Graduation** (Train). Each stage at the gate: the chance of recalling
+    fewer than `r_i` of the maps you study after the gap `T`, against `ε`
+    (0.01% by default); a stage with no maps set as studied does not pass.
+    Each fact — the salt, `m`, `D`, `N` and every stage's selection — must
+    also hold for `T`: its chance of recall after `T` at 90% (`r*`) or more.
+    A fact is a single answer with no forgiveness, so `ε` cannot apply to
+    it: a 1 − 0.01% chance after a week would take an interval of decades.
+    `T` is the user's, in days; unset, it is the time a derivation
+    of the deep stages takes (stages × `D` × the time a pass takes, measured
+    by calibration and by real passes, reset when the profile changes),
+    else a week. A `T` below the derivation time is asked about
+    first: reviewing sooner than a derivation takes needs two or more setups
+    in turn. When every stage passes and every fact holds: the green light
+    to shred the provisional key. *Retire the provisional key* then seals
+    stage 0's bundle (§"8. great-wallet") and leads to the wipe. *Progress*
+    writes each stage's gate in the log.
+  - *Save progress* writes the deck into the setup file under the key that
+    opened it, after checking that key opens it.
 - **Sound cues, swappable at run time.** Every cue plays by name through a
   plain-text cue map in a folder (`GREAT_WALL_SOUNDS`, else `sound_cues` in
   the app's data folder). A first run writes `cues.txt` there: every built-in
