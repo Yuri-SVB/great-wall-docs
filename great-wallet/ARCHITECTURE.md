@@ -78,7 +78,7 @@ mountain-dynasty         (no submodules)
 namtso-core              (no submodules)
 dragon-dice              (no submodules)
 
-great-wallet             (eight submodules, flat, plus its own app/ source tree —
+great-wallet             (nine submodules, flat, plus its own app/ source tree —
                           the only repo with submodules)
   great-wall-core/            <- submodule
   star-clock/                 <- submodule
@@ -88,6 +88,7 @@ great-wallet             (eight submodules, flat, plus its own app/ source tree 
   mountain-dynasty/           <- submodule
   namtso-core/                <- submodule
   dragon-dice/                <- submodule
+  formosa/                    <- submodule (its library and ui package only)
   app/                      (not a submodule: great-wallet's own UI / orchestration)
 ```
 
@@ -740,22 +741,27 @@ argument are written up in
 
 **Status:** In development.
 
-**The unified end-user application.** Integrates all eight libraries
-into a single app with four modes that flow naturally:
+**The unified end-user application.** Integrates all nine libraries
+into a single app with five modes, on F2–F6:
 
 1. **Setup** — encode seed on fractal
    (great-wall-core + great-wall-ux; dragon-dice for points by dice)
 2. **Train** — spaced repetition with TLP-gated practice
    (celestial-peace-nf-core + star-clock + great-wall-ux)
-3. **Accelerate** — outsource TLP solving via Lightning Network
+3. **Formosa** — a password manager for the less critical secrets, apart
+   from the setup (formosa + celestial-peace-nf-core)
+4. **Accelerate** — outsource TLP solving via Lightning Network
    (flying-turtle + star-clock)
-4. **Inherit** — configure and maintain inheritance channels as
+5. **Inherit** — configure and maintain inheritance channels as
    testator *or* act as heir (receive rotation payloads, solve
    TLPs once rotation ceases, maintain the opaque taproot
    fallback for cascading inheritance)
    (mountain-dynasty + star-clock + flying-turtle)
 
-This is the only repo with submodules (all eight libraries, flat).
+This is the only repo with submodules (all nine libraries, flat). Formosa
+has a Dragon Dice submodule of its own, for its app; the wallet uses only
+Formosa's library and ui package, so that copy is never fetched
+(`fetchRecurseSubmodules = false`) — the wallet's own `dragon-dice/` serves.
 
 ```
 great-wallet/
@@ -767,6 +773,7 @@ great-wallet/
   mountain-dynasty/           <- submodule
   namtso-core/                <- submodule
   dragon-dice/                <- submodule
+  formosa/                    <- submodule
   app/                        Unified UI and orchestration (not a submodule)
 ```
 
@@ -814,6 +821,48 @@ the reminder.
 **Build.** `app/tool/build.sh [platform]` builds a release with the commit
 it is built from (`GW_COMMIT`), which the supply-chain card checks; a tree
 with uncommitted changes builds without it, with a warning.
+
+**Formosa (F4): a password manager.** For the less critical secrets —
+general passwords, the Flying Turtle wallet's seed and password — apart from
+the setup, with no wrench-attack goal and no time-lock (a time-lock would
+bring back the deadly race). Its novelty is a master secret CPNF keeps from
+being forgotten:
+
+- **The master secret is `n` raw Formosa sentences,** one theme each: 33
+  bits of entropy apiece, with no checksum (so no typo detection — the vault
+  opening or not is the check). Any `k` of them open the vault; `k` is 4 by
+  default (132 bits) and at least 2 (66 bits), `n` is `k` + 2 by default.
+- **k-of-n by exhaustive rekeying,** not Shamir: a random data key is
+  wrapped once per `k`-subset, C(n, k) wrappings, each keyed by Argon2id over
+  the whole `k`-tuple — hardening each sentence alone would let an attacker
+  harden each slot's 2³³ candidates once and try combinations cheaply.
+  Argon2id is RFC 9106's first recommendation by default (2 GiB, one pass,
+  four lanes; custom values under Advanced): one derivation to open, C(n, k)
+  to create or rewrap, none to save. No sentence has a check of its own,
+  which would be a 33-bit oracle.
+- **The file** is JSON: in the clear, as the encryption's associated data,
+  the version, the KDF settings, `k`, the slots with their themes, the
+  wrappings and the sentences' cards; inside, padded, the sentences, the
+  entries and the entries' cards.
+- **Opening:** a field per slot, with word completion (the first letters of
+  each word) or Moon Cake, Formosa's Table Selector against shoulder
+  surfing. A wrong sentence among more than `k` entered is named.
+- **The sentences' cards,** scheduled in the clear so the app shows which
+  are due before opening. Only the sentences entered at an opening are
+  reviewed, and the user grades each: right and due, Again to Easy by how
+  hard it came back (if in doubt, the lower grade); wrong, Again whether
+  due or not; right before due, practice, not graded. Up to `n` − `k` may
+  be forgotten and the vault still opens — that is the point.
+- **Any session** can add a sentence (its own theme, from system randomness
+  or Dragon Dice, with a new card) or retire one, keeping `n` ≥ `k`; either
+  rewraps the vault.
+- **Entries** are typed in, or Formosa passwords of 64 to 256 bits generated
+  from system randomness or Dragon Dice. Copying is blind, and the clipboard
+  is cleared after 30 seconds. Any entry can be memorised: its card, reviewed
+  through *Next due*, asks the secret typed from memory, matched exactly.
+
+Not yet built: a provisional key before the sentences graduate, and the
+graduation itself.
 
 ### 9. dragon-dice
 
@@ -1104,7 +1153,7 @@ learned them).
 - **Standard orbit setups only.** Nine fractal slots a stage (keys 1–9; 0 is
   the salt). `r_0 = 2` and every deeper `r_i = 3`, fixed; a file holding any
   other count is refused, as is a pre-orbit chain setup.
-- **Global keys** stay as they were: F1–F5, digits (slots) and Alt+digits
+- **Global keys** stay as they were: F1–F6, digits (slots) and Alt+digits
   (stages), Esc, Tab, arrows, scroll and drag. The key dialogs keep their own
   keys.
 - **Train mode (F3).** The open setup's maps are recalled on the same
