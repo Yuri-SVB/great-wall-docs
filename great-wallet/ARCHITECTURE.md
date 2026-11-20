@@ -795,6 +795,16 @@ the bundle (σ comes from a date, and θ₀ checks a guess cheaply); the threat
 model counts σ public. The salt keeps one guess from testing every bundle of
 setups harvested on the same date.
 
+Stage 0 then trains without the key. *Open* (Main › E) takes the bundle's
+path and asks no key: the setup on screen gives way, and stage 0's maps render
+from θ₀. Placing `r₀` of their points (Setup board, *place by click*) derives
+the key and opens the bundle; points that do not open it are cleared, to try
+others. Opened, σ and stage 0's cards are back, and Train reviews stage 0 as
+in any setup; *save progress* reseals the bundle with the key held, with no
+new derivation. The cards for `m`, `D` and `N` stay out of it: the bundle holds
+no answer for them, and the setup's depth and derivation would tell a wrench
+attacker how long to hold the victim. A wipe (Main › V) wipes the open bundle.
+
 **Launch.** `great_wallet [path]`: the path names the setup file, which
 Save and Open then start from, and the log says to open it to see what is
 due. The app schedules no reminders: launched at login with the path, it is
