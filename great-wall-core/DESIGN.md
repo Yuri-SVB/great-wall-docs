@@ -212,7 +212,7 @@ into stage 1 **exactly like any other stage** — its text is the first input th
 memory-hard chain consumes, so even stage 1's fractal depends on it:
 
 ```
-θ_k  =  SHA-256( Argon2^N( stage-0 text  ‖  bits of points 1 .. k−1 ) )  →  (o, p, q)
+θ_k  =  SHA-256( Argon2^D( stage-0 text  ‖  bits of points 1 .. k−1 ) )  →  (o, p, q)
 ```
 
 with `N_iter` the user-chosen Argon2 iteration count. Because stage `k+1`'s
@@ -843,35 +843,35 @@ watch their exact words come back.
   Wall–compatible app still fails, and setup beats the brute-force resistance of
   a 9-decimal-digit PIN. 128 bits (12 words) is the recommended default.
 - **One Argon2 iteration count per setup, calibrated on-device (official).** To
-  prevent parameter explosion, a single iteration count `N` is fixed at setup
+  prevent parameter explosion, a single iteration count `D` is fixed at setup
   and applied to *every* stage (`protocol.encode_entropy` / `decode_entropy`
-  take one `iterations`). **`N` is the durable parameter; wall-clock "hours" is
-  only a perishable label on it** — recovery reproduces the digest from `N`, not
+  take one `iterations`). **`D` is the durable parameter; wall-clock "hours" is
+  only a perishable label on it** — recovery reproduces the digest from `D`, not
   from a duration, so hardware progress (notably AI-driven memory-bandwidth
-  gains) changes only the *time a given `N` takes*, never correctness or the
+  gains) changes only the *time a given `D` takes*, never correctness or the
   entropy/OOM-gate security. Accordingly:
   - The interface offers a few **target wall-clock durations** and **calibrates
-    `N` per setup on the user's own device** (micro-benchmark a few passes at the
-    chosen memory profile → solve for `N`). This removes dev-time and
+    `D` per setup on the user's own device** (micro-benchmark a few passes at the
+    chosen memory profile → solve for `D`). This removes dev-time and
     cross-hardware staleness; only the genuine setup→recovery temporal drift
     remains, and it is harmless to correctness.
-  - **`N` (and the memory profile `m`) is the user's responsibility to
+  - **`D` (and the memory profile `m`) is the user's responsibility to
     memorize** (needed if the device/setup is lost — "hard recovery"). Two
     mitigations: (a) the protocol gracefully stores the **sequence of
     intermediate derivation results**, from which the user can *recognize* the
     correct one (checkpoint trial-and-error; see *Checkpointing*), so an
-    approximate memory of `N` suffices — in this design `N` and `m` are the
+    approximate memory of `D` suffices — in this design `D` and `m` are the
     *only* inter-stage unknowns (the per-stage `o,p,q` are derived from them and
     the prior points), and once the parameter space expands this *same*
     recognition recovers any forgotten inter-stage parameter (next-steps §5);
     (b) the **Celestial-Peace-Never-Forget** trainer (`celestial-peace-nf-core`)
-    drills explicit recall of `N` and `m` — safe because they are *parameters,
+    drills explicit recall of `D` and `m` — safe because they are *parameters,
     not the tacit secret*. Note `m` must be recalled exactly (a wrong profile
-    breaks every derived fractal); `N` only approximately.
+    breaks every derived fractal); `D` only approximately.
   - UX should induce users to set the derivation time **conservatively (e.g.
     2×)**, then use a **TLP / `flying-turtle`** layer to freely adjust the *effective
     per-session* delay (the RSW time-lock puzzle re-imposes a tunable, possibly
-    outsourced, delay on top of the fixed `N`). See `great-wallet`.
+    outsourced, delay on top of the fixed `D`). See `great-wallet`.
   - This per-setup-calibration policy is **official**; per-stage iteration
     variation remains deferred (see next-steps) and may be revisited.
 
@@ -1295,7 +1295,7 @@ as a single point on its own fractal surface:
 | Stage   | Carries     | Parameters     | Derived from                                         |
 |---------|-------------|----------------|------------------------------------------------------|
 | 0       | text only   | — (no fractal) | user input (`[A-Z0-9-]`, ASCII) — salt / pepper      |
-| k (1..N)| one point   | Argon2-derived | SHA-256(Argon2^N(stage-0 text ‖ points 1 .. k−1))    |
+| k (1..N)| one point   | Argon2-derived | SHA-256(Argon2^D(stage-0 text ‖ points 1 .. k−1))    |
 
 Each point stage's parameters (o, p, q) are derived from the memory-hard hash of
 **stage-0 text plus all preceding points**, so every fractal surface depends on
@@ -1303,7 +1303,7 @@ the entire prefix before it — a strict chain that begins at stage-0 text. Ther
 is no public, canonical fractal: stage 1 already depends on the user's stage-0
 label. The user enters stage-0 text, then fixes one point per stage and runs the
 (memory-hard) Argon2 step to unlock the next stage's fractal, repeating until the
-last stage; only then is the full mnemonic recovered. With `N_iter ≥ 1` the
+last stage; only then is the full mnemonic recovered. With `D ≥ 1` the
 honest cost is `N` chained Argon2 runs (stage 0 → 1, then one per point stage).
 The sections below — written when the prototype used two stages with P1/P2/…
 points — illustrate the per-stage mechanics; under the current protocol each
@@ -1417,7 +1417,7 @@ memory-dependent operations.  This maximises two security metrics:
 
 The only tier-variable parameter is therefore `m` (memory): it controls which
 devices are OOM-gated.  The total work is determined by the number of external
-iterations `N`, which is chosen to meet the user's target delay.
+iterations `D`, which is chosen to meet the user's target delay.
 
 #### Why t=2 (two internal passes)
 
@@ -1433,7 +1433,7 @@ the pass boundary or face a quadratic (or worse) recomputation penalty.
 
 `t = 2` is the minimum needed to guarantee that the full memory array must be
 simultaneously resident.  `t > 2` would add marginal hardness at the cost of
-proportionally more wall-clock time per external iteration — since `N` is
+proportionally more wall-clock time per external iteration — since `D` is
 adjusted to fill the target delay anyway, `t = 2` is the sweet spot.
 
 #### Why Argon2d (not Argon2i or Argon2id)
@@ -1456,11 +1456,11 @@ for the OOM gate.
 #### Factoring external iterations
 
 The user's target delay (hours, days, or weeks) determines the total number of
-external iterations `N`.  To make the protocol more forgiving when the user
-forgets the exact iteration count, `N` is factored into two levels:
+external iterations `D`.  To make the protocol more forgiving when the user
+forgets the exact iteration count, `D` is factored into two levels:
 
 ```
-N = n_checkpoints × iters_per_checkpoint
+D = n_checkpoints × iters_per_checkpoint
 ```
 
 - **`iters_per_checkpoint`**: chosen so that one checkpoint interval takes a
@@ -1482,7 +1482,7 @@ P1‖P2 (64 bits of raw entropy)
     │
     ▼
 Argon2d(input, salt="greatwall", profile=Basic|Advanced|GreatWall)
-    │   Iterated N times (configurable in the panel).
+    │   Iterated D times (configurable in the panel).
     │   Each iteration feeds the previous 32-byte digest back as input.
     │   Intermediate digests are checkpointed to disk *only* when the
     │   "save intermediate" checkbox is on (off by default — see below).
@@ -1686,7 +1686,7 @@ its parameters from the memory-hard chain run over **stage-0 text followed by
 the concatenated bits of all preceding points**:
 
 ```
-digest_k = Argon2^N( stage-0 text  ‖  bits of points 1 .. k−1 )   // the memory-hard chain
+digest_k = Argon2^D( stage-0 text  ‖  bits of points 1 .. k−1 )   // the memory-hard chain
 h        = SHA-256(digest_k)
 ```
 

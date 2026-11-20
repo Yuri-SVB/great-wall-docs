@@ -152,14 +152,14 @@ multiple setups for anyone with a specific reason to exceed 256 bits; see the
 design docs' next-steps.)
 
 **Single Argon2 iteration count per setup, calibrated on-device.** To avoid
-parameter explosion, one iteration count `N` is fixed at setup and applied to
-**every** stage. `N` is the durable parameter; wall-clock "hours" is only a
-*perishable label* on it — recovery reproduces the digest from `N`, so hardware
-progress changes how long a given `N` takes, never correctness or security. The
-interface offers a few **target durations** and calibrates `N` on the user's own
-device. `N` is the **user's responsibility to memorize** (for hard recovery if
+parameter explosion, one iteration count `D` is fixed at setup and applied to
+**every** stage. `D` is the durable parameter; wall-clock "hours" is only a
+*perishable label* on it — recovery reproduces the digest from `D`, so hardware
+progress changes how long a given `D` takes, never correctness or security. The
+interface offers a few **target durations** and calibrates `D` on the user's own
+device. `D` is the **user's responsibility to memorize** (for hard recovery if
 the device is lost); the protocol gracefully stores the sequence of intermediate
-results so an approximate memory of `N` suffices (recognize the correct one).
+results so an approximate memory of `D` suffices (recognize the correct one).
 Users are encouraged to set the time **conservatively (≈2×)** and then use the
 TLP / flying-turtle layer (see the `great-wallet` family) to tune the effective
 per-session delay. Official policy; may be revisited.

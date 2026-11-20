@@ -209,7 +209,7 @@ other primitive:
    payment. The TLP-gated ciphertext — the vault itself — never
    leaves the user's device. What the marketplace receives is only
    the TLP *setup*: the operand to be repeatedly squared and the
-   RSW modulus `N`. It returns the raw solution and learns nothing
+   RSW modulus `n`. It returns the raw solution and learns nothing
    about what that solution unlocks (or about the user's identity).
    The user gets time back without giving up custody.
 
@@ -222,7 +222,7 @@ other primitive:
    never shared with the solver. The client checks them offline
    after the solver returns. If a milestone disagrees with the
    delivered result, the client has self-contained evidence of the
-   discrepancy — the original request `(N, x, t)`, the expected
+   discrepancy — the original request `(n, x, t)`, the expected
    milestone digest, and the obtained result — which it presents
    to an arbiter to adjudicate whether the solver cheated,
    whether the client is repudiating honest work, or whether a
@@ -271,12 +271,12 @@ of stage-1 bits could just re-derive via Argon2 in less time —
 while inheritance and acceleration use TLPs on their own independent
 schedules (see the *Inheritance Protocol* section).
 
-**Implementation — on-device calibration of `N`.** The GUI calibrates the
-iteration count `N` **per setup, on the user's own device**, rather than
+**Implementation — on-device calibration of `D`.** The GUI calibrates the
+iteration count `D` **per setup, on the user's own device**, rather than
 shipping a hard-coded value: the user picks a target wall-clock duration,
 the app micro-benchmarks Argon2 at the selected memory profile, and solves
-for the `N` that hits the target. This keeps the time→`N` mapping fresh per
-device while `N` itself stays the durable, reproducible parameter — see the
+for the `D` that hits the target. This keeps the time→`D` mapping fresh per
+device while `D` itself stays the durable, reproducible parameter — see the
 *"time is a perishable label on a durable parameter"* framing in
 [`next-steps/chained-protocol-size-and-ux-roadmap.md`](../next-steps/chained-protocol-size-and-ux-roadmap.md)
 §3. It ships as a calibration dialog:
@@ -285,18 +285,18 @@ device while `N` itself stays the durable, reproducible parameter — see the
   close and confirms before discarding, so a mis-key never throws away a
   measurement.
 - **On-device benchmark.** Runs Argon2 at the *current* memory profile in a
-  **worker isolate** (the UI stays responsive), timing **1 warm-up pass + a
-  median of N timed passes** (default 3). The median — not the mean — is the
+  **worker isolate** (the UI stays responsive), timing **1 warm-up pass + the
+  median of a few timed passes** (3 by default). The median — not the mean — is the
   estimator, so a single scheduler hiccup can't skew the result. The run is
   **cancellable**: Run↔Stop, and closing mid-run kills the isolate.
 - **Progress + ETA.** A determinate progress bar reports `Measuring k / n…`
   with a live **estimated time remaining** (elapsed time over completed
   passes), because a default user has no prior expectation of how long a
   profile takes.
-- **Target → N.** The user picks a **target wall-clock** from presets
+- **Target → D.** The user picks a **target wall-clock** from presets
   grounded in the two calibration points above (and
   `great-wallet/THREAT_MODEL.md`), and the dialog solves
-  `N = ceil(target_per_stage × margin ÷ seconds_per_pass)`. A **per-stage
+  `D = ceil(target_per_stage × margin ÷ seconds_per_pass)`. A **per-stage
   vs all-stages** scope toggle (with a stage-count input) disambiguates
   whether the target is one inter-stage derivation or the whole chain.
 - **KISS + safety margin.** A **default ×2 safety margin** bakes in the
@@ -305,7 +305,7 @@ device while `N` itself stays the durable, reproducible parameter — see the
   everything else (pass count, margin, scope internals) hides behind an
   **Advanced** expander captioned *"if you don't know what these mean, leave
   them unchanged."*
-- **Apply.** Writes the solved `N` into the setup's iteration field; the CLI
+- **Apply.** Writes the solved `D` into the setup's iteration field; the CLI
   `--iterations` reference path is unchanged.
 
 ### Determinism guarantees
@@ -511,18 +511,19 @@ Responsibilities:
   scheduler state)
 - Vault encryption/decryption (via star-clock)
 - Background TLP solver management with checkpointing
-- **Explicit-recall training of the derivation parameters `N` (Argon2
-  iteration count) and `m` (memory profile)**, so a *hard recovery* (device /
-  setup lost) goes smoothly. Unlike the fractal locations — which must stay
-  *tacit* (recognition only) to remain coercion-resistant — `N` and `m` are
+- **Explicit-recall training of the derivation parameters `m` (memory
+  profile), `D` (Argon2 iterations per stage) and `N` (deep stages)**, so a
+  *hard recovery* (device / setup lost) goes smoothly. Unlike the fractal
+  locations — which must stay *tacit* (recognition only) to remain
+  coercion-resistant — `m`, `D` and `N` are
   derivation **parameters, not the secret**: an adversary who learns them still
   has no points, so drilling them as explicit facts does **not** weaken
   coercion-resistance of the seed. Note the asymmetry: `m` must be recalled
   *exactly* (a wrong profile changes the Argon2 digest and breaks every derived
-  fractal), whereas `N` needs only *approximate* recall — checkpoint
+  fractal), whereas `D` needs only *approximate* recall — checkpoint
   trial-and-error and stored, recognizable intermediate results close the gap
   (see `great-wall-core` DESIGN / next-steps). This complements the existing
-  mitigations for a forgotten `N`.
+  mitigations for a forgotten `D`.
 
 #### Core Concept
 
@@ -623,9 +624,9 @@ star-clock (TLP encrypt/decrypt/solve).
   recalling fewer than `r_i` of its nine maps after a gap `T` is at most `ε`
   (a Poisson binomial over the maps' `R(T)`; a map not yet graded counts 0).
   `ε` is 0.01% by default (`GraduationParams`); the app sets `T`.
-- **Fact cards:** the salt's (always on), the supply chain's (optional) and
-  the user's own (`misc:<n>`). The core also defines cards for `m`, `N` and
-  `D`, not yet reviewed.
+- **Fact cards:** the salt's and the setup's parameters `m`, `D` and `N`
+  (always on), the supply chain's (optional) and the user's own
+  (`misc:<n>`).
 - **Consolidation** (interval ≥ 90 days and ≥ 5 successes in a row) and
   **reminders** (at least daily, sooner when a graded card falls due). The
   wallet schedules none (§"8. great-wallet", *Launch*).
@@ -638,8 +639,7 @@ star-clock (TLP encrypt/decrypt/solve).
   the deck at the first save, a card per map; a map whose point changes
   restarts its card.
 
-Not yet implemented: the post-graduation bundles, and the review of `m`, `N`
-and `D`.
+Not yet implemented: the post-graduation bundles.
 
 Design detail for the deck contents and the pre-/post-graduation
 lifecycle ("setup standing on its own legs" — the `CPNF-NNNN` own-legs
@@ -1083,7 +1083,8 @@ learned them).
 - **Train mode (F3).** The open setup's maps are recalled on the same
   screen; F2 returns to Setup. Any map of any stage, at any time, in any
   order: all nine of a stage, placed or derived. *Next due map* goes to the
-  longest-due, fact cards included. While a map is recalled, its point, its
+  longest-due, fact cards included, and past a fact card even when it was
+  cancelled. While a map is recalled, its point, its
   island highlight and its route are hidden.
   - **Targets.** The leaf, and the stops before it that the Path board's
     *fewer / more stops count* (C / V) let count. *Recall* arms a click: the
@@ -1102,11 +1103,14 @@ learned them).
     miss). The salt's card opens from slot 0 of stage 0: by its date, which
     Namtso harvests again, or by σ typed as hex. A burial's date and label
     may be added: Namtso unburies it and the card says which stage's orbit
-    point it is, informative only. The supply chain's card (on or off in *Cards*)
-    sits in a third row of tabs, opened by click: after cloning and building
-    the release anew, paste its commit digest and confirm the build; without
-    the confirmation, or in a build made without `app/tool/build.sh`, only
-    Again can be scored. The user's own cards are a prompt and an answer,
+    point it is, informative only. The setup's parameters are recalled as
+    for a hard reset: the memory profile `m` picked from the three, the
+    derivation steps per stage `D` and the deep stages `N` typed, each
+    compared with the setup's. The supply chain's card (on or off in
+    *Cards*) sits in a third row of tabs, opened by click: after cloning,
+    building and running the release anew, paste its commit digest and
+    confirm it; without the confirmation, or in a build made without
+    `app/tool/build.sh`, only Again can be scored. The user's own cards are a prompt and an answer,
     matched ignoring case and extra spaces; at most 64, of 256 characters
     each. Main's *cards* adds and removes them.
   - **Card stats** (Main, in Train). Every card, ↑ ↓ to pick one: its state,
