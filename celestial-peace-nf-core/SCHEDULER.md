@@ -42,7 +42,9 @@ retention under pressure, is the failure that matters.
 ## Not in Step 1
 
 The review-session flow, encryption-at-rest, and the TLP-gated / graduation /
-inheritance lifecycle. See `cpnf-lifecycle-and-deck.md`.
+inheritance lifecycle. See `cpnf-lifecycle-and-deck.md`. Built since: the
+review rules (`ReviewSession`), the forgetting curve and the graduation gate
+(`graduationGates`) — see `../great-wallet/ARCHITECTURE.md` §4, *Implemented*.
 
 ## Testing and consumption
 

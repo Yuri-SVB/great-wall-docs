@@ -496,8 +496,9 @@ the consuming app provides both.
 ### 4. celestial-peace-nf-core
 
 **Status:** In development. Before graduation, built: the scheduler, a card
-per memorised map with its landmark cues, the deck saved with the setup,
-and the wallet's Train mode (§"Command Board", *Train mode*).
+per map with its landmark cues, fact cards, the review rules, the forgetting
+curve, the graduation gate, the deck saved with the setup, and the wallet's
+Train mode (§"Command Board", *Train mode*).
 
 **Spaced-repetition training logic.** Implements the "Celestial Peace:
 Never Forget" training system that helps users consolidate tacit memory
@@ -553,7 +554,8 @@ Key properties:
   externally across the consolidation window and destroyed at
   graduation, after which the setup self-secures (its own entropy gates
   its own TLP). A first version is **implemented** in the app's Setup
-  mode: the setup is encrypted to a file (AES-256-GCM keyed by Argon2id)
+  mode: the setup is encrypted to a file (AES-256-GCM keyed by Argon2id;
+  random-looking bytes of a random size, §"8. great-wallet")
   and the compact 128- or 256-bit key is carried as a hand-coloured
   byte-mode QR, a blind-copied hex string for a password manager, or the
   user's own entropy — never persisted as a durable digital artifact. See
@@ -606,24 +608,38 @@ star-clock (TLP encrypt/decrypt/solve).
 - **Scheduler:** conservative SM-2 (Woźniak 1990) with four-button grading,
   every number named (`Sm2Params`); honest grading (a hint, a bailout or a
   lucky guess grades Again); time only through an injected `Clock`.
-- **A card per memorised map** (stage, slot), plus the fact cards (`m`, `N`,
-  `D`, salt, provenance, export salts, reminders). Each map card carries its
-  **landmark cues**: the route (ρ and the exponent, the engine's values) and
-  the stops shown before the leaf ([Landmark Path](#landmark-path-alt-e)).
-  While stops show, attempts are **practice** and leave the schedule
-  untouched; once none shows, they are graded.
+- **A card per map** (stage, slot): all nine of a stage, placed or derived,
+  so any map can be trained. Each carries its **landmark cues**: the route
+  (ρ and the exponent, the engine's values) and the stops before the leaf
+  that count as targets ([Landmark Path](#landmark-path-alt-e)).
+- **Review rules** (`ReviewSession`): an attempt is **practice**, leaving the
+  schedule untouched, while stops count as targets, after a route change
+  during it, when the map was already graded this session, or when it is not
+  due (`PracticeReason`); otherwise it is graded.
+- **Forgetting curve:** the chance of recalling a card `t` days after its
+  last review is `R(t) = r*^(t / interval)`, with `r*` = 90% when due
+  (`ForgettingParams`).
+- **Graduation gate** (`graduationGates`): a stage passes when the chance of
+  recalling fewer than `r_i` of its nine maps after a gap `T` is at most `ε`
+  (a Poisson binomial over the maps' `R(T)`; a map not yet graded counts 0).
+  `ε` is 0.01% by default (`GraduationParams`); the app sets `T`.
+- **Fact cards:** the salt's (always on), the supply chain's (optional) and
+  the user's own (`misc:<n>`). The core also defines cards for `m`, `N` and
+  `D`, not yet reviewed.
 - **Consolidation** (interval ≥ 90 days and ≥ 5 successes in a row) and
-  **reminders** (at least daily, sooner when a graded card falls due).
+  **reminders** (at least daily, sooner when a graded card falls due). The
+  wallet schedules none (§"8. great-wallet", *Launch*).
 - **The deck:** the user adds, removes or swaps maps freely — any `r_i` of a
   stage's maps give its polynomial — and its progress reports, per stage, the
   maps held against `r_i`, how many are unaided and how many consolidated.
   No study order is imposed (UX principle 3).
-- **Saved with the setup:** the deck is a section of the provisional-key file
-  (orbit vault v3), encrypted with the setup. Setup builds it at the first
-  save, a card per placed map; a map whose point changes restarts its card.
+- **Saved with the setup:** the deck, the user's fact cards and the gate's
+  settings are sections of the setup file's encrypted payload. Setup builds
+  the deck at the first save, a card per map; a map whose point changes
+  restarts its card.
 
-Not yet implemented: the review session (Train mode), the graduation gate,
-and the post-graduation bundles.
+Not yet implemented: the post-graduation bundles, and the review of `m`, `N`
+and `D`.
 
 Design detail for the deck contents and the pre-/post-graduation
 lifecycle ("setup standing on its own legs" — the `CPNF-NNNN` own-legs
@@ -751,6 +767,26 @@ great-wallet/
   dragon-dice/                <- submodule
   app/                        Unified UI and orchestration (not a submodule)
 ```
+
+**The setup file.** One opaque blob, `salt ‖ nonce ‖ ciphertext ‖ tag`
+(Argon2id over the provisional key, then AES-256-GCM), with nothing in the
+clear: no format name, version, settings or dates. The plaintext is padded
+to a random 256–512 KiB, so the file's size says nothing of how many stages
+or maps it holds, and it changes with every save. While the app runs, it
+rewrites the file with its own bytes at random times (exponentially spaced,
+30 minutes apart on average, at least 1 minute), so the file's times do not
+show when it was used. The threat: a leaked file that is not deciphered must
+not tell an attacker when its owner will next open it. Files in the older
+formats do not open.
+
+**Launch.** `great_wallet [path]`: the path names the setup file, which
+Save and Open then start from, and the log says to open it to see what is
+due. The app schedules no reminders: launched at login with the path, it is
+the reminder.
+
+**Build.** `app/tool/build.sh [platform]` builds a release with the commit
+it is built from (`GW_COMMIT`), which the supply-chain card checks; a tree
+with uncommitted changes builds without it, with a warning.
 
 ### 9. dragon-dice
 
@@ -977,9 +1013,9 @@ learned them).
 
   | Context | Its board |
   |---|---|
-  | Main | keyboard layout · save · open · QR templates · volume − / + · show or hide secrets · file path · reset |
+  | Main | new · save · open · volume − / + · show or hide secrets · keyboard layout · card stats · cards · wipe |
   | Setup | key label · profile · steps `D` · calibrate · system random · Dragon Dice · import hex · place by click · exclude stage · halt / resume · copy key · copy digest |
-  | Train (in Setup's place, F3) | next due map · recall · show the answer · progress · Again · Hard · Good · Easy · save progress |
+  | Train (in Setup's place, F3) | next due map · recall · show the answer · progress · Again · Hard · Good · Easy · save progress · graduation |
   | Path | previous / next stop · ρ toward zoom / pan · numbers · lines · exponent − / + · path on/off · frame the path · stops − / + |
   | View | reveal islands · deep render · auto brightness · brighter / darker · more / fewer shades · hue − / + |
 
@@ -991,7 +1027,8 @@ learned them).
   QWERTY if unset), never detected; Main switches it for the session.
 - **Buttons.** An icon and its key's letter; some have drawn glyphs: the
   exponent's `|◂▸|` (longer hops tolerated: fewer stops) and `▸||◂` (shorter
-  hops: more stops), and a d20 for Dragon Dice. A command not available now
+  hops: more stops), a d20 for Dragon Dice, a dead face (X eyes) for Again
+  and a face with a sweat drop for Hard. A command not available now
   stays in place, greyed; a toggle that is on is lit. Stepping commands
   (volume, brightness, shades, hue, stops shown) repeat while their key is
   held.
@@ -1003,13 +1040,30 @@ learned them).
   context's **pane**, always there at a fixed width; then the log. A pane
   holds input only, centred, and nothing scrolls. A field comes up when its
   button is pressed and stays until another replaces it; Esc only returns to
-  the map. Main's pane holds the file path and the versions (protocol,
-  engine, path finder); Setup's the key label, profile or steps `D`, or an
+  the map. Main's pane holds the versions (protocol, engine, path finder);
+  Save and Open ask for the file's path in their dialogs. Setup's pane holds
+  the key label, profile or steps `D`, or an
   open import editor; Path's the route sliders; View's the hue wheel. A
   confirmation takes the whole log. **F1** collapses or restores the panel
   together with the stage and slot tabs.
 - **Halt and resume.** Halt stops the advance between stages after asking;
-  the passes done are kept, and the same key then resumes it.
+  the passes done are kept, and the same key then resumes it. A halted
+  advance is saved with the setup: after Open, selecting the stage it was
+  deriving resumes it from the pass it stopped at.
+- **Provisional key.** Save asks the file's path, then the key: generated
+  and shown as a QR or copied blind for a password manager, rolled with
+  Dragon Dice (128 or 256 bits, the first bytes of the rolls' digest), or
+  the user's own 32 or 64 hex digits. The QR shows the key's dots over its
+  codewords' colours, the format cells grey, with how many codewords a copy
+  may get wrong and still scan: 2 for 128 bits (QR version 1), 4 for 256
+  bits (version 2), any number of wrong cells in one codeword counting once.
+  `app/tool/qr_templates.dart` prints the blank templates in the same
+  colours (the wallet's `templates/`). Open asks the path, then the key:
+  scan the QR or type it.
+- **Wipe.** Main's *wipe* overwrites the setup file (and its temporary copy)
+  with random bytes, deletes it, and clears the setup on screen, halting any
+  advance. Its one button must be pressed seven times, a counter showing how
+  many are left. It cannot be undone.
 - **Point entry.** *Dragon Dice* opens the dragon-dice wizard, targeting
   40 bits for the point's 32 (8 to spare, for cutting the digest): add
   dice, type their rolls, mix in the mouse or camera if you like, and
@@ -1027,18 +1081,50 @@ learned them).
   (stages), Esc, Tab, arrows, scroll and drag. The key dialogs keep their own
   keys.
 - **Train mode (F3).** The open setup's maps are recalled on the same
-  screen; F2 returns to Setup. Any map, in any order; *next due map* goes
-  to the longest-due. While a map is recalled, its point, its island
-  highlight and the leaf's landmark stop are hidden; the stops before it
-  show as its card sets them. *Recall* arms a click: the leaf clicked is
-  the answer. A hit on a graded map waits for the user's grade (Hard, Good,
-  Easy, or Again if it was luck or came after giving up); a miss is graded
-  Again and shows the answer; showing it first is giving up. An attempt is
-  graded only with no stop shown, when the map is due, with no route change
-  during it and once a session; otherwise it is practice and leaves the
-  schedule alone. Revealing the islands during a graded attempt turns a
-  find into Again. *Save progress* writes the deck into the setup file
-  under the key that opened it, after checking that key opens it.
+  screen; F2 returns to Setup. Any map of any stage, at any time, in any
+  order: all nine of a stage, placed or derived. *Next due map* goes to the
+  longest-due, fact cards included. While a map is recalled, its point, its
+  island highlight and its route are hidden.
+  - **Targets.** The leaf, and the stops before it that the Path board's
+    *fewer / more stops count* (C / V) let count. *Recall* arms a click: the
+    leaf or a target's cell is a hit; a shallower stop is a miss that says
+    which stop it reached and where the targets start. While a stop counts,
+    the attempt is practice; with the leaf alone it can be graded.
+  - **Grading.** A hit on a graded map waits for the user's grade (Hard,
+    Good, Easy, or Again if it was luck); a miss is graded Again. A hit, a
+    miss or *show the answer* draws the point and the route, the targets
+    bright and the other stops dimmed; showing it before answering is giving
+    up. An attempt is graded only when no stop counts, the map is due, the
+    route did not change during it, and once a session; otherwise it is
+    practice and leaves the schedule alone. Revealing the islands during a
+    graded attempt turns a find into Again.
+  - **Fact cards.** Each is checked first, then graded (only Again after a
+    miss). The salt's card opens from slot 0 of stage 0: by its date, which
+    Namtso harvests again, or by σ typed as hex. A burial's date and label
+    may be added: Namtso unburies it and the card says which stage's orbit
+    point it is, informative only. The supply chain's card (on or off in *Cards*)
+    sits in a third row of tabs, opened by click: after cloning and building
+    the release anew, paste its commit digest and confirm the build; without
+    the confirmation, or in a build made without `app/tool/build.sh`, only
+    Again can be scored. The user's own cards are a prompt and an answer,
+    matched ignoring case and extra spaces; at most 64, of 256 characters
+    each. Main's *cards* adds and removes them.
+  - **Card stats** (Main, in Train). Every card, ↑ ↓ to pick one: its state,
+    interval, ease, successes in a row, lapses, last review, due date, the
+    chance of recalling it now, and whether it is consolidated; and its
+    forgetting curve from the last review, *due* and *now* marked.
+  - **Graduation** (Train). Each stage at the gate: the chance of recalling
+    fewer than `r_i` of its maps after the gap `T`, against `ε` (0.01% by
+    default). `T` is the user's, in days; unset, it is the time a derivation
+    of the deep stages takes (stages × `D` × the time a pass takes, measured
+    by calibration and by real passes, reset when the profile changes),
+    else a week. A `T` below the derivation time is asked about
+    first: reviewing sooner than a derivation takes needs two or more setups
+    in turn. When every stage passes: the green light to shred the
+    provisional key, with a way to the wipe. *Progress* writes each stage's
+    gate in the log.
+  - *Save progress* writes the deck into the setup file under the key that
+    opened it, after checking that key opens it.
 - **Sound cues, swappable at run time.** Every cue plays by name through a
   plain-text cue map in a folder (`GREAT_WALL_SOUNDS`, else `sound_cues` in
   the app's data folder). A first run writes `cues.txt` there: every built-in
