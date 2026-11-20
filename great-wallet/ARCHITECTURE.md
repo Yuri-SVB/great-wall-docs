@@ -842,9 +842,9 @@ being forgotten:
   which would be a 33-bit oracle.
 - **The file** is JSON: in the clear, as the encryption's associated data,
   the version, the KDF settings, `k`, the slots with their themes, the
-  wrappings, the provisional key's wrapping while there is one, and the
-  sentences' cards; inside, padded, the sentences, the entries and the
-  entries' cards.
+  wrappings, the provisional key's wrapping while there is one, the
+  sentences' cards and the gate's `T` and `ε` when set; inside, padded, the
+  sentences, the entries and the entries' cards.
 - **Opening:** a field per slot, with word completion (the first letters of
   each word) or Moon Cake, Formosa's Table Selector against shoulder
   surfing. A wrong sentence among more than `k` entered is named.
@@ -861,6 +861,12 @@ being forgotten:
   from system randomness or Dragon Dice. Copying is blind, and the clipboard
   is cleared after 30 seconds. Any entry can be memorised: its card, reviewed
   through *Next due*, asks the secret typed from memory, matched exactly.
+- **Copying entries to another vault:** hold entries in one vault, lock it,
+  open the other, and paste. Each copy gets a new id and no card (it is not
+  memorised there); nothing leaves the first vault. Held entries stay in
+  memory only, across the lock, until pasted or discarded. It serves a new
+  master secret (a suspected leak, or splitting vaults by how critical they
+  are); a slipping memory is better served by adding a provisional key back.
 - **The provisional key,** until the sentences graduate: one more wrapping
   of the data key, under Argon2id over a random 128- or 256-bit key. It
   opens the vault alone, and grades nothing. Its dialog is the setup's own,
@@ -869,10 +875,10 @@ being forgotten:
   one can be added again later.
 - **Graduation:** the chance of recalling fewer than `k` of the `n`
   sentences after `T`, each by its forgetting curve (one never graded counts
-  as forgotten), at most `ε`: one week and 1e-4, as the setup's defaults. At
-  the green light the key can be retired, after a warning: every
-  `k`-subset is rewrapped under a new data key, so the key opens no later
-  copy of the vault.
+  as forgotten), at most `ε`: one week and 1e-4 by default, as the setup's;
+  each vault can set its own, previewed as typed. At the green light the key
+  can be retired, after a warning: every `k`-subset is rewrapped under a new
+  data key, so the key opens no later copy of the vault.
 
 ### 9. dragon-dice
 
