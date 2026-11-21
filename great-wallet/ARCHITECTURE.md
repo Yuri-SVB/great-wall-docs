@@ -872,7 +872,9 @@ being forgotten:
   Entries, the folders, the entries listed and the entry selected (its
   secret hidden unless shown); on Sentences, the sentences and adding one.
   The board's commands act on the row selected, picked by a click or the
-  arrow keys; a long list scrolls within its pane. Forms (making and
+  arrow keys (Up and Down for the entry or sentence, Left and Right for the
+  folder); a long list scrolls within its pane. The log, as the setup's,
+  shows the newest line at the bottom. Forms (making and
   opening a vault) keep their own submit buttons; Esc leaves a field so the
   board's keys work again.
 - **Copying entries to another vault:** hold entries in one vault, lock it,
