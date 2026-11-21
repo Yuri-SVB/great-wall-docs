@@ -857,9 +857,11 @@ being forgotten:
 - **Any session** can add a sentence (its own theme, from system randomness
   or Dragon Dice, with a new card) or retire one, keeping `n` ≥ `k`; either
   rewraps the vault.
-- **Entries** are typed in, or Formosa passwords of 64 to 256 bits generated
-  from system randomness or Dragon Dice. Copying is blind, and the clipboard
-  is cleared after 30 seconds. Any entry can be memorised: its card, reviewed
+- **Entries** have a label, an optional login, a secret and a note; the
+  secret is typed in, or a Formosa password of 64 to 256 bits generated from
+  system randomness or Dragon Dice. An entry can be edited; a new secret
+  starts its card afresh. Copying the login or the secret is blind, and the
+  clipboard is cleared after 30 seconds. Any entry can be memorised: its card, reviewed
   through *Next due*, asks the secret typed from memory, matched exactly.
 - **Copying entries to another vault:** hold entries in one vault, lock it,
   open the other, and paste. Each copy gets a new id and no card (it is not
