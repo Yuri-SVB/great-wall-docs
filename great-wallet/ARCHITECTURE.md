@@ -867,7 +867,12 @@ being forgotten:
   secret typed from memory, matched exactly.
 - **The interface** is the setup's: a bottom panel with the command board
   (contexts Vault, Entries and Sentences on Alt + the top row; each command
-  on its key) and the log, folded away and back with F1. Forms (making and
+  on its key) and the log, folded away and back with F1. Above it, the
+  context's panes, which fit a 1280 × 800 window without scrolling: on
+  Entries, the folders, the entries listed and the entry selected (its
+  secret hidden unless shown); on Sentences, the sentences and adding one.
+  The board's commands act on the row selected, picked by a click or the
+  arrow keys; a long list scrolls within its pane. Forms (making and
   opening a vault) keep their own submit buttons; Esc leaves a field so the
   board's keys work again.
 - **Copying entries to another vault:** hold entries in one vault, lock it,
