@@ -861,9 +861,15 @@ being forgotten:
   secret is typed in, or a Formosa password of 64 to 256 bits generated from
   system randomness or Dragon Dice. An entry can be edited; a new secret
   starts its card afresh. Each entry may sit in a folder, a path such as
-  `Work/Mail`; a folder exists while an entry is in it. Copying the login or the secret is blind, and the
-  clipboard is cleared after 30 seconds. Any entry can be memorised: its card, reviewed
-  through *Next due*, asks the secret typed from memory, matched exactly.
+  `Work/Mail`; a folder exists while an entry is in it. Copying the login or
+  the secret is blind, and the clipboard is cleared after 30 seconds. Any
+  entry can be memorised: its card, reviewed through *Next due*, asks the
+  secret typed from memory, matched exactly.
+- **The interface** is the setup's: a bottom panel with the command board
+  (contexts Vault, Entries and Sentences on Alt + the top row; each command
+  on its key) and the log, folded away and back with F1. Forms (making and
+  opening a vault) keep their own submit buttons; Esc leaves a field so the
+  board's keys work again.
 - **Copying entries to another vault:** hold entries in one vault, lock it,
   open the other, and paste. Each copy keeps its folder, and gets a new id
   and no card (it is not memorised there); nothing leaves the first vault. Held entries stay in
