@@ -860,12 +860,13 @@ being forgotten:
 - **Entries** have a label, an optional login, a secret and a note; the
   secret is typed in, or a Formosa password of 64 to 256 bits generated from
   system randomness or Dragon Dice. An entry can be edited; a new secret
-  starts its card afresh. Copying the login or the secret is blind, and the
+  starts its card afresh. Each entry may sit in a folder, a path such as
+  `Work/Mail`; a folder exists while an entry is in it. Copying the login or the secret is blind, and the
   clipboard is cleared after 30 seconds. Any entry can be memorised: its card, reviewed
   through *Next due*, asks the secret typed from memory, matched exactly.
 - **Copying entries to another vault:** hold entries in one vault, lock it,
-  open the other, and paste. Each copy gets a new id and no card (it is not
-  memorised there); nothing leaves the first vault. Held entries stay in
+  open the other, and paste. Each copy keeps its folder, and gets a new id
+  and no card (it is not memorised there); nothing leaves the first vault. Held entries stay in
   memory only, across the lock, until pasted or discarded. It serves a new
   master secret (a suspected leak, or splitting vaults by how critical they
   are); a slipping memory is better served by adding a provisional key back.
